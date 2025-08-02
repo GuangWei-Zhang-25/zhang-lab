@@ -5,9 +5,408 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guang-Wei Zhang Laboratory - Social Impairment in Neuropsychiatric Disorders</title>
     <meta name="description" content="Research laboratory focused on understanding social impairment in neuropsychiatric disorders">
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 20px;
+        }
+
+        .nav-brand h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: #3498db;
+        }
+
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .nav-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 80px;
+            margin-top: 70px;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .lead {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+        }
+
+        /* Custom icons for social media */
+        .social-links .icon-x {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .social-links .icon-bluesky {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+
+        .social-links .icon-bluesky::before {
+            content: "☁";
+            font-size: 1.3rem;
+            position: absolute;
+            top: -3px;
+            left: 0;
+        }
+
+        /* Research Section */
+        .research {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .research h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .research-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .research-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .research-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .research-card i {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .research-card h3 {
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        /* Publications Section */
+        .publications {
+            padding: 80px 0;
+        }
+
+        .publications h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .publications-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .publication-item {
+            background: #f8f9fa;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .publication-item h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .authors {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .authors strong {
+            color: #333;
+        }
+
+        .journal {
+            color: #667eea;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .pub-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .pub-links a {
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .pub-links a:hover {
+            color: #5a67d8;
+        }
+
+        .view-all {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .team h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .team-member {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            background: #e0e0e0;
+        }
+
+        .team-member h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .position {
+            color: #667eea;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .bio {
+            color: #666;
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+        }
+
+        .contact h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-item {
+            text-align: center;
+        }
+
+        .contact-item i {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .contact-item h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                right: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+                padding: 2rem 0;
+            }
+
+            .nav-menu.active {
+                right: 0;
+            }
+
+            .nav-toggle {
+                display: flex;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation -->
@@ -39,13 +438,13 @@
                 <p class="lead">Investigating the neural mechanisms underlying social behavior and their dysfunction in neuropsychiatric conditions</p>
                 <div class="social-links">
                     <a href="https://twitter.com/zhangguangwei1" target="_blank" rel="noopener noreferrer">
-                        <i class="fab fa-x-twitter"></i> @zhangguangwei1
+                        <span class="icon-x">𝕏</span> @zhangguangwei1
                     </a>
                     <a href="https://bsky.app/profile/guangwei-zhang.bsky.social" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-cloud"></i> @guangwei-zhang.bsky.social
+                        <span class="icon-bluesky"></span> @guangwei-zhang.bsky.social
                     </a>
                     <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-graduation-cap"></i> Google Scholar
+                        <i class="fas fa-book"></i> Google Scholar
                     </a>
                 </div>
             </div>
@@ -88,11 +487,11 @@
             <div class="publications-list">
                 <!-- Publication 1 -->
                 <div class="publication-item">
-                    <h3>Reward and aversion processing by input-defined parallel nucleus accumbens circuits in mice</h3>
-                    <p class="authors">Y Yuan, F Cao, R Atabak, Y Li, X Zhu, <strong>GW Zhang</strong>, J Wang, Z Xie, L Luo, ...</p>
-                    <p class="journal">Nature Communications 13 (1), 6244, 2022</p>
+                    <h3>Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</h3>
+                    <p class="authors">W Sun, <strong>GW Zhang</strong>, JJ Huang, C Tao, MB Seo, HW Tao, LI Zhang</p>
+                    <p class="journal">Science 387 (6736), eadq2677, 2025</p>
                     <div class="pub-links">
-                        <a href="https://doi.org/10.1038/s41467-022-33843-3" target="_blank">
+                        <a href="#" target="_blank">
                             <i class="fas fa-external-link-alt"></i> Full Text
                         </a>
                         <a href="#" class="cite-btn">
@@ -103,8 +502,68 @@
 
                 <!-- Publication 2 -->
                 <div class="publication-item">
+                    <h3>The neural basis of neuropsychiatric symptoms in Alzheimer's disease</h3>
+                    <p class="authors">NK Zhang, SK Zhang, LI Zhang, HW Tao, <strong>GW Zhang</strong></p>
+                    <p class="journal">Frontiers in Aging Neuroscience 16, 1487875, 2024</p>
+                    <div class="pub-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Full Text
+                        </a>
+                        <a href="#" class="cite-btn">
+                            <i class="fas fa-quote-right"></i> Cite
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Publication 3 -->
+                <div class="publication-item">
+                    <h3>A distributed auditory network mediated by pontine central gray underlies ultra-fast awakening in response to alerting sounds</h3>
+                    <p class="authors">J Wei, C Xiao, <strong>GW Zhang</strong>, L Shen, HW Tao, LI Zhang</p>
+                    <p class="journal">Current Biology 34 (20), 4597-4611.e5, 2024</p>
+                    <div class="pub-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Full Text
+                        </a>
+                        <a href="#" class="cite-btn">
+                            <i class="fas fa-quote-right"></i> Cite
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Publication 4 -->
+                <div class="publication-item">
+                    <h3>Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</h3>
+                    <p class="authors">C Tao, <strong>GW Zhang</strong>, WJ Sun, JJ Huang, LI Zhang, HW Tao</p>
+                    <p class="journal">Nature Communications 15 (1), 8575, 2024</p>
+                    <div class="pub-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Full Text
+                        </a>
+                        <a href="#" class="cite-btn">
+                            <i class="fas fa-quote-right"></i> Cite
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Publication 5 -->
+                <div class="publication-item">
+                    <h3>The medial preoptic area mediates depressive-like behaviors induced by ovarian hormone withdrawal through distinct GABAergic projections</h3>
+                    <p class="authors">C Tao, <strong>GW Zhang</strong>, JJ Huang, Z Li, HW Tao, LI Zhang</p>
+                    <p class="journal">Nature Neuroscience 26 (9), 1529-1540, 2023</p>
+                    <div class="pub-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Full Text
+                        </a>
+                        <a href="#" class="cite-btn">
+                            <i class="fas fa-quote-right"></i> Cite
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Publication 6 -->
+                <div class="publication-item">
                     <h3>Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</h3>
-                    <p class="authors"><strong>GW Zhang</strong>, L Shen, W Zhong, Y Xiong, LI Zhang, H Li</p>
+                    <p class="authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
                     <p class="journal">Nature Neuroscience 24 (4), 516-528, 2021</p>
                     <div class="pub-links">
                         <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank">
@@ -116,10 +575,10 @@
                     </div>
                 </div>
 
-                <!-- Publication 3 -->
+                <!-- Publication 7 -->
                 <div class="publication-item">
                     <h3>Transforming sensory cues into aversive emotion via septal-habenular pathway</h3>
-                    <p class="authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, H Li</p>
+                    <p class="authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
                     <p class="journal">Neuron 99 (5), 1016-1028.e5, 2018</p>
                     <div class="pub-links">
                         <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank">
@@ -131,7 +590,20 @@
                     </div>
                 </div>
 
-                <!-- More publications can be added here -->
+                <!-- Publication 8 -->
+                <div class="publication-item">
+                    <h3>A non-canonical reticular-limbic central auditory pathway via medial septum contributes to fear conditioning</h3>
+                    <p class="authors"><strong>GW Zhang</strong>, WJ Sun, B Zingg, L Shen, J He, Y Xiong, HW Tao, LI Zhang</p>
+                    <p class="journal">Neuron 97 (2), 406-417.e4, 2018</p>
+                    <div class="pub-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-external-link-alt"></i> Full Text
+                        </a>
+                        <a href="#" class="cite-btn">
+                            <i class="fas fa-quote-right"></i> Cite
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="view-all">
                 <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" class="btn-primary">
@@ -147,7 +619,7 @@
             <h2>Our Team</h2>
             <div class="team-grid">
                 <div class="team-member">
-                    <img src="images/guangwei-zhang.jpg" alt="Guang-Wei Zhang">
+                    <img src="images/guangwei-zhang.jpg" alt="Guang-Wei Zhang" onerror="this.style.background='#e0e0e0'">
                     <h3>Guang-Wei Zhang, Ph.D.</h3>
                     <p class="position">Principal Investigator</p>
                     <p class="bio">Research interests focus on neural mechanisms of social behavior and neuropsychiatric disorders.</p>
@@ -186,6 +658,38 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Mobile menu toggle
+        const navToggle = document.querySelector('.nav-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        navToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+
+        // Citation functionality
+        document.querySelectorAll('.cite-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Citation feature coming soon!');
+            });
+        });
+    </script>
 </body>
 </html>
