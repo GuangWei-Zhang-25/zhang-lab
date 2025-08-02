@@ -82,12 +82,30 @@
             transition: 0.3s;
         }
 
+
+        .slim-banner {
+            width: 100%;
+            height: 200px; /* Adjust this to your desired height */
+            margin-top: 70px; /* Account for fixed navbar */
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .slim-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* This ensures the image covers the area without distortion */
+            object-position: center; /* Centers the image */
+        }
+        
+
+       
         /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 120px 0 80px;
-            margin-top: 70px;
+            margin-top: 0; /* Changed from 70px to 0 */
         }
 
         .hero-content {
