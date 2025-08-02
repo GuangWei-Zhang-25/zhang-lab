@@ -108,21 +108,21 @@
             background: #f8f9fa;
         }
 
-        /* Team Categories */
-        .team-category {
+        /* Current Members Section */
+        .current-members {
             margin-bottom: 60px;
         }
 
-        .team-category h2 {
+        .section-title {
             font-size: 2rem;
             color: #2c3e50;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
             text-align: center;
             position: relative;
             padding-bottom: 1rem;
         }
 
-        .team-category h2::after {
+        .section-title::after {
             content: '';
             position: absolute;
             bottom: 0;
@@ -133,109 +133,73 @@
             background: #667eea;
         }
 
-        /* Team Grid */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .team-member {
+        /* Single Member Card - Centered */
+        .team-member-single {
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        .team-member:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
-        }
-
-        .team-member img {
-            width: 150px;
-            height: 150px;
+        .team-member-single img {
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
             object-fit: cover;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             background: #e0e0e0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
-        .team-member h3 {
+        .team-member-single h3 {
             color: #2c3e50;
             margin-bottom: 0.5rem;
-            font-size: 1.25rem;
+            font-size: 1.5rem;
         }
 
         .position {
             color: #667eea;
             font-weight: 500;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
         }
 
-        .member-details {
+        .member-bio {
             color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .member-links {
             display: flex;
             justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
         }
 
         .member-links a {
             color: #667eea;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .member-links a:hover {
             color: #5a67d8;
         }
 
-        /* Alumni Section */
-        .alumni-list {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .alumni-item {
-            padding: 1.5rem;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .alumni-item:last-child {
-            border-bottom: none;
-        }
-
-        .alumni-item h4 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .alumni-item .years {
-            color: #667eea;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .alumni-item .current {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
         /* Join Us Section */
         .join-us {
             background: white;
-            padding: 60px 0;
+            padding: 80px 0;
             text-align: center;
         }
 
@@ -245,13 +209,50 @@
             margin-bottom: 1.5rem;
         }
 
+        .join-us-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
         .join-us p {
             color: #666;
             font-size: 1.1rem;
             margin-bottom: 2rem;
-            max-width: 600px;
+            line-height: 1.8;
+        }
+
+        .positions-available {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+        }
+
+        .position-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .position-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+        }
+
+        .position-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .position-card p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 0;
         }
 
         .btn-primary {
@@ -304,7 +305,16 @@
                 font-size: 2rem;
             }
 
-            .team-grid {
+            .team-member-single {
+                padding: 2rem;
+            }
+
+            .team-member-single img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .positions-available {
                 grid-template-columns: 1fr;
             }
         }
@@ -337,7 +347,7 @@
     <div class="page-header">
         <div class="container">
             <h1>Our Team</h1>
-            <p>Meet the researchers driving innovation in understanding social behavior and neuropsychiatric disorders</p>
+            <p>Dedicated to understanding neural mechanisms of social behavior and neuropsychiatric disorders</p>
         </div>
     </div>
 
@@ -345,120 +355,26 @@
     <section class="team-full">
         <div class="container">
             <!-- Current Members -->
-            <div class="team-category">
-                <h2>Current Members</h2>
-                <div class="team-grid">
-                    <!-- Principal Investigator -->
-                    <div class="team-member">
-                        <img src="images/guangwei-zhang.jpg" alt="Guang-Wei Zhang" onerror="this.style.background='#e0e0e0'">
-                        <h3>Guang-Wei Zhang, Ph.D.</h3>
-                        <p class="position">Principal Investigator</p>
-                        <p class="member-details">
-                            Research interests focus on neural mechanisms of social behavior and neuropsychiatric disorders.
-                        </p>
-                        <div class="member-links">
-                            <a href="mailto:guangwei.zhang@[institution].edu"><i class="fas fa-envelope"></i></a>
-                            <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank"><i class="fas fa-book"></i></a>
-                            <a href="https://twitter.com/zhangguangwei1" target="_blank"><i class="fab fa-twitter"></i></a>
-                        </div>
+            <div class="current-members">
+                <h2 class="section-title">Principal Investigator</h2>
+                <div class="team-member-single">
+                    <img src="images/guangwei-zhang.jpg" alt="Guang-Wei Zhang" onerror="this.style.background='#e0e0e0'">
+                    <h3>Guang-Wei Zhang, Ph.D.</h3>
+                    <p class="position">Principal Investigator</p>
+                    <p class="member-bio">
+                        Dr. Zhang's research focuses on understanding the neural mechanisms underlying social behavior and how these mechanisms are disrupted in neuropsychiatric disorders. The laboratory uses cutting-edge techniques in neuroscience to investigate neural circuits controlling social impairment, with the goal of identifying novel therapeutic targets.
+                    </p>
+                    <div class="member-links">
+                        <a href="mailto:guangwei.zhang@[institution].edu">
+                            <i class="fas fa-envelope"></i> Email
+                        </a>
+                        <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank">
+                            <i class="fas fa-book"></i> Google Scholar
+                        </a>
+                        <a href="https://twitter.com/zhangguangwei1" target="_blank">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
                     </div>
-
-                    <!-- Postdoc 1 -->
-                    <div class="team-member">
-                        <img src="images/postdoc1.jpg" alt="Postdoc Name" onerror="this.style.background='#e0e0e0'">
-                        <h3>[Postdoc Name], Ph.D.</h3>
-                        <p class="position">Postdoctoral Fellow</p>
-                        <p class="member-details">
-                            Ph.D. from [University], [Year]<br>
-                            Research: [Research focus]
-                        </p>
-                        <div class="member-links">
-                            <a href="mailto:email@institution.edu"><i class="fas fa-envelope"></i></a>
-                            <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Postdoc 2 -->
-                    <div class="team-member">
-                        <img src="images/postdoc2.jpg" alt="Postdoc Name" onerror="this.style.background='#e0e0e0'">
-                        <h3>[Postdoc Name], Ph.D.</h3>
-                        <p class="position">Postdoctoral Fellow</p>
-                        <p class="member-details">
-                            Ph.D. from [University], [Year]<br>
-                            Research: [Research focus]
-                        </p>
-                        <div class="member-links">
-                            <a href="mailto:email@institution.edu"><i class="fas fa-envelope"></i></a>
-                            <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Graduate Student 1 -->
-                    <div class="team-member">
-                        <img src="images/gradstudent1.jpg" alt="Graduate Student Name" onerror="this.style.background='#e0e0e0'">
-                        <h3>[Student Name]</h3>
-                        <p class="position">Ph.D. Candidate</p>
-                        <p class="member-details">
-                            Joined: [Year]<br>
-                            Research: [Research focus]
-                        </p>
-                        <div class="member-links">
-                            <a href="mailto:email@institution.edu"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Graduate Student 2 -->
-                    <div class="team-member">
-                        <img src="images/gradstudent2.jpg" alt="Graduate Student Name" onerror="this.style.background='#e0e0e0'">
-                        <h3>[Student Name]</h3>
-                        <p class="position">Ph.D. Student</p>
-                        <p class="member-details">
-                            Joined: [Year]<br>
-                            Research: [Research focus]
-                        </p>
-                        <div class="member-links">
-                            <a href="mailto:email@institution.edu"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Research Technician -->
-                    <div class="team-member">
-                        <img src="images/tech1.jpg" alt="Technician Name" onerror="this.style.background='#e0e0e0'">
-                        <h3>[Staff Name]</h3>
-                        <p class="position">Research Technician</p>
-                        <p class="member-details">
-                            B.S. from [University], [Year]<br>
-                            Specialization: [Technical skills]
-                        </p>
-                        <div class="member-links">
-                            <a href="mailto:email@institution.edu"><i class="fas fa-envelope"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- Add more team members as needed -->
-                </div>
-            </div>
-
-            <!-- Alumni -->
-            <div class="team-category">
-                <h2>Alumni</h2>
-                <div class="alumni-list">
-                    <div class="alumni-item">
-                        <h4>[Alumni Name], Ph.D.</h4>
-                        <p class="years">Postdoctoral Fellow (2020-2023)</p>
-                        <p class="current">Current Position: Assistant Professor at [University]</p>
-                    </div>
-                    <div class="alumni-item">
-                        <h4>[Alumni Name], Ph.D.</h4>
-                        <p class="years">Graduate Student (2018-2023)</p>
-                        <p class="current">Current Position: Postdoctoral Fellow at [Institution]</p>
-                    </div>
-                    <div class="alumni-item">
-                        <h4>[Alumni Name], B.S.</h4>
-                        <p class="years">Research Technician (2021-2023)</p>
-                        <p class="current">Current Position: Graduate Student at [University]</p>
-                    </div>
-                    <!-- Add more alumni as needed -->
                 </div>
             </div>
         </div>
@@ -467,9 +383,34 @@
     <!-- Join Us Section -->
     <section class="join-us">
         <div class="container">
-            <h2>Join Our Team</h2>
-            <p>We are always looking for motivated individuals passionate about neuroscience research. If you're interested in joining our lab as a postdoc, graduate student, or research technician, please get in touch!</p>
-            <a href="index.html#contact" class="btn-primary">Contact Us</a>
+            <div class="join-us-content">
+                <h2>Join Our Team</h2>
+                <p>
+                    We are actively recruiting motivated researchers at all levels who are passionate about understanding 
+                    the neural basis of social behavior and developing new approaches to treat neuropsychiatric disorders. 
+                    Our lab provides a collaborative and supportive environment for scientific discovery.
+                </p>
+                
+                <div class="positions-available">
+                    <div class="position-card">
+                        <h3>Postdoctoral Fellows</h3>
+                        <p>PhD holders with expertise in neuroscience, behavioral analysis, or related fields</p>
+                    </div>
+                    <div class="position-card">
+                        <h3>Graduate Students</h3>
+                        <p>Prospective PhD students interested in neural circuits and social behavior</p>
+                    </div>
+                    <div class="position-card">
+                        <h3>Research Technicians</h3>
+                        <p>Recent graduates seeking research experience in systems neuroscience</p>
+                    </div>
+                </div>
+                
+                <p>
+                    If you're interested in joining our research team, please send your CV and a brief statement of research interests.
+                </p>
+                <a href="index.html#contact" class="btn-primary">Get in Touch</a>
+            </div>
         </div>
     </section>
 
