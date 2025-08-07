@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guang-Wei Zhang Laboratory - Social Impairment in Neuropsychiatric Disorders</title>
+    <title>Guang-Wei Zhang Laboratory</title>
     <meta name="description" content="Research laboratory focused on understanding social impairment in neuropsychiatric disorders">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Reset and Base Styles */
+        /* Reset and Base Styles - Apple-inspired */
         * {
             margin: 0;
             padding: 0;
@@ -16,355 +16,358 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+            line-height: 1.47059;
+            font-weight: 400;
+            color: #1d1d1f;
             background-color: #ffffff;
+            letter-spacing: -0.022em;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 980px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 22px;
         }
 
-        /* Navigation */
+        .container-wide {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 22px;
+        }
+
+        /* Navigation - Apple Style */
         .navbar {
-            background: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: saturate(180%) blur(20px);
             position: fixed;
             width: 100%;
             top: 0;
-            z-index: 1000;
+            z-index: 9999;
+            transition: background 0.3s ease;
         }
 
-        .navbar .container {
+        .navbar-content {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 1rem 20px;
-        }
-
-        .nav-brand h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #2c3e50;
+            height: 44px;
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 22px;
         }
 
         .nav-menu {
             display: flex;
             list-style: none;
-            gap: 2rem;
+            gap: 40px;
+            align-items: center;
+            margin: 0;
+            padding: 0;
         }
 
         .nav-menu a {
             text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s;
+            color: rgba(0, 0, 0, 0.8);
+            font-size: 12px;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            letter-spacing: -0.01em;
         }
 
         .nav-menu a:hover {
-            color: #3498db;
+            color: #000;
         }
 
         .nav-toggle {
             display: none;
-            flex-direction: column;
+            width: 18px;
+            height: 18px;
+            position: relative;
             cursor: pointer;
+            position: absolute;
+            right: 22px;
         }
 
         .nav-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
-
-
-        .slim-banner {
-            width: 100%;
-            height: 300px; /* Adjust this to your desired height */
-            margin-top: 70px; /* Account for fixed navbar */
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .slim-banner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* This ensures the image covers the area without distortion */
-            object-position: center; /* Centers the image */
-        }
-        
-
-       
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 120px 0 80px;
-            margin-top: 0; /* Changed from 70px to 0 */
-        }
-
-        .hero-content {
-            text-align: center;
-        }
-
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .lead {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .social-links a {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 25px;
-            transition: all 0.3s;
-        }
-
-        .social-links a:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: white;
-        }
-
-        /* Custom icons for social media */
-        .social-links .icon-x {
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .social-links .icon-bluesky {
-            position: relative;
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-        }
-
-        .social-links .icon-bluesky::before {
-            content: "☁";
-            font-size: 1.3rem;
             position: absolute;
-            top: -3px;
-            left: 0;
+            width: 18px;
+            height: 1.5px;
+            background: #1d1d1f;
+            transition: all 0.3s ease;
         }
 
-        /* Research Section */
-        .research {
-            padding: 80px 0;
-            background: #f8f9fa;
+        .nav-toggle span:first-child {
+            top: 5px;
         }
 
-        .research h2 {
+        .nav-toggle span:last-child {
+            bottom: 5px;
+        }
+
+        /* Banner Section */
+        .banner-section {
+            width: 100%;
+            height: auto;
+            margin-top: 44px;
+            overflow: hidden;
+        }
+
+        .banner-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Hero Gradient Section */
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 0;
             text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #2c3e50;
         }
 
-        .research-areas {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .research-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .research-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .research-card i {
-            font-size: 3rem;
-            color: #667eea;
-            margin-bottom: 1rem;
-        }
-
-        .research-card h3 {
-            margin-bottom: 1rem;
-            color: #2c3e50;
-        }
-
-        /* Publications Section */
-        .publications {
-            padding: 80px 0;
-        }
-
-        .publications h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #2c3e50;
-        }
-
-        .publications-list {
-            max-width: 900px;
+        .gradient-title {
+            font-size: 40px;
+            line-height: 1.1;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -0.005em;
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        .publication-item {
-            background: #f8f9fa;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+        /* Hero Section - Apple Style */
+        .hero {
+            padding: 60px 0 88px;
+            text-align: center;
+            background: #fbfbfd;
         }
 
-        .publication-item h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-            font-size: 1.2rem;
+        .hero h1 {
+            font-size: 48px;
+            line-height: 1.07143;
+            font-weight: 600;
+            letter-spacing: -0.005em;
+            color: #1d1d1f;
+            margin-bottom: 24px;
         }
 
-        .authors {
-            color: #666;
-            margin-bottom: 0.5rem;
+        .hero .subtitle {
+            font-size: 28px;
+            line-height: 1.10722;
+            font-weight: 400;
+            letter-spacing: 0.004em;
+            color: #1d1d1f;
+            margin-bottom: 40px;
+            max-width: 820px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .authors strong {
-            color: #333;
-        }
-
-        .journal {
-            color: #667eea;
-            font-style: italic;
-            margin-bottom: 1rem;
-        }
-
-        .pub-links {
+        /* Social Links - Apple Style */
+        .social-links {
             display: flex;
-            gap: 1rem;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 40px;
         }
 
-        .pub-links a {
-            color: #667eea;
+        .social-links a {
+            color: #06c;
             text-decoration: none;
+            font-size: 17px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            transition: color 0.3s;
+            gap: 8px;
+            transition: color 0.3s ease;
         }
 
-        .pub-links a:hover {
-            color: #5a67d8;
+        .social-links a:hover {
+            text-decoration: underline;
         }
 
-        .view-all {
+        .social-links i {
+            font-size: 20px;
+        }
+
+        /* Section Styles - Apple Inspired */
+        .section {
+            padding: 88px 0;
+        }
+
+        .section-title {
+            font-size: 48px;
+            line-height: 1.08349;
+            font-weight: 600;
+            letter-spacing: -0.003em;
             text-align: center;
-            margin-top: 3rem;
+            margin-bottom: 64px;
+            color: #1d1d1f;
+        }
+
+        /* Research Section - Apple Style Cards */
+        .research {
+            background: #ffffff;
+        }
+
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 64px;
+        }
+
+        .research-card {
+            text-align: center;
+            padding: 40px 20px;
+            background: #fbfbfd;
+            border-radius: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .research-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .research-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #007AFF, #5AC8FA);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .research-icon i {
+            color: white;
+            font-size: 28px;
+        }
+
+        .research-card h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+            letter-spacing: -0.015em;
+        }
+
+        .research-card p {
+            font-size: 17px;
+            line-height: 1.47059;
+            color: #86868b;
+            letter-spacing: -0.022em;
+        }
+
+        /* Publications Preview - Apple Style */
+        .publications-preview {
+            background: #fbfbfd;
+        }
+
+        .publication-item {
+            background: white;
+            padding: 32px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 1px solid #d2d2d7;
+            transition: all 0.3s ease;
+        }
+
+        .publication-item:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .publication-title {
+            font-size: 21px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            line-height: 1.381;
+        }
+
+        .publication-authors {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 8px;
+        }
+
+        .publication-authors strong {
+            color: #1d1d1f;
+            font-weight: 600;
+        }
+
+        .publication-journal {
+            font-size: 14px;
+            color: #06c;
+            margin-bottom: 16px;
+        }
+
+        .publication-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #06c;
+            text-decoration: none;
+            font-size: 17px;
+            transition: text-decoration 0.3s ease;
+        }
+
+        .publication-link:hover {
+            text-decoration: underline;
+        }
+
+        .publication-link i {
+            font-size: 14px;
+        }
+
+        /* CTA Button - Apple Style */
+        .cta-container {
+            text-align: center;
+            margin-top: 48px;
         }
 
         .btn-primary {
             display: inline-block;
-            background: #667eea;
+            background: #0071e3;
             color: white;
-            padding: 1rem 2rem;
-            border-radius: 30px;
+            padding: 12px 28px;
+            border-radius: 980px;
             text-decoration: none;
-            transition: background 0.3s;
+            font-size: 17px;
+            font-weight: 400;
+            transition: background 0.3s ease;
         }
 
         .btn-primary:hover {
-            background: #5a67d8;
+            background: #0077ed;
         }
 
-        /* Team Section */
-        .team {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
-
-        .team h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #2c3e50;
-        }
-
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .team-member {
+        /* Team Preview Section */
+        .team-preview {
             background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             text-align: center;
         }
 
-        .team-member img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 1rem;
-            background: #e0e0e0;
+        .team-description {
+            font-size: 21px;
+            line-height: 1.381;
+            color: #86868b;
+            max-width: 720px;
+            margin: 0 auto 48px;
         }
 
-        .team-member h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-        }
-
-        .position {
-            color: #667eea;
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .bio {
-            color: #666;
-        }
-
-        /* Contact Section */
+        /* Contact Section - Apple Style */
         .contact {
-            padding: 80px 0;
+            background: #fbfbfd;
         }
 
-        .contact h2 {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            color: #2c3e50;
-        }
-
-        .contact-info {
+        .contact-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            gap: 48px;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -373,38 +376,71 @@
             text-align: center;
         }
 
-        .contact-item i {
-            font-size: 2.5rem;
-            color: #667eea;
-            margin-bottom: 1rem;
+        .contact-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #007AFF, #5AC8FA);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-icon i {
+            color: white;
+            font-size: 24px;
         }
 
         .contact-item h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
+            font-size: 21px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1d1d1f;
         }
 
-        /* Footer */
+        .contact-item p {
+            font-size: 17px;
+            line-height: 1.47059;
+            color: #86868b;
+        }
+
+        .contact-item a {
+            color: #06c;
+            text-decoration: none;
+        }
+
+        .contact-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer - Apple Style */
         .footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
+            background: #f5f5f7;
+            padding: 20px 0;
+            border-top: 1px solid #d2d2d7;
         }
 
-        /* Responsive */
+        .footer-content {
+            text-align: center;
+            font-size: 12px;
+            color: #86868b;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             .nav-menu {
                 position: fixed;
                 right: -100%;
-                top: 70px;
-                flex-direction: column;
-                background: white;
+                top: 48px;
                 width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0,0,0,0.05);
-                padding: 2rem 0;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 20px 0;
+                gap: 20px;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                transition: right 0.3s ease;
             }
 
             .nav-menu.active {
@@ -412,92 +448,130 @@
             }
 
             .nav-toggle {
-                display: flex;
+                display: block;
             }
 
-            .hero h2 {
-                font-size: 2rem;
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .hero .subtitle {
+                font-size: 21px;
+            }
+
+            .section-title {
+                font-size: 32px;
             }
 
             .social-links {
                 flex-direction: column;
-                align-items: center;
+                gap: 16px;
             }
+
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.6s ease forwards;
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <h1>Guang-Wei Zhang Laboratory</h1>
-            </div>
+        <div class="navbar-content">
             <ul class="nav-menu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#research">Research</a></li>
-                <li><a href="#publications">Publications</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="research.html">Research</a></li>
+                <li><a href="publications.html">Publications</a></li>
                 <li><a href="team.html">Team</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="publications.html">Full Publications</a></li>
+                <li><a href="contact.html">Contact</a></li>
             </ul>
             <div class="nav-toggle">
-                <span></span>
                 <span></span>
                 <span></span>
             </div>
         </div>
     </nav>
-    
+
     <!-- Banner Section -->
-    <div class="slim-banner">
+    <div class="banner-section">
         <img src="images/banner.jpg" alt="Neuroscience Research Banner">
     </div>
 
-    
-    <!-- Hero Section -->
-    <section id="home" class="hero">
+    <!-- Hero Section with Gradient -->
+    <section class="hero-gradient">
         <div class="container">
-            <div class="hero-content">
-                <h2>Social Impairment in Neuropsychiatric Disorders</h2>
-                <p class="lead">Investigating the neural mechanisms underlying social behavior and their dysfunction in neuropsychiatric conditions</p>
-                <div class="social-links">
-                    <a href="https://twitter.com/zhangguangwei1" target="_blank" rel="noopener noreferrer">
-                        <span class="icon-x">𝕏</span> @zhangguangwei1
-                    </a>
-                    <a href="https://bsky.app/profile/guangwei-zhang.bsky.social" target="_blank" rel="noopener noreferrer">
-                        <span class="icon-bluesky"></span> @guangwei-zhang.bsky.social
-                    </a>
-                    <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
-                        <i class="fas fa-book"></i> Google Scholar
-                    </a>
-                </div>
+            <h2 class="gradient-title">Social Impairment in Neuropsychiatric Disorders</h2>
+        </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="animate-in">Guang-Wei Zhang Laboratory</h1>
+            <p class="subtitle animate-in">Investigating the neural mechanisms underlying social behavior and their dysfunction in neuropsychiatric conditions</p>
+            <div class="social-links animate-in">
+                <a href="https://twitter.com/zhangguangwei1" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-x-twitter"></i>
+                    <span>X (Twitter)</span>
+                </a>
+                <a href="https://bsky.app/profile/guangwei-zhang.bsky.social" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-cloud"></i>
+                    <span>Bluesky</span>
+                </a>
+                <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>Google Scholar</span>
+                </a>
             </div>
         </div>
     </section>
 
     <!-- Research Section -->
-    <section id="research" class="research">
+    <section class="section research">
         <div class="container">
-            <h2>Research Focus</h2>
-            <div class="research-areas">
+            <h2 class="section-title">Research Focus</h2>
+            <div class="research-grid">
                 <div class="research-card">
-                    <i class="fas fa-brain"></i>
+                    <div class="research-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
                     <h3>Neural Circuits</h3>
                     <p>Mapping the neural circuits that control social behavior and emotional processing</p>
                 </div>
                 <div class="research-card">
-                    <i class="fas fa-users"></i>
+                    <div class="research-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <h3>Social Behavior</h3>
                     <p>Understanding how social impairments manifest in various neuropsychiatric disorders</p>
                 </div>
                 <div class="research-card">
-                    <i class="fas fa-microscope"></i>
+                    <div class="research-icon">
+                        <i class="fas fa-dna"></i>
+                    </div>
                     <h3>Molecular Mechanisms</h3>
                     <p>Investigating molecular and cellular mechanisms underlying social dysfunction</p>
                 </div>
                 <div class="research-card">
-                    <i class="fas fa-heartbeat"></i>
+                    <div class="research-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
                     <h3>Therapeutic Targets</h3>
                     <p>Identifying novel therapeutic targets for treating social impairments</p>
                 </div>
@@ -505,122 +579,76 @@
         </div>
     </section>
 
-    <!-- Publications Section -->
-    <section id="publications" class="publications">
+    <!-- Publications Preview -->
+    <section class="section publications-preview">
         <div class="container">
-            <h2>Selected Publications</h2>
+            <h2 class="section-title">Recent Publications</h2>
             <div class="publications-list">
-                <!-- Publication 1 -->
                 <div class="publication-item">
-                    <h3>Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</h3>
-                    <p class="authors">W Sun, <strong>GW Zhang</strong>, JJ Huang, C Tao, MB Seo, HW Tao, LI Zhang</p>
-                    <p class="journal">Science 387 (6736), eadq2677, 2025</p>
-                    <div class="pub-links">
-                        <a href="https://doi.org/10.1126/science.adq2677" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Full Text
-                        </a>
-                    </div>
+                    <h3 class="publication-title">Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</h3>
+                    <p class="publication-authors">W Sun, <strong>GW Zhang</strong>, JJ Huang, C Tao, MB Seo, HW Tao, LI Zhang</p>
+                    <p class="publication-journal">Science 387 (6736), eadq2677, 2025</p>
+                    <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="publication-link">
+                        View Paper <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
 
-                <!-- Publication 2 -->
                 <div class="publication-item">
-                    <h3>Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</h3>
-                    <p class="authors">C Tao, <strong>GW Zhang</strong>, WJ Sun, JJ Huang, LI Zhang, HW Tao</p>
-                    <p class="journal">Nature Communications 15 (1), 8575, 2024</p>
-                    <div class="pub-links">
-                        <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Full Text
-                        </a>
-                    </div>
+                    <h3 class="publication-title">Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</h3>
+                    <p class="publication-authors">C Tao, <strong>GW Zhang</strong>, WJ Sun, JJ Huang, LI Zhang, HW Tao</p>
+                    <p class="publication-journal">Nature Communications 15 (1), 8575, 2024</p>
+                    <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="publication-link">
+                        View Paper <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
 
-                <!-- Publication 3 -->
                 <div class="publication-item">
-                    <h3>The medial preoptic area mediates depressive-like behaviors induced by ovarian hormone withdrawal through distinct GABAergic projections</h3>
-                    <p class="authors">C Tao, <strong>GW Zhang</strong>, JJ Huang, Z Li, HW Tao, LI Zhang</p>
-                    <p class="journal">Nature Neuroscience 26 (9), 1529-1540, 2023</p>
-                    <div class="pub-links">
-                        <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Full Text
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Publication 4 -->
-                <div class="publication-item">
-                    <h3>Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</h3>
-                    <p class="authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
-                    <p class="journal">Nature Neuroscience 24 (4), 516-528, 2021</p>
-                    <div class="pub-links">
-                        <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Full Text
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Publication 5 -->
-                <div class="publication-item">
-                    <h3>Transforming sensory cues into aversive emotion via septal-habenular pathway</h3>
-                    <p class="authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
-                    <p class="journal">Neuron 99 (5), 1016-1028.e5, 2018</p>
-                    <div class="pub-links">
-                        <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Full Text
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Publication 6 -->
-                <div class="publication-item">
-                    <h3>A non-canonical reticular-limbic central auditory pathway via medial septum contributes to fear conditioning</h3>
-                    <p class="authors"><strong>GW Zhang</strong>, WJ Sun, B Zingg, L Shen, J He, Y Xiong, HW Tao, LI Zhang</p>
-                    <p class="journal">Neuron 97 (2), 406-417.e4, 2018</p>
-                    <div class="pub-links">
-                        <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank">
-                            <i class="fas fa-external-link-alt"></i> Full Text
-                        </a>
-                    </div>
+                    <h3 class="publication-title">Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</h3>
+                    <p class="publication-authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
+                    <p class="publication-journal">Nature Neuroscience 24 (4), 516-528, 2021</p>
+                    <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="publication-link">
+                        View Paper <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
-            <div class="view-all">
-                <a href="publications.html" class="btn-primary">
-                    View All Publications
-                </a>
+            <div class="cta-container">
+                <a href="publications.html" class="btn-primary">View All Publications</a>
             </div>
         </div>
     </section>
 
-<!-- Team Section -->
-<section id="team" class="team">
-    <div class="container">
-        <h2>Our Team</h2>
-        <p style="text-align: center; color: #666; margin-bottom: 2rem;">
-            We have a diverse team of researchers working on understanding neural mechanisms of social behavior
-        </p>
-        <div style="text-align: center;">
-            <a href="team.html" class="btn-primary">
-                Meet Our Team
-            </a>
+    <!-- Team Preview -->
+    <section class="section team-preview">
+        <div class="container">
+            <h2 class="section-title">Our Team</h2>
+            <p class="team-description">
+                We have a diverse team of researchers working on understanding neural mechanisms of social behavior
+            </p>
+            <div class="cta-container">
+                <a href="team.html" class="btn-primary">Meet Our Team</a>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="contact">
+    <section class="section contact">
         <div class="container">
-            <h2>Contact Us</h2>
-            <div class="contact-info">
+            <h2 class="section-title">Contact</h2>
+            <div class="contact-grid">
                 <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
                     <h3>Email</h3>
-                    <p>guangwei.zhang@vcuhealth.org</p>
+                    <p><a href="mailto:guangwei.zhang@vcuhealth.org">guangwei.zhang@vcuhealth.org</a></p>
                 </div>
                 <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <h3>Address</h3>
+                    <div class="contact-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Location</h3>
                     <p>Virginia Commonwealth University<br>
-                    Department of Neuroscience and Anatomy<br>
-                    1101 E Marshall St<br>
+                    Department of Neuroscience<br>
                     Sanger Hall, Room 9-060<br>
                     Richmond, VA 23298</p>
                 </div>
@@ -631,7 +659,9 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+            <div class="footer-content">
+                <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+            </div>
         </div>
     </footer>
 
@@ -642,22 +672,59 @@
 
         navToggle.addEventListener('click', () => {
             navMenu.classList.toggle('active');
+            
+            // Animate hamburger menu
+            const spans = navToggle.querySelectorAll('span');
+            if (navMenu.classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.transform = 'none';
+            }
         });
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    navMenu.classList.remove('active');
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                const spans = navToggle.querySelectorAll('span');
+                spans[0].style.transform = 'none';
+                spans[1].style.transform = 'none';
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 10) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.8)';
+            }
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
+        }, observerOptions);
+
+        // Observe all cards and sections
+        document.querySelectorAll('.research-card, .publication-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
         });
     </script>
 </body>
