@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Research - Guang-Wei Zhang Laboratory</title>
+  <meta name="description" content="Research page for the Guang-Wei Zhang Laboratory at VCU">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styles specific to research page */
+    .research-overview {
+      padding: 40px 0;
+      background: #fff;
+    }
+    
+    .overview-text {
+      max-width: 900px;
+      margin: 0 auto 3rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #333;
+      text-align: center;
+    }
+    
+    .research-areas-detailed {
+      padding: 60px 0;
+      background: #f8f9fa;
+    }
+    
+    .research-area-card {
+      background: white;
+      margin-bottom: 3rem;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .research-area-header {
+      background: linear-gradient(135deg, #000 0%, #333 100%);
+      color: white;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .research-area-icon {
+      font-size: 3rem;
+      opacity: 0.9;
+    }
+    
+    .research-area-title h3 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+    
+    .research-area-subtitle {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+    
+    .research-area-content {
+      padding: 2.5rem;
+    }
+    
+    .research-description {
+      margin-bottom: 2rem;
+      line-height: 1.8;
+      color: #333;
+    }
+    
+    .research-highlights {
+      margin-bottom: 2rem;
+    }
+    
+    .research-highlights h4 {
+      color: #000;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .highlight-list {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .highlight-list li {
+      padding: 0.75rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #555;
+    }
+    
+    .highlight-list li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #000;
+      font-weight: bold;
+    }
+    
+    .key-publications {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+    
+    .key-publications h4 {
+      color: #000;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .pub-item {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .pub-item:last-child {
+      border-bottom: none;
+    }
+    
+    .pub-item-title {
+      font-weight: 500;
+      color: #000;
+      margin-bottom: 0.25rem;
+    }
+    
+    .pub-item-authors {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.25rem;
+    }
+    
+    .pub-item-journal {
+      font-size: 0.9rem;
+      color: #888;
+      font-style: italic;
+    }
+    
+    .pub-item-link {
+      display: inline-block;
+      margin-top: 0.5rem;
+      color: #000;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+    
+    .pub-item-link:hover {
+      text-decoration: underline;
+    }
+    
+    .techniques-section {
+      padding: 60px 0;
+      background: white;
+    }
+    
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    
+    .technique-card {
+      text-align: center;
+      padding: 1.5rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    
+    .technique-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .technique-card i {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+    
+    .technique-card h4 {
+      color: #000;
+      margin-bottom: 0.5rem;
+    }
+    
+    .technique-card p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .funding-section {
+      padding: 40px 0;
+      background: #f8f9fa;
+      text-align: center;
+    }
+    
+    .funding-logos {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+    
+    .funding-item {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+      .research-area-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .techniques-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand"><h1><a href="index.html" style="text-decoration:none;color:inherit;">Guang-Wei Zhang Laboratory</a></h1></div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-content container">
+    <h2>Research</h2>
+  </div>
+</header>
+
+<section class="research-overview">
+  <div class="container">
+    <div class="overview-text">
+      <p>Our laboratory investigates the neural circuit mechanisms underlying social impairments in neuropsychiatric disorders. Using cutting-edge neuroscience techniques, we aim to understand how specific brain circuits control social behavior and emotional processing, and how dysfunction in these circuits contributes to conditions such as autism, depression, and anxiety disorders.</p>
+    </div>
+  </div>
+</section>
+
+<section class="research-areas-detailed">
+  <div class="container">
+    <h2 class="section-title">Research Areas</h2>
+    
+    <!-- Neural Circuits -->
+    <div class="research-area-card">
+      <div class="research-area-header">
+        <div class="research-area-icon">
+          <i class="fas fa-brain"></i>
+        </div>
+        <div class="research-area-title">
+          <h3>Neural Circuits</h3>
+          <p class="research-area-subtitle">Mapping circuits controlling social behavior and emotions</p>
+        </div>
+      </div>
+      <div class="research-area-content">
+        <div class="research-description">
+          <p>We focus on identifying and characterizing the neural circuits that regulate social behavior, emotional processing, and stress responses. Our work has revealed critical roles for several brain regions including the medial preoptic area (mPOA), medial septum, pontine central gray, and their interconnected networks in mediating complex behaviors.</p>
+        </div>
+        <div class="research-highlights">
+          <h4>Key Discoveries</h4>
+          <ul class="highlight-list">
+            <li>Identified the medial preoptic area as a hub that antagonistically mediates stress-induced anxiety and parental behavior</li>
+            <li>Discovered a non-canonical reticular-limbic auditory pathway that contributes to fear conditioning</li>
+            <li>Characterized septal-habenular pathways that transform sensory cues into aversive emotions</li>
+            <li>Mapped distributed networks underlying ultra-fast awakening responses to alerting sounds</li>
+          </ul>
+        </div>
+        <div class="key-publications">
+          <h4>Selected Publications</h4>
+          <div class="pub-item">
+            <div class="pub-item-title">Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</div>
+            <div class="pub-item-authors">Zhang GW, Shen L, Tao C, et al.</div>
+            <div class="pub-item-journal">Nature Neuroscience, 2021</div>
+            <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+          <div class="pub-item">
+            <div class="pub-item-title">A non-canonical reticular-limbic central auditory pathway via medial septum contributes to fear conditioning</div>
+            <div class="pub-item-authors">Zhang GW, Sun WJ, Zingg B, et al.</div>
+            <div class="pub-item-journal">Neuron, 2018</div>
+            <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+          <div class="pub-item">
+            <div class="pub-item-title">Transforming sensory cues into aversive emotion via septal-habenular pathway</div>
+            <div class="pub-item-authors">Zhang GW, Shen L, Tao C, et al.</div>
+            <div class="pub-item-journal">Neuron, 2018</div>
+            <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Social Behavior -->
+    <div class="research-area-card">
+      <div class="research-area-header">
+        <div class="research-area-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="research-area-title">
+          <h3>Social Behavior</h3>
+          <p class="research-area-subtitle">Understanding social impairments in neuropsychiatric disorders</p>
+        </div>
+      </div>
+      <div class="research-area-content">
+        <div class="research-description">
+          <p>Our research investigates how social behaviors emerge from neural circuit activity and how disruptions in these circuits lead to social impairments. We recently made groundbreaking discoveries about prosocial behaviors in rodents, including reviving-like behaviors toward unconscious conspecifics, providing new insights into empathy and prosocial motivation.</p>
+        </div>
+        <div class="research-highlights">
+          <h4>Research Focus</h4>
+          <ul class="highlight-list">
+            <li>Prosocial behaviors and empathy-like responses in rodent models</li>
+            <li>Neural mechanisms of parental behavior and social bonding</li>
+            <li>Social impairments in autism and depression models</li>
+            <li>Stress-induced changes in social interaction patterns</li>
+          </ul>
+        </div>
+        <div class="key-publications">
+          <h4>Selected Publications</h4>
+          <div class="pub-item">
+            <div class="pub-item-title">Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</div>
+            <div class="pub-item-authors">Sun W, Zhang GW, Huang JJ, et al.</div>
+            <div class="pub-item-journal">Science, 2025</div>
+            <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+          <div class="pub-item">
+            <div class="pub-item-title">Glutamatergic and GABAergic neurons in pontine central gray mediate opposing valence-specific behaviors</div>
+            <div class="pub-item-authors">Xiao C, Wei J, Zhang G, et al.</div>
+            <div class="pub-item-journal">Neuron, 2023</div>
+            <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Molecular Mechanisms -->
+    <div class="research-area-card">
+      <div class="research-area-header">
+        <div class="research-area-icon">
+          <i class="fas fa-dna"></i>
+        </div>
+        <div class="research-area-title">
+          <h3>Molecular Mechanisms</h3>
+          <p class="research-area-subtitle">Cellular and molecular basis of social dysfunction</p>
+        </div>
+      </div>
+      <div class="research-area-content">
+        <div class="research-description">
+          <p>We investigate the molecular and cellular mechanisms underlying social dysfunction, with particular focus on excitation-inhibition balance, neurotransmitter systems, and hormonal regulation. Our work has revealed how chronic stress and hormonal changes alter neural circuit function to produce depression-like states and anxiety behaviors.</p>
+        </div>
+        <div class="research-highlights">
+          <h4>Key Findings</h4>
+          <ul class="highlight-list">
+            <li>Excitation-inhibition imbalance in mPOA circuits underlies stress-induced depression</li>
+            <li>GABAergic projections mediate hormone withdrawal-induced depressive behaviors</li>
+            <li>Somatostatin neurons in medial septum drive reward and appetitive learning</li>
+            <li>Cell-type specific contributions to behavioral outcomes in neuropsychiatric conditions</li>
+          </ul>
+        </div>
+        <div class="key-publications">
+          <h4>Selected Publications</h4>
+          <div class="pub-item">
+            <div class="pub-item-title">Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</div>
+            <div class="pub-item-authors">Tao C, Zhang GW, Sun WJ, et al.</div>
+            <div class="pub-item-journal">Nature Communications, 2024</div>
+            <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+          <div class="pub-item">
+            <div class="pub-item-title">The medial preoptic area mediates depressive-like behaviors induced by ovarian hormone withdrawal</div>
+            <div class="pub-item-authors">Tao C, Zhang GW, Huang JJ, et al.</div>
+            <div class="pub-item-journal">Nature Neuroscience, 2023</div>
+            <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+          <div class="pub-item">
+            <div class="pub-item-title">A bottom-up reward pathway mediated by somatostatin neurons in the medial septum</div>
+            <div class="pub-item-authors">Shen L, Zhang GW, Tao C, et al.</div>
+            <div class="pub-item-journal">Nature Communications, 2022</div>
+            <a href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Therapeutic Targets -->
+    <div class="research-area-card">
+      <div class="research-area-header">
+        <div class="research-area-icon">
+          <i class="fas fa-pills"></i>
+        </div>
+        <div class="research-area-title">
+          <h3>Therapeutic Targets</h3>
+          <p class="research-area-subtitle">Translating discoveries into treatment strategies</p>
+        </div>
+      </div>
+      <div class="research-area-content">
+        <div class="research-description">
+          <p>Our ultimate goal is to translate our basic science discoveries into therapeutic strategies for neuropsychiatric disorders. We focus on identifying druggable targets within the neural circuits we study, particularly those involved in social impairments, anxiety, and depression. Our work on Alzheimer's disease also explores neuropsychiatric symptoms and sensory processing deficits as potential intervention points.</p>
+        </div>
+        <div class="research-highlights">
+          <h4>Translational Focus</h4>
+          <ul class="highlight-list">
+            <li>Identifying circuit-specific interventions for depression and anxiety</li>
+            <li>Developing biomarkers for neuropsychiatric symptoms in neurodegenerative diseases</li>
+            <li>Testing novel therapeutic approaches using optogenetics and chemogenetics</li>
+            <li>Exploring hormonal and neuromodulatory treatment strategies</li>
+          </ul>
+        </div>
+        <div class="key-publications">
+          <h4>Selected Publications</h4>
+          <div class="pub-item">
+            <div class="pub-item-title">The neural basis of neuropsychiatric symptoms in Alzheimer's disease</div>
+            <div class="pub-item-authors">Zhang NK, Zhang SK, Zhang LI, Tao HW, Zhang GW</div>
+            <div class="pub-item-journal">Frontiers in Aging Neuroscience, 2024</div>
+            <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+          <div class="pub-item">
+            <div class="pub-item-title">Sensory processing deficits and related cortical pathological changes in Alzheimer's Disease</div>
+            <div class="pub-item-authors">Zhang NK, Zhang SK, Zhang LI, Tao HW, Zhang GW</div>
+            <div class="pub-item-journal">Frontiers in Aging Neuroscience, 2023</div>
+            <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-item-link">View Paper →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="techniques-section">
+  <div class="container">
+    <h2 class="section-title">Techniques & Approaches</h2>
+    <div class="techniques-grid">
+      <div class="technique-card">
+        <i class="fas fa-lightbulb"></i>
+        <h4>Optogenetics</h4>
+        <p>Precise control of neural activity using light</p>
+      </div>
+      <div class="technique-card">
+        <i class="fas fa-flask"></i>
+        <h4>Chemogenetics</h4>
+        <p>Designer receptors for circuit manipulation</p>
+      </div>
+      <div class="technique-card">
+        <i class="fas fa-microscope"></i>
+        <h4>In Vivo Imaging</h4>
+        <p>Real-time monitoring of neural activity</p>
+      </div>
+      <div class="technique-card">
+        <i class="fas fa-chart-line"></i>
+        <h4>Behavioral Analysis</h4>
+        <p>Sophisticated paradigms for social behaviors</p>
+      </div>
+      <div class="technique-card">
+        <i class="fas fa-project-diagram"></i>
+        <h4>Circuit Tracing</h4>
+        <p>Mapping neural connections and pathways</p>
+      </div>
+      <div class="technique-card">
+        <i class="fas fa-wave-square"></i>
+        <h4>Electrophysiology</h4>
+        <p>Recording neural signals and synaptic activity</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="funding-section">
+  <div class="container">
+    <h3 style="color: #000; margin-bottom: 1rem;">Funding Support</h3>
+    <div class="funding-logos">
+      <div class="funding-item">NIH/NIMH</div>
+      <div class="funding-item">NIH/NIA</div>
+      <div class="funding-item">Brain & Behavior Research Foundation</div>
+      <div class="funding-item">VCU School of Medicine</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+  </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
