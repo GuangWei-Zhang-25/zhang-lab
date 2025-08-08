@@ -1,731 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guang-Wei Zhang Laboratory</title>
-    <meta name="description" content="Research laboratory focused on understanding social impairment in neuropsychiatric disorders">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Reset and Base Styles - Apple-inspired */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home - Guang-Wei Zhang Laboratory</title>
+  <meta name="description" content="Home page for the Guang-Wei Zhang Laboratory at VCU">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Global Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
-            line-height: 1.47059;
-            font-weight: 400;
-            color: #1d1d1f;
-            background-color: #ffffff;
-            letter-spacing: -0.022em;
-            -webkit-font-smoothing: antialiased;
-        }
+    :root {
+        --primary-color: #000000;
+        --secondary-color: #333333;
+        --accent-color: #555555;
+        --text-color: #333333;
+        --light-bg: #f8f9fa;
+        --white: #ffffff;
+        --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-        .container {
-            max-width: 980px;
-            margin: 0 auto;
-            padding: 0 22px;
-        }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+    }
 
-        .container-wide {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 22px;
-        }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
 
-        /* Navigation - Apple Style */
-        .navbar {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: saturate(180%) blur(20px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 9999;
-            transition: background 0.3s ease;
-        }
+    /* Navigation */
+    .navbar {
+        background: var(--white);
+        box-shadow: var(--shadow);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+    }
 
-        .navbar-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 44px;
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 0 22px;
-        }
+    .navbar .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 20px;
+    }
 
+    .nav-brand h1 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .nav-menu {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+    }
+
+    .nav-menu a {
+        text-decoration: none;
+        color: var(--text-color);
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-menu a:hover {
+        color: var(--primary-color);
+    }
+
+    .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+    }
+
+    .nav-toggle span {
+        width: 25px;
+        height: 3px;
+        background: var(--primary-color);
+        margin: 3px 0;
+        transition: 0.3s;
+    }
+
+    /* Hero Section */
+    .hero {
+        background: var(--light-bg);
+        padding: 120px 0 60px;
+        margin-top: 70px;
+    }
+
+    .hero-content {
+        text-align: center;
+    }
+
+    .hero h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        color: var(--primary-color);
+    }
+
+    /* Sections */
+    .section {
+        padding: 60px 0;
+    }
+
+    .section-title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 3rem;
+        color: var(--primary-color);
+    }
+
+    /* Research Section */
+    .research {
+        background: var(--white);
+    }
+
+    .research-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .research-card {
+        background: var(--light-bg);
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .research-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow);
+    }
+
+    .research-icon i {
+        font-size: 3rem;
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+
+    .research-card h3 {
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+    }
+
+    .research-card p {
+        color: var(--text-color);
+    }
+
+    /* Publications Section */
+    .publications-preview {
+        background: var(--light-bg);
+    }
+
+    .publications-list {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .publication-item {
+        background: var(--white);
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid var(--primary-color);
+        border-radius: 0 8px 8px 0;
+    }
+
+    .publication-title {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .publication-authors {
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .publication-authors strong {
+        color: var(--primary-color);
+        font-weight: 600;
+    }
+
+    .publication-journal {
+        font-style: italic;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+    }
+
+    .publication-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s;
+    }
+
+    .publication-link:hover {
+        color: var(--secondary-color);
+    }
+
+    .publication-link i {
+        margin-left: 5px;
+        transition: transform 0.3s;
+    }
+
+    .publication-link:hover i {
+        transform: translateX(3px);
+    }
+
+    /* Team Section */
+    .team-preview {
+        background: var(--white);
+    }
+
+    .team-description {
+        text-align: center;
+        color: var(--text-color);
+        margin-bottom: 2rem;
+    }
+
+    /* Contact Section */
+    .contact {
+        background: var(--light-bg);
+    }
+
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 3rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .contact-item {
+        text-align: center;
+    }
+
+    .contact-icon i {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .contact-item h3 {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+    }
+
+    .contact-item p {
+        color: var(--text-color);
+    }
+
+    .contact-item a {
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+    .contact-item a:hover {
+        text-decoration: underline;
+    }
+
+    /* Buttons */
+    .cta-container {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .btn-primary {
+        display: inline-block;
+        padding: 0.75rem 2rem;
+        background: var(--primary-color);
+        color: var(--white);
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.3s;
+        font-weight: 500;
+    }
+
+    .btn-primary:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+    }
+
+    /* Footer */
+    .footer {
+        background: var(--primary-color);
+        color: var(--white);
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
         .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 40px;
-            align-items: center;
-            margin: 0;
-            padding: 0;
+            position: fixed;
+            left: -100%;
+            top: 70px;
+            flex-direction: column;
+            background-color: var(--white);
+            width: 100%;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 10px 27px rgba(0,0,0,0.05);
+            padding: 2rem 0;
         }
 
-        .nav-menu a {
-            text-decoration: none;
-            color: rgba(0, 0, 0, 0.8);
-            font-size: 12px;
-            font-weight: 400;
-            transition: color 0.3s ease;
-            letter-spacing: -0.01em;
+        .nav-menu.active {
+            left: 0;
         }
-
-        .nav-menu a:hover {
-            color: #000;
-        }
-
+        
         .nav-toggle {
-            display: none;
-            width: 18px;
-            height: 18px;
-            position: relative;
-            cursor: pointer;
-            position: absolute;
-            right: 22px;
-        }
-
-        .nav-toggle span {
-            position: absolute;
-            width: 18px;
-            height: 1.5px;
-            background: #1d1d1f;
-            transition: all 0.3s ease;
-        }
-
-        .nav-toggle span:first-child {
-            top: 5px;
-        }
-
-        .nav-toggle span:last-child {
-            bottom: 5px;
-        }
-
-        /* Banner Section */
-        .banner-section {
-            width: 100%;
-            height: auto;
-            margin-top: 44px;
-            overflow: hidden;
-        }
-
-        .banner-section img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* Hero Gradient Section */
-        .hero-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 0;
-            text-align: center;
-        }
-
-        .gradient-title {
-            font-size: 40px;
-            line-height: 1.1;
-            font-weight: 600;
-            color: white;
-            letter-spacing: -0.005em;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* Hero Section - Apple Style */
-        .hero {
-            padding: 60px 0 88px;
-            text-align: center;
-            background: #fbfbfd;
-        }
-
-        .hero h1 {
-            font-size: 48px;
-            line-height: 1.07143;
-            font-weight: 600;
-            letter-spacing: -0.005em;
-            color: #1d1d1f;
-            margin-bottom: 24px;
-        }
-
-        .hero .subtitle {
-            font-size: 28px;
-            line-height: 1.10722;
-            font-weight: 400;
-            letter-spacing: 0.004em;
-            color: #1d1d1f;
-            margin-bottom: 40px;
-            max-width: 820px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Social Links - Apple Style */
-        .social-links {
             display: flex;
-            justify-content: center;
-            gap: 32px;
-            margin-top: 40px;
         }
 
-        .social-links a {
-            color: #06c;
-            text-decoration: none;
-            font-size: 17px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: color 0.3s ease;
+        .nav-toggle.active span:nth-child(2) {
+            opacity: 0;
         }
 
-        .social-links a:hover {
-            text-decoration: underline;
+        .nav-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
         }
 
-        .social-links i {
-            font-size: 20px;
+        .nav-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
         }
-
-        /* Section Styles - Apple Inspired */
-        .section {
-            padding: 88px 0;
+        
+        .hero h2 {
+            font-size: 2rem;
         }
-
+        
         .section-title {
-            font-size: 48px;
-            line-height: 1.08349;
-            font-weight: 600;
-            letter-spacing: -0.003em;
-            text-align: center;
-            margin-bottom: 64px;
-            color: #1d1d1f;
+            font-size: 1.75rem;
         }
-
-        /* Research Section - Apple Style Cards */
-        .research {
-            background: #ffffff;
-        }
-
+        
         .research-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-top: 64px;
+            grid-template-columns: 1fr;
         }
-
-        .research-card {
-            text-align: center;
-            padding: 40px 20px;
-            background: #fbfbfd;
-            border-radius: 18px;
-            transition: all 0.3s ease;
-        }
-
-        .research-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
-        }
-
-        .research-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 24px;
-            background: linear-gradient(135deg, #007AFF, #5AC8FA);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .research-icon i {
-            color: white;
-            font-size: 28px;
-        }
-
-        .research-card h3 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-            letter-spacing: -0.015em;
-        }
-
-        .research-card p {
-            font-size: 17px;
-            line-height: 1.47059;
-            color: #86868b;
-            letter-spacing: -0.022em;
-        }
-
-        /* Publications Preview - Apple Style */
-        .publications-preview {
-            background: #fbfbfd;
-        }
-
+        
         .publication-item {
-            background: white;
-            padding: 32px;
-            margin-bottom: 20px;
-            border-radius: 12px;
-            border: 1px solid #d2d2d7;
-            transition: all 0.3s ease;
-        }
-
-        .publication-item:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-        }
-
-        .publication-title {
-            font-size: 21px;
-            font-weight: 600;
-            color: #1d1d1f;
-            margin-bottom: 8px;
-            line-height: 1.381;
-        }
-
-        .publication-authors {
-            font-size: 14px;
-            color: #86868b;
-            margin-bottom: 8px;
-        }
-
-        .publication-authors strong {
-            color: #1d1d1f;
-            font-weight: 600;
-        }
-
-        .publication-journal {
-            font-size: 14px;
-            color: #06c;
-            margin-bottom: 16px;
-        }
-
-        .publication-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: #06c;
-            text-decoration: none;
-            font-size: 17px;
-            transition: text-decoration 0.3s ease;
-        }
-
-        .publication-link:hover {
-            text-decoration: underline;
-        }
-
-        .publication-link i {
-            font-size: 14px;
-        }
-
-        /* CTA Button - Apple Style */
-        .cta-container {
-            text-align: center;
-            margin-top: 48px;
-        }
-
-        .btn-primary {
-            display: inline-block;
-            background: #0071e3;
-            color: white;
-            padding: 12px 28px;
-            border-radius: 980px;
-            text-decoration: none;
-            font-size: 17px;
-            font-weight: 400;
-            transition: background 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background: #0077ed;
-        }
-
-        /* Team Preview Section */
-        .team-preview {
-            background: white;
-            text-align: center;
-        }
-
-        .team-description {
-            font-size: 21px;
-            line-height: 1.381;
-            color: #86868b;
-            max-width: 720px;
-            margin: 0 auto 48px;
-        }
-
-        /* Contact Section - Apple Style */
-        .contact {
-            background: #fbfbfd;
+            padding: 1.5rem;
         }
 
         .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 48px;
-            max-width: 800px;
-            margin: 0 auto;
+            grid-template-columns: 1fr;
         }
-
-        .contact-item {
-            text-align: center;
-        }
-
-        .contact-icon {
-            width: 56px;
-            height: 56px;
-            margin: 0 auto 20px;
-            background: linear-gradient(135deg, #007AFF, #5AC8FA);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .contact-icon i {
-            color: white;
-            font-size: 24px;
-        }
-
-        .contact-item h3 {
-            font-size: 21px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1d1d1f;
-        }
-
-        .contact-item p {
-            font-size: 17px;
-            line-height: 1.47059;
-            color: #86868b;
-        }
-
-        .contact-item a {
-            color: #06c;
-            text-decoration: none;
-        }
-
-        .contact-item a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer - Apple Style */
-        .footer {
-            background: #f5f5f7;
-            padding: 20px 0;
-            border-top: 1px solid #d2d2d7;
-        }
-
-        .footer-content {
-            text-align: center;
-            font-size: 12px;
-            color: #86868b;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                right: -100%;
-                top: 48px;
-                width: 100%;
-                background: rgba(255, 255, 255, 0.95);
-                backdrop-filter: blur(20px);
-                flex-direction: column;
-                padding: 20px 0;
-                gap: 20px;
-                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-                transition: right 0.3s ease;
-            }
-
-            .nav-menu.active {
-                right: 0;
-            }
-
-            .nav-toggle {
-                display: block;
-            }
-
-            .hero h1 {
-                font-size: 40px;
-            }
-
-            .hero .subtitle {
-                font-size: 21px;
-            }
-
-            .section-title {
-                font-size: 32px;
-            }
-
-            .social-links {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .research-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Smooth animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .animate-in {
-            animation: fadeIn 0.6s ease forwards;
-        }
-    </style>
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-content">
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="research.html">Research</a></li>
-                <li><a href="publications.html">Publications</a></li>
-                <li><a href="team.html">Team</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-            <div class="nav-toggle">
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Banner Section -->
-    <div class="banner-section">
-        <img src="images/banner.jpg" alt="Neuroscience Research Banner">
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand"><h1><a href="index.html" style="text-decoration:none;color:inherit;">Guang-Wei Zhang Laboratory</a></h1></div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+      <span></span><span></span><span></span>
     </div>
+  </div>
+</nav>
 
-    <!-- Hero Section with Gradient -->
-    <section class="hero-gradient">
-        <div class="container">
-            <h2 class="gradient-title">Social Impairment in Neuropsychiatric Disorders</h2>
-        </div>
-    </section>
+<header class="hero">
+  <div class="hero-content container">
+    <h2>Social Impairment in Neuropsychiatric Disorders</h2>
+  </div>
+</header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1 class="animate-in">Guang-Wei Zhang Laboratory</h1>
-            <p class="subtitle animate-in">Investigating the neural mechanisms underlying social behavior and their dysfunction in neuropsychiatric conditions</p>
-            <div class="social-links animate-in">
-                <a href="https://twitter.com/zhangguangwei1" target="_blank" rel="noopener noreferrer">
-                    <i class="fab fa-x-twitter"></i>
-                    <span>X (Twitter)</span>
-                </a>
-                <a href="https://bsky.app/profile/guangwei-zhang.bsky.social" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-cloud"></i>
-                    <span>Bluesky</span>
-                </a>
-                <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>Google Scholar</span>
-                </a>
-            </div>
-        </div>
-    </section>
+<section class="section research">
+<div class="container">
+<h2 class="section-title">Research Focus</h2>
+<div class="research-grid">
+<div class="research-card">
+<div class="research-icon">
+<i class="fas fa-brain"></i>
+</div>
+<h3>Neural Circuits</h3>
+<p>Mapping the neural circuits that control social behavior and emotional processing</p>
+</div>
+<div class="research-card">
+<div class="research-icon">
+<i class="fas fa-users"></i>
+</div>
+<h3>Social Behavior</h3>
+<p>Understanding how social impairments manifest in various neuropsychiatric disorders</p>
+</div>
+<div class="research-card">
+<div class="research-icon">
+<i class="fas fa-dna"></i>
+</div>
+<h3>Molecular Mechanisms</h3>
+<p>Investigating molecular and cellular mechanisms underlying social dysfunction</p>
+</div>
+<div class="research-card">
+<div class="research-icon">
+<i class="fas fa-pills"></i>
+</div>
+<h3>Therapeutic Targets</h3>
+<p>Identifying novel therapeutic targets for treating social impairments</p>
+</div>
+</div>
+</div>
+</section>
 
-    <!-- Research Section -->
-    <section class="section research">
-        <div class="container">
-            <h2 class="section-title">Research Focus</h2>
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3>Neural Circuits</h3>
-                    <p>Mapping the neural circuits that control social behavior and emotional processing</p>
-                </div>
-                <div class="research-card">
-                    <div class="research-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Social Behavior</h3>
-                    <p>Understanding how social impairments manifest in various neuropsychiatric disorders</p>
-                </div>
-                <div class="research-card">
-                    <div class="research-icon">
-                        <i class="fas fa-dna"></i>
-                    </div>
-                    <h3>Molecular Mechanisms</h3>
-                    <p>Investigating molecular and cellular mechanisms underlying social dysfunction</p>
-                </div>
-                <div class="research-card">
-                    <div class="research-icon">
-                        <i class="fas fa-pills"></i>
-                    </div>
-                    <h3>Therapeutic Targets</h3>
-                    <p>Identifying novel therapeutic targets for treating social impairments</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<section class="section publications-preview">
+<div class="container">
+<h2 class="section-title">Recent Publications</h2>
+<div class="publications-list">
+<div class="publication-item">
+<h3 class="publication-title">Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</h3>
+<p class="publication-authors">W Sun, <strong>GW Zhang</strong>, JJ Huang, C Tao, MB Seo, HW Tao, LI Zhang</p>
+<p class="publication-journal">Science 387 (6736), eadq2677, 2025</p>
+<a class="publication-link" href="https://doi.org/10.1126/science.adq2677" target="_blank">
+View Paper <i class="fas fa-arrow-right"></i>
+</a>
+</div>
+<div class="publication-item">
+<h3 class="publication-title">Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</h3>
+<p class="publication-authors">C Tao, <strong>GW Zhang</strong>, WJ Sun, JJ Huang, LI Zhang, HW Tao</p>
+<p class="publication-journal">Nature Communications 15 (1), 8575, 2024</p>
+<a class="publication-link" href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank">
+View Paper <i class="fas fa-arrow-right"></i>
+</a>
+</div>
+<div class="publication-item">
+<h3 class="publication-title">Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</h3>
+<p class="publication-authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
+<p class="publication-journal">Nature Neuroscience 24 (4), 516-528, 2021</p>
+<a class="publication-link" href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank">
+View Paper <i class="fas fa-arrow-right"></i>
+</a>
+</div>
+</div>
+<div class="cta-container">
+<a class="btn-primary" href="publications.html">View All Publications</a>
+</div>
+</div>
+</section>
 
-    <!-- Publications Preview -->
-    <section class="section publications-preview">
-        <div class="container">
-            <h2 class="section-title">Recent Publications</h2>
-            <div class="publications-list">
-                <div class="publication-item">
-                    <h3 class="publication-title">Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</h3>
-                    <p class="publication-authors">W Sun, <strong>GW Zhang</strong>, JJ Huang, C Tao, MB Seo, HW Tao, LI Zhang</p>
-                    <p class="publication-journal">Science 387 (6736), eadq2677, 2025</p>
-                    <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="publication-link">
-                        View Paper <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+<section class="section team-preview">
+<div class="container">
+<h2 class="section-title">Our Team</h2>
+<p class="team-description">
+We have a diverse team of researchers working on understanding neural mechanisms of social behavior
+</p>
+<div class="cta-container">
+<a class="btn-primary" href="team.html">Meet Our Team</a>
+</div>
+</div>
+</section>
 
-                <div class="publication-item">
-                    <h3 class="publication-title">Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</h3>
-                    <p class="publication-authors">C Tao, <strong>GW Zhang</strong>, WJ Sun, JJ Huang, LI Zhang, HW Tao</p>
-                    <p class="publication-journal">Nature Communications 15 (1), 8575, 2024</p>
-                    <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="publication-link">
-                        View Paper <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
+<section class="section contact">
+<div class="container">
+<h2 class="section-title">Contact</h2>
+<div class="contact-grid">
+<div class="contact-item">
+<div class="contact-icon">
+<i class="fas fa-envelope"></i>
+</div>
+<h3>Email</h3>
+<p><a href="mailto:guangwei.zhang@vcuhealth.org">guangwei.zhang@vcuhealth.org</a></p>
+</div>
+<div class="contact-item">
+<div class="contact-icon">
+<i class="fas fa-map-marker-alt"></i>
+</div>
+<h3>Location</h3>
+<p>Virginia Commonwealth University<br/>
+Department of Neuroscience<br/>
+Sanger Hall, Room 9-060<br/>
+Richmond, VA 23298</p>
+</div>
+</div>
+</div>
+</section>
 
-                <div class="publication-item">
-                    <h3 class="publication-title">Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</h3>
-                    <p class="publication-authors"><strong>GW Zhang</strong>, L Shen, C Tao, AH Jung, B Peng, Z Li, LI Zhang, HW Tao</p>
-                    <p class="publication-journal">Nature Neuroscience 24 (4), 516-528, 2021</p>
-                    <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="publication-link">
-                        View Paper <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="cta-container">
-                <a href="publications.html" class="btn-primary">View All Publications</a>
-            </div>
-        </div>
-    </section>
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+  </div>
+</footer>
 
-    <!-- Team Preview -->
-    <section class="section team-preview">
-        <div class="container">
-            <h2 class="section-title">Our Team</h2>
-            <p class="team-description">
-                We have a diverse team of researchers working on understanding neural mechanisms of social behavior
-            </p>
-            <div class="cta-container">
-                <a href="team.html" class="btn-primary">Meet Our Team</a>
-            </div>
-        </div>
-    </section>
+<script>
+// Mobile Navigation Toggle
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
 
-    <!-- Contact Section -->
-    <section class="section contact">
-        <div class="container">
-            <h2 class="section-title">Contact</h2>
-            <div class="contact-grid">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3>Email</h3>
-                    <p><a href="mailto:guangwei.zhang@vcuhealth.org">guangwei.zhang@vcuhealth.org</a></p>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3>Location</h3>
-                    <p>Virginia Commonwealth University<br>
-                    Department of Neuroscience<br>
-                    Sanger Hall, Room 9-060<br>
-                    Richmond, VA 23298</p>
-                </div>
-            </div>
-        </div>
-    </section>
+navToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+    navToggle.classList.toggle('active');
+});
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Mobile menu toggle
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.querySelector('.nav-menu');
-
-        navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-            
-            // Animate hamburger menu
-            const spans = navToggle.querySelectorAll('span');
-            if (navMenu.classList.contains('active')) {
-                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
-                spans[1].style.transform = 'rotate(-45deg) translate(5px, -5px)';
-            } else {
-                spans[0].style.transform = 'none';
-                spans[1].style.transform = 'none';
-            }
-        });
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('.nav-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('active');
-                const spans = navToggle.querySelectorAll('span');
-                spans[0].style.transform = 'none';
-                spans[1].style.transform = 'none';
-            });
-        });
-
-        // Add scroll effect to navbar
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 10) {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 0.8)';
-            }
-        });
-
-        // Add intersection observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe all cards and sections
-        document.querySelectorAll('.research-card, .publication-item').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
-        });
-    </script>
+// Close mobile menu when clicking on a link
+document.querySelectorAll('.nav-menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        navToggle.classList.remove('active');
+    });
+});
+</script>
 </body>
 </html>
