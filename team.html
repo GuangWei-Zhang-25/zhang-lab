@@ -1,434 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team - Guang-Wei Zhang Laboratory</title>
-    <meta name="description" content="Meet the research team at Guang-Wei Zhang Laboratory">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Reset and Base Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Team - Guang-Wei Zhang Laboratory</title>
+  <meta name="description" content="Team page for the Guang-Wei Zhang Laboratory at VCU">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styles specific to team page */
+    .team-full {
+      padding: 80px 0;
+      background: #f8f9fa;
+    }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #ffffff;
-        }
+    .current-members {
+      margin-bottom: 60px;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+    .pi-section {
+      margin-bottom: 60px;
+    }
 
-        /* Navigation */
-        .navbar {
-            background: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-        }
+    /* Single Member Card - Centered */
+    .team-member-single {
+      background: white;
+      padding: 3rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto;
+    }
 
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 20px;
-        }
+    .team-member-single img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      background: #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
 
-        .nav-brand h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #2c3e50;
-        }
+    .team-member-single h3 {
+      color: #000;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
 
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
+    .position {
+      color: #333;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
 
-        .nav-menu a {
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
+    .member-bio {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
 
-        .nav-menu a:hover {
-            color: #3498db;
-        }
+    .member-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
 
-        .nav-toggle {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
+    .member-links a {
+      color: #000;
+      font-size: 1rem;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid #000;
+      border-radius: 4px;
+    }
 
-        .nav-toggle span {
-            width: 25px;
-            height: 3px;
-            background: #333;
-            margin: 3px 0;
-            transition: 0.3s;
-        }
+    .member-links a:hover {
+      background: #000;
+      color: white;
+    }
 
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 120px 0 60px;
-            margin-top: 70px;
-            text-align: center;
-        }
+    /* Join Us Section */
+    .join-us {
+      background: white;
+      padding: 80px 0;
+      text-align: center;
+    }
 
-        .page-header h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
+    .join-us h2 {
+      font-size: 2rem;
+      color: #000;
+      margin-bottom: 3rem;
+      text-align: center;
+    }
 
-        .page-header p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-        }
+    .join-us-content {
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-        /* Team Section */
-        .team-full {
-            padding: 80px 0;
-            background: #f8f9fa;
-        }
+    .join-us p {
+      color: #555;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
 
-        /* Current Members Section */
-        .current-members {
-            margin-bottom: 60px;
-        }
+    .positions-available {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-        .section-title {
-            font-size: 2rem;
-            color: #2c3e50;
-            margin-bottom: 3rem;
-            text-align: center;
-            position: relative;
-            padding-bottom: 1rem;
-        }
+    .position-card {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 8px;
+      transition: all 0.3s;
+      border: 2px solid transparent;
+    }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: #667eea;
-        }
+    .position-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: #000;
+    }
 
-        /* Single Member Card - Centered */
-        .team-member-single {
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 500px;
-            margin: 0 auto;
-        }
+    .position-card h3 {
+      color: #000;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
 
-        .team-member-single img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 1.5rem;
-            background: #e0e0e0;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-        }
+    .position-card p {
+      color: #666;
+      font-size: 0.95rem;
+      margin-bottom: 0;
+      line-height: 1.6;
+    }
 
-        .team-member-single h3 {
-            color: #2c3e50;
-            margin-bottom: 0.5rem;
-            font-size: 1.5rem;
-        }
+    .btn-contact {
+      display: inline-block;
+      background: #000;
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-weight: 500;
+      margin-top: 2rem;
+    }
 
-        .position {
-            color: #667eea;
-            font-weight: 500;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
+    .btn-contact:hover {
+      background: #333;
+      transform: translateY(-2px);
+    }
 
-        .member-bio {
-            color: #666;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            max-width: 400px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    /* Research Interests Section */
+    .research-interests {
+      background: #f0f0f0;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
 
-        .member-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-top: 1.5rem;
-        }
+    .research-interests h4 {
+      color: #000;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
 
-        .member-links a {
-            color: #667eea;
-            font-size: 1.3rem;
-            transition: color 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+    .research-interests ul {
+      list-style: none;
+      padding: 0;
+    }
 
-        .member-links a:hover {
-            color: #5a67d8;
-        }
+    .research-interests li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #555;
+    }
 
-        /* Join Us Section */
-        .join-us {
-            background: white;
-            padding: 80px 0;
-            text-align: center;
-        }
+    .research-interests li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: #000;
+    }
 
-        .join-us h2 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 1.5rem;
-        }
+    /* Alumni Section */
+    .alumni-section {
+      background: #f8f9fa;
+      padding: 60px 0;
+    }
 
-        .join-us-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+    .alumni-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-        .join-us p {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
+    .alumni-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-        .positions-available {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
+    .alumni-card h4 {
+      color: #000;
+      margin-bottom: 0.5rem;
+    }
 
-        .position-card {
-            background: #f8f9fa;
-            padding: 2rem;
-            border-radius: 10px;
-            border: 2px solid transparent;
-            transition: all 0.3s;
-        }
+    .alumni-card .years {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
 
-        .position-card:hover {
-            border-color: #667eea;
-            transform: translateY(-5px);
-        }
+    .alumni-card .current-position {
+      color: #555;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
 
-        .position-card h3 {
-            color: #2c3e50;
-            margin-bottom: 1rem;
-        }
+    @media (max-width: 768px) {
+      .team-member-single {
+        padding: 2rem;
+      }
 
-        .position-card p {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 0;
-        }
+      .team-member-single img {
+        width: 150px;
+        height: 150px;
+      }
 
-        .btn-primary {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 1rem 2rem;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: background 0.3s;
-            font-weight: 500;
-        }
+      .member-links {
+        flex-direction: column;
+        gap: 1rem;
+      }
 
-        .btn-primary:hover {
-            background: #5a67d8;
-        }
+      .positions-available {
+        grid-template-columns: 1fr;
+      }
 
-        /* Footer */
-        .footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 2rem 0;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                right: -100%;
-                top: 70px;
-                flex-direction: column;
-                background: white;
-                width: 100%;
-                text-align: center;
-                transition: 0.3s;
-                box-shadow: 0 10px 27px rgba(0,0,0,0.05);
-                padding: 2rem 0;
-            }
-
-            .nav-menu.active {
-                right: 0;
-            }
-
-            .nav-toggle {
-                display: flex;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-
-            .team-member-single {
-                padding: 2rem;
-            }
-
-            .team-member-single img {
-                width: 150px;
-                height: 150px;
-            }
-
-            .positions-available {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+      .alumni-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <h1>Guang-Wei Zhang Laboratory</h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#research">Research</a></li>
-                <li><a href="index.html#publications">Publications</a></li>
-                <li><a href="team.html">Team</a></li>
-                <li><a href="index.html#contact">Contact</a></li>
-                <li><a href="publications.html">Full Publications</a></li>
-            </ul>
-            <div class="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand"><h1><a href="index.html" style="text-decoration:none;color:inherit;">Guang-Wei Zhang Laboratory</a></h1></div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
 
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="container">
-            <h1>Our Team</h1>
-            <p>Dedicated to understanding neural mechanisms of social behavior and neuropsychiatric disorders</p>
+<header class="hero">
+  <div class="hero-content container">
+    <h2>Our Team</h2>
+  </div>
+</header>
+
+<!-- Team Section -->
+<section class="team-full">
+  <div class="container">
+    <!-- Principal Investigator -->
+    <div class="pi-section">
+      <h2 class="section-title">Principal Investigator</h2>
+      <div class="team-member-single">
+        <img src="images/guangwei-zhang_small.jpg" alt="Guang-Wei Zhang" onerror="this.style.background='#e5e7eb'">
+        <h3>Guang-Wei Zhang, MD, PhD</h3>
+        <p class="position">Principal Investigator</p>
+        <p class="position" style="font-size: 1rem; color: #666;">Assistant Professor<br/>Department of Anatomy and Neurobiology<br/>Virginia Commonwealth University</p>
+        <p class="member-bio">
+          Dr. Zhang's research focuses on understanding the neural mechanisms underlying social behavior and how these mechanisms are disrupted in neuropsychiatric disorders. The laboratory uses cutting-edge techniques including optogenetics, chemogenetics, in vivo imaging, and sophisticated behavioral analysis to investigate neural circuits controlling social impairment, with the ultimate goal of identifying novel therapeutic targets for conditions such as autism, depression, and anxiety disorders.
+        </p>
+        
+        <div class="research-interests">
+          <h4>Research Interests</h4>
+          <ul>
+            <li>Neural circuits controlling social behavior and emotional processing</li>
+            <li>Prosocial behaviors and empathy in animal models</li>
+            <li>Stress-induced anxiety and depression mechanisms</li>
+            <li>Excitation-inhibition balance in neuropsychiatric disorders</li>
+            <li>Therapeutic target identification for social impairments</li>
+          </ul>
         </div>
+
+        <div class="member-links">
+          <a href="mailto:guangwei.zhang@vcuhealth.org">
+            <i class="fas fa-envelope"></i> Email
+          </a>
+          <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank">
+            <i class="fas fa-graduation-cap"></i> Scholar
+          </a>
+          <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Zhang+GW%5BAuthor%5D" target="_blank">
+            <i class="fas fa-book"></i> PubMed
+          </a>
+        </div>
+      </div>
     </div>
 
-    <!-- Team Section -->
-    <section class="team-full">
-        <div class="container">
-            <!-- Current Members -->
-            <div class="current-members">
-                <h2 class="section-title">Principal Investigator</h2>
-                <div class="team-member-single">
-                    <img src="images/guangwei-zhang.jpg" alt="Guang-Wei Zhang" onerror="this.style.background='#e0e0e0'">
-                    <h3>Guang-Wei Zhang, Ph.D.</h3>
-                    <p class="position">Principal Investigator</p>
-                    <p class="member-bio">
-                        Dr. Zhang's research focuses on understanding the neural mechanisms underlying social behavior and how these mechanisms are disrupted in neuropsychiatric disorders. The laboratory uses cutting-edge techniques in neuroscience to investigate neural circuits controlling social impairment, with the goal of identifying novel therapeutic targets.
-                    </p>
-                    <div class="member-links">
-                        <a href="mailto:guangwei.zhang@vcuhealth.org">
-                            <i class="fas fa-envelope"></i> Email
-                        </a>
-                        <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank">
-                            <i class="fas fa-book"></i> Google Scholar
-                        </a>
-                        <a href="https://twitter.com/zhangguangwei1" target="_blank">
-                            <i class="fab fa-twitter"></i> Twitter
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <!-- Current Members -->
+    <div class="current-members">
+      <h2 class="section-title">Current Members</h2>
+      <div class="team-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto;">
+        <div class="team-card placeholder" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; border: 2px dashed #ddd; opacity: 0.6;">
+          <div class="avatar-placeholder" style="width: 120px; height: 120px; border-radius: 50%; background: #e5e7eb; margin: 0 auto 1.5rem;"></div>
+          <h4 style="color: #000; margin-bottom: 0.5rem;">Position Available</h4>
+          <p style="color: #666;">Postdoctoral Fellow</p>
+          <p class="muted" style="color: #999; font-size: 0.9rem;">Join our team</p>
         </div>
-    </section>
-
-    <!-- Join Us Section -->
-    <section class="join-us">
-        <div class="container">
-            <div class="join-us-content">
-                <h2>Join Our Team</h2>
-                <p>
-                    We are actively recruiting motivated researchers at all levels who are passionate about understanding 
-                    the neural basis of social behavior and developing new approaches to treat neuropsychiatric disorders. 
-                    Our lab provides a collaborative and supportive environment for scientific discovery.
-                </p>
-                
-                <div class="positions-available">
-                    <div class="position-card">
-                        <h3>Postdoctoral Fellows</h3>
-                        <p>PhD holders with expertise in neuroscience, behavioral analysis, or related fields</p>
-                    </div>
-                    <div class="position-card">
-                        <h3>Graduate Students</h3>
-                        <p>Prospective PhD students interested in neural circuits and social behavior</p>
-                    </div>
-                    <div class="position-card">
-                        <h3>Research Technicians</h3>
-                        <p>Recent graduates seeking research experience in systems neuroscience</p>
-                    </div>
-                </div>
-                
-                <p>
-                    If you're interested in joining our research team, please send your CV and a brief statement of research interests.
-                </p>
-                <a href="index.html#contact" class="btn-primary">Get in Touch</a>
-            </div>
+        <div class="team-card placeholder" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; border: 2px dashed #ddd; opacity: 0.6;">
+          <div class="avatar-placeholder" style="width: 120px; height: 120px; border-radius: 50%; background: #e5e7eb; margin: 0 auto 1.5rem;"></div>
+          <h4 style="color: #000; margin-bottom: 0.5rem;">Position Available</h4>
+          <p style="color: #666;">Graduate Student</p>
+          <p class="muted" style="color: #999; font-size: 0.9rem;">Join our team</p>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+        <div class="team-card placeholder" style="background: white; border-radius: 12px; padding: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; border: 2px dashed #ddd; opacity: 0.6;">
+          <div class="avatar-placeholder" style="width: 120px; height: 120px; border-radius: 50%; background: #e5e7eb; margin: 0 auto 1.5rem;"></div>
+          <h4 style="color: #000; margin-bottom: 0.5rem;">Position Available</h4>
+          <p style="color: #666;">Research Technician</p>
+          <p class="muted" style="color: #999; font-size: 0.9rem;">Join our team</p>
         </div>
-    </footer>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Mobile menu toggle
-        const navToggle = document.querySelector('.nav-toggle');
-        const navMenu = document.querySelector('.nav-menu');
+<!-- Join Us Section -->
+<section class="join-us">
+  <div class="container">
+    <div class="join-us-content">
+      <h2 class="section-title">Join Our Team</h2>
+      <p>
+        We are actively recruiting motivated researchers at all levels who are passionate about understanding 
+        the neural basis of social behavior and developing new approaches to treat neuropsychiatric disorders. 
+        Our lab provides a collaborative and supportive environment with access to state-of-the-art facilities 
+        and techniques for scientific discovery.
+      </p>
+      
+      <div class="positions-available">
+        <div class="position-card">
+          <h3>Postdoctoral Fellows</h3>
+          <p>We seek PhD holders with expertise in neuroscience, behavioral analysis, electrophysiology, or related fields. Experience with in vivo techniques is preferred.</p>
+        </div>
+        <div class="position-card">
+          <h3>Graduate Students</h3>
+          <p>Prospective PhD students interested in neural circuits, social behavior, and translational neuroscience are encouraged to apply through VCU's graduate programs.</p>
+        </div>
+        <div class="position-card">
+          <h3>Research Technicians</h3>
+          <p>Recent graduates seeking research experience in systems neuroscience. Ideal candidates have strong organizational skills and interest in animal behavior.</p>
+        </div>
+      </div>
 
-        navToggle.addEventListener('click', () => {
-            navMenu.classList.toggle('active');
-        });
-    </script>
+      <p style="margin-top: 3rem;">
+        <strong>To Apply:</strong> Please send your CV, a cover letter describing your research interests and career goals, 
+        and contact information for three references to Dr. Zhang.
+      </p>
+      
+      <p>
+        We are committed to fostering an inclusive and diverse research environment. 
+        We encourage applications from individuals of all backgrounds.
+      </p>
+      
+      <a href="contact.html" class="btn-contact">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<!-- Alumni Section (Optional - can be populated later) -->
+<section class="alumni-section">
+  <div class="container">
+    <h2 class="section-title">Alumni</h2>
+    <p style="text-align: center; color: #666; margin-bottom: 2rem;">Our lab alumni have gone on to successful careers in academia, industry, and healthcare.</p>
+    <div class="alumni-grid">
+      <!-- Alumni cards can be added here as people graduate from the lab -->
+      <div class="alumni-card" style="opacity: 0.5; border: 2px dashed #ddd;">
+        <h4>Future Alumni</h4>
+        <p class="years">Years in Lab</p>
+        <p class="current-position">Current Position</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+  </div>
+</footer>
+<script src="script.js"></script>
 </body>
 </html>
