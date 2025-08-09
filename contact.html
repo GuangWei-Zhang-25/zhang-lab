@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact - Guang-Wei Zhang Laboratory</title>
+  <meta name="description" content="Contact information for the Guang-Wei Zhang Laboratory at VCU">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Additional styles specific to contact page */
+    .contact-main {
+      padding: 80px 0;
+      background: #fff;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Contact Info Section */
+    .contact-info-section {
+      background: #f8f9fa;
+      padding: 3rem;
+      border-radius: 12px;
+    }
+
+    .contact-info-section h3 {
+      color: #000;
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid #000;
+    }
+
+    .contact-item {
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-item-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-item-header i {
+      font-size: 1.5rem;
+      color: #000;
+      width: 30px;
+    }
+
+    .contact-item-header h4 {
+      color: #000;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .contact-item-content {
+      margin-left: 40px;
+      color: #555;
+      line-height: 1.8;
+    }
+
+    .contact-item-content a {
+      color: #000;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .contact-item-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Map Section */
+    .map-section {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .map-header {
+      padding: 2rem;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .map-header h3 {
+      color: #000;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .map-header p {
+      color: #666;
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    .map-container {
+      height: 400px;
+      background: #e5e7eb;
+      position: relative;
+    }
+
+    .map-placeholder {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #666;
+    }
+
+    .map-placeholder i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #999;
+    }
+
+    /* Directions Section */
+    .directions-section {
+      padding: 60px 0;
+      background: #f8f9fa;
+    }
+
+    .directions-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+    }
+
+    .direction-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .direction-card h4 {
+      color: #000;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .direction-card h4 i {
+      font-size: 1.2rem;
+    }
+
+    .direction-card p {
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .direction-card ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .direction-card li {
+      padding: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+      color: #555;
+    }
+
+    .direction-card li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #000;
+    }
+
+    /* Quick Links Section */
+    .quick-links {
+      padding: 60px 0;
+      background: white;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .link-card {
+      background: #f8f9fa;
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: center;
+      transition: all 0.3s;
+      text-decoration: none;
+      color: inherit;
+      border: 2px solid transparent;
+    }
+
+    .link-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: #000;
+    }
+
+    .link-card i {
+      font-size: 2.5rem;
+      color: #000;
+      margin-bottom: 1rem;
+    }
+
+    .link-card h4 {
+      color: #000;
+      margin-bottom: 0.5rem;
+    }
+
+    .link-card p {
+      color: #666;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    /* Social Media Section */
+    .social-section {
+      padding: 40px 0;
+      background: #f8f9fa;
+      text-align: center;
+    }
+
+    .social-links-contact {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .social-links-contact a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: white;
+      color: #000;
+      text-decoration: none;
+      transition: all 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .social-links-contact a:hover {
+      background: #000;
+      color: white;
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Office Hours */
+    .office-hours {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 1.5rem;
+      border-radius: 4px;
+      margin-top: 2rem;
+    }
+
+    .office-hours h4 {
+      color: #856404;
+      margin-bottom: 0.5rem;
+    }
+
+    .office-hours p {
+      color: #856404;
+      margin: 0;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .directions-content {
+        grid-template-columns: 1fr;
+      }
+
+      .links-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .social-links-contact {
+        flex-wrap: wrap;
+      }
+
+      .contact-info-section {
+        padding: 2rem;
+      }
+
+      .map-container {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand"><h1><a href="index.html" style="text-decoration:none;color:inherit;">Guang-Wei Zhang Laboratory</a></h1></div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="research.html">Research</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-content container">
+    <h2>Contact Us</h2>
+  </div>
+</header>
+
+<!-- Main Contact Section -->
+<section class="contact-main">
+  <div class="container">
+    <div class="contact-grid">
+      <!-- Contact Information -->
+      <div class="contact-info-section">
+        <h3>Get in Touch</h3>
+        
+        <div class="contact-item">
+          <div class="contact-item-header">
+            <i class="fas fa-user"></i>
+            <h4>Principal Investigator</h4>
+          </div>
+          <div class="contact-item-content">
+            <strong>Guang-Wei Zhang, MD, PhD</strong><br>
+            Assistant Professor<br>
+            Department of Anatomy and Neurobiology
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-header">
+            <i class="fas fa-envelope"></i>
+            <h4>Email</h4>
+          </div>
+          <div class="contact-item-content">
+            <a href="mailto:guangwei.zhang@vcuhealth.org">guangwei.zhang@vcuhealth.org</a>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-header">
+            <i class="fas fa-phone"></i>
+            <h4>Phone</h4>
+          </div>
+          <div class="contact-item-content">
+            <a href="tel:+1-804-828-XXXX">(804) 828-XXXX</a><br>
+            <small>Please email for phone appointments</small>
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-header">
+            <i class="fas fa-map-marker-alt"></i>
+            <h4>Laboratory Address</h4>
+          </div>
+          <div class="contact-item-content">
+            Sanger Hall, Room 9-060<br>
+            1101 E Marshall Street<br>
+            Richmond, VA 23298<br>
+            United States
+          </div>
+        </div>
+
+        <div class="contact-item">
+          <div class="contact-item-header">
+            <i class="fas fa-university"></i>
+            <h4>Mailing Address</h4>
+          </div>
+          <div class="contact-item-content">
+            Department of Anatomy and Neurobiology<br>
+            Virginia Commonwealth University<br>
+            School of Medicine<br>
+            P.O. Box 980709<br>
+            Richmond, VA 23298-0709
+          </div>
+        </div>
+
+        <div class="office-hours">
+          <h4><i class="fas fa-clock"></i> Office Hours</h4>
+          <p>By appointment only. Please email to schedule a meeting.</p>
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <div class="map-section">
+        <div class="map-header">
+          <h3>Location</h3>
+          <p>Sanger Hall - VCU Medical Campus</p>
+        </div>
+        <div class="map-container">
+          <div class="map-placeholder">
+            <i class="fas fa-map-marked-alt"></i>
+            <p>Interactive map</p>
+            <a href="https://www.google.com/maps/place/Sanger+Hall,+1101+E+Marshall+St,+Richmond,+VA+23298" target="_blank" style="display: inline-block; margin-top: 1rem; padding: 0.5rem 1.5rem; background: #000; color: white; text-decoration: none; border-radius: 4px;">
+              View on Google Maps
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Directions Section -->
+<section class="directions-section">
+  <div class="container">
+    <h2 class="section-title">Visiting Our Lab</h2>
+    <div class="directions-content">
+      <div class="direction-card">
+        <h4><i class="fas fa-car"></i> By Car</h4>
+        <p>From I-95/I-64:</p>
+        <ul>
+          <li>Take Exit 74C (Broad Street)</li>
+          <li>Turn right onto N 10th Street</li>
+          <li>Turn left onto E Marshall Street</li>
+          <li>Sanger Hall will be on your right</li>
+        </ul>
+        <p><strong>Parking:</strong> Visitor parking is available in the D Deck (8th and Marshall Streets) or A Deck (12th and Marshall Streets)</p>
+      </div>
+
+      <div class="direction-card">
+        <h4><i class="fas fa-plane"></i> By Air</h4>
+        <p>Richmond International Airport (RIC) is approximately 15 minutes from campus.</p>
+        <ul>
+          <li>Taxi/Uber/Lyft available at airport</li>
+          <li>Rental cars available</li>
+          <li>Airport shuttle services to downtown Richmond</li>
+        </ul>
+      </div>
+
+      <div class="direction-card">
+        <h4><i class="fas fa-bus"></i> Public Transportation</h4>
+        <p>GRTC Transit System serves the VCU Medical Campus:</p>
+        <ul>
+          <li>Multiple bus routes stop near Sanger Hall</li>
+          <li>Pulse BRT line connects to main campus</li>
+          <li>Check GRTC website for schedules</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Links Section -->
+<section class="quick-links">
+  <div class="container">
+    <h2 class="section-title">Quick Links</h2>
+    <div class="links-grid">
+      <a href="https://medschool.vcu.edu/departments/anatomy/" target="_blank" class="link-card">
+        <i class="fas fa-building"></i>
+        <h4>Department</h4>
+        <p>Anatomy & Neurobiology</p>
+      </a>
+      <a href="https://www.vcu.edu/" target="_blank" class="link-card">
+        <i class="fas fa-university"></i>
+        <h4>University</h4>
+        <p>Virginia Commonwealth University</p>
+      </a>
+      <a href="https://medschool.vcu.edu/" target="_blank" class="link-card">
+        <i class="fas fa-user-md"></i>
+        <h4>School</h4>
+        <p>VCU School of Medicine</p>
+      </a>
+      <a href="team.html#join-us" class="link-card">
+        <i class="fas fa-user-plus"></i>
+        <h4>Join Us</h4>
+        <p>Open Positions</p>
+      </a>
+      <a href="publications.html" class="link-card">
+        <i class="fas fa-book"></i>
+        <h4>Publications</h4>
+        <p>Recent Papers</p>
+      </a>
+      <a href="research.html" class="link-card">
+        <i class="fas fa-microscope"></i>
+        <h4>Research</h4>
+        <p>Our Focus Areas</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Social Media Section -->
+<section class="social-section">
+  <div class="container">
+    <h3 style="color: #000; margin-bottom: 1rem;">Connect With Us</h3>
+    <p style="color: #666; margin-bottom: 2rem;">Follow our research and stay updated on lab news</p>
+    <div class="social-links-contact">
+      <a href="https://twitter.com/zhangguangwei1" target="_blank" title="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://www.linkedin.com/in/guangwei-zhang" target="_blank" title="LinkedIn">
+        <i class="fab fa-linkedin"></i>
+      </a>
+      <a href="https://scholar.google.com/citations?user=YOUR_ID" target="_blank" title="Google Scholar">
+        <i class="fas fa-graduation-cap"></i>
+      </a>
+      <a href="https://pubmed.ncbi.nlm.nih.gov/?term=Zhang+GW%5BAuthor%5D" target="_blank" title="PubMed">
+        <i class="fas fa-book-medical"></i>
+      </a>
+      <a href="https://github.com/zhanglab" target="_blank" title="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Collaboration Section -->
+<section class="contact-main" style="background: #f8f9fa;">
+  <div class="container">
+    <h2 class="section-title">Collaboration & Opportunities</h2>
+    <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+      <p style="color: #555; line-height: 1.8; margin-bottom: 2rem;">
+        We welcome collaborations with researchers interested in neural circuits, social behavior, and neuropsychiatric disorders. 
+        Our laboratory has expertise in optogenetics, chemogenetics, in vivo imaging, and behavioral analysis.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 3rem;">
+        <div style="text-align: center;">
+          <i class="fas fa-handshake" style="font-size: 2.5rem; color: #000; margin-bottom: 1rem;"></i>
+          <h4 style="color: #000; margin-bottom: 0.5rem;">Collaborations</h4>
+          <p style="color: #666; font-size: 0.9rem;">Joint research projects and grants</p>
+        </div>
+        <div style="text-align: center;">
+          <i class="fas fa-graduation-cap" style="font-size: 2.5rem; color: #000; margin-bottom: 1rem;"></i>
+          <h4 style="color: #000; margin-bottom: 0.5rem;">Training</h4>
+          <p style="color: #666; font-size: 0.9rem;">Postdoc and student opportunities</p>
+        </div>
+        <div style="text-align: center;">
+          <i class="fas fa-microscope" style="font-size: 2.5rem; color: #000; margin-bottom: 1rem;"></i>
+          <h4 style="color: #000; margin-bottom: 0.5rem;">Resources</h4>
+          <p style="color: #666; font-size: 0.9rem;">Shared equipment and expertise</p>
+        </div>
+      </div>
+      <div style="margin-top: 3rem;">
+        <a href="mailto:guangwei.zhang@vcuhealth.org" style="display: inline-block; padding: 0.75rem 2rem; background: #000; color: white; text-decoration: none; border-radius: 4px; font-weight: 500; transition: all 0.3s;">
+          Contact Dr. Zhang
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+  </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
