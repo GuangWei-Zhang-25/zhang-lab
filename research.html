@@ -3,234 +3,608 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Research - Guang-Wei Zhang Laboratory</title>
-  <meta name="description" content="Research page for the Guang-Wei Zhang Laboratory at VCU">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>Research | Zhang Lab</title>
+  <meta name="description" content="Research at the Zhang Laboratory - Neural circuits, social behavior, and therapeutic targets for neuropsychiatric disorders">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="styles.css">
   <style>
-    /* Additional styles specific to research page */
-    .research-overview {
-      padding: 40px 0;
-      background: #fff;
+    /* ============================================
+       ELEGANT DESIGN SYSTEM - ZHANG LAB
+       ============================================ */
+
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2c5282;
+      --primary-dark: #0f2744;
+      --accent: #c9a227;
+      --accent-light: #d4b54a;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --bg-light: #f7fafc;
+      --bg-warm: #fffbf5;
+      --white: #ffffff;
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e0;
+      --font-serif: 'Crimson Text', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --section-padding: 100px;
+      --container-width: 1200px;
+      --transition: all 0.3s ease;
     }
-    
-    .overview-text {
-      max-width: 900px;
-      margin: 0 auto 3rem;
-      font-size: 1.1rem;
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: var(--container-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 24px;
+    }
+
+    .nav-brand a {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-medium);
+    }
+
+    .nav-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2.5rem;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .nav-menu a:hover { color: var(--primary); }
+    .nav-menu a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    /* Page Header */
+    .page-header {
+      padding: 140px 0 80px;
+      background: linear-gradient(165deg, var(--bg-light) 0%, var(--white) 50%, var(--bg-warm) 100%);
+      margin-top: 70px;
+      text-align: center;
+      position: relative;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 60%;
+      height: 100%;
+      background: radial-gradient(ellipse at top right, rgba(26, 54, 93, 0.03) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .page-header-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .page-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--primary);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .page-eyebrow::after {
+      content: '';
+      width: 40px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    .page-header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .page-header-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
       line-height: 1.8;
-      color: #333;
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    /* Sections */
+    .section {
+      padding: var(--section-padding) 0;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    .section-eyebrow {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    /* Overview Section */
+    .overview-section {
+      background: var(--white);
+      padding: 80px 0;
+    }
+
+    .overview-content {
+      max-width: 900px;
+      margin: 0 auto;
       text-align: center;
     }
-    
-    .research-areas-detailed {
-      padding: 60px 0;
-      background: #f8f9fa;
+
+    .overview-text {
+      font-size: 1.15rem;
+      line-height: 1.9;
+      color: var(--text-secondary);
     }
-    
+
+    /* Research Areas */
+    .research-areas {
+      background: var(--bg-light);
+    }
+
     .research-area-card {
-      background: white;
-      margin-bottom: 3rem;
+      background: var(--white);
       border-radius: 12px;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border-light);
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: var(--transition);
     }
-    
+
+    .research-area-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 20px 60px rgba(26, 54, 93, 0.08);
+    }
+
     .research-area-header {
-      background: linear-gradient(135deg, #000 0%, #333 100%);
-      color: white;
-      padding: 2rem;
+      background: var(--primary);
+      padding: 2rem 2.5rem;
       display: flex;
       align-items: center;
       gap: 1.5rem;
     }
-    
+
     .research-area-icon {
-      font-size: 3rem;
-      opacity: 0.9;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      color: var(--white);
+      font-size: 1.5rem;
     }
-    
+
     .research-area-title h3 {
-      font-size: 1.8rem;
-      margin-bottom: 0.5rem;
-      color: white;
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.25rem;
     }
-    
+
     .research-area-subtitle {
-      opacity: 0.9;
+      color: rgba(255, 255, 255, 0.8);
       font-size: 0.95rem;
     }
-    
+
     .research-area-content {
       padding: 2.5rem;
     }
-    
+
     .research-description {
-      margin-bottom: 2rem;
-      line-height: 1.8;
-      color: #333;
-    }
-    
-    .research-highlights {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text-secondary);
       margin-bottom: 2rem;
     }
-    
+
     .research-highlights h4 {
-      color: #000;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--primary-dark);
       margin-bottom: 1rem;
-      font-size: 1.2rem;
     }
-    
+
     .highlight-list {
       list-style: none;
       padding: 0;
     }
-    
+
     .highlight-list li {
       padding: 0.75rem 0;
-      padding-left: 1.5rem;
+      padding-left: 1.75rem;
       position: relative;
-      color: #555;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      border-bottom: 1px solid var(--border-light);
     }
-    
-    .highlight-list li:before {
-      content: "▸";
-      position: absolute;
-      left: 0;
-      color: #000;
-      font-weight: bold;
-    }
-    
-    .key-publications {
-      background: #f8f9fa;
-      padding: 1.5rem;
-      border-radius: 8px;
-      margin-top: 2rem;
-    }
-    
-    .key-publications h4 {
-      color: #000;
-      margin-bottom: 1rem;
-      font-size: 1.1rem;
-    }
-    
-    .pub-item {
-      padding: 0.75rem 0;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    
-    .pub-item:last-child {
+
+    .highlight-list li:last-child {
       border-bottom: none;
     }
-    
-    .pub-item-title {
-      font-weight: 500;
-      color: #000;
-      margin-bottom: 0.25rem;
+
+    .highlight-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 1.1rem;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
     }
-    
-    .pub-item-authors {
-      font-size: 0.9rem;
-      color: #666;
-      margin-bottom: 0.25rem;
-    }
-    
-    .pub-item-journal {
-      font-size: 0.9rem;
-      color: #888;
-      font-style: italic;
-    }
-    
-    .pub-item-link {
-      display: inline-block;
-      margin-top: 0.5rem;
-      color: #000;
-      text-decoration: none;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    
-    .pub-item-link:hover {
-      text-decoration: underline;
-    }
-    
-    .techniques-section {
-      padding: 60px 0;
-      background: white;
-    }
-    
-    .techniques-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
+
+    /* Key Publications */
+    .key-publications {
+      background: var(--bg-light);
+      padding: 2rem;
+      border-radius: 8px;
       margin-top: 2rem;
     }
-    
-    .technique-card {
-      text-align: center;
-      padding: 1.5rem;
-      background: #f8f9fa;
-      border-radius: 8px;
-      transition: transform 0.3s;
+
+    .key-publications h4 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-bottom: 1.25rem;
     }
-    
-    .technique-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
+    .pub-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-light);
     }
-    
-    .technique-card i {
-      font-size: 2.5rem;
-      color: #333;
-      margin-bottom: 1rem;
+
+    .pub-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
     }
-    
-    .technique-card h4 {
-      color: #000;
+
+    .pub-item-title {
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.25rem;
+      line-height: 1.5;
+    }
+
+    .pub-item-journal {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
       margin-bottom: 0.5rem;
     }
-    
-    .technique-card p {
-      font-size: 0.9rem;
-      color: #666;
+
+    .pub-item-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
     }
-    
+
+    .pub-item-link:hover {
+      color: var(--primary-dark);
+    }
+
+    /* Techniques Section */
+    .techniques-section {
+      background: var(--white);
+    }
+
+    .techniques-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.5rem;
+    }
+
+    .technique-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: var(--bg-light);
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .technique-card:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 30px rgba(26, 54, 93, 0.08);
+    }
+
+    .technique-card i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .technique-card h4 {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .technique-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Funding Section */
     .funding-section {
-      padding: 40px 0;
-      background: #f8f9fa;
+      background: var(--bg-light);
+      padding: 60px 0;
       text-align: center;
     }
-    
+
+    .funding-section h3 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      margin-bottom: 2rem;
+    }
+
     .funding-logos {
       display: flex;
       justify-content: center;
       gap: 3rem;
-      margin-top: 2rem;
       flex-wrap: wrap;
+      align-items: center;
     }
-    
+
     .funding-item {
-      color: #666;
+      color: var(--text-secondary);
       font-size: 0.95rem;
+      font-weight: 500;
+      padding: 1rem 2rem;
+      background: var(--white);
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--primary-dark);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 3rem 0;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .footer-text { font-size: 0.875rem; }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .techniques-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
     @media (max-width: 768px) {
+      :root {
+        --section-padding: 60px;
+      }
+
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: var(--white);
+        width: 100%;
+        text-align: center;
+        transition: var(--transition);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 2rem 0;
+        gap: 1.5rem;
+      }
+
+      .nav-menu.active { left: 0; }
+      .nav-toggle { display: flex; }
+      .nav-toggle.active span:nth-child(2) { opacity: 0; }
+      .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      .nav-subtitle, .nav-divider { display: none; }
+
+      .page-header { padding: 100px 0 60px; }
+      .page-header h1 { font-size: 2rem; }
+
       .research-area-header {
         flex-direction: column;
         text-align: center;
+        padding: 2rem;
       }
-      
+
       .techniques-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .funding-logos {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
       }
     }
   </style>
 </head>
 <body>
+
 <nav class="navbar">
   <div class="container">
-    <div class="nav-brand"><h1><a href="index.html" style="text-decoration:none;color:inherit;">Guang-Wei Zhang Laboratory</a></h1></div>
+    <div class="nav-brand">
+      <a href="index.html">
+        <span class="nav-logo">Zhang Lab</span>
+        <span class="nav-divider"></span>
+        <span class="nav-subtitle">Neuroscience at VCU</span>
+      </a>
+    </div>
     <ul class="nav-menu">
       <li><a href="index.html">Home</a></li>
       <li><a href="research.html">Research</a></li>
@@ -239,29 +613,46 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
-      <span></span><span></span><span></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="hero-content container">
-    <h2>Research</h2>
+<header class="page-header">
+  <div class="container">
+    <div class="page-header-content">
+      <div class="page-eyebrow">Our Science</div>
+      <h1>Research</h1>
+      <p class="page-header-subtitle">
+        Using cutting-edge neuroscience techniques to understand the neural basis of
+        social behavior and develop new treatments for neuropsychiatric disorders.
+      </p>
+    </div>
   </div>
 </header>
 
-<section class="research-overview">
+<section class="overview-section">
   <div class="container">
-    <div class="overview-text">
-      <p>Our laboratory investigates the neural circuit mechanisms underlying social impairments in neuropsychiatric disorders. Using cutting-edge neuroscience techniques, we aim to understand how specific brain circuits control social behavior and emotional processing, and how dysfunction in these circuits contributes to conditions such as autism, depression, and anxiety disorders.</p>
+    <div class="overview-content">
+      <p class="overview-text">
+        Our laboratory investigates the neural circuit mechanisms underlying social impairments
+        in neuropsychiatric disorders. We aim to understand how specific brain circuits control
+        social behavior and emotional processing, and how dysfunction in these circuits contributes
+        to conditions such as autism, depression, and anxiety disorders.
+      </p>
     </div>
   </div>
 </section>
 
-<section class="research-areas-detailed">
+<section class="section research-areas">
   <div class="container">
-    <h2 class="section-title">Research Areas</h2>
-    
+    <div class="section-header">
+      <span class="section-eyebrow">Focus Areas</span>
+      <h2 class="section-title">Research Areas</h2>
+    </div>
+
     <!-- Neural Circuits -->
     <div class="research-area-card">
       <div class="research-area-header">
@@ -274,9 +665,12 @@
         </div>
       </div>
       <div class="research-area-content">
-        <div class="research-description">
-          <p>We focus on identifying and characterizing the neural circuits that regulate social behavior, emotional processing, and stress responses. Our work has revealed critical roles for several brain regions including the medial preoptic area (mPOA), medial septum, pontine central gray, and their interconnected networks in mediating complex behaviors.</p>
-        </div>
+        <p class="research-description">
+          We focus on identifying and characterizing the neural circuits that regulate social behavior,
+          emotional processing, and stress responses. Our work has revealed critical roles for several
+          brain regions including the medial preoptic area (mPOA), medial septum, pontine central gray,
+          and their interconnected networks in mediating complex behaviors.
+        </p>
         <div class="research-highlights">
           <h4>Key Discoveries</h4>
           <ul class="highlight-list">
@@ -290,21 +684,17 @@
           <h4>Selected Publications</h4>
           <div class="pub-item">
             <div class="pub-item-title">Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</div>
-            <div class="pub-item-authors">Zhang GW, Shen L, Tao C, et al.</div>
             <div class="pub-item-journal">Nature Neuroscience, 2021</div>
-            <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
           <div class="pub-item">
             <div class="pub-item-title">A non-canonical reticular-limbic central auditory pathway via medial septum contributes to fear conditioning</div>
-            <div class="pub-item-authors">Zhang GW, Sun WJ, Zingg B, et al.</div>
             <div class="pub-item-journal">Neuron, 2018</div>
-            <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-item-link">View Paper →</a>
-          </div>
-          <div class="pub-item">
-            <div class="pub-item-title">Transforming sensory cues into aversive emotion via septal-habenular pathway</div>
-            <div class="pub-item-authors">Zhang GW, Shen L, Tao C, et al.</div>
-            <div class="pub-item-journal">Neuron, 2018</div>
-            <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -322,9 +712,12 @@
         </div>
       </div>
       <div class="research-area-content">
-        <div class="research-description">
-          <p>Our research investigates how social behaviors emerge from neural circuit activity and how disruptions in these circuits lead to social impairments. We recently made groundbreaking discoveries about prosocial behaviors in rodents, including reviving-like behaviors toward unconscious conspecifics, providing new insights into empathy and prosocial motivation.</p>
-        </div>
+        <p class="research-description">
+          Our research investigates how social behaviors emerge from neural circuit activity and how
+          disruptions in these circuits lead to social impairments. We recently made groundbreaking
+          discoveries about prosocial behaviors in rodents, including reviving-like behaviors toward
+          unconscious conspecifics, providing new insights into empathy and prosocial motivation.
+        </p>
         <div class="research-highlights">
           <h4>Research Focus</h4>
           <ul class="highlight-list">
@@ -338,15 +731,17 @@
           <h4>Selected Publications</h4>
           <div class="pub-item">
             <div class="pub-item-title">Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</div>
-            <div class="pub-item-authors">Sun W, Zhang GW, Huang JJ, et al.</div>
             <div class="pub-item-journal">Science, 2025</div>
-            <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
           <div class="pub-item">
             <div class="pub-item-title">Glutamatergic and GABAergic neurons in pontine central gray mediate opposing valence-specific behaviors</div>
-            <div class="pub-item-authors">Xiao C, Wei J, Zhang G, et al.</div>
             <div class="pub-item-journal">Neuron, 2023</div>
-            <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -364,9 +759,12 @@
         </div>
       </div>
       <div class="research-area-content">
-        <div class="research-description">
-          <p>We investigate the molecular and cellular mechanisms underlying social dysfunction, with particular focus on excitation-inhibition balance, neurotransmitter systems, and hormonal regulation. Our work has revealed how chronic stress and hormonal changes alter neural circuit function to produce depression-like states and anxiety behaviors.</p>
-        </div>
+        <p class="research-description">
+          We investigate the molecular and cellular mechanisms underlying social dysfunction, with
+          particular focus on excitation-inhibition balance, neurotransmitter systems, and hormonal
+          regulation. Our work has revealed how chronic stress and hormonal changes alter neural
+          circuit function to produce depression-like states and anxiety behaviors.
+        </p>
         <div class="research-highlights">
           <h4>Key Findings</h4>
           <ul class="highlight-list">
@@ -380,21 +778,17 @@
           <h4>Selected Publications</h4>
           <div class="pub-item">
             <div class="pub-item-title">Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depression-like states</div>
-            <div class="pub-item-authors">Tao C, Zhang GW, Sun WJ, et al.</div>
             <div class="pub-item-journal">Nature Communications, 2024</div>
-            <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
           <div class="pub-item">
             <div class="pub-item-title">The medial preoptic area mediates depressive-like behaviors induced by ovarian hormone withdrawal</div>
-            <div class="pub-item-authors">Tao C, Zhang GW, Huang JJ, et al.</div>
             <div class="pub-item-journal">Nature Neuroscience, 2023</div>
-            <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-item-link">View Paper →</a>
-          </div>
-          <div class="pub-item">
-            <div class="pub-item-title">A bottom-up reward pathway mediated by somatostatin neurons in the medial septum</div>
-            <div class="pub-item-authors">Shen L, Zhang GW, Tao C, et al.</div>
-            <div class="pub-item-journal">Nature Communications, 2022</div>
-            <a href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -412,9 +806,13 @@
         </div>
       </div>
       <div class="research-area-content">
-        <div class="research-description">
-          <p>Our ultimate goal is to translate our basic science discoveries into therapeutic strategies for neuropsychiatric disorders. We focus on identifying druggable targets within the neural circuits we study, particularly those involved in social impairments, anxiety, and depression. Our work on Alzheimer's disease also explores neuropsychiatric symptoms and sensory processing deficits as potential intervention points.</p>
-        </div>
+        <p class="research-description">
+          Our ultimate goal is to translate our basic science discoveries into therapeutic strategies
+          for neuropsychiatric disorders. We focus on identifying druggable targets within the neural
+          circuits we study, particularly those involved in social impairments, anxiety, and depression.
+          Our work on Alzheimer's disease also explores neuropsychiatric symptoms and sensory processing
+          deficits as potential intervention points.
+        </p>
         <div class="research-highlights">
           <h4>Translational Focus</h4>
           <ul class="highlight-list">
@@ -428,15 +826,17 @@
           <h4>Selected Publications</h4>
           <div class="pub-item">
             <div class="pub-item-title">The neural basis of neuropsychiatric symptoms in Alzheimer's disease</div>
-            <div class="pub-item-authors">Zhang NK, Zhang SK, Zhang LI, Tao HW, Zhang GW</div>
             <div class="pub-item-journal">Frontiers in Aging Neuroscience, 2024</div>
-            <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
           <div class="pub-item">
             <div class="pub-item-title">Sensory processing deficits and related cortical pathological changes in Alzheimer's Disease</div>
-            <div class="pub-item-authors">Zhang NK, Zhang SK, Zhang LI, Tao HW, Zhang GW</div>
             <div class="pub-item-journal">Frontiers in Aging Neuroscience, 2023</div>
-            <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-item-link">View Paper →</a>
+            <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-item-link">
+              View Paper <i class="fas fa-arrow-right"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -444,9 +844,15 @@
   </div>
 </section>
 
-<section class="techniques-section">
+<section class="section techniques-section">
   <div class="container">
-    <h2 class="section-title">Techniques & Approaches</h2>
+    <div class="section-header">
+      <span class="section-eyebrow">Our Methods</span>
+      <h2 class="section-title">Techniques & Approaches</h2>
+      <p class="section-subtitle">
+        We employ state-of-the-art neuroscience techniques to investigate neural circuit function.
+      </p>
+    </div>
     <div class="techniques-grid">
       <div class="technique-card">
         <i class="fas fa-lightbulb"></i>
@@ -484,10 +890,10 @@
 
 <section class="funding-section">
   <div class="container">
-    <h3 style="color: #000; margin-bottom: 1rem;">Funding Support</h3>
+    <h3>Funding Support</h3>
     <div class="funding-logos">
-      <div class="funding-item">NIH/NIMH</div>
-      <div class="funding-item">NIH/NIA</div>
+      <div class="funding-item">NIH / NIMH</div>
+      <div class="funding-item">NIH / NIA</div>
       <div class="funding-item">Brain & Behavior Research Foundation</div>
       <div class="funding-item">VCU School of Medicine</div>
     </div>
@@ -496,9 +902,34 @@
 
 <footer class="footer">
   <div class="container">
-    <p>© 2025 Guang-Wei Zhang Laboratory. All rights reserved.</p>
+    <div class="footer-content">
+      <div class="footer-brand">Zhang Lab</div>
+      <p class="footer-text">&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
+      <div class="footer-links">
+        <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
+        <a href="https://www.vcu.edu/" target="_blank">VCU</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
   </div>
 </footer>
-<script src="script.js"></script>
+
+<script>
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+
+navToggle.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+  navToggle.classList.toggle('active');
+});
+
+document.querySelectorAll('.nav-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    navMenu.classList.remove('active');
+    navToggle.classList.remove('active');
+  });
+});
+</script>
+
 </body>
 </html>
