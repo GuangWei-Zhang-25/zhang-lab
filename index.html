@@ -419,6 +419,25 @@
       box-shadow: 0 4px 20px rgba(26, 54, 93, 0.06);
     }
 
+    .publication-item.featured {
+      border-left: 4px solid var(--accent);
+      background: linear-gradient(90deg, #fffbf5 0%, var(--white) 100%);
+    }
+
+    .publication-featured-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--white);
+      background: var(--accent);
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      margin-left: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      vertical-align: middle;
+    }
+
     .publication-year {
       display: inline-block;
       font-size: 0.75rem;
@@ -834,9 +853,8 @@
       </p>
     </div>
     <div class="publications-list">
-      <!-- Science (1) -->
-      <div class="publication-item">
-        <span class="publication-year">Science</span>
+      <div class="publication-item featured">
+        <span class="publication-year">Science</span><span class="publication-featured-badge">Featured</span>
         <h3 class="publication-title">Reviving-like prosocial behavior in response to unconscious or dead conspecifics in rodents</h3>
         <p class="publication-authors">Sun W*, <strong>Zhang GW*</strong>, Huang JJ, Tao C*, Seo MB, Tao HW, Zhang LI</p>
         <p class="publication-journal">Science. 387, eadq2677 (2025)</p>
@@ -844,9 +862,8 @@
           Read Paper <i class="fas fa-arrow-right"></i>
         </a>
       </div>
-      <!-- Nature Neuroscience (2) -->
-      <div class="publication-item">
-        <span class="publication-year">Nature Neuroscience</span>
+      <div class="publication-item featured">
+        <span class="publication-year">Nature Neuroscience</span><span class="publication-featured-badge">Featured</span>
         <h3 class="publication-title">Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</h3>
         <p class="publication-authors"><strong>Zhang GW</strong>, Shen L, Tao C, Jung AH, Peng B, Li Z, Zhang LI, Tao HW</p>
         <p class="publication-journal">Nature Neuroscience. 24, 516-528 (2021)</p>
@@ -863,7 +880,6 @@
           Read Paper <i class="fas fa-arrow-right"></i>
         </a>
       </div>
-      <!-- Neuron (3) -->
       <div class="publication-item">
         <span class="publication-year">Neuron</span>
         <h3 class="publication-title">Glutamatergic and GABAergic neurons in pontine central gray mediate opposing valence-specific behaviors through a global network</h3>
@@ -891,7 +907,6 @@
           Read Paper <i class="fas fa-arrow-right"></i>
         </a>
       </div>
-      <!-- Nature Communications (3) -->
       <div class="publication-item">
         <span class="publication-year">Nature Communications</span>
         <h3 class="publication-title">Excitation-inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depressive-like states</h3>
