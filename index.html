@@ -196,10 +196,69 @@
       pointer-events: none;
     }
 
+    .hero .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+
     .hero-content {
       position: relative;
       z-index: 1;
-      max-width: 900px;
+      max-width: 580px;
+      flex: 1;
+    }
+
+    .hero-video-container {
+      flex: 0 0 45%;
+      max-width: 500px;
+      position: relative;
+      z-index: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(26, 54, 93, 0.15);
+    }
+
+    .hero-video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+
+    .hero-video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(26, 54, 93, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 968px) {
+      .hero .container {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero-content {
+        max-width: 100%;
+      }
+
+      .hero-video-container {
+        flex: none;
+        max-width: 100%;
+        width: 100%;
+        margin-top: 2rem;
+      }
+
+      .hero-eyebrow::before {
+        display: none;
+      }
+
+      .hero-cta {
+        justify-content: center;
+      }
     }
 
     .hero-eyebrow {
@@ -788,6 +847,13 @@
           Publications
         </a>
       </div>
+    </div>
+    <!-- Video Demo -->
+    <div class="hero-video-container">
+      <video class="hero-video" autoplay muted loop playsinline>
+        <source src="images/hero-video.mp4" type="video/mp4">
+      </video>
+      <div class="hero-video-overlay"></div>
     </div>
   </div>
 </header>
