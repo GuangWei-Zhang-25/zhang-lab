@@ -13,7 +13,6 @@
       --primary-light: #2c5282;
       --primary-dark: #0f2744;
       --accent: #c9a227;
-      --accent-light: #d4af37;
       --text-primary: #1a202c;
       --text-secondary: #4a5568;
       --text-muted: #718096;
@@ -22,11 +21,8 @@
       --white: #ffffff;
       --border-light: #e2e8f0;
       --border-medium: #cbd5e0;
-      --featured-bg: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
       --font-serif: 'Crimson Text', Georgia, serif;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --section-padding: 80px;
-      --container-width: 1200px;
       --transition: all 0.3s ease;
     }
 
@@ -35,17 +31,16 @@
 
     body {
       font-family: var(--font-sans);
-      font-size: 16px;
-      line-height: 1.7;
+      font-size: 15px;
+      line-height: 1.6;
       color: var(--text-primary);
       background: var(--bg-light);
-      -webkit-font-smoothing: antialiased;
     }
 
     .container {
-      max-width: var(--container-width);
+      max-width: 950px;
       margin: 0 auto;
-      padding: 0 24px;
+      padding: 0 20px;
     }
 
     /* Navigation */
@@ -57,14 +52,14 @@
       background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border-light);
-      transition: var(--transition);
     }
 
     .navbar .container {
+      max-width: 1200px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1.25rem 24px;
+      padding: 1rem 20px;
     }
 
     .nav-brand a {
@@ -77,506 +72,169 @@
 
     .nav-logo {
       font-family: var(--font-serif);
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--primary);
-      letter-spacing: -0.02em;
     }
 
     .nav-divider {
       width: 1px;
-      height: 24px;
+      height: 20px;
       background: var(--border-medium);
     }
 
     .nav-subtitle {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
-      font-weight: 400;
     }
 
     .nav-menu {
       display: flex;
       list-style: none;
-      gap: 2.5rem;
+      gap: 2rem;
     }
 
     .nav-menu a {
       text-decoration: none;
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       font-weight: 500;
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-menu a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
       transition: var(--transition);
     }
 
     .nav-menu a:hover { color: var(--primary); }
-    .nav-menu a:hover::after { width: 100%; }
 
     .nav-toggle {
       display: none;
       flex-direction: column;
       cursor: pointer;
-      gap: 5px;
+      gap: 4px;
     }
 
     .nav-toggle span {
-      width: 24px;
+      width: 22px;
       height: 2px;
       background: var(--primary);
-      transition: var(--transition);
     }
 
-    /* Page Header */
+    /* Page Header - Compact */
     .page-header {
-      padding: 140px 0 60px;
-      background: linear-gradient(165deg, var(--white) 0%, var(--bg-light) 50%, var(--bg-warm) 100%);
-      margin-top: 70px;
-      text-align: center;
-      position: relative;
-    }
-
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 60%;
-      height: 100%;
-      background: radial-gradient(ellipse at top right, rgba(26, 54, 93, 0.03) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .page-header-content {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .page-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--primary);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-
-    .page-eyebrow::before,
-    .page-eyebrow::after {
-      content: '';
-      width: 40px;
-      height: 2px;
-      background: var(--accent);
+      padding: 100px 0 30px;
+      background: var(--white);
+      margin-top: 60px;
+      border-bottom: 1px solid var(--border-light);
     }
 
     .page-header h1 {
       font-family: var(--font-serif);
-      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-size: 2rem;
       font-weight: 700;
       color: var(--primary-dark);
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .page-header-subtitle {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-      max-width: 650px;
-      margin: 0 auto;
-    }
-
-    /* Featured Publications Section */
-    .featured-section {
-      padding: 60px 0;
-      background: var(--featured-bg);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .featured-section::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 80%;
-      height: 200%;
-      background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .featured-title {
-      text-align: center;
-      margin-bottom: 3rem;
-    }
-
-    .featured-title h2 {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      color: var(--white);
       margin-bottom: 0.5rem;
     }
 
-    .featured-title p {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 1rem;
-    }
-
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-      gap: 1.5rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .featured-card {
-      background: var(--white);
-      border-radius: 12px;
-      padding: 2rem;
-      position: relative;
-      transition: var(--transition);
-      border: 2px solid transparent;
-    }
-
-    .featured-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .featured-badge {
-      position: absolute;
-      top: -10px;
-      right: 20px;
-      background: var(--accent);
-      color: var(--white);
-      padding: 0.35rem 0.75rem;
-      border-radius: 20px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .featured-journal {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--primary);
-      color: var(--white);
-      padding: 0.4rem 0.8rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 1rem;
-    }
-
-    .featured-card-title {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--primary-dark);
-      margin-bottom: 0.75rem;
-      line-height: 1.5;
-    }
-
-    .featured-card-authors {
-      font-size: 0.85rem;
+    .page-header p {
+      font-size: 0.95rem;
       color: var(--text-secondary);
-      margin-bottom: 0.5rem;
-      line-height: 1.6;
-    }
-
-    .featured-card-authors strong {
-      color: var(--primary);
-      font-weight: 600;
-    }
-
-    .featured-card-info {
-      font-size: 0.85rem;
-      font-style: italic;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-    }
-
-    .featured-highlight {
-      background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
-      border: 1px solid var(--accent);
-      border-radius: 6px;
-      padding: 0.75rem 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .featured-highlight i {
-      color: var(--accent);
-      margin-top: 2px;
-    }
-
-    .featured-highlight span {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      line-height: 1.5;
-    }
-
-    .featured-links {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .featured-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.8rem;
-      font-weight: 500;
-      text-decoration: none;
-      padding: 0.5rem 1rem;
-      border-radius: 4px;
-      transition: var(--transition);
-      background: var(--primary);
-      color: var(--white);
-    }
-
-    .featured-link:hover {
-      background: var(--primary-dark);
-    }
-
-    .featured-link.secondary {
-      background: transparent;
-      border: 1px solid var(--primary);
-      color: var(--primary);
-    }
-
-    .featured-link.secondary:hover {
-      background: var(--primary);
-      color: var(--white);
     }
 
     /* Publications Section */
     .publications-section {
-      padding: var(--section-padding) 0;
+      padding: 30px 0 60px;
     }
 
-    .section-nav {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-
-    .section-nav-btn {
-      padding: 0.75rem 1.5rem;
-      border: 2px solid var(--border-medium);
-      border-radius: 30px;
-      background: var(--white);
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .section-nav-btn:hover,
-    .section-nav-btn.active {
-      border-color: var(--primary);
-      background: var(--primary);
-      color: var(--white);
-    }
-
-    .publications-list {
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .category-section {
-      margin-bottom: 4rem;
-    }
-
-    .category-header {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--primary);
-    }
-
-    .category-icon {
-      width: 48px;
-      height: 48px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--white);
-      font-size: 1.2rem;
-    }
-
-    .category-title {
-      font-family: var(--font-serif);
-      font-size: 1.75rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-    }
-
-    .category-count {
-      margin-left: auto;
-      background: var(--bg-light);
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .year-section {
-      margin-bottom: 3rem;
-    }
-
-    .year-header {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
+    .year-group {
+      margin-bottom: 25px;
     }
 
     .year-label {
       font-family: var(--font-serif);
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       font-weight: 700;
       color: var(--primary);
-      flex-shrink: 0;
-      background: var(--bg-warm);
-      padding: 0.25rem 1rem;
-      border-radius: 4px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--primary);
+      margin-bottom: 12px;
     }
 
-    .year-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border-medium);
-    }
-
-    .publication-item {
+    .pub-item {
       background: var(--white);
-      padding: 1.75rem 2rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      border-radius: 6px;
       border: 1px solid var(--border-light);
       transition: var(--transition);
-      position: relative;
     }
 
-    .publication-item:hover {
+    .pub-item:hover {
       border-color: var(--primary-light);
-      box-shadow: 0 8px 30px rgba(26, 54, 93, 0.08);
+      box-shadow: 0 2px 8px rgba(26, 54, 93, 0.06);
     }
 
-    .publication-item.highlighted {
-      border-left: 4px solid var(--accent);
-      background: linear-gradient(90deg, #fffbf5 0%, var(--white) 100%);
+    .pub-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 6px;
     }
 
-    .publication-item.highlighted::before {
-      content: 'Featured';
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: var(--accent);
-      color: var(--white);
-      padding: 0.2rem 0.6rem;
-      border-radius: 3px;
+    .pub-keyword {
+      display: inline-block;
       font-size: 0.65rem;
       font-weight: 600;
+      color: var(--white);
+      background: var(--primary);
+      padding: 2px 8px;
+      border-radius: 3px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .publication-title {
+    .pub-title {
       font-family: var(--font-serif);
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       color: var(--primary-dark);
-      margin-bottom: 0.6rem;
-      line-height: 1.5;
-      padding-right: 70px;
+      line-height: 1.4;
     }
 
-    .publication-authors {
-      font-size: 0.875rem;
+    .pub-authors {
+      font-size: 0.8rem;
       color: var(--text-secondary);
-      margin-bottom: 0.4rem;
-      line-height: 1.6;
+      margin-bottom: 4px;
     }
 
-    .publication-authors strong {
+    .pub-authors strong {
       color: var(--primary);
       font-weight: 600;
     }
 
-    .publication-journal {
-      font-size: 0.875rem;
+    .pub-journal {
+      font-size: 0.8rem;
       font-style: italic;
       color: var(--text-muted);
-      margin-bottom: 0.75rem;
+      margin-bottom: 6px;
     }
 
-    .publication-note {
-      background: linear-gradient(135deg, #f0f9ff 0%, #e6f4ff 100%);
-      border-radius: 4px;
-      padding: 0.5rem 0.75rem;
-      margin-bottom: 0.75rem;
-      font-size: 0.8rem;
-      color: var(--primary);
-      display: inline-block;
-    }
-
-    .publication-note i {
-      margin-right: 0.4rem;
-    }
-
-    .publication-links {
+    .pub-links {
       display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .pub-link {
       display: inline-flex;
       align-items: center;
-      gap: 0.35rem;
-      font-size: 0.8rem;
+      gap: 4px;
+      font-size: 0.7rem;
       font-weight: 500;
       text-decoration: none;
-      padding: 0.45rem 0.9rem;
-      border-radius: 4px;
-      transition: var(--transition);
+      padding: 3px 8px;
+      border-radius: 3px;
       border: 1px solid var(--border-medium);
       color: var(--primary);
+      transition: var(--transition);
     }
 
     .pub-link:hover {
@@ -585,51 +243,36 @@
       color: var(--white);
     }
 
-    .pub-link i {
-      font-size: 0.7rem;
-    }
+    .pub-link i { font-size: 0.6rem; }
 
-    /* Stats Section */
-    .stats-banner {
-      background: var(--bg-warm);
-      padding: 2.5rem 0;
-      margin-top: 2rem;
-    }
-
-    .stats-grid {
+    /* Section Divider */
+    .section-divider {
       display: flex;
-      justify-content: center;
-      gap: 4rem;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      font-family: var(--font-serif);
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .stat-label {
-      font-size: 0.9rem;
+      align-items: center;
+      gap: 15px;
+      margin: 35px 0 20px;
       color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+    }
+
+    .section-divider::before,
+    .section-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-medium);
     }
 
     /* Back to Top */
     .back-to-top {
       position: fixed;
-      bottom: 30px;
-      right: 30px;
-      width: 48px;
-      height: 48px;
+      bottom: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -637,27 +280,21 @@
       color: var(--white);
       border-radius: 50%;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(26, 54, 93, 0.2);
+      box-shadow: 0 2px 10px rgba(26, 54, 93, 0.2);
       transition: var(--transition);
       opacity: 0;
       visibility: hidden;
     }
 
-    .back-to-top.visible {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    .back-to-top:hover {
-      background: var(--primary-dark);
-      transform: translateY(-3px);
-    }
+    .back-to-top.visible { opacity: 1; visibility: visible; }
+    .back-to-top:hover { background: var(--primary-dark); }
 
     /* Footer */
     .footer {
       background: var(--primary-dark);
       color: rgba(255, 255, 255, 0.8);
-      padding: 3rem 0;
+      padding: 2rem 0;
+      font-size: 0.85rem;
     }
 
     .footer-content {
@@ -668,12 +305,10 @@
 
     .footer-brand {
       font-family: var(--font-serif);
-      font-size: 1.25rem;
+      font-size: 1.1rem;
       color: var(--white);
       font-weight: 600;
     }
-
-    .footer-text { font-size: 0.875rem; }
 
     .footer-links {
       display: flex;
@@ -683,7 +318,6 @@
     .footer-links a {
       color: rgba(255, 255, 255, 0.7);
       text-decoration: none;
-      font-size: 0.875rem;
       transition: var(--transition);
     }
 
@@ -691,62 +325,27 @@
 
     /* Responsive */
     @media (max-width: 768px) {
-      :root {
-        --section-padding: 60px;
-      }
-
       .nav-menu {
         position: fixed;
         left: -100%;
-        top: 70px;
+        top: 60px;
         flex-direction: column;
         background: var(--white);
         width: 100%;
         text-align: center;
-        transition: var(--transition);
+        padding: 1.5rem 0;
+        gap: 1rem;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-        padding: 2rem 0;
-        gap: 1.5rem;
+        transition: var(--transition);
       }
-
       .nav-menu.active { left: 0; }
       .nav-toggle { display: flex; }
-      .nav-toggle.active span:nth-child(2) { opacity: 0; }
-      .nav-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-      .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
       .nav-subtitle, .nav-divider { display: none; }
-
-      .page-header { padding: 100px 0 50px; }
-      .page-header h1 { font-size: 2rem; }
-
-      .featured-grid { grid-template-columns: 1fr; }
-      .featured-card { padding: 1.5rem; }
-
-      .section-nav { gap: 0.5rem; }
-      .section-nav-btn { padding: 0.6rem 1rem; font-size: 0.8rem; }
-
-      .category-header { flex-wrap: wrap; }
-      .category-count { margin-left: 0; margin-top: 0.5rem; width: 100%; text-align: center; }
-
-      .publication-item { padding: 1.25rem; }
-      .publication-title { padding-right: 0; font-size: 1rem; }
-      .publication-item.highlighted::before { position: static; display: block; margin-bottom: 0.75rem; width: fit-content; }
-      .publication-links { flex-direction: column; }
-      .pub-link { justify-content: center; }
-
-      .stats-grid { gap: 2rem; }
-      .stat-number { font-size: 2rem; }
-
-      .footer-content {
-        flex-direction: column;
-        gap: 1rem;
-        text-align: center;
-      }
-
-      .footer-links {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
+      .page-header { padding: 80px 0 20px; }
+      .page-header h1 { font-size: 1.6rem; }
+      .pub-top { flex-direction: column; gap: 6px; }
+      .pub-links { flex-wrap: wrap; }
+      .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
     }
   </style>
 </head>
@@ -768,7 +367,7 @@
       <li><a href="team.html">Team</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
-    <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+    <div class="nav-toggle">
       <span></span>
       <span></span>
       <span></span>
@@ -778,571 +377,347 @@
 
 <header class="page-header">
   <div class="container">
-    <div class="page-header-content">
-      <div class="page-eyebrow">Our Research</div>
-      <h1>Publications</h1>
-      <p class="page-header-subtitle">
-        Our work on neural circuits, social behavior, emotion, and neuropsychiatric disorders has been published in leading journals including <em>Science</em>, <em>Nature Neuroscience</em>, <em>Neuron</em>, and more.
-      </p>
-    </div>
+    <h1>Publications</h1>
+    <p>Research published in Science, Nature Neuroscience, Neuron, Nature Communications, and more.</p>
   </div>
 </header>
 
-<!-- Featured Publications -->
-<section class="featured-section">
-  <div class="container">
-    <div class="featured-title">
-      <h2>Highlighted Publications</h2>
-      <p>Selected high-impact research from our laboratory</p>
-    </div>
-    <div class="featured-grid">
-
-      <!-- Science 2025 -->
-      <div class="featured-card">
-        <span class="featured-badge">Cover Story</span>
-        <div class="featured-journal"><i class="fas fa-flask"></i> Science 2025</div>
-        <h3 class="featured-card-title">Reviving-like Prosocial Behavior in Response to Unconscious or Dead Conspecifics in Rodents</h3>
-        <p class="featured-card-authors">Sun W*, <strong>Zhang GW*</strong>, Huang JJ, Tao C*, Seo MB, Tao HW, Zhang LI</p>
-        <p class="featured-card-info">Science. 387, eadq2677</p>
-        <div class="featured-highlight">
-          <i class="fas fa-star"></i>
-          <span>Featured by Sheeran and Donaldson in Science 387, 6736</span>
-        </div>
-        <div class="featured-links">
-          <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="featured-link">
-            <i class="fas fa-external-link-alt"></i> Full Text
-          </a>
-          <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank" class="featured-link secondary">
-            <i class="fas fa-file-pdf"></i> PDF
-          </a>
-        </div>
-      </div>
-
-      <!-- Nature Neuroscience 2021 -->
-      <div class="featured-card">
-        <span class="featured-badge">Featured Article</span>
-        <div class="featured-journal"><i class="fas fa-brain"></i> Nature Neuroscience 2021</div>
-        <h3 class="featured-card-title">Medial Preoptic Area Antagonistically Mediates Stress-Induced Anxiety and Parental Behavior</h3>
-        <p class="featured-card-authors"><strong>Zhang GW</strong>, Shen L, Tao C, Jung AH, Peng B, Li Z, Zhang LI, Tao HW</p>
-        <p class="featured-card-info">Nature Neuroscience. 24, 516-528</p>
-        <div class="featured-highlight">
-          <i class="fas fa-star"></i>
-          <span>Featured by Blackman and Falkner in Nature Neuroscience 24, 453-454</span>
-        </div>
-        <div class="featured-links">
-          <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="featured-link">
-            <i class="fas fa-external-link-alt"></i> Full Text
-          </a>
-          <a href="publications/Zhang Shen 2021 Nature Neuroscience.pdf" target="_blank" class="featured-link secondary">
-            <i class="fas fa-file-pdf"></i> PDF
-          </a>
-        </div>
-      </div>
-
-      <!-- Nature Neuroscience 2023 -->
-      <div class="featured-card">
-        <div class="featured-journal"><i class="fas fa-brain"></i> Nature Neuroscience 2023</div>
-        <h3 class="featured-card-title">The Medial Preoptic Area Mediates Depressive-like Behaviors Induced by Ovarian Hormone Withdrawal</h3>
-        <p class="featured-card-authors">Tao C*, <strong>Zhang GW*</strong>, Huang JJ, Li Z, Tao HW, Zhang LI</p>
-        <p class="featured-card-info">Nature Neuroscience. 26, 1529-1540</p>
-        <div class="featured-links">
-          <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="featured-link">
-            <i class="fas fa-external-link-alt"></i> Full Text
-          </a>
-          <a href="publications/Tao Zhang 2023 Nature Neuroscience.pdf" target="_blank" class="featured-link secondary">
-            <i class="fas fa-file-pdf"></i> PDF
-          </a>
-        </div>
-      </div>
-
-      <!-- Neuron 2023 -->
-      <div class="featured-card">
-        <div class="featured-journal"><i class="fas fa-project-diagram"></i> Neuron 2023</div>
-        <h3 class="featured-card-title">Glutamatergic and GABAergic Neurons in Pontine Central Gray Mediate Opposing Valence-Specific Behaviors</h3>
-        <p class="featured-card-authors">Xiao C, Wei J, <strong>Zhang GW</strong>, Tao C, Huang JJ, Shen L, Wickersham R, Tao HW, Zhang LI</p>
-        <p class="featured-card-info">Neuron. 111, 9, 1486-1503.e7</p>
-        <div class="featured-links">
-          <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="featured-link">
-            <i class="fas fa-external-link-alt"></i> Full Text
-          </a>
-          <a href="publications/Xiao Wei 2023 Neuron.pdf" target="_blank" class="featured-link secondary">
-            <i class="fas fa-file-pdf"></i> PDF
-          </a>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- Stats Banner -->
-<div class="stats-banner">
-  <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-number">20+</div>
-        <div class="stat-label">Publications</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">6</div>
-        <div class="stat-label">Nature/Science Family</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">3</div>
-        <div class="stat-label">Neuron Papers</div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <section class="publications-section">
   <div class="container">
-    <div class="publications-list">
 
-      <!-- RESEARCH ARTICLES -->
-      <div class="category-section" id="research">
-        <div class="category-header">
-          <div class="category-icon"><i class="fas fa-microscope"></i></div>
-          <h2 class="category-title">Research Articles</h2>
-          <span class="category-count">17 publications</span>
+    <!-- 2025 -->
+    <div class="year-group">
+      <div class="year-label">2025</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Natural Social Behaviors</span>
+          <span class="pub-title">Reviving-like Prosocial Behavior in Response to Unconscious or Dead Conspecifics in Rodents</span>
         </div>
-
-        <!-- 2025 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2025</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item highlighted">
-            <h3 class="publication-title">Reviving-like Prosocial Behavior in Response to Unconscious or Dead Conspecifics in Rodents</h3>
-            <p class="publication-authors">Sun W*, <strong>Zhang GW*</strong>, Huang JJ, Tao C*, Seo MB, Tao HW, Zhang LI</p>
-            <p class="publication-journal">Science. 387, eadq2677</p>
-            <div class="publication-note"><i class="fas fa-award"></i> Featured by Sheeran and Donaldson. Science. 387, 6736</div>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2024 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2024</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Excitation-Inhibition Imbalance in Medial Preoptic Area Circuits Underlies Chronic Stress-Induced Depressive-like States</h3>
-            <p class="publication-authors">Tao C*, <strong>Zhang GW*</strong>, Sun W, Huang JJ, Zhang LI, Tao HW</p>
-            <p class="publication-journal">Nature Communications. 15, 8575</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Tao Zhang 2024 Nature Communications.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">A Distributed Auditory Network Mediated by Pontine Central Gray Underlies Ultra-fast Awakening in Response to Alerting Sounds</h3>
-            <p class="publication-authors">Wei J, Xiao C, <strong>Zhang GW</strong>, Shen L, Tao HW, Zhang LI</p>
-            <p class="publication-journal">Current Biology. 34, 20, 4597-4611.e5</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1016/j.cub.2024.08.020" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Wei Xiao 2024 Current Biology.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2023 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2023</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item highlighted">
-            <h3 class="publication-title">The Medial Preoptic Area Mediates Depressive-like Behaviors Induced by Ovarian Hormone Withdrawal through Distinct GABAergic Projections</h3>
-            <p class="publication-authors">Tao C*, <strong>Zhang GW*</strong>, Huang JJ, Li Z, Tao HW, Zhang LI</p>
-            <p class="publication-journal">Nature Neuroscience. 26, 1529-1540</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Tao Zhang 2023 Nature Neuroscience.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Glutamatergic and GABAergic Neurons in Pontine Central Gray Mediate Opposing Valence-Specific Behaviors through A Global Network</h3>
-            <p class="publication-authors">Xiao C, Wei J, <strong>Zhang GW</strong>, Tao C, Huang JJ, Shen L, Wickersham R, Tao HW, Zhang LI</p>
-            <p class="publication-journal">Neuron. 111, 9, 1486-1503.e7</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Xiao Wei 2023 Neuron.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Enhancement and Contextual Modulation of Visuospatial Processing by Thalamocollicular Projections from Ventral Lateral Geniculate Nucleus</h3>
-            <p class="publication-authors">Li Z, Peng B, Huang JJ, Zhang Y, Fang Q, <strong>Zhang GW</strong>, Zhang X, Zhang LI, Tao HW</p>
-            <p class="publication-journal">Nature Communications. 14, 7278</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/s41467-023-43147-9" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Li Peng 2023 Nature Communications.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2022 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2022</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">A Bottom-up Reward Pathway Mediated by Somatostatin Neurons in the Medial Septum Complex Underlying Appetitive Learning</h3>
-            <p class="publication-authors">Shen L*, <strong>Zhang GW*</strong>, Tao C, Seo MB, Zhang NK, Huang JJ, Zhang LI, Tao HW</p>
-            <p class="publication-journal">Nature Communications. 13, 1194</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Shen Zhang 2022 Nature Communications.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2021 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2021</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item highlighted">
-            <h3 class="publication-title">Medial Preoptic Area Antagonistically Mediates Stress-Induced Anxiety and Parental Behavior</h3>
-            <p class="publication-authors"><strong>Zhang GW</strong>, Shen L, Tao C, Jung AH, Peng B, Li Z, Zhang LI, Tao HW</p>
-            <p class="publication-journal">Nature Neuroscience. 24, 516-528</p>
-            <div class="publication-note"><i class="fas fa-award"></i> Featured by Blackman and Falkner. Nature Neuroscience. 24, 453-454</div>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Shen 2021 Nature Neuroscience.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Corticostriatal Control of Defense Behavior in Mice Induced by Auditory Looming Cues</h3>
-            <p class="publication-authors">Li Z, Wei J, <strong>Zhang GW</strong>, Huang JJ, Zingg B, Wang X, Tao HW, Zhang LI</p>
-            <p class="publication-journal">Nature Communications. 12, 1040</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/s41467-021-21248-7" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2018 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2018</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Transforming Sensory Cues into Aversive Emotion via Septal-Habenular Pathway</h3>
-            <p class="publication-authors"><strong>Zhang GW</strong>, Shen L, Zhong W, Xiong Y, Zhang LI, Tao HW</p>
-            <p class="publication-journal">Neuron. 99, 1016-1028.e5</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Shen 2018 Neuron.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">A Non-canonical Reticular-Limbic Central Auditory Pathway via Medial Septum Contributes to Fear Conditioning</h3>
-            <p class="publication-authors"><strong>Zhang GW*</strong>, Sun W*, Zingg B, Shen L, He J, Xiong Y, Tao HW, Zhang LI</p>
-            <p class="publication-journal">Neuron. 97, 406-417.e4</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Sun 2018 Neuron.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2017 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2017</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Diversity in Excitation-Inhibition Mismatch Underlies Local Functional Heterogeneity in the Rat Auditory Cortex</h3>
-            <p class="publication-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Tao HW, Zhang LI, Zhou Y, Xiong Y</p>
-            <p class="publication-journal">Cell Reports. 19, 521-531</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1016/j.celrep.2017.03.061" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Bidirectional Shifting Effects of the Sound Intensity on the Best Frequency in the Rat Auditory Cortex</h3>
-            <p class="publication-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhou Y, Xiong Y</p>
-            <p class="publication-journal">Scientific Reports. 7, 44493</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/srep44493" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Tao Zhang 2017 Scientific Reports.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Excitatory Effects of the Primary Auditory Cortex on the Sound-Evoked Responses in the Ipsilateral Anterior Auditory Field in Rat</h3>
-            <p class="publication-authors"><strong>Zhang GW*</strong>, Tao C*, Zhou C, Yan S, Wang Z, Zhou Y, Xiong Y</p>
-            <p class="publication-journal">Neuroscience. 361, 157-166</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1016/j.neuroscience.2017.08.022" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Tao 2017 Neuroscience.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Unbalanced Synaptic Inputs Underlying Multi-peaked Frequency Selectivity in Rat Auditory Cortex</h3>
-            <p class="publication-authors">Zhou C, Tao C, <strong>Zhang GW</strong>, Yan S, Wang L, Zhou Y, Xiong Y</p>
-            <p class="publication-journal">European Journal of Neuroscience. 45, 1078-1084</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1111/ejn.13544" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhou Tao 2017 European Journal Neuroscience.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2016 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2016</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Synaptic Basis for the Generation of Response Variation in Auditory Cortex</h3>
-            <p class="publication-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhang LI, Zhou Y, Xiong Y</p>
-            <p class="publication-journal">Scientific Reports. 6, 31024</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1038/srep31024" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Tao Zhang 2016 Scientific Reports.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2014 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2014</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Ventral Tegmental Area Activation Promotes Firing Precision and Strength through Circuit Inhibition in the Primary Auditory Cortex</h3>
-            <p class="publication-authors">Lou Y, Luo W, <strong>Zhang GW</strong>, Tao C, Chen P, Zhou Y, Xiong Y</p>
-            <p class="publication-journal">Frontiers in Neural Circuits. 8, 25</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.3389/fncir.2014.00025" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Lou Luo 2014 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
+        <p class="pub-authors">Sun W*, <strong>Zhang GW*</strong>, Huang JJ, Tao C*, Seo MB, Tao HW, Zhang LI</p>
+        <p class="pub-journal">Science. 387, eadq2677</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
         </div>
       </div>
-
-      <!-- REVIEWS AND COMMENTARIES -->
-      <div class="category-section" id="reviews">
-        <div class="category-header">
-          <div class="category-icon"><i class="fas fa-book-open"></i></div>
-          <h2 class="category-title">Reviews & Commentaries</h2>
-          <span class="category-count">3 publications</span>
-        </div>
-
-        <!-- 2024 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2024</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">The Neural Basis of Neuropsychiatric Symptoms in Alzheimer's Disease</h3>
-            <p class="publication-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
-            <p class="publication-journal">Frontiers in Aging Neuroscience. 16, 1487875</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Zhang 2024 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2023 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2023</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Sensory Processing Deficits and Related Cortical Pathological Changes in Alzheimer's Disease</h3>
-            <p class="publication-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
-            <p class="publication-journal">Frontiers in Aging Neuroscience. 15, 1213379</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Zhang 2023 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2015 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2015</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Functional Dissection of Synaptic Circuits: In Vivo Patch-Clamp Recording in Neuroscience</h3>
-            <p class="publication-authors">Tao C*, <strong>Zhang GW*</strong>, Xiong Y, Zhou Y</p>
-            <p class="publication-journal">Frontiers in Neural Circuits. 9, 23</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.3389/fncir.2015.00023" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Tao Zhang 2015 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- PREPRINTS -->
-      <div class="category-section" id="preprints">
-        <div class="category-header">
-          <div class="category-icon"><i class="fas fa-file-alt"></i></div>
-          <h2 class="category-title">Preprints</h2>
-          <span class="category-count">2 publications</span>
-        </div>
-
-        <!-- 2023 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2023</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Integrative Mapping of Spatial Transcriptomic and Amyloid Pathology in Alzheimer's Disease at Single-Cell Resolution</h3>
-            <p class="publication-authors"><strong>Zhang GW</strong>, Xia S, Zhang KN, Gao F, Zlokovic BV, Zhang LI, Zhao Z, Tao HW</p>
-            <p class="publication-journal">bioRxiv</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1101/2023.08.28.555156" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Xia 2023 bioRxiv.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2019 -->
-        <div class="year-section">
-          <div class="year-header">
-            <span class="year-label">2019</span>
-            <div class="year-line"></div>
-          </div>
-
-          <div class="publication-item">
-            <h3 class="publication-title">Track-Control: An Automatic Video-based Real-time Closed-loop Behavior Toolbox</h3>
-            <p class="publication-authors"><strong>Zhang GW</strong>, Shen L, Li Z, Tao HW, Zhang LI</p>
-            <p class="publication-journal">bioRxiv</p>
-            <div class="publication-links">
-              <a href="https://doi.org/10.1101/2019.12.11.873372" target="_blank" class="pub-link">
-                <i class="fas fa-external-link-alt"></i> Full Text
-              </a>
-              <a href="publications/Zhang Shen 2019 bioRxiv.pdf" target="_blank" class="pub-link">
-                <i class="fas fa-file-pdf"></i> PDF
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- 2024 -->
+    <div class="year-group">
+      <div class="year-label">2024</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Social Behavior & Stress</span>
+          <span class="pub-title">Excitation-Inhibition Imbalance in Medial Preoptic Area Circuits Underlies Chronic Stress-Induced Depressive-like States</span>
+        </div>
+        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Sun W, Huang JJ, Zhang LI, Tao HW</p>
+        <p class="pub-journal">Nature Communications. 15, 8575</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Tao Zhang 2024 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">A Distributed Auditory Network Mediated by Pontine Central Gray Underlies Ultra-fast Awakening in Response to Alerting Sounds</span>
+        </div>
+        <p class="pub-authors">Wei J, Xiao C, <strong>Zhang GW</strong>, Shen L, Tao HW, Zhang LI</p>
+        <p class="pub-journal">Current Biology. 34, 20, 4597-4611.e5</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1016/j.cub.2024.08.020" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Wei Xiao 2024 Current Biology.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2023 -->
+    <div class="year-group">
+      <div class="year-label">2023</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Social Behavior & Hormones</span>
+          <span class="pub-title">The Medial Preoptic Area Mediates Depressive-like Behaviors Induced by Ovarian Hormone Withdrawal through Distinct GABAergic Projections</span>
+        </div>
+        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Huang JJ, Li Z, Tao HW, Zhang LI</p>
+        <p class="pub-journal">Nature Neuroscience. 26, 1529-1540</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Tao Zhang 2023 Nature Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Glutamatergic and GABAergic Neurons in Pontine Central Gray Mediate Opposing Valence-Specific Behaviors through A Global Network</span>
+        </div>
+        <p class="pub-authors">Xiao C, Wei J, <strong>Zhang GW</strong>, Tao C, Huang JJ, Shen L, Wickersham R, Tao HW, Zhang LI</p>
+        <p class="pub-journal">Neuron. 111, 9, 1486-1503.e7</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Xiao Wei 2023 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Enhancement and Contextual Modulation of Visuospatial Processing by Thalamocollicular Projections from Ventral Lateral Geniculate Nucleus</span>
+        </div>
+        <p class="pub-authors">Li Z, Peng B, Huang JJ, Zhang Y, Fang Q, <strong>Zhang GW</strong>, Zhang X, Zhang LI, Tao HW</p>
+        <p class="pub-journal">Nature Communications. 14, 7278</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/s41467-023-43147-9" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Li Peng 2023 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2022 -->
+    <div class="year-group">
+      <div class="year-label">2022</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Reward Learning</span>
+          <span class="pub-title">A Bottom-up Reward Pathway Mediated by Somatostatin Neurons in the Medial Septum Complex Underlying Appetitive Learning</span>
+        </div>
+        <p class="pub-authors">Shen L*, <strong>Zhang GW*</strong>, Tao C, Seo MB, Zhang NK, Huang JJ, Zhang LI, Tao HW</p>
+        <p class="pub-journal">Nature Communications. 13, 1194</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Shen Zhang 2022 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2021 -->
+    <div class="year-group">
+      <div class="year-label">2021</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Social Behavior & Stress</span>
+          <span class="pub-title">Medial Preoptic Area Antagonistically Mediates Stress-Induced Anxiety and Parental Behavior</span>
+        </div>
+        <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Tao C, Jung AH, Peng B, Li Z, Zhang LI, Tao HW</p>
+        <p class="pub-journal">Nature Neuroscience. 24, 516-528</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Shen 2021 Nature Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Corticostriatal Control of Defense Behavior in Mice Induced by Auditory Looming Cues</span>
+        </div>
+        <p class="pub-authors">Li Z, Wei J, <strong>Zhang GW</strong>, Huang JJ, Zingg B, Wang X, Tao HW, Zhang LI</p>
+        <p class="pub-journal">Nature Communications. 12, 1040</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/s41467-021-21248-7" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2018 -->
+    <div class="year-group">
+      <div class="year-label">2018</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Transforming Sensory Cues into Aversive Emotion via Septal-Habenular Pathway</span>
+        </div>
+        <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Zhong W, Xiong Y, Zhang LI, Tao HW</p>
+        <p class="pub-journal">Neuron. 99, 1016-1028.e5</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Shen 2018 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">A Non-canonical Reticular-Limbic Central Auditory Pathway via Medial Septum Contributes to Fear Conditioning</span>
+        </div>
+        <p class="pub-authors"><strong>Zhang GW*</strong>, Sun W*, Zingg B, Shen L, He J, Xiong Y, Tao HW, Zhang LI</p>
+        <p class="pub-journal">Neuron. 97, 406-417.e4</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Sun 2018 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2017 -->
+    <div class="year-group">
+      <div class="year-label">2017</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Diversity in Excitation-Inhibition Mismatch Underlies Local Functional Heterogeneity in the Rat Auditory Cortex</span>
+        </div>
+        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Tao HW, Zhang LI, Zhou Y, Xiong Y</p>
+        <p class="pub-journal">Cell Reports. 19, 521-531</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1016/j.celrep.2017.03.061" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Bidirectional Shifting Effects of the Sound Intensity on the Best Frequency in the Rat Auditory Cortex</span>
+        </div>
+        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhou Y, Xiong Y</p>
+        <p class="pub-journal">Scientific Reports. 7, 44493</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/srep44493" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Tao Zhang 2017 Scientific Reports.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Excitatory Effects of the Primary Auditory Cortex on the Sound-Evoked Responses in the Ipsilateral Anterior Auditory Field in Rat</span>
+        </div>
+        <p class="pub-authors"><strong>Zhang GW*</strong>, Tao C*, Zhou C, Yan S, Wang Z, Zhou Y, Xiong Y</p>
+        <p class="pub-journal">Neuroscience. 361, 157-166</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1016/j.neuroscience.2017.08.022" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Tao 2017 Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Unbalanced Synaptic Inputs Underlying Multi-peaked Frequency Selectivity in Rat Auditory Cortex</span>
+        </div>
+        <p class="pub-authors">Zhou C, Tao C, <strong>Zhang GW</strong>, Yan S, Wang L, Zhou Y, Xiong Y</p>
+        <p class="pub-journal">European Journal of Neuroscience. 45, 1078-1084</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1111/ejn.13544" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhou Tao 2017 European Journal Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2016 -->
+    <div class="year-group">
+      <div class="year-label">2016</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Synaptic Basis for the Generation of Response Variation in Auditory Cortex</span>
+        </div>
+        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhang LI, Zhou Y, Xiong Y</p>
+        <p class="pub-journal">Scientific Reports. 6, 31024</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1038/srep31024" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Tao Zhang 2016 Scientific Reports.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2014 -->
+    <div class="year-group">
+      <div class="year-label">2014</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Sensory Processing</span>
+          <span class="pub-title">Ventral Tegmental Area Activation Promotes Firing Precision and Strength through Circuit Inhibition in the Primary Auditory Cortex</span>
+        </div>
+        <p class="pub-authors">Lou Y, Luo W, <strong>Zhang GW</strong>, Tao C, Chen P, Zhou Y, Xiong Y</p>
+        <p class="pub-journal">Frontiers in Neural Circuits. 8, 25</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.3389/fncir.2014.00025" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Lou Luo 2014 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reviews Section -->
+    <div class="section-divider">Reviews & Commentaries</div>
+
+    <div class="year-group">
+      <div class="year-label">2024</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Alzheimer's Disease</span>
+          <span class="pub-title">The Neural Basis of Neuropsychiatric Symptoms in Alzheimer's Disease</span>
+        </div>
+        <p class="pub-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
+        <p class="pub-journal">Frontiers in Aging Neuroscience. 16, 1487875</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Zhang 2024 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2023</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Alzheimer's Disease</span>
+          <span class="pub-title">Sensory Processing Deficits and Related Cortical Pathological Changes in Alzheimer's Disease</span>
+        </div>
+        <p class="pub-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
+        <p class="pub-journal">Frontiers in Aging Neuroscience. 15, 1213379</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Zhang 2023 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2015</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Methods</span>
+          <span class="pub-title">Functional Dissection of Synaptic Circuits: In Vivo Patch-Clamp Recording in Neuroscience</span>
+        </div>
+        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Xiong Y, Zhou Y</p>
+        <p class="pub-journal">Frontiers in Neural Circuits. 9, 23</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.3389/fncir.2015.00023" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Tao Zhang 2015 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preprints Section -->
+    <div class="section-divider">Preprints</div>
+
+    <div class="year-group">
+      <div class="year-label">2023</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Alzheimer's Disease</span>
+          <span class="pub-title">Integrative Mapping of Spatial Transcriptomic and Amyloid Pathology in Alzheimer's Disease at Single-Cell Resolution</span>
+        </div>
+        <p class="pub-authors"><strong>Zhang GW</strong>, Xia S, Zhang KN, Gao F, Zlokovic BV, Zhang LI, Zhao Z, Tao HW</p>
+        <p class="pub-journal">bioRxiv</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1101/2023.08.28.555156" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Xia 2023 bioRxiv.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="year-group">
+      <div class="year-label">2019</div>
+      <div class="pub-item">
+        <div class="pub-top">
+          <span class="pub-keyword">Methods</span>
+          <span class="pub-title">Track-Control: An Automatic Video-based Real-time Closed-loop Behavior Toolbox</span>
+        </div>
+        <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Li Z, Tao HW, Zhang LI</p>
+        <p class="pub-journal">bioRxiv</p>
+        <div class="pub-links">
+          <a href="https://doi.org/10.1101/2019.12.11.873372" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          <a href="publications/Zhang Shen 2019 bioRxiv.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -1351,10 +726,10 @@
 </a>
 
 <footer class="footer">
-  <div class="container">
+  <div class="container" style="max-width: 1200px;">
     <div class="footer-content">
       <div class="footer-brand">Zhang Lab</div>
-      <p class="footer-text">&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
+      <p>&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
       <div class="footer-links">
         <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
         <a href="https://www.vcu.edu/" target="_blank">VCU</a>
@@ -1370,25 +745,11 @@ const navMenu = document.querySelector('.nav-menu');
 
 navToggle.addEventListener('click', () => {
   navMenu.classList.toggle('active');
-  navToggle.classList.toggle('active');
 });
 
-document.querySelectorAll('.nav-menu a').forEach(link => {
-  link.addEventListener('click', () => {
-    navMenu.classList.remove('active');
-    navToggle.classList.remove('active');
-  });
-});
-
-// Back to top
 const backToTop = document.getElementById('backToTop');
-
 window.addEventListener('scroll', () => {
-  if (window.pageYOffset > 400) {
-    backToTop.classList.add('visible');
-  } else {
-    backToTop.classList.remove('visible');
-  }
+  backToTop.classList.toggle('visible', window.pageYOffset > 300);
 });
 
 backToTop.addEventListener('click', (e) => {
