@@ -341,6 +341,252 @@
     }
 
     /* ============================================
+       AI TRACKING SECTION
+       ============================================ */
+
+    .ai-tracking-section {
+      background: linear-gradient(180deg, var(--white) 0%, var(--bg-light) 100%);
+      padding: var(--section-padding) 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-tracking-container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .ai-tracking-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .ai-tracking-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(72, 187, 120, 0.12);
+      color: #276749;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(72, 187, 120, 0.2);
+      letter-spacing: 0.3px;
+    }
+
+    .ai-tracking-badge .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #48bb78;
+      border-radius: 50%;
+      animation: aiPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes aiPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .ai-tracking-content h2 {
+      font-family: var(--font-serif);
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .ai-tracking-content h2 span {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #4299e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .ai-tracking-description {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .ai-features {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .ai-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .ai-feature-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary);
+      border-radius: 50%;
+      color: white;
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .ai-feature-text {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    .ai-feature-text strong {
+      color: var(--primary-dark);
+      font-weight: 600;
+    }
+
+    .ai-tracking-demo {
+      position: relative;
+      background: var(--white);
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(26, 54, 93, 0.12);
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .demo-header-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .demo-header-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .demo-header-dot:nth-child(1) { background: #ff5f57; }
+    .demo-header-dot:nth-child(2) { background: #ffbd2e; }
+    .demo-header-dot:nth-child(3) { background: #28ca41; }
+
+    .demo-header-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .demo-header-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      color: #276749;
+      font-weight: 500;
+    }
+
+    .demo-header-status .live-dot {
+      width: 6px;
+      height: 6px;
+      background: #48bb78;
+      border-radius: 50%;
+      animation: aiPulse 1.5s ease-in-out infinite;
+    }
+
+    #mouse-tracking-canvas {
+      display: block;
+      width: 100%;
+      height: 400px;
+      background: linear-gradient(135deg, #fafbfc 0%, #f0f4f8 100%);
+    }
+
+    .demo-legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 0.75rem 1rem;
+      background: var(--bg-light);
+      border-top: 1px solid var(--border-light);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    .legend-color.mouse-1 { background: rgb(185, 90, 80); }
+    .legend-color.mouse-2 { background: rgb(70, 65, 62); }
+    .legend-color.mouse-3 { background: rgb(200, 185, 160); }
+    .legend-color.mouse-4 { background: rgb(150, 110, 80); }
+
+    @media (max-width: 1024px) {
+      .ai-tracking-container {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .ai-tracking-content {
+        text-align: center;
+      }
+
+      .ai-features {
+        align-items: center;
+      }
+
+      .ai-feature {
+        text-align: left;
+        max-width: 400px;
+      }
+
+      #mouse-tracking-canvas {
+        height: 350px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .ai-tracking-content h2 {
+        font-size: 1.75rem;
+      }
+
+      .ai-tracking-description {
+        font-size: 1rem;
+      }
+
+      #mouse-tracking-canvas {
+        height: 300px;
+      }
+
+      .demo-legend {
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+
+    /* ============================================
        SECTIONS
        ============================================ */
 
@@ -858,6 +1104,85 @@
   </div>
 </header>
 
+<!-- AI-Powered Behavior Tracking Section -->
+<section class="ai-tracking-section">
+  <div class="container">
+    <div class="ai-tracking-container">
+      <div class="ai-tracking-content">
+        <div class="ai-tracking-badge">
+          <span class="pulse-dot"></span>
+          AI-Powered Analysis
+        </div>
+        <h2>Automated <span>Social Behavior</span> Tracking</h2>
+        <p class="ai-tracking-description">
+          We use advanced computer vision and machine learning algorithms to automatically
+          track and classify complex social behaviors in mice, enabling precise quantification
+          of social interactions at unprecedented scale and resolution.
+        </p>
+        <div class="ai-features">
+          <div class="ai-feature">
+            <div class="ai-feature-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <p class="ai-feature-text">
+              <strong>Multi-animal tracking:</strong> Simultaneously track multiple animals with individual identity preservation
+            </p>
+          </div>
+          <div class="ai-feature">
+            <div class="ai-feature-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <p class="ai-feature-text">
+              <strong>Behavior classification:</strong> AI-based recognition of social behaviors including sniffing, grooming, and approach
+            </p>
+          </div>
+          <div class="ai-feature">
+            <div class="ai-feature-icon">
+              <i class="fas fa-check"></i>
+            </div>
+            <p class="ai-feature-text">
+              <strong>Real-time analysis:</strong> Process hours of behavioral data in minutes with automated annotation
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="ai-tracking-demo">
+        <div class="demo-header">
+          <div class="demo-header-dots">
+            <span class="demo-header-dot"></span>
+            <span class="demo-header-dot"></span>
+            <span class="demo-header-dot"></span>
+          </div>
+          <span class="demo-header-title">Social Behavior Tracking Simulation</span>
+          <div class="demo-header-status">
+            <span class="live-dot"></span>
+            Live Demo
+          </div>
+        </div>
+        <canvas id="mouse-tracking-canvas"></canvas>
+        <div class="demo-legend">
+          <div class="legend-item">
+            <span class="legend-color mouse-1"></span>
+            Mouse 1
+          </div>
+          <div class="legend-item">
+            <span class="legend-color mouse-2"></span>
+            Mouse 2
+          </div>
+          <div class="legend-item">
+            <span class="legend-color mouse-3"></span>
+            Mouse 3
+          </div>
+          <div class="legend-item">
+            <span class="legend-color mouse-4"></span>
+            Mouse 4
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- Research Section -->
 <section class="section research-section">
   <div class="container">
@@ -1109,6 +1434,477 @@ window.addEventListener('scroll', () => {
     navbar.style.boxShadow = 'none';
   }
 });
+
+// Mouse Tracking Animation
+(function() {
+  const canvas = document.getElementById('mouse-tracking-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let width, height, ARENA_RADIUS;
+  const NUM_MICE = 4;
+  const LIGHT = { x: 0.35, y: -0.45, z: 0.82 };
+
+  const MOUSE_COLORS = [
+    { fur: [185, 90, 80], paw: [220, 180, 175] },
+    { fur: [70, 65, 62], paw: [140, 135, 130] },
+    { fur: [230, 220, 200], paw: [245, 240, 235] },
+    { fur: [150, 110, 80], paw: [200, 180, 165] }
+  ];
+
+  const TRACE_COLORS = [
+    { r: 185, g: 90, b: 80 },
+    { r: 70, g: 65, b: 62 },
+    { r: 200, g: 185, b: 160 },
+    { r: 150, g: 110, b: 80 }
+  ];
+
+  const STATE = {
+    IDLE: 0, EXPLORING: 1, APPROACHING: 2, SNIFFING: 3, CUDDLING: 4,
+    GROOMING: 5, FLEEING: 6, DARTING: 7, SELF_GROOM: 8, FREEZING: 9,
+    REARING: 10, SNIFF_FACE: 11, SNIFF_ANOGENITAL: 12
+  };
+
+  function v3sub(a, b) { return { x: a.x - b.x, y: a.y - b.y, z: a.z - b.z }; }
+  function v3cross(a, b) { return { x: a.y*b.z - a.z*b.y, y: a.z*b.x - a.x*b.z, z: a.x*b.y - a.y*b.x }; }
+  function v3dot(a, b) { return a.x*b.x + a.y*b.y + a.z*b.z; }
+  function v3norm(v) { const m = Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z); return m > 0 ? { x: v.x/m, y: v.y/m, z: v.z/m } : { x: 0, y: 0, z: 1 }; }
+  function project(p) { return { x: (p.x - p.y) * 0.72, y: (p.x + p.y) * 0.38 - p.z * 0.85 }; }
+
+  function shade(v0, v1, v2, baseColor) {
+    const n = v3norm(v3cross(v3sub(v1, v0), v3sub(v2, v0)));
+    if (n.z < 0) { n.x *= -1; n.y *= -1; n.z *= -1; }
+    const intensity = Math.max(0.4, Math.min(1, v3dot(n, LIGHT) * 0.5 + 0.55));
+    return `rgb(${Math.floor(baseColor[0] * intensity)}, ${Math.floor(baseColor[1] * intensity)}, ${Math.floor(baseColor[2] * intensity)})`;
+  }
+
+  class Mouse {
+    constructor(id, x, y) {
+      this.id = id;
+      this.colors = MOUSE_COLORS[id % MOUSE_COLORS.length];
+      this.traceColor = TRACE_COLORS[id % TRACE_COLORS.length];
+      this.x = x; this.y = y;
+      this.angle = Math.random() * Math.PI * 2;
+      this.targetAngle = this.angle;
+      this.headAngle = 0;
+      this.speed = 0; this.targetSpeed = 0;
+      this.maxSpeed = 14 + Math.random() * 5;
+      this.state = STATE.EXPLORING;
+      this.stateTimer = 0;
+      this.socialPartner = null;
+      this.interactionCooldown = 0;
+      this.postInteractionFlee = false;
+      this.legPhase = Math.random() * Math.PI * 2;
+      this.legSpeed = 0;
+      this.breathe = 0;
+      this.time = Math.random() * 100;
+      this.noiseOff = Math.random() * 1000;
+      this.tailSegs = [];
+      for (let i = 0; i < 5; i++) this.tailSegs.push({x: x, y: y});
+      this.trail = [];
+      this.triangles = [];
+      this.scale = 1.4;
+      this.rearAmount = 0;
+      this.targetRear = 0;
+      this.groomAmount = 0;
+      this.targetGroom = 0;
+    }
+
+    noise(t) { return Math.sin(t * 1.1) * 0.5 + Math.sin(t * 2.8) * 0.3 + Math.sin(t * 5.9) * 0.2; }
+    distTo(o) { return Math.sqrt((o.x - this.x) ** 2 + (o.y - this.y) ** 2); }
+    angleTo(o) { return Math.atan2(o.y - this.y, o.x - this.x); }
+
+    findNearest(mice) {
+      let nearest = null, minD = Infinity;
+      for (const m of mice) if (m.id !== this.id) { const d = this.distTo(m); if (d < minD) { minD = d; nearest = m; } }
+      return { mouse: nearest, dist: minD };
+    }
+
+    update(mice, dt) {
+      this.time += dt;
+      this.stateTimer -= dt;
+      this.interactionCooldown -= dt;
+      const { mouse: nearest, dist: nearestDist } = this.findNearest(mice);
+      if (this.stateTimer <= 0) this.decideNextState(nearest, nearestDist);
+      this.executeBehavior(nearest, nearestDist);
+
+      this.rearAmount += (this.targetRear - this.rearAmount) * 0.25;
+      this.groomAmount += (this.targetGroom - this.groomAmount) * 0.2;
+
+      this.speed += (this.targetSpeed - this.speed) * 0.55;
+      let diff = this.targetAngle - this.angle;
+      while (diff > Math.PI) diff -= Math.PI * 2;
+      while (diff < -Math.PI) diff += Math.PI * 2;
+      this.angle += diff * 0.35;
+      this.headAngle += (diff * 0.35 - this.headAngle) * 0.1;
+
+      const moveNoise = this.noise(this.time * 2 + this.noiseOff) * 0.04;
+      this.x += Math.cos(this.angle + moveNoise) * this.speed;
+      this.y += Math.sin(this.angle + moveNoise) * this.speed;
+      this.breathe = Math.sin(this.time * 4) * 0.03;
+
+      const dist = Math.sqrt(this.x * this.x + this.y * this.y);
+      if (dist > ARENA_RADIUS - 45) {
+        const ang = Math.atan2(this.y, this.x);
+        this.x = Math.cos(ang) * (ARENA_RADIUS - 45);
+        this.y = Math.sin(ang) * (ARENA_RADIUS - 45);
+        this.targetAngle = ang + Math.PI + (Math.random() - 0.5) * 0.8;
+        this.targetSpeed = this.maxSpeed * 0.6;
+        this.state = STATE.DARTING;
+        this.stateTimer = 0.2 + Math.random() * 0.3;
+        this.targetRear = 0;
+      }
+
+      for (const m of mice) {
+        if (m.id !== this.id) {
+          const d = this.distTo(m);
+          const minDist = (this.state === STATE.CUDDLING && this.socialPartner === m) ? 35 : 50;
+          if (d < minDist && d > 0) {
+            const ang = Math.atan2(this.y - m.y, this.x - m.x);
+            this.x += Math.cos(ang) * (minDist - d) * 0.08;
+            this.y += Math.sin(ang) * (minDist - d) * 0.08;
+          }
+        }
+      }
+
+      this.legSpeed += (this.speed - this.legSpeed) * 0.1;
+      if (this.legSpeed > 0.3) this.legPhase += this.legSpeed * 0.1;
+
+      const S = this.scale;
+      const TAIL_SEG_LEN = 5.5 * S;
+      const tailBase = { x: this.x - Math.cos(this.angle) * 24 * S, y: this.y - Math.sin(this.angle) * 24 * S };
+
+      for (let i = 0; i < this.tailSegs.length; i++) {
+        const seg = this.tailSegs[i];
+        const wave = Math.sin(this.time * 2.5 - i * 0.5) * 0.8 * (i + 1) / this.tailSegs.length;
+        seg.x += Math.cos(this.angle + Math.PI/2) * wave * 0.015;
+        seg.y += Math.sin(this.angle + Math.PI/2) * wave * 0.015;
+      }
+
+      for (let iter = 0; iter < 3; iter++) {
+        let prevX = tailBase.x, prevY = tailBase.y;
+        for (let i = 0; i < this.tailSegs.length; i++) {
+          const seg = this.tailSegs[i];
+          const dx = seg.x - prevX, dy = seg.y - prevY;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d > 0.01) {
+            seg.x = prevX + (dx / d) * TAIL_SEG_LEN;
+            seg.y = prevY + (dy / d) * TAIL_SEG_LEN;
+          } else {
+            seg.x = prevX - Math.cos(this.angle) * TAIL_SEG_LEN;
+            seg.y = prevY - Math.sin(this.angle) * TAIL_SEG_LEN;
+          }
+          prevX = seg.x; prevY = seg.y;
+        }
+      }
+
+      if (Math.floor(this.time * 25) !== Math.floor((this.time - dt) * 25)) {
+        this.trail.push({ x: this.x, y: this.y, t: this.time });
+        if (this.trail.length > 40) this.trail.shift();
+      }
+
+      this.buildMesh();
+    }
+
+    decideNextState(nearest, nearestDist) {
+      const r = Math.random();
+      if (this.postInteractionFlee) {
+        this.postInteractionFlee = false;
+        this.state = r < 0.7 ? STATE.FLEEING : STATE.DARTING;
+        this.socialPartner = nearest;
+        this.stateTimer = 0.3 + Math.random() * 0.4;
+        this.interactionCooldown = 1 + Math.random() * 1.5;
+        this.targetRear = 0;
+        if (this.state === STATE.DARTING) this.targetAngle += (Math.random() - 0.5) * 3;
+        return;
+      }
+      if (nearest && nearestDist < 65 && this.interactionCooldown <= 0) {
+        const avail = nearest.state !== STATE.FLEEING && nearest.state !== STATE.DARTING;
+        const partnerSniffingOurRear = nearest.state === STATE.SNIFF_ANOGENITAL && nearest.socialPartner === this;
+
+        if (avail) {
+          if (r < 0.22) {
+            this.state = STATE.SNIFF_FACE; this.socialPartner = nearest; this.stateTimer = 0.4 + Math.random() * 0.6; this.targetRear = 0; this.targetGroom = 0;
+            if (nearest.state === STATE.EXPLORING || nearest.state === STATE.IDLE) { nearest.state = STATE.SNIFF_FACE; nearest.socialPartner = this; nearest.stateTimer = 0.4 + Math.random() * 0.5; }
+            return;
+          }
+          if (r < 0.45 && !partnerSniffingOurRear) { this.state = STATE.SNIFF_ANOGENITAL; this.socialPartner = nearest; this.stateTimer = 0.5 + Math.random() * 0.7; this.targetRear = 0; this.targetGroom = 0; return; }
+          if (r < 0.55) { this.state = STATE.SNIFFING; this.socialPartner = nearest; this.stateTimer = 0.3 + Math.random() * 0.5; this.targetRear = 0; this.targetGroom = 0; return; }
+          if (r < 0.65) {
+            this.state = STATE.CUDDLING; this.socialPartner = nearest; this.stateTimer = 0.8 + Math.random() * 1.5; this.targetRear = 0; this.targetGroom = 0;
+            if (nearest.state === STATE.EXPLORING || nearest.state === STATE.IDLE) { nearest.state = STATE.CUDDLING; nearest.socialPartner = this; nearest.stateTimer = 0.8 + Math.random() * 1.0; }
+            return;
+          }
+          if (r < 0.72) { this.state = STATE.GROOMING; this.socialPartner = nearest; this.stateTimer = 0.5 + Math.random() * 0.8; this.targetRear = 0; this.targetGroom = 0; return; }
+        }
+        if (r < 0.85) { this.state = STATE.FLEEING; this.socialPartner = nearest; this.stateTimer = 0.2 + Math.random() * 0.3; this.interactionCooldown = 0.5; this.targetRear = 0; this.targetGroom = 0; return; }
+      }
+      if (nearest && nearestDist < 180 && nearestDist > 65 && this.interactionCooldown <= 0 && r < 0.45) {
+        this.state = STATE.APPROACHING; this.socialPartner = nearest; this.stateTimer = 0.3 + Math.random() * 0.5; this.targetRear = 0; this.targetGroom = 0; return;
+      }
+
+      if (r < 0.22) { this.state = STATE.EXPLORING; this.stateTimer = 0.3 + Math.random() * 0.5; this.targetRear = 0; this.targetGroom = 0; }
+      else if (r < 0.45) { this.state = STATE.DARTING; this.targetAngle += (Math.random() - 0.5) * 3.0; this.stateTimer = 0.1 + Math.random() * 0.2; this.targetRear = 0; this.targetGroom = 0; }
+      else if (r < 0.58) { this.state = STATE.IDLE; this.stateTimer = 0.15 + Math.random() * 0.35; this.targetRear = 0; this.targetGroom = 0; }
+      else if (r < 0.72) { this.state = STATE.SELF_GROOM; this.stateTimer = 0.5 + Math.random() * 0.8; this.targetRear = 0; this.targetGroom = 1; }
+      else if (r < 0.80) { this.state = STATE.FREEZING; this.stateTimer = 0.1 + Math.random() * 0.25; this.targetRear = 0; this.targetGroom = 0; }
+      else if (r < 0.96) { this.state = STATE.REARING; this.stateTimer = 0.4 + Math.random() * 0.6; this.targetRear = 0.75; this.targetGroom = 0; }
+      else { this.state = STATE.DARTING; this.targetAngle = Math.random() * Math.PI * 2; this.stateTimer = 0.1 + Math.random() * 0.2; this.targetRear = 0; this.targetGroom = 0; }
+    }
+
+    executeBehavior(nearest, nearestDist) {
+      switch (this.state) {
+        case STATE.IDLE: this.targetSpeed = 0; this.targetRear = 0; this.targetGroom = 0; this.headAngle = Math.sin(this.time * 12) * 0.15 + Math.sin(this.time * 7) * 0.1; if (Math.random() < 0.08) this.targetAngle += (Math.random() - 0.5) * 0.5; break;
+        case STATE.EXPLORING: this.targetSpeed = this.maxSpeed * (0.4 + Math.random() * 0.35); this.targetRear = 0; this.targetGroom = 0; this.headAngle = Math.sin(this.time * 10) * 0.12; if (Math.random() < 0.1) this.targetAngle += (Math.random() - 0.5) * 1.8; break;
+        case STATE.APPROACHING:
+          this.targetGroom = 0;
+          if (this.socialPartner) { this.targetAngle = this.angleTo(this.socialPartner); this.targetSpeed = this.maxSpeed * 0.6; this.headAngle = Math.sin(this.time * 10) * 0.1; if (this.distTo(this.socialPartner) < 65) { this.state = STATE.SNIFFING; this.stateTimer = 0.3 + Math.random() * 0.4; } }
+          else this.state = STATE.EXPLORING; break;
+        case STATE.SNIFFING:
+          this.targetSpeed = 0; this.targetRear = 0; this.targetGroom = 0;
+          if (this.socialPartner) { this.targetAngle = this.angleTo(this.socialPartner); this.headAngle = Math.sin(this.time * 16) * 0.18 + Math.sin(this.time * 23) * 0.1; }
+          if (this.stateTimer <= 0) this.postInteractionFlee = Math.random() < 0.6; break;
+        case STATE.SNIFF_FACE:
+          this.targetRear = 0; this.targetGroom = 0;
+          if (this.socialPartner) {
+            const partnerHeadX = this.socialPartner.x + Math.cos(this.socialPartner.angle) * 20;
+            const partnerHeadY = this.socialPartner.y + Math.sin(this.socialPartner.angle) * 20;
+            const toHeadAngle = Math.atan2(partnerHeadY - this.y, partnerHeadX - this.x);
+            const headDist = Math.sqrt((partnerHeadX - this.x) ** 2 + (partnerHeadY - this.y) ** 2);
+            this.targetAngle = toHeadAngle;
+            this.targetSpeed = headDist > 30 ? this.maxSpeed * 0.3 : 0;
+            this.headAngle = Math.sin(this.time * 20) * 0.15 + Math.sin(this.time * 14) * 0.1;
+          }
+          if (this.stateTimer <= 0) this.postInteractionFlee = Math.random() < 0.5; break;
+        case STATE.SNIFF_ANOGENITAL:
+          this.targetRear = 0; this.targetGroom = 0;
+          if (this.socialPartner) {
+            const partnerSniffingUs = this.socialPartner.state === STATE.SNIFF_ANOGENITAL && this.socialPartner.socialPartner === this;
+            if (partnerSniffingUs && this.id > this.socialPartner.id) { this.targetSpeed = 0; this.headAngle = Math.sin(this.time * 10) * 0.1; }
+            else {
+              const partnerRearX = this.socialPartner.x - Math.cos(this.socialPartner.angle) * 25;
+              const partnerRearY = this.socialPartner.y - Math.sin(this.socialPartner.angle) * 25;
+              const toRearAngle = Math.atan2(partnerRearY - this.y, partnerRearX - this.x);
+              const rearDist = Math.sqrt((partnerRearX - this.x) ** 2 + (partnerRearY - this.y) ** 2);
+              this.targetAngle = toRearAngle;
+              this.targetSpeed = rearDist > 25 ? this.maxSpeed * 0.35 : 0;
+              this.headAngle = Math.sin(this.time * 22) * 0.2 + Math.sin(this.time * 15) * 0.12;
+            }
+            if ([STATE.EXPLORING, STATE.IDLE, STATE.DARTING].includes(this.socialPartner.state) && Math.random() < 0.1) this.socialPartner.targetSpeed *= 0.3;
+          }
+          if (this.stateTimer <= 0) this.postInteractionFlee = Math.random() < 0.4; break;
+        case STATE.CUDDLING:
+          this.targetSpeed = 0; this.targetRear = 0; this.targetGroom = 0;
+          if (this.socialPartner) {
+            const d = this.distTo(this.socialPartner);
+            if (d > 50) { this.targetAngle = this.angleTo(this.socialPartner); this.targetSpeed = 1.5; }
+            this.headAngle = Math.sin(this.time * 8) * 0.1 + Math.sin(this.time * 12) * 0.08;
+          }
+          if (this.stateTimer <= 0) this.postInteractionFlee = Math.random() < 0.75; break;
+        case STATE.GROOMING:
+          this.targetSpeed = 0; this.targetRear = 0; this.targetGroom = 0;
+          if (this.socialPartner) { this.targetAngle = this.angleTo(this.socialPartner); this.headAngle = Math.sin(this.time * 12) * 0.18 + Math.sin(this.time * 19) * 0.1; }
+          if (this.stateTimer <= 0) this.postInteractionFlee = Math.random() < 0.5; break;
+        case STATE.FLEEING:
+          if (this.socialPartner) this.targetAngle = this.angleTo(this.socialPartner) + Math.PI + (Math.random() - 0.5) * 0.6;
+          this.targetSpeed = this.maxSpeed * (0.85 + Math.random() * 0.2); this.targetRear = 0; this.targetGroom = 0; break;
+        case STATE.DARTING: this.targetSpeed = this.maxSpeed * (0.8 + Math.random() * 0.25); this.targetRear = 0; this.targetGroom = 0; if (Math.random() < 0.12) this.targetAngle += (Math.random() - 0.5) * 2.0; break;
+        case STATE.SELF_GROOM: this.targetSpeed = 0; this.targetRear = 0; this.targetGroom = 1; this.headAngle = Math.sin(this.time * 14) * 0.22 + Math.sin(this.time * 9) * 0.12; break;
+        case STATE.FREEZING: this.targetSpeed = 0; this.targetRear = 0; this.targetGroom = 0; break;
+        case STATE.REARING:
+          this.targetSpeed = 0; this.targetRear = 0.75; this.targetGroom = 0;
+          this.headAngle = Math.sin(this.time * 18) * 0.2 + Math.sin(this.time * 11) * 0.12 + Math.sin(this.time * 25) * 0.08;
+          if (Math.random() < 0.03) this.targetAngle += (Math.random() - 0.5) * 0.4; break;
+      }
+    }
+
+    addCylinder(x1, y1, z1, x2, y2, z2, r1, r2, segs, color) {
+      const dx = x2 - x1, dy = y2 - y1, dz = z2 - z1;
+      const len = Math.sqrt(dx*dx + dy*dy + dz*dz);
+      if (len < 0.01) return;
+      let px, py, pz;
+      if (Math.abs(dz) < Math.abs(dx)) { px = -dy; py = dx; pz = 0; } else { px = 0; py = -dz; pz = dy; }
+      const pl = Math.sqrt(px*px + py*py + pz*pz) || 1;
+      px /= pl; py /= pl; pz /= pl;
+      const qx = (dy * pz - dz * py) / len, qy = (dz * px - dx * pz) / len, qz = (dx * py - dy * px) / len;
+      const ring1 = [], ring2 = [];
+      for (let i = 0; i < segs; i++) {
+        const a = (i / segs) * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+        ring1.push({ x: x1 + (px*c + qx*s) * r1, y: y1 + (py*c + qy*s) * r1, z: z1 + (pz*c + qz*s) * r1 });
+        ring2.push({ x: x2 + (px*c + qx*s) * r2, y: y2 + (py*c + qy*s) * r2, z: z2 + (pz*c + qz*s) * r2 });
+      }
+      for (let i = 0; i < segs; i++) { const j = (i + 1) % segs; this.addTri(ring1[i], ring2[i], ring1[j], color); this.addTri(ring1[j], ring2[i], ring2[j], color); }
+      const c1 = { x: x1, y: y1, z: z1 }, c2 = { x: x2, y: y2, z: z2 };
+      for (let i = 0; i < segs; i++) { const j = (i + 1) % segs; this.addTri(c1, ring1[j], ring1[i], color); this.addTri(c2, ring2[i], ring2[j], color); }
+    }
+
+    addFlatPaw(cx, cy, length, width, height, angle, color) {
+      const cos = Math.cos(angle), sin = Math.sin(angle), segs = 8;
+      const topRing = [], botRing = [];
+      for (let i = 0; i < segs; i++) {
+        const a = (i / segs) * Math.PI * 2, lx = Math.cos(a) * length * 0.5, ly = Math.sin(a) * width * 0.5;
+        const wx = cx + cos * lx - sin * ly, wy = cy + sin * lx + cos * ly;
+        botRing.push({ x: wx, y: wy, z: 0 }); topRing.push({ x: wx, y: wy, z: height });
+      }
+      for (let i = 1; i < segs - 1; i++) { this.addTri(topRing[0], topRing[i], topRing[i + 1], color); this.addTri(botRing[0], botRing[i + 1], botRing[i], color); }
+      for (let i = 0; i < segs; i++) { const j = (i + 1) % segs; this.addTri(botRing[i], topRing[i], botRing[j], color); this.addTri(botRing[j], topRing[i], topRing[j], color); }
+    }
+
+    buildMesh() {
+      this.triangles = [];
+      const S = this.scale, b = 1 + this.breathe, rear = this.rearAmount;
+      const cos = Math.cos(this.angle), sin = Math.sin(this.angle);
+      const pcos = Math.cos(this.angle + Math.PI/2), psin = Math.sin(this.angle + Math.PI/2);
+      const bodyR = 15 * S * b, bodyLen = 36 * S, bodyLift = rear * 20 * S;
+      const bbX = this.x - cos * bodyLen * 0.38, bbY = this.y - sin * bodyLen * 0.38, bbZ = bodyR + 1;
+      const bfX = this.x + cos * bodyLen * 0.28 * (1 - rear * 0.25), bfY = this.y + sin * bodyLen * 0.28 * (1 - rear * 0.25), bfZ = bodyR + 1 + bodyLift + rear * bodyLen * 0.38;
+      this.addCylinder(bbX, bbY, bbZ, bfX, bfY, bfZ, bodyR * 1.05, bodyR * 0.85, 10, this.colors.fur);
+      const rX = bbX - cos * bodyR * 0.55, rY = bbY - sin * bodyR * 0.55;
+      this.addCylinder(bbX, bbY, bbZ, rX, rY, bbZ - 1, bodyR * 1.05, bodyR * 0.4, 8, this.colors.fur);
+      const headR = 10 * S * b, headLen = 20 * S, headAng = this.angle + this.headAngle;
+      const hcos = Math.cos(headAng), hsin = Math.sin(headAng);
+      const hbX = bfX + cos * 2 * S, hbY = bfY + sin * 2 * S, hbZ = bfZ + headR * 0.15;
+      const h1X = hbX + hcos * headLen * 0.35, h1Y = hbY + hsin * headLen * 0.35, h1Z = hbZ + rear * 4 * S;
+      const h2X = hbX + hcos * headLen * 0.7, h2Y = hbY + hsin * headLen * 0.7, h2Z = hbZ + rear * 6 * S - 1 * S;
+      const hfX = hbX + hcos * headLen, hfY = hbY + hsin * headLen, hfZ = hbZ + rear * 7 * S - 3 * S;
+      this.addCylinder(hbX, hbY, hbZ, h1X, h1Y, h1Z, headR, headR * 0.82, 10, this.colors.fur);
+      this.addCylinder(h1X, h1Y, h1Z, h2X, h2Y, h2Z, headR * 0.82, headR * 0.55, 8, this.colors.fur);
+      this.addCylinder(h2X, h2Y, h2Z, hfX, hfY, hfZ, headR * 0.55, headR * 0.3, 7, this.colors.fur);
+      const nX = hfX + hcos * 4 * S, nY = hfY + hsin * 4 * S, nZ = hfZ - 1 * S;
+      this.addCylinder(hfX, hfY, hfZ, nX, nY, nZ, headR * 0.3, headR * 0.1, 5, [55, 45, 45]);
+      const gait = this.legSpeed / this.maxSpeed, lc = this.legPhase;
+      for (const side of [-1, 1]) {
+        const swing = Math.sin(lc + (side > 0 ? Math.PI : 0)) * 4 * gait * (1 - rear) * (1 - this.groomAmount);
+        const lift = Math.max(0, Math.sin(lc + (side > 0 ? Math.PI : 0))) * 3 * gait * (1 - rear) * (1 - this.groomAmount);
+        const shX = bfX - cos * 4 * S + pcos * 9 * S * side, shY = bfY - sin * 4 * S + psin * 9 * S * side, shZ = bfZ - bodyR * 0.4;
+        const groom = this.groomAmount, groomLift = groom * 18 * S, groomForward = groom * 12 * S, groomInward = groom * 4 * S * side;
+        const elbowAngle = rear * 1.2, upperLegLen = 10 * S;
+        const elX = shX + cos * (swing * 0.2 + Math.sin(elbowAngle) * upperLegLen * 0.3 + groomForward * 0.4);
+        const elY = shY + sin * (swing * 0.2 + Math.sin(elbowAngle) * upperLegLen * 0.3 + groomForward * 0.4) - groomInward * 0.3;
+        const elZ = shZ - upperLegLen * (1 - rear * 0.5) * (1 - groom * 0.6) + rear * 8 * S + groomLift * 0.5;
+        const groomPawCycle = Math.sin(this.time * 14 + side * 0.5) * 2 * groom;
+        const pawX = elX + cos * ((4 + swing) * (1 - rear * 0.8) * (1 - groom * 0.7) + groomForward * 0.6);
+        const pawY = elY + sin * ((4 + swing) * (1 - rear * 0.8) * (1 - groom * 0.7) + groomForward * 0.6) - groomInward * 0.7;
+        const pawZ = (rear > 0.3 || groom > 0.3) ? elZ + rear * 12 * S + groomLift * 0.6 + groomPawCycle : lift + 1.5;
+        this.addCylinder(shX, shY, shZ, elX, elY, elZ, 4 * S, 3.3 * S, 6, this.colors.fur);
+        this.addCylinder(elX, elY, elZ, pawX, pawY, pawZ, 3.3 * S, 2.8 * S, 6, this.colors.fur);
+        if (rear < 0.3 && groom < 0.3 && lift < 2) this.addFlatPaw(pawX + cos * 2 * S, pawY + sin * 2 * S, 5.5 * S, 4.5 * S, 2 * S, this.angle, this.colors.paw);
+        else this.addCylinder(pawX, pawY, pawZ, pawX + hcos * 2.5 * S, pawY + hsin * 2.5 * S, pawZ - 1 * S, 2.8 * S, 2 * S, 5, this.colors.paw);
+      }
+      for (const side of [-1, 1]) {
+        const swing = Math.sin(lc + Math.PI + (side > 0 ? Math.PI : 0)) * 5 * gait * (1 - rear * 0.4);
+        const lift = Math.max(0, Math.sin(lc + Math.PI + (side > 0 ? Math.PI : 0))) * 4 * gait * (1 - rear);
+        const hiX = bbX + cos * 4 * S + pcos * 10 * S * side, hiY = bbY + sin * 4 * S + psin * 10 * S * side, hiZ = bbZ - bodyR * 0.15;
+        const kneeBack = rear * 4 * S;
+        const knX = hiX - cos * (5 + kneeBack) + cos * swing * 0.2, knY = hiY - sin * (5 + kneeBack) + sin * swing * 0.2, knZ = hiZ - 11 * S - rear * 2 * S;
+        const ftX = knX - cos * 2 + cos * swing, ftY = knY - sin * 2 + sin * swing, ftZ = lift + 1.5;
+        this.addCylinder(hiX, hiY, hiZ, knX, knY, knZ, 5 * S, 3.8 * S, 6, this.colors.fur);
+        this.addCylinder(knX, knY, knZ, ftX, ftY, ftZ, 3.8 * S, 3 * S, 6, this.colors.fur);
+        this.addFlatPaw(ftX - cos * 1 * S, ftY - sin * 1 * S, 7 * S, 5 * S, 2.2 * S, this.angle + swing * 0.05, this.colors.paw);
+      }
+      let tpX = rX, tpY = rY, tpZ = bbZ - 3 * S, tR = 2.8 * S;
+      for (let i = 0; i < this.tailSegs.length; i++) {
+        const seg = this.tailSegs[i], segZ = Math.max(3 * S, (6 - i) * S), nR = Math.max(0.5 * S, tR - 0.4 * S);
+        this.addCylinder(tpX, tpY, tpZ, seg.x, seg.y, segZ, tR, nR, 4, [195, 175, 168]);
+        tpX = seg.x; tpY = seg.y; tpZ = segZ; tR = nR;
+      }
+      this.triangles.sort((a, b) => a.depth - b.depth);
+    }
+
+    addTri(v0, v1, v2, color) {
+      const p0 = project(v0), p1 = project(v1), p2 = project(v2);
+      this.triangles.push({ pts: [p0, p1, p2], color: shade(v0, v1, v2, color), depth: (v0.x + v1.x + v2.x + v0.y + v1.y + v2.y) / 6 });
+    }
+
+    draw(ctx, cx, cy) {
+      const tc = this.traceColor;
+      for (let i = 1; i < this.trail.length; i++) {
+        const age = this.time - this.trail[i].t, alpha = Math.max(0, 1 - age / 0.65) * 0.5;
+        if (alpha > 0.02) {
+          const p0 = project({ x: this.trail[i-1].x, y: this.trail[i-1].y, z: 0 });
+          const p1 = project({ x: this.trail[i].x, y: this.trail[i].y, z: 0 });
+          ctx.beginPath(); ctx.strokeStyle = `rgba(${tc.r}, ${tc.g}, ${tc.b}, ${alpha})`; ctx.lineWidth = 3; ctx.lineCap = 'round';
+          ctx.moveTo(cx + p0.x, cy + p0.y); ctx.lineTo(cx + p1.x, cy + p1.y); ctx.stroke();
+        }
+      }
+      const S = this.scale, sp = project({ x: this.x, y: this.y, z: 0 }), ss = 1 - this.rearAmount * 0.18;
+      ctx.beginPath(); ctx.fillStyle = 'rgba(0,0,0,0.04)';
+      ctx.ellipse(cx + sp.x, cy + sp.y + 6, 28 * S * ss, 15 * S * ss, -Math.PI / 4, 0, Math.PI * 2); ctx.fill();
+      for (const tri of this.triangles) {
+        ctx.beginPath(); ctx.moveTo(cx + tri.pts[0].x, cy + tri.pts[0].y);
+        ctx.lineTo(cx + tri.pts[1].x, cy + tri.pts[1].y); ctx.lineTo(cx + tri.pts[2].x, cy + tri.pts[2].y);
+        ctx.closePath(); ctx.fillStyle = tri.color; ctx.fill();
+      }
+    }
+  }
+
+  const mice = [];
+
+  function resize() {
+    const rect = canvas.getBoundingClientRect();
+    width = canvas.width = rect.width * window.devicePixelRatio;
+    height = canvas.height = rect.height * window.devicePixelRatio;
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    ARENA_RADIUS = Math.min(rect.width, rect.height) * 0.38;
+  }
+
+  function initMice() {
+    mice.length = 0;
+    for (let i = 0; i < NUM_MICE; i++) {
+      const ang = (i / NUM_MICE) * Math.PI * 2 + Math.random() * 0.3, dist = 45 + Math.random() * 55;
+      mice.push(new Mouse(i, Math.cos(ang) * dist, Math.sin(ang) * dist));
+    }
+  }
+
+  window.addEventListener('resize', () => { resize(); });
+  resize();
+  initMice();
+
+  let lastTime = performance.now();
+
+  function animate(now) {
+    const dt = Math.min((now - lastTime) / 1000, 0.032);
+    lastTime = now;
+
+    const rect = canvas.getBoundingClientRect();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+    const gradient = ctx.createRadialGradient(rect.width/2, rect.height/2, 0, rect.width/2, rect.height/2, Math.max(rect.width, rect.height) * 0.7);
+    gradient.addColorStop(0, '#fafbfc');
+    gradient.addColorStop(1, '#eef2f7');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, rect.width, rect.height);
+
+    const cx = rect.width / 2, cy = rect.height / 2;
+
+    ctx.strokeStyle = 'rgba(0,0,0,0.025)';
+    ctx.lineWidth = 1;
+    for (let v = -320; v <= 320; v += 50) {
+      let s = project({ x: v, y: -320, z: 0 }), e = project({ x: v, y: 320, z: 0 });
+      ctx.beginPath(); ctx.moveTo(cx + s.x * 0.55, cy + s.y * 0.55); ctx.lineTo(cx + e.x * 0.55, cy + e.y * 0.55); ctx.stroke();
+      s = project({ x: -320, y: v, z: 0 }); e = project({ x: 320, y: v, z: 0 });
+      ctx.beginPath(); ctx.moveTo(cx + s.x * 0.55, cy + s.y * 0.55); ctx.lineTo(cx + e.x * 0.55, cy + e.y * 0.55); ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(26, 54, 93, 0.08)';
+    ctx.lineWidth = 1.5;
+    for (let i = 0; i <= 64; i++) {
+      const a = (i / 64) * Math.PI * 2;
+      const p = project({ x: Math.cos(a) * ARENA_RADIUS, y: Math.sin(a) * ARENA_RADIUS, z: 0 });
+      if (i === 0) ctx.moveTo(cx + p.x, cy + p.y); else ctx.lineTo(cx + p.x, cy + p.y);
+    }
+    ctx.stroke();
+
+    for (const m of mice) m.update(mice, dt);
+    const sorted = [...mice].sort((a, b) => (a.x + a.y) - (b.x + b.y));
+    for (const m of sorted) m.draw(ctx, cx, cy);
+
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
 </script>
 
 </body>
