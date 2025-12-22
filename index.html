@@ -587,6 +587,63 @@
     }
 
     /* ============================================
+       NEURAL NETWORK SECTION
+       ============================================ */
+
+    .neural-network-section {
+      background: linear-gradient(180deg, var(--bg-light) 0%, var(--white) 100%);
+      padding: calc(var(--section-padding) * 0.8) 0;
+    }
+
+    .neural-network-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .neural-network-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .neural-network-header h3 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .neural-network-header p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .neural-canvas-wrapper {
+      background: var(--white);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(26, 54, 93, 0.08);
+      border: 1px solid var(--border-light);
+      padding: 12px 15px;
+      overflow: hidden;
+    }
+
+    #networkCanvas {
+      width: 100%;
+      height: 280px;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .neural-network-header h3 {
+        font-size: 1.25rem;
+      }
+
+      #networkCanvas {
+        height: 220px;
+      }
+    }
+
+    /* ============================================
        SECTIONS
        ============================================ */
 
@@ -1133,7 +1190,7 @@
               <i class="fas fa-check"></i>
             </div>
             <p class="ai-feature-text">
-              <strong>Behavior classification:</strong> AI-based recognition of social behaviors including sniffing, grooming, and approach
+              <strong>Behavior classification:</strong> AI-based recognition and classification of complex social behaviors
             </p>
           </div>
           <div class="ai-feature">
@@ -1141,7 +1198,7 @@
               <i class="fas fa-check"></i>
             </div>
             <p class="ai-feature-text">
-              <strong>Real-time analysis:</strong> Process hours of behavioral data in minutes with automated annotation
+              <strong>High-throughput analysis:</strong> Process large-scale behavioral data with automated annotation
             </p>
           </div>
         </div>
@@ -1178,6 +1235,21 @@
             Mouse 4
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Neural Network Classification Section -->
+<section class="neural-network-section">
+  <div class="container">
+    <div class="neural-network-container">
+      <div class="neural-network-header">
+        <h3>Neural Behavior Classification</h3>
+        <p>Deep learning models automatically classify detected behaviors in real-time</p>
+      </div>
+      <div class="neural-canvas-wrapper">
+        <canvas id="networkCanvas"></canvas>
       </div>
     </div>
   </div>
@@ -1488,7 +1560,7 @@ window.addEventListener('scroll', () => {
       this.targetAngle = this.angle;
       this.headAngle = 0;
       this.speed = 0; this.targetSpeed = 0;
-      this.maxSpeed = 14 + Math.random() * 5;
+      this.maxSpeed = 10 + Math.random() * 4;
       this.state = STATE.EXPLORING;
       this.stateTimer = 0;
       this.socialPartner = null;
@@ -1845,7 +1917,7 @@ window.addEventListener('scroll', () => {
     width = canvas.width = rect.width * window.devicePixelRatio;
     height = canvas.height = rect.height * window.devicePixelRatio;
     ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    ARENA_RADIUS = Math.min(rect.width, rect.height) * 0.38;
+    ARENA_RADIUS = Math.min(rect.width, rect.height) * 0.44;
   }
 
   function initMice() {
@@ -1904,6 +1976,387 @@ window.addEventListener('scroll', () => {
     requestAnimationFrame(animate);
   }
   requestAnimationFrame(animate);
+})();
+
+// Neural Network Animation
+(function() {
+  const canvas = document.getElementById('networkCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    canvas.width = (rect.width - 30) * 2;
+    canvas.height = canvas.offsetHeight * 2;
+    ctx.scale(2, 2);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const gridSize = 8;
+  let imagePixels = [];
+
+  function generateMouseImage() {
+    const mouseX = 2 + Math.random() * 4;
+    const mouseY = 2 + Math.random() * 4;
+    const mouseAngle = Math.random() * Math.PI * 2;
+
+    imagePixels = [];
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
+        const dx = x - mouseX;
+        const dy = y - mouseY;
+        const rotX = dx * Math.cos(-mouseAngle) - dy * Math.sin(-mouseAngle);
+        const rotY = dx * Math.sin(-mouseAngle) + dy * Math.cos(-mouseAngle);
+
+        const isBody = Math.abs(rotX) < 2.5 && Math.abs(rotY) < 1.5;
+        const isHead = Math.sqrt(Math.pow(rotX - 2, 2) + Math.pow(rotY, 2)) < 1.3;
+        const isEar1 = Math.sqrt(Math.pow(rotX - 2.5, 2) + Math.pow(rotY - 1.2, 2)) < 0.8;
+        const isEar2 = Math.sqrt(Math.pow(rotX - 2.5, 2) + Math.pow(rotY + 1.2, 2)) < 0.8;
+        const isTail = rotX < -1.5 && Math.abs(rotY) < 0.4;
+
+        let bright = 0.95;
+        if (isBody || isHead) bright = 0.15 + Math.random() * 0.1;
+        else if (isEar1 || isEar2) bright = 0.3 + Math.random() * 0.1;
+        else if (isTail) bright = 0.35 + Math.random() * 0.1;
+
+        imagePixels.push({ x, y, v: bright });
+      }
+    }
+  }
+
+  const neuronsPerLayer = 12;
+  const trailLength = 3;
+  const totalHiddenLayers = 11;
+
+  const layers = [
+    { neurons: neuronsPerLayer, x: 0.18 },
+    { neurons: neuronsPerLayer, x: 0.24 },
+    { neurons: neuronsPerLayer, x: 0.30 },
+    { neurons: neuronsPerLayer, x: 0.36 },
+    { neurons: neuronsPerLayer, x: 0.42 },
+    { neurons: neuronsPerLayer, x: 0.48 },
+    { type: 'ellipsis', x: 0.54 },
+    { neurons: neuronsPerLayer, x: 0.60 },
+    { neurons: neuronsPerLayer, x: 0.66 },
+    { neurons: neuronsPerLayer, x: 0.72 },
+    { neurons: neuronsPerLayer, x: 0.78 },
+    { neurons: neuronsPerLayer, x: 0.84 }
+  ];
+
+  const outputClasses = 6;
+  const behaviors = ['run', 'groom', 'rear', 'sniff', 'sleep', 'eat'];
+  let currentPrediction = Math.floor(Math.random() * outputClasses);
+  let predictionVisible = false;
+
+  let layerActivations = [];
+  let layerConnections = [];
+
+  layers.forEach((layer, idx) => {
+    if (layer.type !== 'ellipsis') {
+      layerActivations.push(Array(layer.neurons).fill(0));
+
+      if (idx > 0) {
+        const connections = [];
+        for (let i = 0; i < layer.neurons; i++) {
+          const numConnections = 3 + Math.floor(Math.random() * 4);
+          const targets = [];
+          for (let c = 0; c < numConnections; c++) {
+            targets.push(Math.floor(Math.random() * neuronsPerLayer));
+          }
+          connections.push([...new Set(targets)]);
+        }
+        layerConnections.push(connections);
+      }
+    }
+  });
+  layerActivations.push(Array(outputClasses).fill(0));
+
+  const outputConnections = [];
+  for (let i = 0; i < outputClasses; i++) {
+    const targets = [];
+    for (let c = 0; c < 4; c++) {
+      targets.push(Math.floor(Math.random() * neuronsPerLayer));
+    }
+    outputConnections.push([...new Set(targets)]);
+  }
+  layerConnections.push(outputConnections);
+
+  let targetActivations = layerActivations.map(layer => layer.map(() => 0));
+
+  let currentPropagationLayer = -1;
+  let propagationProgress = 0;
+  const propagationSpeed = 1.0;
+
+  function generateNewActivations(layerIdx) {
+    const count = layerActivations[layerIdx].length;
+    return Array(count).fill(0).map(() => Math.random() > 0.35 ? 0.5 + Math.random() * 0.5 : 0);
+  }
+
+  function lerpActivations() {
+    for (let l = 0; l < layerActivations.length; l++) {
+      for (let i = 0; i < layerActivations[l].length; i++) {
+        layerActivations[l][i] += (targetActivations[l][i] - layerActivations[l][i]) * 0.7;
+      }
+    }
+  }
+
+  function getLayerVisibility(layerIdx) {
+    if (currentPropagationLayer < 0) return 0;
+    const distance = currentPropagationLayer - layerIdx;
+    if (distance < 0) return 0;
+    else if (distance === 0) return 1;
+    else if (distance <= trailLength) return 1 - (distance / (trailLength + 1));
+    else return 0;
+  }
+
+  function updatePropagation() {
+    if (currentPropagationLayer < 0) {
+      generateMouseImage();
+      currentPropagationLayer = 0;
+      targetActivations[0] = generateNewActivations(0);
+      propagationProgress = 0;
+    }
+
+    if (propagationProgress >= 1) {
+      currentPropagationLayer++;
+      propagationProgress = 0;
+
+      if (currentPropagationLayer >= layerActivations.length + trailLength + 1) {
+        currentPropagationLayer = -1;
+        for (let l = 0; l < targetActivations.length; l++) {
+          targetActivations[l] = targetActivations[l].map(() => 0);
+        }
+        return;
+      }
+
+      if (currentPropagationLayer < layerActivations.length) {
+        targetActivations[currentPropagationLayer] = generateNewActivations(currentPropagationLayer);
+      }
+
+      if (currentPropagationLayer === totalHiddenLayers) {
+        currentPrediction = Math.floor(Math.random() * outputClasses);
+        predictionVisible = true;
+      }
+    } else {
+      propagationProgress += propagationSpeed;
+    }
+  }
+
+  function getLayoutPositions(width, height) {
+    const allPositions = [];
+
+    layers.forEach(layer => {
+      if (layer.type === 'ellipsis') return;
+      const neurons = [];
+      const spacing = 20;
+      const startY = height / 2 - (layer.neurons - 1) * spacing / 2;
+      for (let j = 0; j < layer.neurons; j++) {
+        neurons.push({ x: layer.x * width, y: startY + j * spacing });
+      }
+      allPositions.push(neurons);
+    });
+
+    const outputX = 0.94 * width;
+    const labelSpacing = 28;
+    const outputStartY = height / 2 - (outputClasses - 1) * labelSpacing / 2;
+    const outputPos = [];
+    for (let i = 0; i < outputClasses; i++) {
+      outputPos.push({ x: outputX, y: outputStartY + i * labelSpacing });
+    }
+    allPositions.push(outputPos);
+
+    return allPositions;
+  }
+
+  function drawPixelGrid(ctx, centerX, centerY, size) {
+    const pixelSize = size / gridSize;
+    const startX = centerX - size / 2;
+    const startY = centerY - size / 2;
+    const isImageActive = currentPropagationLayer === 0;
+
+    imagePixels.forEach(pixel => {
+      const px = startX + pixel.x * pixelSize;
+      const py = startY + pixel.y * pixelSize;
+      const v = Math.floor(255 - (1 - pixel.v) * 255);
+      ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
+      ctx.fillRect(px, py, pixelSize - 1, pixelSize - 1);
+    });
+
+    ctx.strokeStyle = isImageActive ? 'rgba(20, 20, 30, 0.8)' : 'rgba(20, 20, 30, 0.4)';
+    ctx.lineWidth = isImageActive ? 2 : 1.5;
+    ctx.strokeRect(startX - 2, startY - 2, size + 4, size + 4);
+  }
+
+  function drawImageToInputConnections(ctx, imageX, imageY, imageSize, inputPos) {
+    const imgRight = imageX + imageSize / 2;
+    const visibility = getLayerVisibility(0);
+    if (visibility < 0.01) return;
+
+    for (let i = 0; i < inputPos.length; i++) {
+      const fromY = imageY - imageSize / 2 + (i + 0.5) * (imageSize / inputPos.length);
+      const target = inputPos[i];
+      const targetActivation = layerActivations[0][i];
+      if (targetActivation < 0.1) continue;
+
+      const alpha = visibility * targetActivation * 0.5;
+      ctx.strokeStyle = `rgba(20, 20, 35, ${alpha})`;
+      ctx.lineWidth = 0.5 + targetActivation * 0.8;
+      ctx.beginPath();
+      ctx.moveTo(imgRight + 3, fromY);
+      ctx.lineTo(target.x - 3, target.y);
+      ctx.stroke();
+    }
+  }
+
+  function drawEllipsis(ctx, centerX, centerY) {
+    const visibility = (getLayerVisibility(5) + getLayerVisibility(6)) / 2;
+    if (visibility < 0.01) return;
+    for (let i = 0; i < 3; i++) {
+      const y = centerY - 8 + i * 8;
+      ctx.fillStyle = `rgba(20, 20, 30, ${visibility * 0.6})`;
+      ctx.beginPath();
+      ctx.arc(centerX, y, 1.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  function drawNeuron(ctx, x, y, activation, visibility) {
+    if (activation < 0.1 || visibility < 0.01) return;
+    const alpha = visibility * activation;
+    const radius = 1.5 + activation * 1.5;
+    ctx.fillStyle = `rgba(15, 15, 25, ${alpha})`;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  function drawConnections(ctx, positions) {
+    for (let i = 0; i < positions.length - 1; i++) {
+      const fromLayer = positions[i];
+      const toLayer = positions[i + 1];
+      const connections = layerConnections[i];
+
+      const fromVisibility = getLayerVisibility(i);
+      const toVisibility = getLayerVisibility(i + 1);
+      const visibility = Math.min(fromVisibility, toVisibility);
+
+      if (visibility < 0.01 || !connections) continue;
+
+      toLayer.forEach((tp, ti) => {
+        const connectedFrom = connections[ti] || [];
+        const toActivation = layerActivations[i + 1] ? layerActivations[i + 1][ti] : 0;
+        if (toActivation < 0.1) return;
+
+        connectedFrom.forEach(fi => {
+          if (fi >= fromLayer.length) return;
+          const fp = fromLayer[fi];
+          const fromActivation = layerActivations[i][fi];
+          if (fromActivation < 0.1) return;
+
+          const strength = fromActivation * toActivation;
+          const alpha = visibility * strength * 0.5;
+
+          ctx.strokeStyle = `rgba(20, 20, 35, ${alpha})`;
+          ctx.lineWidth = 0.3 + strength * 0.8;
+          ctx.beginPath();
+          ctx.moveTo(fp.x + 2, fp.y);
+          ctx.lineTo(tp.x - 2, tp.y);
+          ctx.stroke();
+        });
+      });
+    }
+  }
+
+  function drawPropagationPulse(ctx, positions) {
+    if (currentPropagationLayer <= 0 || currentPropagationLayer >= layerActivations.length) return;
+    if (propagationProgress >= 1) return;
+
+    const fromLayer = positions[currentPropagationLayer - 1];
+    const toLayer = positions[currentPropagationLayer];
+    const connections = layerConnections[currentPropagationLayer - 1];
+    if (!connections) return;
+
+    for (let ti = 0; ti < toLayer.length; ti++) {
+      const connectedFrom = connections[ti] || [];
+      const toAct = targetActivations[currentPropagationLayer][ti];
+      if (toAct < 0.1) continue;
+
+      connectedFrom.forEach(fi => {
+        if (fi >= fromLayer.length) return;
+        const from = fromLayer[fi];
+        const to = toLayer[ti];
+        const fromAct = layerActivations[currentPropagationLayer - 1][fi];
+        if (fromAct < 0.1) return;
+
+        const t = propagationProgress;
+        const px = (from.x + 2) + ((to.x - 2) - (from.x + 2)) * t;
+        const py = from.y + (to.y - from.y) * t;
+
+        ctx.fillStyle = 'rgba(10, 10, 20, 0.9)';
+        ctx.beginPath();
+        ctx.arc(px, py, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+  }
+
+  function drawOutputLabel(ctx, centerX, centerY) {
+    if (!predictionVisible) return;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, sans-serif';
+    ctx.fillStyle = 'rgba(15, 15, 25, 1)';
+    ctx.fillText(behaviors[currentPrediction], centerX - 20, centerY);
+  }
+
+  function animateNetwork() {
+    updatePropagation();
+    lerpActivations();
+
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const width = rect.width - 30;
+    const height = canvas.offsetHeight;
+
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(2, 2);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    const positions = getLayoutPositions(width, height);
+    const imageX = 0.04 * width;
+    const imageY = height / 2;
+    const imageSize = 60;
+
+    drawConnections(ctx, positions);
+    drawImageToInputConnections(ctx, imageX, imageY, imageSize, positions[0]);
+    drawPropagationPulse(ctx, positions);
+    drawPixelGrid(ctx, imageX, imageY, imageSize);
+
+    let posIdx = 0;
+    layers.forEach((layer) => {
+      if (layer.type === 'ellipsis') {
+        drawEllipsis(ctx, layer.x * width, height / 2);
+      } else {
+        const layerPos = positions[posIdx];
+        const activations = layerActivations[posIdx];
+        const visibility = getLayerVisibility(posIdx);
+        if (layerPos && activations) {
+          layerPos.forEach((pos, i) => {
+            drawNeuron(ctx, pos.x, pos.y, activations[i], visibility);
+          });
+        }
+        posIdx++;
+      }
+    });
+
+    drawOutputLabel(ctx, 0.91 * width, height / 2);
+    requestAnimationFrame(animateNetwork);
+  }
+
+  generateMouseImage();
+  animateNetwork();
 })();
 </script>
 
