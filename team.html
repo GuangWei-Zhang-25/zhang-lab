@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Team | Zhang Lab</title>
-  <meta name="description" content="Meet the team at the Zhang Laboratory - Join us for postdoctoral, graduate student, and technician positions">
+  <meta name="description" content="Meet the team at the Zhang Laboratory">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -13,7 +13,6 @@
       --primary-light: #2c5282;
       --primary-dark: #0f2744;
       --accent: #c9a227;
-      --accent-light: #d4b54a;
       --text-primary: #1a202c;
       --text-secondary: #4a5568;
       --text-muted: #718096;
@@ -24,8 +23,6 @@
       --border-medium: #cbd5e0;
       --font-serif: 'Crimson Text', Georgia, serif;
       --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --section-padding: 100px;
-      --container-width: 1200px;
       --transition: all 0.3s ease;
     }
 
@@ -42,7 +39,7 @@
     }
 
     .container {
-      max-width: var(--container-width);
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 24px;
     }
@@ -139,49 +136,10 @@
 
     /* Page Header */
     .page-header {
-      padding: 140px 0 80px;
+      padding: 140px 0 60px;
       background: linear-gradient(165deg, var(--bg-light) 0%, var(--white) 50%, var(--bg-warm) 100%);
       margin-top: 70px;
       text-align: center;
-      position: relative;
-    }
-
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 60%;
-      height: 100%;
-      background: radial-gradient(ellipse at top right, rgba(26, 54, 93, 0.03) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .page-header-content {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .page-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--primary);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-    }
-
-    .page-eyebrow::before,
-    .page-eyebrow::after {
-      content: '';
-      width: 40px;
-      height: 2px;
-      background: var(--accent);
     }
 
     .page-header h1 {
@@ -189,351 +147,131 @@
       font-size: clamp(2.5rem, 4vw, 3.5rem);
       font-weight: 700;
       color: var(--primary-dark);
-      margin-bottom: 1.5rem;
-      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
     }
 
     .page-header-subtitle {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: var(--text-secondary);
-      line-height: 1.8;
-      max-width: 650px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
-    /* Sections */
-    .section {
-      padding: var(--section-padding) 0;
-    }
-
-    .section-header {
-      text-align: center;
-      max-width: 700px;
-      margin: 0 auto 4rem;
-    }
-
-    .section-eyebrow {
-      display: inline-block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--primary);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-
-    .section-title {
-      font-family: var(--font-serif);
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 1rem;
-    }
-
-    .section-subtitle {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-    }
-
-    /* PI Section */
-    .pi-section {
+    /* Photo Wall Section */
+    .photo-wall {
+      padding: 80px 0;
       background: var(--white);
     }
 
-    .pi-card {
-      display: grid;
-      grid-template-columns: 280px 1fr;
-      gap: 4rem;
-      max-width: 1000px;
-      margin: 0 auto;
-      align-items: start;
+    .team-category {
+      margin-bottom: 60px;
     }
 
-    .pi-image-container {
+    .team-category:last-child {
+      margin-bottom: 0;
+    }
+
+    .category-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--primary-dark);
+      text-align: center;
+      margin-bottom: 2.5rem;
       position: relative;
     }
 
-    .pi-image {
-      width: 100%;
-      aspect-ratio: 1;
-      border-radius: 12px;
-      object-fit: cover;
-      background: var(--bg-light);
-      box-shadow: 0 20px 60px rgba(26, 54, 93, 0.12);
-    }
-
-    .pi-info h2 {
-      font-family: var(--font-serif);
-      font-size: 2rem;
-      color: var(--primary-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .pi-title {
-      font-size: 1.1rem;
-      color: var(--primary);
-      font-weight: 500;
-      margin-bottom: 0.25rem;
-    }
-
-    .pi-affiliation {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    .pi-bio {
-      font-size: 1.05rem;
-      color: var(--text-secondary);
-      line-height: 1.85;
-      margin-bottom: 2rem;
-    }
-
-    .pi-interests {
-      background: var(--bg-light);
-      padding: 1.5rem 2rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-    }
-
-    .pi-interests h4 {
-      font-family: var(--font-serif);
-      font-size: 1.1rem;
-      color: var(--primary-dark);
-      margin-bottom: 1rem;
-    }
-
-    .pi-interests ul {
-      list-style: none;
-      padding: 0;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.5rem 1.5rem;
-    }
-
-    .pi-interests li {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      padding-left: 1.25rem;
-      position: relative;
-    }
-
-    .pi-interests li::before {
+    .category-title::after {
       content: '';
-      position: absolute;
-      left: 0;
-      top: 0.5rem;
-      width: 6px;
-      height: 6px;
+      display: block;
+      width: 60px;
+      height: 3px;
       background: var(--accent);
-      border-radius: 50%;
+      margin: 0.75rem auto 0;
     }
 
-    .pi-links {
+    .team-grid {
       display: flex;
-      gap: 1rem;
       flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.5rem;
     }
 
-    .pi-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.25rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-decoration: none;
-      border-radius: 6px;
-      transition: var(--transition);
-      border: 1px solid var(--border-medium);
-      color: var(--primary);
-    }
-
-    .pi-link:hover {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: var(--white);
-    }
-
-    /* Open Positions */
-    .positions-section {
-      background: var(--bg-light);
-    }
-
-    .positions-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .position-card {
-      background: var(--white);
-      padding: 2rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-light);
+    .team-member {
       text-align: center;
+      width: 200px;
+    }
+
+    .member-photo-container {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--bg-light);
+      border: 4px solid var(--border-light);
       transition: var(--transition);
     }
 
-    .position-card:hover {
+    .team-member:hover .member-photo-container {
       border-color: var(--primary-light);
-      box-shadow: 0 15px 40px rgba(26, 54, 93, 0.08);
-      transform: translateY(-4px);
+      transform: scale(1.05);
     }
 
-    .position-icon {
-      width: 64px;
-      height: 64px;
+    .member-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    .member-placeholder {
+      width: 100%;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--bg-light);
-      border-radius: 50%;
-      margin: 0 auto 1.5rem;
-      border: 2px dashed var(--border-medium);
+      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-warm) 100%);
     }
 
-    .position-icon i {
-      font-size: 1.5rem;
-      color: var(--text-muted);
+    .member-placeholder i {
+      font-size: 4rem;
+      color: var(--border-medium);
     }
 
-    .position-card h3 {
+    .member-name {
       font-family: var(--font-serif);
-      font-size: 1.25rem;
-      color: var(--primary-dark);
-      margin-bottom: 0.75rem;
-    }
-
-    .position-card p {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 1rem;
-    }
-
-    .position-status {
-      display: inline-block;
-      font-size: 0.75rem;
+      font-size: 1.15rem;
       font-weight: 600;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    /* Join Us Section */
-    .join-section {
-      background: var(--white);
-    }
-
-    .join-content {
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .join-text {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      line-height: 1.85;
-      margin-bottom: 2rem;
-    }
-
-    .join-details {
-      background: var(--bg-light);
-      padding: 2.5rem;
-      border-radius: 12px;
-      margin-bottom: 2rem;
-      text-align: left;
-    }
-
-    .join-details h4 {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
       color: var(--primary-dark);
-      margin-bottom: 1.5rem;
-      text-align: center;
+      margin-bottom: 0.25rem;
     }
 
-    .requirements-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2rem;
-    }
-
-    .requirement-item h5 {
-      font-size: 1rem;
-      color: var(--primary);
-      margin-bottom: 0.75rem;
-    }
-
-    .requirement-item p {
-      font-size: 0.9rem;
+    .member-title {
+      font-size: 0.85rem;
       color: var(--text-secondary);
-      line-height: 1.7;
+      margin-bottom: 0.25rem;
     }
 
-    .diversity-statement {
-      background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-light) 100%);
-      padding: 2rem;
-      border-radius: 8px;
-      border-left: 4px solid var(--accent);
-      text-align: left;
-      margin-bottom: 2rem;
-    }
-
-    .diversity-statement p {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      font-style: italic;
-      margin: 0;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.875rem 1.75rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: var(--transition);
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background: var(--primary);
-      color: var(--white);
-      border: 2px solid var(--primary);
-    }
-
-    .btn-primary:hover {
-      background: var(--primary-dark);
-      border-color: var(--primary-dark);
-      transform: translateY(-2px);
-    }
-
-    /* Alumni Section */
-    .alumni-section {
-      background: var(--bg-light);
-      padding: 60px 0;
-    }
-
-    .alumni-section .section-title {
-      font-size: 1.75rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .alumni-note {
-      text-align: center;
+    .member-affiliation {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      font-size: 0.95rem;
-      max-width: 600px;
-      margin: 0 auto;
+    }
+
+    .member-links {
+      margin-top: 0.75rem;
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .member-links a {
+      color: var(--text-muted);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .member-links a:hover {
+      color: var(--primary);
     }
 
     /* Footer */
@@ -573,40 +311,7 @@
     .footer-links a:hover { color: var(--white); }
 
     /* Responsive */
-    @media (max-width: 1024px) {
-      .pi-card {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 2rem;
-      }
-
-      .pi-image-container {
-        max-width: 280px;
-        margin: 0 auto;
-      }
-
-      .pi-interests ul {
-        grid-template-columns: 1fr;
-      }
-
-      .pi-links {
-        justify-content: center;
-      }
-
-      .positions-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .requirements-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
     @media (max-width: 768px) {
-      :root {
-        --section-padding: 60px;
-      }
-
       .nav-menu {
         position: fixed;
         left: -100%;
@@ -628,11 +333,20 @@
       .nav-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
       .nav-subtitle, .nav-divider { display: none; }
 
-      .page-header { padding: 100px 0 60px; }
+      .page-header { padding: 100px 0 40px; }
       .page-header h1 { font-size: 2rem; }
 
-      .positions-grid {
-        grid-template-columns: 1fr;
+      .team-grid {
+        gap: 2rem;
+      }
+
+      .team-member {
+        width: 160px;
+      }
+
+      .member-photo-container {
+        width: 140px;
+        height: 140px;
       }
 
       .footer-content {
@@ -676,171 +390,114 @@
 
 <header class="page-header">
   <div class="container">
-    <div class="page-header-content">
-      <div class="page-eyebrow">Our People</div>
-      <h1>Team</h1>
-      <p class="page-header-subtitle">
-        Meet the researchers driving discoveries in neural circuits and social behavior.
-      </p>
-    </div>
+    <h1>Our Team</h1>
+    <p class="page-header-subtitle">
+      Meet the researchers driving discoveries in neural circuits and social behavior.
+    </p>
   </div>
 </header>
 
-<!-- Principal Investigator -->
-<section class="section pi-section">
+<section class="photo-wall">
   <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">Leadership</span>
-      <h2 class="section-title">Principal Investigator</h2>
-    </div>
-    <div class="pi-card">
-      <div class="pi-image-container">
-        <img src="images/Guangwei headshot_small.jpg" alt="Guang-Wei Zhang" class="pi-image" onerror="this.style.background='linear-gradient(135deg, var(--bg-light) 0%, var(--bg-warm) 100%)'">
-      </div>
-      <div class="pi-info">
-        <h2>Guang-Wei Zhang, MD, PhD</h2>
-        <p class="pi-title">Principal Investigator</p>
-        <p class="pi-affiliation">Assistant Professor, Department of Anatomy and Neurobiology<br>Virginia Commonwealth University</p>
 
-        <p class="pi-bio">
-          Dr. Zhang's research focuses on understanding the neural mechanisms underlying social behavior
-          and how these mechanisms are disrupted in neuropsychiatric disorders. The laboratory uses
-          cutting-edge techniques including optogenetics, chemogenetics, in vivo imaging, and sophisticated
-          behavioral analysis to investigate neural circuits controlling social impairment, with the
-          ultimate goal of identifying novel therapeutic targets for conditions such as autism,
-          depression, and anxiety disorders.
-        </p>
-
-        <div class="pi-interests">
-          <h4>Research Interests</h4>
-          <ul>
-            <li>Neural circuits controlling social behavior</li>
-            <li>Prosocial behaviors and empathy</li>
-            <li>Stress-induced anxiety and depression</li>
-            <li>Excitation-inhibition balance</li>
-            <li>Therapeutic target identification</li>
-          </ul>
-        </div>
-
-        <div class="pi-links">
-          <a href="mailto:guangwei.zhang@vcuhealth.org" class="pi-link">
-            <i class="fas fa-envelope"></i> Email
-          </a>
-          <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" class="pi-link">
-            <i class="fas fa-graduation-cap"></i> Google Scholar
-          </a>
-          <a href="https://www.ncbi.nlm.nih.gov/myncbi/guangwei.zhang.1/bibliography/public/" target="_blank" class="pi-link">
-            <i class="fas fa-book"></i> PubMed
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Open Positions -->
-<section class="section positions-section" id="join-us">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">Opportunities</span>
-      <h2 class="section-title">Open Positions</h2>
-      <p class="section-subtitle">
-        We are actively recruiting motivated researchers at all levels who are passionate about
-        understanding the neural basis of social behavior.
-      </p>
-    </div>
-    <div class="positions-grid">
-      <div class="position-card">
-        <div class="position-icon">
-          <i class="fas fa-user-graduate"></i>
-        </div>
-        <h3>Postdoctoral Fellow</h3>
-        <p>PhD holders with expertise in neuroscience, behavioral analysis, electrophysiology, or related fields. Experience with in vivo techniques preferred.</p>
-        <span class="position-status">Now Recruiting</span>
-      </div>
-      <div class="position-card">
-        <div class="position-icon">
-          <i class="fas fa-graduation-cap"></i>
-        </div>
-        <h3>Graduate Student</h3>
-        <p>Prospective PhD students interested in neural circuits, social behavior, and translational neuroscience through VCU's graduate programs.</p>
-        <span class="position-status">Now Recruiting</span>
-      </div>
-      <div class="position-card">
-        <div class="position-icon">
-          <i class="fas fa-flask"></i>
-        </div>
-        <h3>Research Technician</h3>
-        <p>Recent graduates seeking research experience in systems neuroscience. Strong organizational skills and interest in animal behavior required.</p>
-        <span class="position-status">Now Recruiting</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Join Us -->
-<section class="section join-section">
-  <div class="container">
-    <div class="join-content">
-      <div class="section-header">
-        <span class="section-eyebrow">Join Us</span>
-        <h2 class="section-title">How to Apply</h2>
-      </div>
-
-      <p class="join-text">
-        Our lab provides a collaborative and supportive environment with access to state-of-the-art
-        facilities and techniques for scientific discovery. We are committed to mentoring the next
-        generation of neuroscientists.
-      </p>
-
-      <div class="join-details">
-        <h4>What We're Looking For</h4>
-        <div class="requirements-grid">
-          <div class="requirement-item">
-            <h5>Postdoctoral Fellows</h5>
-            <p>PhD in neuroscience or related field. Experience with optogenetics, electrophysiology, or in vivo imaging is highly valued.</p>
+    <!-- Principal Investigator -->
+    <div class="team-category">
+      <h2 class="category-title">Principal Investigator</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo-container">
+            <img src="images/Guangwei headshot_small.jpg" alt="Guang-Wei Zhang" class="member-photo">
           </div>
-          <div class="requirement-item">
-            <h5>Graduate Students</h5>
-            <p>Strong academic record and genuine interest in neural circuit research. Apply through VCU's Neuroscience or Integrative Life Sciences programs.</p>
-          </div>
-          <div class="requirement-item">
-            <h5>Research Technicians</h5>
-            <p>Bachelor's degree in biology or related field. Prior research experience preferred but not required. Must be detail-oriented and reliable.</p>
+          <h3 class="member-name">Guang-Wei Zhang</h3>
+          <p class="member-title">MD, PhD</p>
+          <p class="member-affiliation">Assistant Professor, VCU</p>
+          <div class="member-links">
+            <a href="mailto:guangwei.zhang@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i></a>
+            <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="diversity-statement">
-        <p>
-          We are committed to fostering an inclusive and diverse research environment.
-          We encourage applications from individuals of all backgrounds and believe that
-          diversity strengthens our science.
-        </p>
+    <!-- Senior Research Scientist -->
+    <div class="team-category">
+      <h2 class="category-title">Senior Research Scientist</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo-container">
+            <img src="images/Catherine Tao headshort.png" alt="Can Tao" class="member-photo">
+          </div>
+          <h3 class="member-name">Can Tao</h3>
+          <p class="member-title">MD, PhD</p>
+          <p class="member-affiliation">VCU</p>
+        </div>
       </div>
-
-      <p class="join-text">
-        <strong>To Apply:</strong> Please send your CV, a cover letter describing your research
-        interests and career goals, and contact information for three references to Dr. Zhang.
-      </p>
-
-      <a href="mailto:guangwei.zhang@vcuhealth.org" class="btn btn-primary">
-        <i class="fas fa-envelope"></i> Contact Dr. Zhang
-      </a>
     </div>
-  </div>
-</section>
 
-<!-- Alumni -->
-<section class="alumni-section">
-  <div class="container">
-    <div class="section-header" style="margin-bottom: 2rem;">
-      <h2 class="section-title">Alumni</h2>
+    <!-- Undergraduate Students -->
+    <div class="team-category">
+      <h2 class="category-title">Undergraduate Students</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo-container">
+            <div class="member-placeholder">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="member-name">Jaden Harris</h3>
+          <p class="member-title">Undergraduate Student</p>
+          <p class="member-affiliation">VCU</p>
+        </div>
+        <div class="team-member">
+          <div class="member-photo-container">
+            <div class="member-placeholder">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="member-name">Siara Shah</h3>
+          <p class="member-title">Undergraduate Student</p>
+          <p class="member-affiliation">VCU</p>
+        </div>
+        <div class="team-member">
+          <div class="member-photo-container">
+            <div class="member-placeholder">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="member-name">Alisha Pillai</h3>
+          <p class="member-title">Undergraduate Student</p>
+          <p class="member-affiliation">VCU</p>
+        </div>
+      </div>
     </div>
-    <p class="alumni-note">
-      Our lab alumni have gone on to successful careers in academia, industry, and healthcare.
-      This section will be updated as members complete their training.
-    </p>
+
+    <!-- Remote Students -->
+    <div class="team-category">
+      <h2 class="category-title">Remote Students</h2>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="member-photo-container">
+            <div class="member-placeholder">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="member-name">Elizabeth</h3>
+          <p class="member-title">Undergraduate Student</p>
+          <p class="member-affiliation">USC</p>
+        </div>
+        <div class="team-member">
+          <div class="member-photo-container">
+            <div class="member-placeholder">
+              <i class="fas fa-user"></i>
+            </div>
+          </div>
+          <h3 class="member-name">Wissem Gmach</h3>
+          <p class="member-title">MD Student</p>
+          <p class="member-affiliation">Remote</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
