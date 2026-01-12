@@ -163,42 +163,21 @@
       background: var(--white);
     }
 
-    .team-category {
-      margin-bottom: 40px;
-    }
-
-    .team-category:last-child {
-      margin-bottom: 0;
-    }
-
-    .category-title {
-      font-family: var(--font-serif);
-      font-size: 1.3rem;
-      color: var(--primary-dark);
-      text-align: center;
-      margin-bottom: 1.5rem;
-      position: relative;
-    }
-
-    .category-title::after {
-      content: '';
-      display: block;
-      width: 50px;
-      height: 2px;
-      background: var(--accent);
-      margin: 0.5rem auto 0;
-    }
-
-    .team-grid {
+    .team-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 1.5rem;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .team-row:last-child {
+      margin-bottom: 0;
     }
 
     .team-member {
       text-align: center;
-      width: 150px;
+      width: 140px;
     }
 
     .member-photo-container {
@@ -337,17 +316,17 @@
       .page-header { padding: 80px 0 30px; }
       .page-header h1 { font-size: 1.75rem; }
 
-      .team-grid {
+      .team-row {
         gap: 1rem;
       }
 
       .team-member {
-        width: 130px;
+        width: 110px;
       }
 
       .member-photo-container {
-        width: 100px;
-        height: 100px;
+        width: 90px;
+        height: 90px;
       }
 
       .footer-content {
@@ -401,98 +380,85 @@
 <section class="photo-wall">
   <div class="container">
 
-    <!-- Principal Investigator -->
-    <div class="team-category">
-      <h2 class="category-title">Principal Investigator</h2>
-      <div class="team-grid">
-        <div class="team-member">
-          <div class="member-photo-container">
-            <img src="images/Guangwei headshot_small.jpg" alt="Guang-Wei Zhang" class="member-photo">
-          </div>
-          <h3 class="member-name">Guang-Wei Zhang</h3>
-          <p class="member-title">MD, PhD</p>
-          <p class="member-affiliation">Assistant Professor, VCU</p>
-          <div class="member-links">
-            <a href="mailto:guangwei.zhang@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
-            <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-          </div>
+    <!-- Leadership -->
+    <div class="team-row">
+      <div class="team-member">
+        <div class="member-photo-container">
+          <img src="images/Guangwei headshot_small.jpg" alt="Guang-Wei Zhang" class="member-photo">
+        </div>
+        <h3 class="member-name">Guang-Wei Zhang</h3>
+        <p class="member-title">MD, PhD | Principal Investigator</p>
+        <p class="member-affiliation">Assistant Professor, VCU</p>
+        <div class="member-links">
+          <a href="mailto:guangwei.zhang@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
+          <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
         </div>
       </div>
-    </div>
-
-    <!-- Senior Research Scientist -->
-    <div class="team-category">
-      <h2 class="category-title">Senior Research Scientist</h2>
-      <div class="team-grid">
-        <div class="team-member">
-          <div class="member-photo-container">
-            <img src="images/Catherine Tao headshort.png" alt="Can Tao" class="member-photo">
-          </div>
-          <h3 class="member-name">Can Tao</h3>
-          <p class="member-title">MD, PhD</p>
-          <p class="member-affiliation">VCU</p>
-          <div class="member-links">
-            <a href="mailto:can.tao@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
-            <a href="https://scholar.google.com/citations?user=XA2Ncs0AAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-          </div>
+      <div class="team-member">
+        <div class="member-photo-container">
+          <img src="images/Catherine Tao headshort.png" alt="Can Tao" class="member-photo">
+        </div>
+        <h3 class="member-name">Can Tao</h3>
+        <p class="member-title">MD, PhD | Senior Research Scientist</p>
+        <p class="member-affiliation">VCU</p>
+        <div class="member-links">
+          <a href="mailto:can.tao@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
+          <a href="https://scholar.google.com/citations?user=XA2Ncs0AAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
         </div>
       </div>
     </div>
 
     <!-- Students -->
-    <div class="team-category">
-      <h2 class="category-title">Students</h2>
-      <div class="team-grid">
-        <div class="team-member">
-          <div class="member-photo-container">
-            <div class="member-placeholder">
-              <i class="fas fa-user"></i>
-            </div>
+    <div class="team-row">
+      <div class="team-member">
+        <div class="member-photo-container">
+          <div class="member-placeholder">
+            <i class="fas fa-user"></i>
           </div>
-          <h3 class="member-name">Jaden Harris</h3>
-          <p class="member-title">Undergraduate Student</p>
-          <p class="member-affiliation">VCU</p>
         </div>
-        <div class="team-member">
-          <div class="member-photo-container">
-            <div class="member-placeholder">
-              <i class="fas fa-user"></i>
-            </div>
+        <h3 class="member-name">Jaden Harris</h3>
+        <p class="member-title">Undergraduate Student</p>
+        <p class="member-affiliation">VCU</p>
+      </div>
+      <div class="team-member">
+        <div class="member-photo-container">
+          <div class="member-placeholder">
+            <i class="fas fa-user"></i>
           </div>
-          <h3 class="member-name">Siara Shah</h3>
-          <p class="member-title">Undergraduate Student</p>
-          <p class="member-affiliation">VCU</p>
         </div>
-        <div class="team-member">
-          <div class="member-photo-container">
-            <div class="member-placeholder">
-              <i class="fas fa-user"></i>
-            </div>
+        <h3 class="member-name">Siara Shah</h3>
+        <p class="member-title">Undergraduate Student</p>
+        <p class="member-affiliation">VCU</p>
+      </div>
+      <div class="team-member">
+        <div class="member-photo-container">
+          <div class="member-placeholder">
+            <i class="fas fa-user"></i>
           </div>
-          <h3 class="member-name">Alisha Pillai</h3>
-          <p class="member-title">Undergraduate Student</p>
-          <p class="member-affiliation">VCU</p>
         </div>
-        <div class="team-member">
-          <div class="member-photo-container">
-            <div class="member-placeholder">
-              <i class="fas fa-user"></i>
-            </div>
+        <h3 class="member-name">Alisha Pillai</h3>
+        <p class="member-title">Undergraduate Student</p>
+        <p class="member-affiliation">VCU</p>
+      </div>
+      <div class="team-member">
+        <div class="member-photo-container">
+          <div class="member-placeholder">
+            <i class="fas fa-user"></i>
           </div>
-          <h3 class="member-name">Elizabeth</h3>
-          <p class="member-title">Undergraduate Student</p>
-          <p class="member-affiliation">University of Southern California</p>
         </div>
-        <div class="team-member">
-          <div class="member-photo-container">
-            <div class="member-placeholder">
-              <i class="fas fa-user"></i>
-            </div>
+        <h3 class="member-name">Elizabeth</h3>
+        <p class="member-title">Undergraduate Student</p>
+        <p class="member-affiliation">University of Southern California</p>
+      </div>
+      <div class="team-member">
+        <div class="member-photo-container">
+          <div class="member-placeholder">
+            <i class="fas fa-user"></i>
           </div>
-          <h3 class="member-name">Wissem Gmach</h3>
-          <p class="member-title">MD Student</p>
-          <p class="member-affiliation">Odessa National Medical University</p>
         </div>
+        <h3 class="member-name">Wissem Gmach</h3>
+        <p class="member-title">MD Student</p>
+        <p class="member-affiliation">Odessa National Medical University</p>
       </div>
     </div>
 
