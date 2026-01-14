@@ -341,219 +341,290 @@
     }
 
     /* ============================================
-       APPROACH SECTION
+       TECH SHOWCASE SECTIONS
        ============================================ */
 
-    .approach-section {
-      background: var(--bg-light);
-      padding: 3rem 0;
-    }
-
-    .approach-content {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 2rem 2.5rem;
-      background: var(--white);
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .approach-content p {
-      font-size: 1rem;
-      line-height: 1.9;
-      color: var(--text-secondary);
-      text-align: justify;
-      margin: 0;
-    }
-
-    /* ============================================
-       AI TRACKING SECTION
-       ============================================ */
-
-    .ai-tracking-section {
-      background: linear-gradient(180deg, var(--white) 0%, var(--bg-light) 100%);
-      padding: var(--section-padding) 0;
+    .tech-showcase {
+      padding: 80px 0;
       position: relative;
       overflow: hidden;
     }
 
-    .ai-tracking-container {
+    .tech-showcase-ai {
+      background: linear-gradient(180deg, var(--bg-light) 0%, var(--white) 100%);
+    }
+
+    .tech-showcase-neural {
+      background: linear-gradient(180deg, var(--white) 0%, #f0f5ff 100%);
+    }
+
+    .tech-showcase-circuit {
+      background: linear-gradient(180deg, #f0f5ff 0%, #f5f0ff 100%);
+    }
+
+    .tech-showcase-causal {
+      background: linear-gradient(180deg, #f5f0ff 0%, #fff8f0 100%);
+    }
+
+    .tech-showcase-molecular {
+      background: linear-gradient(180deg, #fff8f0 0%, #f0fffe 100%);
+    }
+
+    /* AI Section Special Grid - Two Column with Text+Network on Left */
+    .tech-content-grid-ai {
       display: grid;
       grid-template-columns: 1fr 1.2fr;
-      gap: 4rem;
-      align-items: center;
+      gap: 40px;
+      align-items: stretch;
     }
 
-    .ai-tracking-content {
-      position: relative;
-      z-index: 2;
-    }
-
-    .ai-tracking-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(72, 187, 120, 0.12);
-      color: #276749;
-      padding: 8px 16px;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      border: 1px solid rgba(72, 187, 120, 0.2);
-      letter-spacing: 0.3px;
-    }
-
-    .ai-tracking-badge .pulse-dot {
-      width: 8px;
-      height: 8px;
-      background: #48bb78;
-      border-radius: 50%;
-      animation: aiPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes aiPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.85); }
-    }
-
-    .ai-tracking-content h2 {
-      font-family: var(--font-serif);
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 1rem;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-    }
-
-    .ai-tracking-content h2 span {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #4299e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .ai-tracking-description {
-      font-size: 1.1rem;
-      color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: 1.5rem;
-    }
-
-    .ai-features {
+    .tech-left-column {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 20px;
     }
 
-    .ai-feature {
+    .tech-right-column {
       display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
+      flex-direction: column;
     }
 
-    .ai-feature-icon {
-      width: 24px;
-      height: 24px;
+    .tech-demo-main {
+      flex: 1;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--primary);
-      border-radius: 50%;
-      color: white;
-      font-size: 0.7rem;
-      flex-shrink: 0;
-      margin-top: 2px;
+      flex-direction: column;
     }
 
-    .ai-feature-text {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .ai-feature-text strong {
-      color: var(--primary-dark);
-      font-weight: 600;
-    }
-
-    .ai-tracking-demo {
-      position: relative;
+    /* Simple Demo Frame Style (like hero video) */
+    .tech-demo-simple {
       background: var(--white);
-      border-radius: 16px;
-      box-shadow: 0 20px 60px rgba(26, 54, 93, 0.12);
+      border-radius: 12px;
+      box-shadow: 0 25px 60px rgba(26, 54, 93, 0.15);
       overflow: hidden;
-      border: 1px solid var(--border-light);
     }
 
-    .demo-header {
+    .demo-simple-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1rem;
+      padding: 10px 16px;
       background: var(--bg-light);
       border-bottom: 1px solid var(--border-light);
     }
 
-    .demo-header-dots {
-      display: flex;
-      gap: 6px;
-    }
-
-    .demo-header-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-
-    .demo-header-dot:nth-child(1) { background: #ff5f57; }
-    .demo-header-dot:nth-child(2) { background: #ffbd2e; }
-    .demo-header-dot:nth-child(3) { background: #28ca41; }
-
-    .demo-header-title {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .demo-simple-title {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
-    .demo-header-status {
+    .demo-simple-status {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       color: #276749;
       font-weight: 500;
     }
 
-    .demo-header-status .live-dot {
+    .demo-simple-status .live-dot {
       width: 6px;
       height: 6px;
       background: #48bb78;
       border-radius: 50%;
-      animation: aiPulse 1.5s ease-in-out infinite;
+      animation: techPulse 1.5s ease-in-out infinite;
+    }
+
+    .demo-legend-simple {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 10px 16px;
+      background: var(--bg-light);
+      border-top: 1px solid var(--border-light);
     }
 
     #mouse-tracking-canvas {
       display: block;
       width: 100%;
       height: 400px;
+      flex: 1;
       background: linear-gradient(135deg, #fafbfc 0%, #f0f4f8 100%);
     }
 
-    .demo-legend {
+    #networkCanvas {
+      display: block;
+      width: 100%;
+      height: 200px;
+    }
+
+    /* Tech Content Grid for other sections */
+    .tech-content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    .tech-content-reverse {
+      grid-template-columns: 1.3fr 1fr;
+    }
+
+    .tech-content-reverse .tech-info {
+      order: 2;
+    }
+
+    .tech-content-reverse .tech-visual,
+    .tech-content-reverse .tech-demos {
+      order: 1;
+    }
+
+    /* Tech Info */
+    .tech-info {
+      position: relative;
+      z-index: 2;
+    }
+
+    .tech-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(72, 187, 120, 0.12);
+      color: #276749;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      border: 1px solid rgba(72, 187, 120, 0.2);
+      letter-spacing: 0.3px;
+    }
+
+    .tech-badge .pulse-dot {
+      width: 6px;
+      height: 6px;
+      background: #48bb78;
+      border-radius: 50%;
+      animation: techPulse 2s ease-in-out infinite;
+    }
+
+    .tech-badge-blue {
+      background: rgba(66, 153, 225, 0.12);
+      color: #2b6cb0;
+      border-color: rgba(66, 153, 225, 0.2);
+    }
+
+    .tech-badge-purple {
+      background: rgba(128, 90, 213, 0.12);
+      color: #553c9a;
+      border-color: rgba(128, 90, 213, 0.2);
+    }
+
+    .tech-badge-teal {
+      background: rgba(56, 178, 172, 0.12);
+      color: #234e52;
+      border-color: rgba(56, 178, 172, 0.2);
+    }
+
+    .tech-badge-orange {
+      background: rgba(237, 137, 54, 0.12);
+      color: #c05621;
+      border-color: rgba(237, 137, 54, 0.2);
+    }
+
+    @keyframes techPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    .tech-title {
+      font-family: var(--font-serif);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .tech-title span {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, #4299e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tech-showcase-neural .tech-title span {
+      background: linear-gradient(135deg, #2b6cb0 0%, #4299e1 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .tech-showcase-circuit .tech-title span {
+      background: linear-gradient(135deg, #553c9a 0%, #805ad5 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .tech-showcase-molecular .tech-title span {
+      background: linear-gradient(135deg, #234e52 0%, #38b2ac 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .tech-showcase-causal .tech-title span {
+      background: linear-gradient(135deg, #c05621 0%, #ed8936 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .tech-description {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* Tech Features */
+    .tech-features {
       display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .tech-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .tech-feature i {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 1.5rem;
-      padding: 0.75rem 1rem;
-      background: var(--bg-light);
-      border-top: 1px solid var(--border-light);
+      color: #48bb78;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .tech-showcase-neural .tech-feature i { color: #4299e1; }
+    .tech-showcase-circuit .tech-feature i { color: #805ad5; }
+    .tech-showcase-causal .tech-feature i { color: #ed8936; }
+    .tech-showcase-molecular .tech-feature i { color: #38b2ac; }
+
+    .tech-feature strong {
+      color: var(--primary-dark);
+      font-weight: 600;
     }
 
     .legend-item {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       font-size: 0.75rem;
       color: var(--text-muted);
     }
@@ -569,21 +640,87 @@
     .legend-color.mouse-3 { background: rgb(200, 185, 160); }
     .legend-color.mouse-4 { background: rgb(150, 110, 80); }
 
+    /* Tech Visual Placeholder */
+    .tech-visual {
+      position: relative;
+    }
+
+    .tech-visual-placeholder {
+      background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
+      border: 2px dashed var(--border-medium);
+      border-radius: 12px;
+      padding: 60px 30px;
+      text-align: center;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .tech-visual-placeholder:hover {
+      border-color: var(--primary-light);
+      background: linear-gradient(135deg, var(--white) 0%, rgba(26, 54, 93, 0.03) 100%);
+    }
+
+    .visual-icon {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-light);
+      border-radius: 50%;
+      margin-bottom: 16px;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .tech-showcase-neural .visual-icon { color: #4299e1; }
+    .tech-showcase-circuit .visual-icon { color: #805ad5; }
+    .tech-showcase-causal .visual-icon { color: #ed8936; }
+    .tech-showcase-molecular .visual-icon { color: #38b2ac; }
+
+    .tech-visual-placeholder p {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .visual-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Responsive */
     @media (max-width: 1024px) {
-      .ai-tracking-container {
+      .tech-content-grid-ai {
         grid-template-columns: 1fr;
-        gap: 2.5rem;
+        gap: 30px;
       }
 
-      .ai-tracking-content {
+      .tech-content-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .tech-content-reverse .tech-info,
+      .tech-content-reverse .tech-visual {
+        order: unset;
+      }
+
+      .tech-info {
         text-align: center;
       }
 
-      .ai-features {
+      .tech-features {
         align-items: center;
       }
 
-      .ai-feature {
+      .tech-feature {
         text-align: left;
         max-width: 400px;
       }
@@ -594,78 +731,34 @@
     }
 
     @media (max-width: 768px) {
-      .ai-tracking-content h2 {
-        font-size: 1.75rem;
+      .tech-showcase {
+        padding: 50px 0;
       }
 
-      .ai-tracking-description {
-        font-size: 1rem;
+      .tech-title {
+        font-size: 1.5rem;
+      }
+
+      .tech-description {
+        font-size: 0.9rem;
       }
 
       #mouse-tracking-canvas {
         height: 300px;
       }
 
-      .demo-legend {
-        flex-wrap: wrap;
-        gap: 1rem;
-      }
-    }
-
-    /* ============================================
-       NEURAL NETWORK SECTION
-       ============================================ */
-
-    .neural-network-section {
-      background: linear-gradient(180deg, var(--bg-light) 0%, var(--white) 100%);
-      padding: calc(var(--section-padding) * 0.8) 0;
-    }
-
-    .neural-network-container {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .neural-network-header {
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .neural-network-header h3 {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--primary-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .neural-network-header p {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-    }
-
-    .neural-canvas-wrapper {
-      background: var(--white);
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(26, 54, 93, 0.08);
-      border: 1px solid var(--border-light);
-      padding: 12px 15px;
-      overflow: hidden;
-    }
-
-    #networkCanvas {
-      width: 100%;
-      height: 280px;
-      display: block;
-    }
-
-    @media (max-width: 768px) {
-      .neural-network-header h3 {
-        font-size: 1.25rem;
-      }
-
       #networkCanvas {
-        height: 220px;
+        height: 180px;
+      }
+
+      .demo-legend-simple {
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .tech-visual-placeholder {
+        min-height: 200px;
+        padding: 40px 20px;
       }
     }
 
@@ -1227,106 +1320,224 @@
   </div>
 </section>
 
-<!-- Our Approach Section -->
-<section class="approach-section">
+<!-- Tech Showcase: AI-Powered Behavior Analysis -->
+<section class="tech-showcase tech-showcase-ai" id="ai-tracking">
   <div class="container">
-    <div class="approach-content">
-      <p>
-        Our approach integrates neural circuit analysis with AI enabled behavioral quantification. We capture naturalistic social interactions using robotic active vision and machine learning based behavioral analysis, and link behavior to neural activity using miniscope and fiber photometry calcium imaging and large scale electrophysiology with Neuropixels 2.0. Circuit architecture and causal function are examined using anatomical tracing, viral based optogenetic manipulation, and slice whole cell patch clamp recordings. Single cell sequencing and spatial transcriptomics provide a complementary molecular perspective on behavior relevant neuronal populations.
-      </p>
+    <div class="tech-content-grid-ai">
+      <!-- Left Column: Text + Neural Network -->
+      <div class="tech-left-column">
+        <div class="tech-info">
+          <div class="tech-badge">
+            <span class="pulse-dot"></span>
+            AI-Powered Analysis
+          </div>
+          <h2 class="tech-title">Automated <span>Social Behavior</span> Tracking</h2>
+          <p class="tech-description">
+            Computer vision and machine learning algorithms automatically track and classify complex social behaviors at unprecedented scale.
+          </p>
+          <div class="tech-features">
+            <div class="tech-feature">
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Multi-animal tracking</strong> with identity preservation</span>
+            </div>
+            <div class="tech-feature">
+              <i class="fas fa-check-circle"></i>
+              <span><strong>Behavior classification</strong> using deep learning</span>
+            </div>
+            <div class="tech-feature">
+              <i class="fas fa-check-circle"></i>
+              <span><strong>High-throughput analysis</strong> with automated annotation</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Neural Network Demo -->
+        <div class="tech-demo-simple">
+          <div class="demo-simple-header">
+            <span class="demo-simple-title">Neural Behavior Classification</span>
+          </div>
+          <canvas id="networkCanvas"></canvas>
+        </div>
+      </div>
+
+      <!-- Right Column: Mouse Tracking Demo -->
+      <div class="tech-right-column">
+        <div class="tech-demo-simple tech-demo-main">
+          <div class="demo-simple-header">
+            <span class="demo-simple-title">Social Behavior Tracking</span>
+            <div class="demo-simple-status">
+              <span class="live-dot"></span>
+              Live Demo
+            </div>
+          </div>
+          <canvas id="mouse-tracking-canvas"></canvas>
+          <div class="demo-legend-simple">
+            <div class="legend-item"><span class="legend-color mouse-1"></span>Mouse 1</div>
+            <div class="legend-item"><span class="legend-color mouse-2"></span>Mouse 2</div>
+            <div class="legend-item"><span class="legend-color mouse-3"></span>Mouse 3</div>
+            <div class="legend-item"><span class="legend-color mouse-4"></span>Mouse 4</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- AI-Powered Behavior Tracking Section -->
-<section class="ai-tracking-section">
+<!-- Tech Showcase: Neural Activity Recording -->
+<section class="tech-showcase tech-showcase-neural" id="neural-recording">
   <div class="container">
-    <div class="ai-tracking-container">
-      <div class="ai-tracking-content">
-        <div class="ai-tracking-badge">
-          <span class="pulse-dot"></span>
-          AI-Powered Analysis
+    <div class="tech-content-grid tech-content-reverse">
+      <div class="tech-info">
+        <div class="tech-badge tech-badge-blue">
+          <i class="fas fa-brain"></i>
+          Neural Recording
         </div>
-        <h2>Automated <span>Social Behavior</span> Tracking</h2>
-        <p class="ai-tracking-description">
-          We are developing computer vision and machine learning algorithms to automatically
-          track and classify complex social behaviors in mice, enabling precise quantification
-          of social interactions at unprecedented scale and resolution.
+        <h2 class="tech-title">Linking Behavior to <span>Neural Activity</span></h2>
+        <p class="tech-description">
+          We link behavior to neural activity using cutting-edge calcium imaging and large-scale electrophysiology to understand how social behaviors are encoded in the brain.
         </p>
-        <div class="ai-features">
-          <div class="ai-feature">
-            <div class="ai-feature-icon">
-              <i class="fas fa-check"></i>
-            </div>
-            <p class="ai-feature-text">
-              <strong>Multi-animal tracking:</strong> Simultaneously track multiple animals with individual identity preservation
-            </p>
+        <div class="tech-features">
+          <div class="tech-feature">
+            <i class="fas fa-microscope"></i>
+            <span><strong>Miniscope imaging</strong> for freely moving recordings</span>
           </div>
-          <div class="ai-feature">
-            <div class="ai-feature-icon">
-              <i class="fas fa-check"></i>
-            </div>
-            <p class="ai-feature-text">
-              <strong>Behavior classification:</strong> AI-based recognition and classification of complex social behaviors
-            </p>
+          <div class="tech-feature">
+            <i class="fas fa-wave-square"></i>
+            <span><strong>Fiber photometry</strong> calcium imaging</span>
           </div>
-          <div class="ai-feature">
-            <div class="ai-feature-icon">
-              <i class="fas fa-check"></i>
-            </div>
-            <p class="ai-feature-text">
-              <strong>High-throughput analysis:</strong> Process large-scale behavioral data with automated annotation
-            </p>
+          <div class="tech-feature">
+            <i class="fas fa-microchip"></i>
+            <span><strong>Neuropixels 2.0</strong> large-scale electrophysiology</span>
           </div>
         </div>
       </div>
-      <div class="ai-tracking-demo">
-        <div class="demo-header">
-          <div class="demo-header-dots">
-            <span class="demo-header-dot"></span>
-            <span class="demo-header-dot"></span>
-            <span class="demo-header-dot"></span>
-          </div>
-          <span class="demo-header-title">Social Behavior Tracking Simulation</span>
-          <div class="demo-header-status">
-            <span class="live-dot"></span>
-            Live Demo
-          </div>
-        </div>
-        <canvas id="mouse-tracking-canvas"></canvas>
-        <div class="demo-legend">
-          <div class="legend-item">
-            <span class="legend-color mouse-1"></span>
-            Mouse 1
-          </div>
-          <div class="legend-item">
-            <span class="legend-color mouse-2"></span>
-            Mouse 2
-          </div>
-          <div class="legend-item">
-            <span class="legend-color mouse-3"></span>
-            Mouse 3
-          </div>
-          <div class="legend-item">
-            <span class="legend-color mouse-4"></span>
-            Mouse 4
-          </div>
+
+      <div class="tech-visual">
+        <div class="tech-visual-placeholder" id="neural-visual">
+          <div class="visual-icon"><i class="fas fa-brain"></i></div>
+          <p>Neural Activity Visualization</p>
+          <span class="visual-hint">Recording data coming soon</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Neural Network Classification Section -->
-<section class="neural-network-section">
+<!-- Tech Showcase: Circuit Architecture -->
+<section class="tech-showcase tech-showcase-circuit" id="circuit-analysis">
   <div class="container">
-    <div class="neural-network-container">
-      <div class="neural-network-header">
-        <h3>Neural Behavior Classification</h3>
-        <p>Deep learning models automatically classify detected behaviors</p>
+    <div class="tech-content-grid">
+      <div class="tech-info">
+        <div class="tech-badge tech-badge-purple">
+          <i class="fas fa-project-diagram"></i>
+          Circuit Mapping
+        </div>
+        <h2 class="tech-title">Mapping <span>Circuit Architecture</span></h2>
+        <p class="tech-description">
+          We map circuit architecture using state-of-the-art anatomical and physiological techniques to understand how neural circuits are organized.
+        </p>
+        <div class="tech-features">
+          <div class="tech-feature">
+            <i class="fas fa-route"></i>
+            <span><strong>Anatomical tracing</strong> for connectivity mapping</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-bolt"></i>
+            <span><strong>Patch clamp recordings</strong> for cellular physiology</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-microscope"></i>
+            <span><strong>Slice electrophysiology</strong> for synaptic properties</span>
+          </div>
+        </div>
       </div>
-      <div class="neural-canvas-wrapper">
-        <canvas id="networkCanvas"></canvas>
+
+      <div class="tech-visual">
+        <div class="tech-visual-placeholder" id="circuit-visual">
+          <div class="visual-icon"><i class="fas fa-project-diagram"></i></div>
+          <p>Circuit Architecture Visualization</p>
+          <span class="visual-hint">Tracing example coming soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Showcase: Causal Manipulation -->
+<section class="tech-showcase tech-showcase-causal" id="causal-manipulation">
+  <div class="container">
+    <div class="tech-content-grid tech-content-reverse">
+      <div class="tech-info">
+        <div class="tech-badge tech-badge-orange">
+          <i class="fas fa-lightbulb"></i>
+          Causal Testing
+        </div>
+        <h2 class="tech-title">Testing <span>Circuit Function</span></h2>
+        <p class="tech-description">
+          We test causal relationships between neural activity and behavior using precise manipulation of genetically defined neuronal populations.
+        </p>
+        <div class="tech-features">
+          <div class="tech-feature">
+            <i class="fas fa-lightbulb"></i>
+            <span><strong>Optogenetic manipulation</strong> for precise temporal control</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-pills"></i>
+            <span><strong>Chemogenetic approaches</strong> for sustained modulation</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-crosshairs"></i>
+            <span><strong>Cell-type specific targeting</strong> with viral strategies</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-visual">
+        <div class="tech-visual-placeholder" id="causal-visual">
+          <div class="visual-icon"><i class="fas fa-lightbulb"></i></div>
+          <p>Optogenetic Manipulation</p>
+          <span class="visual-hint">Manipulation example coming soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Tech Showcase: Molecular Profiling -->
+<section class="tech-showcase tech-showcase-molecular" id="molecular-profiling">
+  <div class="container">
+    <div class="tech-content-grid tech-content-reverse">
+      <div class="tech-info">
+        <div class="tech-badge tech-badge-teal">
+          <i class="fas fa-dna"></i>
+          Molecular Analysis
+        </div>
+        <h2 class="tech-title">Molecular <span>Perspective</span> on Neural Populations</h2>
+        <p class="tech-description">
+          Single-cell sequencing and spatial transcriptomics provide a complementary molecular perspective on behavior-relevant neuronal populations.
+        </p>
+        <div class="tech-features">
+          <div class="tech-feature">
+            <i class="fas fa-dna"></i>
+            <span><strong>Single-cell sequencing</strong> for cell type identification</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-map-marked-alt"></i>
+            <span><strong>Spatial transcriptomics</strong> for tissue mapping</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-layer-group"></i>
+            <span><strong>Multi-modal integration</strong> linking genes to circuits</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tech-visual">
+        <div class="tech-visual-placeholder" id="molecular-visual">
+          <div class="visual-icon"><i class="fas fa-dna"></i></div>
+          <p>Molecular Profiling Visualization</p>
+          <span class="visual-hint">Sequencing data coming soon</span>
+        </div>
       </div>
     </div>
   </div>
