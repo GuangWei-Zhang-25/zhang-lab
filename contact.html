@@ -600,6 +600,90 @@
       color: var(--text-muted);
     }
 
+    /* Prospective Students */
+    .prospective-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .program-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .program-card {
+      background: var(--bg-light);
+      padding: 2rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .program-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 20px rgba(26, 54, 93, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .program-card i:first-child {
+      font-size: 1.75rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .program-card h4 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .program-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      flex-grow: 1;
+    }
+
+    .program-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--primary-light);
+      margin-top: 1rem;
+      transition: var(--transition);
+    }
+
+    .program-card:hover .program-link {
+      color: var(--primary-dark);
+      gap: 0.6rem;
+    }
+
+    .prospective-cta {
+      text-align: center;
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-top: 1.5rem;
+    }
+
+    .prospective-cta a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .prospective-cta a:hover {
+      color: var(--primary-dark);
+    }
+
     .btn {
       display: inline-flex;
       align-items: center;
@@ -711,6 +795,10 @@
       }
 
       .collab-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .program-grid {
         grid-template-columns: 1fr;
       }
 
@@ -944,6 +1032,57 @@
       <a href="https://github.com/GuangWei-Zhang-25" target="_blank" title="GitHub">
         <i class="fab fa-github"></i>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- Prospective Students Section -->
+<section class="section prospective-section" id="join-us">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-eyebrow">Join Our Lab</span>
+      <h2 class="section-title">Prospective Graduate Students</h2>
+    </div>
+
+    <div class="prospective-content">
+      <p class="collaboration-text">
+        We welcome graduate students interested in neural circuits, sensory processing, and social behavior.
+        Students can join the lab through the following VCU programs:
+      </p>
+
+      <div class="program-grid">
+        <a href="https://medschool.vcu.edu/education/graduate/bsdp/" target="_blank" class="program-card">
+          <i class="fas fa-brain"></i>
+          <h4>Biomedical Sciences Doctoral Program (BSDP)</h4>
+          <p>The primary portal for PhD students joining our lab. Apply through the VCU BSDP to rotate in neuroscience laboratories.</p>
+          <span class="program-link">Visit BSDP Portal <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a href="https://bulletin.vcu.edu/graduate/school-engineering/biomedical-engineering/biomedical-engineering-phd/" target="_blank" class="program-card">
+          <i class="fas fa-cogs"></i>
+          <h4>Biomedical Engineering PhD Program</h4>
+          <p>For students with engineering backgrounds interested in neural engineering and neuroscience research.</p>
+          <span class="program-link">Visit BME PhD Program <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a href="https://medschool.vcu.edu/education/graduate/dual-degree/mdphd/" target="_blank" class="program-card">
+          <i class="fas fa-user-md"></i>
+          <h4>MD-PhD Dual Degree Program</h4>
+          <p>For physician-scientists pursuing both clinical training and doctoral research in neuroscience.</p>
+          <span class="program-link">Visit MD-PhD Program <i class="fas fa-arrow-right"></i></span>
+        </a>
+
+        <a href="https://anatomy.vcu.edu/education/master-of-science/" target="_blank" class="program-card">
+          <i class="fas fa-microscope"></i>
+          <h4>Neuroscience Master's Program</h4>
+          <p>We also accept master's students through the Department of Anatomy and Neurobiology MS program.</p>
+          <span class="program-link">Visit MS Program <i class="fas fa-arrow-right"></i></span>
+        </a>
+      </div>
+
+      <p class="prospective-cta">
+        Interested in joining? Please email <a href="mailto:guangwei.zhang@vcuhealth.org">Dr. Zhang</a> with your CV and a brief description of your research interests.
+      </p>
     </div>
   </div>
 </section>
