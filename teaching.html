@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Team | Zhang Lab</title>
-  <meta name="description" content="Meet the team at the Zhang Laboratory">
+  <title>Teaching | Zhang Lab</title>
+  <meta name="description" content="Teaching resources and interactive simulations from the Zhang Laboratory">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -157,101 +157,91 @@
       margin: 0 auto;
     }
 
-    /* Photo Wall Section */
-    .photo-wall {
+    /* Course Section */
+    .course-section {
       padding: 50px 0;
-      background: var(--white);
     }
 
-    .team-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .team-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .team-member {
-      text-align: center;
-      width: 180px;
-    }
-
-    .member-photo-container {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto 0.75rem;
-      border-radius: 50%;
-      overflow: hidden;
-      background: var(--bg-light);
-      border: 3px solid var(--border-light);
-      transition: var(--transition);
-    }
-
-    .team-member:hover .member-photo-container {
-      border-color: var(--primary-light);
-      transform: scale(1.05);
-    }
-
-    .member-photo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-    }
-
-    .member-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-warm) 100%);
-    }
-
-    .member-placeholder i {
-      font-size: 2.5rem;
-      color: var(--border-medium);
-    }
-
-    .member-name {
+    .course-title {
       font-family: var(--font-serif);
-      font-size: 1rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.25rem;
+    }
+
+    .course-meta {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* Simulation Cards */
+    .sim-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .sim-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sim-card:hover {
+      border-color: var(--primary-light);
+      box-shadow: 0 4px 20px rgba(26, 54, 93, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .sim-number {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .sim-name {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
       font-weight: 600;
       color: var(--primary-dark);
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.5rem;
     }
 
-    .member-title {
-      font-size: 0.75rem;
+    .sim-desc {
+      font-size: 0.85rem;
       color: var(--text-secondary);
-      margin-bottom: 0.15rem;
+      line-height: 1.6;
+      flex-grow: 1;
+      margin-bottom: 1rem;
     }
 
-    .member-affiliation {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .member-links {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .member-links a {
-      color: var(--text-muted);
-      font-size: 0.75rem;
+    .sim-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--primary-light);
+      text-decoration: none;
       transition: var(--transition);
     }
 
-    .member-links a:hover {
-      color: var(--primary);
+    .sim-link:hover {
+      color: var(--primary-dark);
+      gap: 0.6rem;
+    }
+
+    .sim-link i {
+      font-size: 0.75rem;
     }
 
     /* Footer */
@@ -316,17 +306,8 @@
       .page-header { padding: 80px 0 30px; }
       .page-header h1 { font-size: 1.75rem; }
 
-      .team-row {
-        gap: 1rem;
-      }
-
-      .team-member {
-        width: 140px;
-      }
-
-      .member-photo-container {
-        width: 120px;
-        height: 120px;
+      .sim-grid {
+        grid-template-columns: 1fr;
       }
 
       .footer-content {
@@ -370,106 +351,87 @@
 
 <header class="page-header">
   <div class="container">
-    <h1>Our Team</h1>
+    <h1>Teaching</h1>
     <p class="page-header-subtitle">
-      Meet the researchers driving discoveries in neural circuits and social behavior.
+      Interactive simulations and resources for neuroscience education.
     </p>
   </div>
 </header>
 
-<section class="photo-wall">
+<section class="course-section">
   <div class="container">
+    <h2 class="course-title">Systems Neuroscience — Auditory System</h2>
+    <p class="course-meta">Spring 2026 | Virginia Commonwealth University</p>
 
-    <!-- Leadership -->
-    <div class="team-row">
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Guangwei headshot_small.jpg" alt="Guang-Wei Zhang" class="member-photo">
-        </div>
-        <h3 class="member-name">Guang-Wei Zhang</h3>
-        <p class="member-title">MD, PhD | Principal Investigator</p>
-        <p class="member-affiliation">Assistant Professor, VCU</p>
-        <div class="member-links">
-          <a href="mailto:guangwei.zhang@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
-          <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-        </div>
+    <div class="sim-grid">
+
+      <div class="sim-card">
+        <div class="sim-number">Simulation 1</div>
+        <h3 class="sim-name">Human Hearing Range Sweep</h3>
+        <p class="sim-desc">
+          An automatic frequency sweep from 20 Hz to 32 kHz across intensity levels (0–70 dB relative). Maps your personal hearing threshold by holding the spacebar when tones are audible, visualized on an octave-scaled audiogram.
+        </p>
+        <a href="simulations/Simulation1_hearing_range_auto_octave_0_70dB_reversed_fixed.html" class="sim-link" target="_blank">
+          Launch Simulation <i class="fas fa-arrow-right"></i>
+        </a>
       </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Catherine Tao headshort.png" alt="Can Tao" class="member-photo" style="object-position: center 35%;">
-        </div>
-        <h3 class="member-name">Can Tao</h3>
-        <p class="member-title">MD, PhD | Senior Research Scientist</p>
-        <p class="member-affiliation">VCU</p>
-        <div class="member-links">
-          <a href="mailto:can.tao@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
-          <a href="https://scholar.google.com/citations?user=XA2Ncs0AAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-        </div>
+
+      <div class="sim-card">
+        <div class="sim-number">Simulation 2</div>
+        <h3 class="sim-name">Auditory Cortex Receptive Field Simulator</h3>
+        <p class="sim-desc">
+          Explore how auditory cortex neurons respond to combinations of frequency and intensity. Adjust tuning parameters to visualize receptive fields, characteristic frequencies, and response maps across the tonotopic axis.
+        </p>
+        <a href="simulations/Simulation2_auditory_cortex_receptive_field_simulator.html" class="sim-link" target="_blank">
+          Launch Simulation <i class="fas fa-arrow-right"></i>
+        </a>
       </div>
+
+      <div class="sim-card">
+        <div class="sim-number">Simulation 3</div>
+        <h3 class="sim-name">Cochlear Basilar Membrane Simulator</h3>
+        <p class="sim-desc">
+          Visualize how the basilar membrane responds to sound. Adjust frequency, intensity, tuning sharpness, and damping to see traveling wave patterns and the tonotopic organization of the cochlea, with real-time audio output.
+        </p>
+        <a href="simulations/Simulation3_cochlear_basilar_membrane_simulator_with_sound.html" class="sim-link" target="_blank">
+          Launch Simulation <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-number">Simulation 4</div>
+        <h3 class="sim-name">Interaural Time Difference (ITD) Tuner</h3>
+        <p class="sim-desc">
+          Demonstrates how the brain uses microsecond timing differences between ears to localize sound. Adjust the ITD delay and mute individual ears to experience binaural processing and the precedence effect.
+        </p>
+        <a href="simulations/Simulation4_itd_binaural_delay_tuner_with_lr_mute.html" class="sim-link" target="_blank">
+          Launch Simulation <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-number">Simulation 5</div>
+        <h3 class="sim-name">Interaural Intensity Difference (IID) Simulator</h3>
+        <p class="sim-desc">
+          Explore how level differences between the two ears contribute to sound localization, especially for high-frequency sounds. Adjust IID values and frequency to observe the head shadow effect and binaural level cues.
+        </p>
+        <a href="simulations/Simulation5 IID_binaural_level_difference_simulator.html" class="sim-link" target="_blank">
+          Launch Simulation <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="sim-card">
+        <div class="sim-number">Simulation 6</div>
+        <h3 class="sim-name">Harmonics & Timbre — Melody Loop</h3>
+        <p class="sim-desc">
+          Plays a looping melody while you adjust the strength of individual harmonics in real time. Demonstrates how the same pitch can sound like different instruments depending on harmonic content (timbre), with waveform and spectrum visualization.
+        </p>
+        <a href="simulations/Simulation6_harmonics_melody_loop.html" class="sim-link" target="_blank">
+          Launch Simulation <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
     </div>
-
-    <!-- Students Row 1 -->
-    <div class="team-row">
-      <div class="team-member">
-        <div class="member-photo-container">
-          <div class="member-placeholder">
-            <i class="fas fa-user"></i>
-          </div>
-        </div>
-        <h3 class="member-name">Henry Oo</h3>
-        <p class="member-title">Rotation Graduate Student</p>
-        <p class="member-affiliation">Neuroscience PhD Program, VCU</p>
-      </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <div class="member-placeholder">
-            <i class="fas fa-user"></i>
-          </div>
-        </div>
-        <h3 class="member-name">Alisha Pillai</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
-      </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Jaden Headshot.png" alt="Jaden Harris" class="member-photo">
-        </div>
-        <h3 class="member-name">Jaden Harris</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
-      </div>
-    </div>
-
-    <!-- Students Row 2 -->
-    <div class="team-row">
-      <div class="team-member">
-        <div class="member-photo-container">
-          <div class="member-placeholder">
-            <i class="fas fa-user"></i>
-          </div>
-        </div>
-        <h3 class="member-name">Siara Shah</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
-      </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova" class="member-photo" style="object-position: center 30%;">
-        </div>
-        <h3 class="member-name">Elizabeth Ivanova</h3>
-        <p class="member-title">Post-Bacc Student</p>
-        <p class="member-affiliation">University of Southern California</p>
-      </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" class="member-photo" style="object-position: center 15%; transform: scale(0.8);">
-        </div>
-        <h3 class="member-name">Wissem Gmach</h3>
-        <p class="member-title">MD</p>
-        <p class="member-affiliation">Odessa National Medical University</p>
-      </div>
-    </div>
-
   </div>
 </section>
 

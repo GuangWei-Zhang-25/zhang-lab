@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Auto Hearing Sweep (Octave) 20 Hz–32 kHz, 0–70 dB (relative)</title>
+<style>
+  :root { color-scheme: light dark; }
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;margin:0;padding:18px;line-height:1.35}
+  h2{margin:0 0 8px 0;font-size:20px}
+  .muted{opacity:.75;font-size:13px}
+  .wrap{display:grid;grid-template-columns:1.25fr .75fr;gap:14px;align-items:start;margin-top:12px}
+  @media (max-width: 900px){.wrap{grid-template-columns:1fr}}
+  .card{border:1px solid rgba(127,127,127,.35);border-radius:14px;padding:14px;box-shadow:0 8px 18px rgba(0,0,0,.08)}
+  canvas{width:100%;height:460px;border:1px solid rgba(127,127,127,.35);border-radius:12px}
+  button{padding:10px 12px;border-radius:10px;border:1px solid rgba(127,127,127,.45);background:transparent;font-size:14px;cursor:pointer}
+  button.primary{font-weight:700;border:1px solid rgba(127,127,127,.65)}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .pill{border:1px solid rgba(127,127,127,.35);border-radius:999px;padding:5px 10px;font-size:13px;display:inline-flex;gap:8px;align-items:center}
+  .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;border:1px solid rgba(127,127,127,.45);padding:2px 6px;border-radius:6px}
+  .small{font-size:12px;opacity:.75}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  input[type="number"], select {width:100%;padding:10px;border-radius:10px;border:1px solid rgba(127,127,127,.35);background:transparent}
+  input[type="range"]{width:100%}
+  label{display:block}
+  .warn{margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,165,0,.35);background:rgba(255,165,0,.08);font-size:13px}
+</style>
+</head>
+<body>
+
+<h2>Automatic Hearing Sweep (Octave / Log) — 0 dB at bottom</h2>
+<div class="muted">
+  • Frequency: <b>20 Hz → 32 kHz</b> (octave/log2 mapping)<br>
+  • Intensity: <b>0 to 70 dB</b> in 10 dB steps (relative; not calibrated SPL)<br>
+  • <b>5 s</b> per level, auto-advances 0→10→…→70 dB (then stops)<br>
+  • Hold <span class="kbd">Space</span> while audible to mark segments
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <canvas id="plot" width="1200" height="760" aria-label="octave plot"></canvas>
+    <div class="row" id="status"></div>
+    <div class="warn">
+      <b>Important:</b> “dB” here is <b>relative digital level (dBFS-like)</b>, not true dB SPL. Actual loudness depends on your device,
+      volume setting, headphones/speakers, and calibration. Start with low system volume.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid">
+      <div>
+        <label class="small">Min frequency (Hz)</label>
+        <input id="fMin" type="number" min="1" max="1000" value="20"/>
+      </div>
+      <div>
+        <label class="small">Max frequency (Hz)</label>
+        <input id="fMax" type="number" min="2000" max="40000" value="32000"/>
+      </div>
+    </div>
+
+    <div style="margin-top:10px">
+      <label class="small">Max output (for 70 dB level) (0–1)</label>
+      <input id="maxGain" type="range" min="0" max="1" step="0.001" value="0.14"/>
+      <div class="small">This sets the <b>top</b> (70 dB) level; lower dB levels scale down exponentially.</div>
+    </div>
+
+    <div style="margin-top:10px">
+      <label class="small">Sweep duration per level (seconds)</label>
+      <input id="dur" type="number" min="2" max="20" step="0.5" value="5"/>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <button class="primary" id="start">Start (Enter)</button>
+      <button id="stop">Stop (Esc)</button>
+      <button id="reset">Reset</button>
+    </div>
+
+    <div class="small" style="margin-top:10px">
+      Sequence: 0 → 10 → 20 → 30 → 40 → 50 → 60 → 70 dB, then stops.
+      (Start is disabled while running to prevent accidental restarts.)
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const fmtHz=(hz)=> hz>=1000 ? (hz/1000).toFixed(hz<10000?2:1).replace(/\.0+$/,'')+" kHz" : Math.round(hz)+" Hz";
+  const log2=(x)=>Math.log(x)/Math.log(2);
+
+  const canvas=document.getElementById("plot");
+  const ctx=canvas.getContext("2d");
+  const statusEl=document.getElementById("status");
+
+  const elFmin=document.getElementById("fMin");
+  const elFmax=document.getElementById("fMax");
+  const elMaxGain=document.getElementById("maxGain");
+  const elDur=document.getElementById("dur");
+
+  const btnStart=document.getElementById("start");
+  const btnStop=document.getElementById("stop");
+  const btnReset=document.getElementById("reset");
+
+  canvas.tabIndex=0;
+  canvas.addEventListener("pointerdown",()=>canvas.focus());
+
+  // levels
+  const LEVEL_DB = [0,10,20,30,40,50,60,70]; // 8 levels
+  const NLEVEL = LEVEL_DB.length;
+
+  const GAP_S = 0.25;
+  const RAMP_S = 0.010;
+
+  const COLORS = ["#2563EB","#16A34A","#F59E0B","#DC2626","#7C3AED","#0EA5E9","#A16207","#EF4444"];
+
+  // state
+  let segments = Array.from({length:NLEVEL}, ()=>[]); // each: [{n0,n1}]
+  let running=false;
+  let level=0;                    // 0..NLEVEL-1 (0 dB -> 70 dB)
+  let phase="idle";               // sweep|gap|idle|done
+  let phaseStartT=0;
+  let hold=false;
+  let holdStartN=null;
+  let rafId=null;
+
+  // audio
+  let audioCtx=null, osc=null, gain=null;
+  function ensureAudio(){
+    if(!audioCtx){
+      audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+      osc=audioCtx.createOscillator();
+      osc.type="sine";
+      gain=audioCtx.createGain();
+      gain.gain.value=0;
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start();
+    }
+  }
+  function setGain(target){
+    const t=audioCtx.currentTime;
+    gain.gain.cancelScheduledValues(t);
+    gain.gain.setValueAtTime(gain.gain.value, t);
+    gain.gain.linearRampToValueAtTime(target, t+RAMP_S);
+  }
+  function setFreq(hz){
+    const t=audioCtx.currentTime;
+    osc.frequency.cancelScheduledValues(t);
+    osc.frequency.setValueAtTime(osc.frequency.value || hz, t);
+    osc.frequency.linearRampToValueAtTime(hz, t+RAMP_S);
+  }
+
+  // relative dB -> gain (70 dB is maxGain; 0 dB is 70 dB down)
+  function gainForDb(db, maxGain){
+    const delta = db - 70; // <=0
+    return clamp(maxGain * Math.pow(10, delta/20), 0, 1);
+  }
+
+  function getSettings(){
+    let fmin=parseFloat(elFmin.value);
+    let fmax=parseFloat(elFmax.value);
+    if(!isFinite(fmin)||fmin<1) fmin=20;
+    if(!isFinite(fmax)||fmax<=fmin) fmax=32000;
+    fmin=clamp(fmin,1,1000);
+    fmax=clamp(fmax,2000,40000);
+    elFmin.value=fmin; elFmax.value=fmax;
+
+    let maxGain=clamp(parseFloat(elMaxGain.value)||0.14,0,1);
+    let dur=clamp(parseFloat(elDur.value)||5,2,20);
+    elDur.value=dur;
+
+    const oct=log2(fmax/fmin);
+    return {fmin,fmax,oct,maxGain,dur};
+  }
+
+  // octave/log mapping
+  function freqFromNorm(n,s){ return s.fmin * Math.pow(2, clamp(n,0,1)*s.oct); }
+  function normFromFreq(hz,s){ return log2(hz/s.fmin)/s.oct; }
+
+  // segments
+  function startHold(n){
+    if(holdStartN!==null) return;
+    holdStartN=n;
+  }
+  function endHold(n){
+    if(holdStartN===null) return;
+    const a=holdStartN,b=n;
+    holdStartN=null;
+    const lo=Math.min(a,b),hi=Math.max(a,b);
+    if(hi-lo<0.006) return;
+    segments[level].push({n0:lo,n1:hi});
+    merge(level);
+  }
+  function merge(idx){
+    const segs=segments[idx].slice().sort((a,b)=>a.n0-b.n0);
+    const out=[];
+    for(const s of segs){
+      if(!out.length||s.n0>out[out.length-1].n1) out.push({...s});
+      else out[out.length-1].n1=Math.max(out[out.length-1].n1,s.n1);
+    }
+    segments[idx]=out;
+  }
+
+  // drawing
+  function resizeForDPR(){
+    const dpr=window.devicePixelRatio||1;
+    const cssW=canvas.clientWidth, cssH=canvas.clientHeight;
+    canvas.width=Math.round(cssW*dpr);
+    canvas.height=Math.round(cssH*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+  }
+  function roundRect(c,x,y,w,h,r){
+    r=Math.min(r,w/2,h/2);
+    c.moveTo(x+r,y);
+    c.arcTo(x+w,y,x+w,y+h,r);
+    c.arcTo(x+w,y+h,x,y+h,r);
+    c.arcTo(x,y+h,x,y,r);
+    c.arcTo(x,y,x+w,y,r);
+    c.closePath();
+  }
+
+  // Map logical level index (0=0dB ... N-1=70dB) to display row index (0=top)
+  // Want 70dB at top and 0dB at bottom => displayRow = N-1-level.
+  function levelToDisplayRow(lvl){ return (NLEVEL-1) - lvl; }
+
+  function drawAxes(s){
+    const W=canvas.clientWidth, H=canvas.clientHeight;
+    const padL=74, padR=18, padT=18, padB=56;
+    const left=padL, right=W-padR, top=padT, bottom=H-padB;
+
+    ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle="rgba(127,127,127,.45)";
+    ctx.lineWidth=1;
+    ctx.beginPath(); roundRect(ctx,left,top,right-left,bottom-top,12); ctx.stroke();
+
+    // octave ticks at powers of 2
+    ctx.font="12px system-ui,-apple-system,Segoe UI,Roboto,Arial";
+    ctx.fillStyle="rgba(127,127,127,.95)";
+    ctx.textAlign="center";
+    ctx.textBaseline="top";
+    const p0=Math.floor(log2(s.fmin));
+    const p1=Math.ceil(log2(s.fmax));
+    for(let p=p0;p<=p1;p++){
+      const f=Math.pow(2,p);
+      if(f<s.fmin||f>s.fmax) continue;
+      const n=normFromFreq(f,s);
+      const x=left+(right-left)*n;
+      ctx.strokeStyle="rgba(127,127,127,.22)";
+      ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.stroke();
+      ctx.fillText(fmtHz(f), x, bottom+12);
+    }
+
+    // rows (display reversed: 70 at top, 0 at bottom)
+    const rowH=(bottom-top)/NLEVEL;
+    ctx.textAlign="right"; ctx.textBaseline="middle";
+    for(let lvl=0; lvl<NLEVEL; lvl++){
+      const disp = levelToDisplayRow(lvl);
+      const y=top+rowH*(disp+0.5);
+      ctx.fillStyle="rgba(127,127,127,.95)";
+      ctx.fillText(`${LEVEL_DB[lvl]} dB`, left-10, y);
+      ctx.strokeStyle="rgba(127,127,127,.12)";
+      ctx.beginPath(); ctx.moveTo(left, top+rowH*disp); ctx.lineTo(right, top+rowH*disp); ctx.stroke();
+    }
+    ctx.beginPath(); ctx.moveTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+
+    ctx.textAlign="left"; ctx.textBaseline="top";
+    ctx.fillStyle="rgba(127,127,127,.95)";
+    ctx.fillText("Frequency (octaves / log2)", left, 4);
+
+    return {left,right,top,bottom,rowH};
+  }
+
+  function drawSegments(box){
+    const {left,right,top,rowH}=box;
+    for(let lvl=0; lvl<NLEVEL; lvl++){
+      const disp = levelToDisplayRow(lvl);
+      const y0=top+rowH*disp+rowH*0.18;
+      const h=rowH*0.64;
+      for(const seg of segments[lvl]){
+        const x0=left+(right-left)*seg.n0;
+        const x1=left+(right-left)*seg.n1;
+        const col=(COLORS[lvl%COLORS.length]||"#60A5FA");
+        ctx.fillStyle=col+"55";
+        ctx.strokeStyle=col;
+        ctx.lineWidth=1.4;
+        ctx.beginPath(); roundRect(ctx,x0,y0,Math.max(1,x1-x0),h,10); ctx.fill(); ctx.stroke();
+      }
+    }
+  }
+
+  function drawCursor(n,s,box){
+    const {left,right,top,bottom,rowH}=box;
+    const x=left+(right-left)*n;
+
+    // highlight active row (mapped)
+    const disp = levelToDisplayRow(level);
+    const yRow=top+rowH*disp;
+    ctx.fillStyle="rgba(127,127,127,.10)";
+    ctx.beginPath(); roundRect(ctx,left+1,yRow+2,(right-left)-2,rowH-4,10); ctx.fill();
+
+    // vertical cursor
+    ctx.strokeStyle = running && phase==="sweep" ? "rgba(255,255,255,.85)" : "rgba(127,127,127,.55)";
+    ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.stroke();
+
+    // label
+    const f=freqFromNorm(n,s);
+    const label=fmtHz(f);
+    ctx.font="12px system-ui,-apple-system,Segoe UI,Roboto,Arial";
+    const w=ctx.measureText(label).width+16;
+    const px=clamp(x-w/2,left,right-w);
+    const py=top-2;
+    ctx.fillStyle="rgba(0,0,0,.55)";
+    ctx.strokeStyle="rgba(255,255,255,.25)";
+    ctx.lineWidth=1;
+    ctx.beginPath(); roundRect(ctx,px,py,w,22,8); ctx.fill(); ctx.stroke();
+    ctx.fillStyle="rgba(255,255,255,.92)";
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(label, px+w/2, py+11);
+
+    // temporary segment
+    if(holdStartN!==null && phase==="sweep"){
+      const lo=Math.min(holdStartN,n), hi=Math.max(holdStartN,n);
+      const x0=left+(right-left)*lo, x1=left+(right-left)*hi;
+      const y0=yRow+rowH*0.18, h=rowH*0.64;
+      const col=(COLORS[level%COLORS.length]||"#60A5FA");
+      ctx.fillStyle=col+"33"; ctx.strokeStyle=col; ctx.lineWidth=1.4;
+      ctx.beginPath(); roundRect(ctx,x0,y0,Math.max(1,x1-x0),h,10); ctx.fill(); ctx.stroke();
+    }
+  }
+
+  function setRunningUI(isRunning){
+    btnStart.disabled = isRunning;
+    elFmin.disabled = isRunning;
+    elFmax.disabled = isRunning;
+    elMaxGain.disabled = isRunning;
+    elDur.disabled = isRunning;
+  }
+
+  function updateStatus(n,s){
+    const f=freqFromNorm(n,s);
+    const db=LEVEL_DB[level];
+    const outGain=gainForDb(db,s.maxGain);
+    statusEl.innerHTML="";
+    const pills=[
+      ["State", running ? (phase==="sweep" ? "Sweeping" : "Switching levels") : (phase==="done" ? "Done" : "Idle")],
+      ["Level", `${level+1}/${NLEVEL}`],
+      ["Intensity", `${db} dB (relative)`],
+      ["Output gain", outGain.toFixed(6)],
+      ["Frequency", fmtHz(f)],
+      ["Progress", `${Math.round(n*100)}%`],
+      ["Marking", hold ? "Holding Space" : "Not marking"]
+    ];
+    for(const [k,v] of pills){
+      const d=document.createElement("div");
+      d.className="pill";
+      d.innerHTML=`<span class="muted">${k}:</span> <b>${v}</b>`;
+      statusEl.appendChild(d);
+    }
+  }
+
+  function draw(n=0){
+    const s=getSettings();
+    resizeForDPR();
+    const box=drawAxes(s);
+    drawSegments(box);
+    drawCursor(n,s,box);
+    updateStatus(n,s);
+  }
+
+  // loop/state machine
+  function start(){
+    if(running) return; // prevent accidental restart mid-run
+    ensureAudio();
+    if(audioCtx.state==="suspended") audioCtx.resume();
+
+    running=true;
+    phase="sweep";
+    level=0; // start at 0 dB
+    phaseStartT=audioCtx.currentTime;
+    hold=false;
+    holdStartN=null;
+
+    setRunningUI(true);
+    setGain(0);
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function stop(){
+    if(!audioCtx){
+      running=false; phase="idle";
+      setRunningUI(false);
+      draw(0);
+      return;
+    }
+    running=false;
+    phase="idle";
+    hold=false;
+    holdStartN=null;
+    setGain(0);
+    setRunningUI(false);
+    if(rafId) cancelAnimationFrame(rafId);
+    rafId=null;
+    draw(0);
+  }
+
+  function resetAll(){
+    stop();
+    segments = Array.from({length:NLEVEL}, ()=>[]);
+    level=0; phase="idle";
+    draw(0);
+  }
+
+  function loop(){
+    if(!running){ return; }
+    const s=getSettings();
+    const t=audioCtx.currentTime;
+
+    if(phase==="sweep"){
+      const elapsed=t-phaseStartT;
+      const n=clamp(elapsed/s.dur,0,1);
+
+      const f=freqFromNorm(n,s);
+      const db=LEVEL_DB[level];
+      const outGain=gainForDb(db,s.maxGain);
+
+      setFreq(f);
+      setGain(outGain);
+
+      draw(n);
+
+      if(n>=1){
+        if(hold){ hold=false; endHold(1); }
+        phase="gap";
+        phaseStartT=t;
+        setGain(0);
+      }
+    } else if(phase==="gap"){
+      draw(1);
+      if((t-phaseStartT)>=GAP_S){
+        level += 1;
+        if(level >= NLEVEL){
+          phase="done";
+          running=false;
+          setGain(0);
+          setRunningUI(false);
+          if(rafId) cancelAnimationFrame(rafId);
+          rafId=null;
+          draw(1);
+          return;
+        }
+        phase="sweep";
+        phaseStartT=t;
+        hold=false;
+        holdStartN=null;
+      }
+    }
+
+    rafId = requestAnimationFrame(loop);
+  }
+
+  // keyboard
+  window.addEventListener("keydown",(e)=>{
+    if(e.repeat) return;
+    if(e.code==="Space"){
+      if(running && phase==="sweep" && !hold){
+        e.preventDefault();
+        hold=true;
+        const s=getSettings();
+        const n=clamp((audioCtx.currentTime-phaseStartT)/s.dur,0,1);
+        startHold(n);
+        draw(n);
+      }
+      return;
+    }
+    if(e.code==="Enter"){ e.preventDefault(); start(); return; }
+    if(e.code==="Escape"){ e.preventDefault(); stop(); return; }
+  }, {passive:false});
+
+  window.addEventListener("keyup",(e)=>{
+    if(e.code==="Space"){
+      if(running && phase==="sweep" && hold){
+        e.preventDefault();
+        hold=false;
+        const s=getSettings();
+        const n=clamp((audioCtx.currentTime-phaseStartT)/s.dur,0,1);
+        endHold(n);
+        draw(n);
+      }
+    }
+  }, {passive:false});
+
+  // controls
+  btnStart.addEventListener("click", start);
+  btnStop.addEventListener("click", stop);
+  btnReset.addEventListener("click", resetAll);
+  window.addEventListener("resize", ()=>draw(0));
+
+  // initial
+  draw(0);
+})();
+</script>
+</body>
+</html>

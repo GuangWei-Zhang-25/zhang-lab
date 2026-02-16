@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Auditory Cortex Receptive Field Simulator (Freq × Intensity)</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#111824;
+      --panel2:#0f1622;
+      --text:#e7edf6;
+      --muted:#9fb0c7;
+      --accent:#7dd3fc;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --bad:#fb7185;
+      --grid:#1f2a3b;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: radial-gradient(1200px 600px at 20% 10%, #122238 0%, rgba(18,34,56,0) 60%),
+                  radial-gradient(900px 500px at 80% 20%, #1a1b3b 0%, rgba(26,27,59,0) 60%),
+                  linear-gradient(180deg, var(--bg), #070a0f 70%);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    header{
+      padding:22px 18px 10px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    h1{
+      font-size:20px;
+      margin:0 0 6px;
+      letter-spacing:.2px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.4;
+      margin:0;
+    }
+    .wrap{
+      max-width:1200px;
+      margin:0 auto;
+      padding:12px 18px 26px;
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap:14px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background: linear-gradient(180deg, rgba(125,211,252,.08), rgba(125,211,252,0));
+    }
+    .card .bd{ padding:14px; }
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .row.tight{gap:8px}
+    label{
+      font-size:12px;
+      color:var(--muted);
+      display:block;
+      margin:0 0 4px;
+    }
+    input[type="range"]{ width:100%; }
+    input[type="number"], select{
+      width:100%;
+      padding:9px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,20,.65);
+      color:var(--text);
+      outline:none;
+    }
+    input[type="number"]:focus, select:focus{
+      border-color: rgba(125,211,252,.55);
+      box-shadow: 0 0 0 3px rgba(125,211,252,.15);
+    }
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .btns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    button{
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(17,24,36,.6);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:600;
+      letter-spacing:.2px;
+      transition: transform .06s ease, background .2s ease, border-color .2s ease;
+      user-select:none;
+    }
+    button:hover{ background: rgba(17,24,36,.9); border-color: rgba(255,255,255,.18);}
+    button:active{ transform: translateY(1px); }
+    button.primary{
+      background: linear-gradient(180deg, rgba(125,211,252,.25), rgba(125,211,252,.12));
+      border-color: rgba(125,211,252,.35);
+    }
+    button.primary:hover{ border-color: rgba(125,211,252,.55); }
+    button.danger{
+      background: linear-gradient(180deg, rgba(251,113,133,.22), rgba(251,113,133,.10));
+      border-color: rgba(251,113,133,.35);
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(10,14,20,.45);
+      font-size:12px;
+      color:var(--muted);
+    }
+    .dot{
+      width:9px; height:9px; border-radius:50%;
+      background: var(--warn);
+      box-shadow: 0 0 0 3px rgba(251,191,36,.15);
+    }
+    .dot.on{ background: var(--good); box-shadow: 0 0 0 3px rgba(52,211,153,.15); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .plotWrap{
+      display:grid;
+      grid-template-columns: 1fr 280px;
+      gap:14px;
+      padding:14px;
+    }
+    canvas{
+      width:100%;
+      height:520px;
+      background: rgba(7,10,15,.65);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+    }
+    .side{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .smallCard{
+      padding:12px;
+      background: rgba(10,14,20,.45);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+    }
+    .smallCard h3{
+      margin:0 0 8px;
+      font-size:13px;
+      color:var(--text);
+      letter-spacing:.2px;
+    }
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:6px 10px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .kv div:nth-child(2n){ color: var(--text); text-align:right; }
+    .note{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.45;
+    }
+    .mini{
+      width:100%;
+      height:180px;
+      border-radius:16px;
+    }
+    .footer{
+      max-width:1200px;
+      margin:0 auto;
+      padding:0 18px 22px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    a{ color: var(--accent); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns: 1fr; }
+      .plotWrap{ grid-template-columns: 1fr; }
+      canvas{ height:420px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Auditory Cortex Receptive Field Simulator</h1>
+    <p class="sub">
+      Randomized <span class="mono">frequency × intensity</span> tone pips, with an underlying <b>V-shaped tuning curve</b> (threshold rises away from CF).
+      The heatmap fills in as trials are presented—like building a basic FRA (frequency response area).
+    </p>
+  </header>
+
+  <section class="wrap">
+    <div class="card">
+      <div class="hd">
+        <div class="row tight" style="justify-content:space-between;">
+          <div class="pill"><span id="runDot" class="dot"></span><span id="runState">Stopped</span></div>
+          <div class="pill"><span>Trials</span><span class="mono" id="trialCount">0</span></div>
+          <div class="pill"><span>Order</span><span class="mono" id="orderLabel">Random</span></div>
+        </div>
+      </div>
+      <div class="bd">
+        <div class="grid2">
+          <div>
+            <label>Frequency range (Hz)</label>
+            <div class="row tight">
+              <input id="fMin" type="number" value="2000" min="100" step="100"/>
+              <input id="fMax" type="number" value="40000" min="200" step="100"/>
+            </div>
+          </div>
+          <div>
+            <label>Frequencies (count, log-spaced)</label>
+            <input id="nF" type="number" value="16" min="6" max="48" step="1"/>
+          </div>
+          <div>
+            <label>Intensity range (dB, arbitrary)</label>
+            <div class="row tight">
+              <input id="dMin" type="number" value="0" min="-20" max="80" step="1"/>
+              <input id="dMax" type="number" value="70" min="-20" max="100" step="1"/>
+            </div>
+          </div>
+          <div>
+            <label>Intensities (count, linear)</label>
+            <input id="nD" type="number" value="12" min="6" max="30" step="1"/>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,.07);margin:14px 0;">
+
+        <div class="grid2">
+          <div>
+            <label>Tone duration (ms)</label>
+            <input id="toneMs" type="number" value="60" min="10" max="400" step="5"/>
+          </div>
+          <div>
+            <label>ISI (ms, avg; randomized)</label>
+            <input id="isiMs" type="number" value="140" min="30" max="1000" step="10"/>
+          </div>
+          <div>
+            <label>Reps per condition</label>
+            <input id="reps" type="number" value="1" min="1" max="10" step="1"/>
+          </div>
+          <div>
+            <label>Presentation order</label>
+            <select id="order">
+              <option value="random" selected>Random</option>
+              <option value="sweepF">Sweep freq (low→high)</option>
+              <option value="sweepD">Sweep dB (low→high)</option>
+            </select>
+          </div>
+        </div>
+
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,.07);margin:14px 0;">
+
+        <div class="smallCard">
+          <h3>Hidden neuron parameters (tuning)</h3>
+          <div class="grid2">
+            <div>
+              <label>Characteristic frequency (CF, Hz)</label>
+              <input id="cf" type="number" value="12000" min="200" step="100"/>
+            </div>
+            <div>
+              <label>Minimum threshold (dB)</label>
+              <input id="thrMin" type="number" value="15" min="-20" max="80" step="1"/>
+            </div>
+            <div>
+              <label>V-slope (dB per octave)</label>
+              <input id="vSlope" type="number" value="22" min="2" max="60" step="1"/>
+            </div>
+            <div>
+              <label>Max firing (spk/s)</label>
+              <input id="maxFR" type="number" value="55" min="5" max="200" step="1"/>
+            </div>
+          </div>
+          <div class="grid2" style="margin-top:10px;">
+            <div>
+              <label>Response sharpness</label>
+              <input id="sharp" type="range" min="0.6" max="3.2" value="1.4" step="0.05"/>
+            </div>
+            <div>
+              <label>Noise (trial-to-trial)</label>
+              <input id="noise" type="range" min="0" max="20" value="6" step="0.5"/>
+            </div>
+          </div>
+          <div class="note" style="margin-top:10px;">
+            The “V” is implemented as a threshold curve: <span class="mono">thr(f) = thrMin + vSlope · |log2(f / CF)|</span>.
+            Above threshold, firing rises with intensity and peaks near CF.
+          </div>
+        </div>
+
+        <div class="btns">
+          <button class="primary" id="startBtn">Start</button>
+          <button id="pauseBtn">Pause</button>
+          <button class="danger" id="stopBtn">Stop & Reset</button>
+          <button id="newNeuronBtn">New Random Neuron</button>
+          <button id="exportBtn">Export CSV</button>
+        </div>
+
+        <div class="note" style="margin-top:10px;">
+          Audio safety: this plays short tones. Keep your volume low.
+          If you hear nothing, your browser may require you to click <b>Start</b> first (audio unlock).
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd">
+        <div class="row tight" style="justify-content:space-between;">
+          <div>
+            <div style="font-weight:700; letter-spacing:.2px;">FRA Heatmap (observed)</div>
+            <div class="sub" style="margin-top:3px;">Each cell is the running mean firing rate (spk/s) for that frequency/intensity.</div>
+          </div>
+          <div class="pill"><span>Current stim</span><span class="mono" id="curStim">—</span></div>
+        </div>
+      </div>
+
+      <div class="plotWrap">
+        <canvas id="heat"></canvas>
+        <div class="side">
+          <div class="smallCard">
+            <h3>Last trial response</h3>
+            <canvas id="last" class="mini"></canvas>
+            <div class="note" style="margin-top:8px;">
+              Mini-plot shows the hidden threshold curve (dashed) and current (f,dB) point.
+            </div>
+          </div>
+
+          <div class="smallCard">
+            <h3>Status</h3>
+            <div class="kv" id="kv">
+              <div>Conditions</div><div class="mono" id="condN">—</div>
+              <div>Total trials</div><div class="mono" id="totalN">—</div>
+              <div>Progress</div><div class="mono" id="prog">—</div>
+              <div>Mean FR</div><div class="mono" id="meanFR">—</div>
+              <div>Peak FR</div><div class="mono" id="peakFR">—</div>
+            </div>
+          </div>
+
+          <div class="smallCard">
+            <h3>How to use in teaching</h3>
+            <div class="note">
+              1) Pick ranges and resolution (counts).<br/>
+              2) Click <b>Start</b> (random order helps).<br/>
+              3) Watch the V-shaped “response area” appear as more cells get sampled.<br/>
+              4) Click <b>New Random Neuron</b> to show a different CF/slope/noise profile.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    Tip: This is a <i>conceptual</i> simulator—not calibrated SPL. In real experiments you would use a calibrated speaker,
+    a fixed SPL reference, and compute firing from spike times within a response window.
+  </div>
+
+<script>
+(() => {
+  // ---------- Utilities ----------
+  const clamp = (x,a,b)=>Math.max(a,Math.min(b,x));
+  const log2 = (x)=>Math.log(x)/Math.log(2);
+  const lerp = (a,b,t)=>a+(b-a)*t;
+  function mulberry32(seed){
+    let t = seed >>> 0;
+    return function(){
+      t += 0x6D2B79F5;
+      let r = Math.imul(t ^ (t >>> 15), 1 | t);
+      r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+      return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+    }
+  }
+  function nowSeed(){
+    return (Date.now() ^ (performance.now()*1e6)) >>> 0;
+  }
+
+  // ---------- DOM ----------
+  const $ = (id)=>document.getElementById(id);
+  const heat = $("heat");
+  const last = $("last");
+  const ctxH = heat.getContext("2d");
+  const ctxL = last.getContext("2d");
+
+  const runDot = $("runDot");
+  const runState = $("runState");
+  const trialCountEl = $("trialCount");
+  const curStimEl = $("curStim");
+  const orderSel = $("order");
+  const orderLabel = $("orderLabel");
+
+  const condNEl = $("condN");
+  const totalNEl = $("totalN");
+  const progEl = $("prog");
+  const meanFREl = $("meanFR");
+  const peakFREl = $("peakFR");
+
+  // Inputs
+  const fMinEl = $("fMin"), fMaxEl = $("fMax"), nFEl = $("nF");
+  const dMinEl = $("dMin"), dMaxEl = $("dMax"), nDEl = $("nD");
+  const toneMsEl = $("toneMs"), isiMsEl = $("isiMs"), repsEl = $("reps");
+
+  const cfEl = $("cf"), thrMinEl = $("thrMin"), vSlopeEl = $("vSlope"), maxFREl = $("maxFR");
+  const sharpEl = $("sharp"), noiseEl = $("noise");
+
+  // Buttons
+  const startBtn = $("startBtn"), pauseBtn = $("pauseBtn"), stopBtn = $("stopBtn");
+  const newNeuronBtn = $("newNeuronBtn"), exportBtn = $("exportBtn");
+
+  // ---------- Audio ----------
+  let audioCtx = null;
+  let master = null;
+
+  function ensureAudio(){
+    if (!audioCtx){
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      master = audioCtx.createGain();
+      master.gain.value = 0.2; // global safety
+      master.connect(audioCtx.destination);
+    }
+  }
+
+  function playTone(freqHz, dB, durMs){
+    // Map "dB" (arbitrary) to amplitude. We use a soft mapping:
+    // gain ~ 10^((dB - dMax)/25), clamped.
+    ensureAudio();
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    const t0 = audioCtx.currentTime;
+    const dur = Math.max(0.01, durMs/1000);
+
+    const dMax = Number(dMaxEl.value);
+    const amp = clamp(Math.pow(10, (dB - dMax)/25), 0.0005, 0.9);
+
+    // Simple 5 ms ramp to avoid clicks
+    g.gain.setValueAtTime(0.00001, t0);
+    g.gain.exponentialRampToValueAtTime(amp, t0 + 0.005);
+    g.gain.setValueAtTime(amp, t0 + dur - 0.008);
+    g.gain.exponentialRampToValueAtTime(0.00001, t0 + dur);
+
+    osc.frequency.setValueAtTime(freqHz, t0);
+    osc.type = "sine";
+
+    osc.connect(g);
+    g.connect(master);
+
+    osc.start(t0);
+    osc.stop(t0 + dur + 0.02);
+  }
+
+  // ---------- FRA model ----------
+  // V-shaped threshold + intensity gain + frequency preference around CF
+  function thresholdAt(f){
+    const cf = Number(cfEl.value);
+    const thrMin = Number(thrMinEl.value);
+    const vSlope = Number(vSlopeEl.value);
+    const oct = Math.abs(log2(f / cf));
+    return thrMin + vSlope * oct;
+  }
+
+  function expectedFR(f, dB){
+    const cf = Number(cfEl.value);
+    const maxFR = Number(maxFREl.value);
+    const sharp = Number(sharpEl.value);
+
+    const thr = thresholdAt(f);
+    const above = dB - thr;
+
+    // Intensity nonlinearity: logistic in "above threshold"
+    const k = 0.20 * sharp;              // slope
+    const frac = 1 / (1 + Math.exp(-k * above)); // 0..1
+
+    // Frequency preference: gaussian in log-frequency
+    const sigmaOct = 0.55 / sharp; // narrower with sharpness
+    const freqWeight = Math.exp(-0.5 * Math.pow(log2(f / cf) / sigmaOct, 2));
+
+    return maxFR * frac * freqWeight;
+  }
+
+  function noisyFR(f, dB, rng){
+    const mu = expectedFR(f, dB);
+    const noise = Number(noiseEl.value);
+    // Gaussian-ish noise via sum of uniforms
+    let g = 0;
+    for (let i=0;i<6;i++) g += (rng() - 0.5);
+    g *= (noise / 0.5); // scale
+    return Math.max(0, mu + g);
+  }
+
+  // ---------- State ----------
+  let freqs = [];
+  let dBs = [];
+  let schedule = []; // list of {fi, di}
+  let schedIdx = 0;
+  let running = false;
+  let paused = false;
+  let timer = null;
+  let rng = mulberry32(nowSeed());
+
+  // Running stats per cell: mean and count
+  let mean = [];
+  let count = [];
+
+  function rebuildGrid(){
+    // Validate inputs
+    let fMin = Math.max(50, Number(fMinEl.value));
+    let fMax = Math.max(fMin + 50, Number(fMaxEl.value));
+    fMinEl.value = Math.round(fMin);
+    fMaxEl.value = Math.round(fMax);
+
+    let nF = clamp(Number(nFEl.value)|0, 6, 64);
+    let dMin = Number(dMinEl.value);
+    let dMax = Math.max(dMin + 1, Number(dMaxEl.value));
+    dMinEl.value = dMin;
+    dMaxEl.value = dMax;
+
+    let nD = clamp(Number(nDEl.value)|0, 6, 40);
+
+    // log-spaced freqs
+    freqs = [];
+    const a = Math.log(fMin), b = Math.log(fMax);
+    for (let i=0;i<nF;i++){
+      const t = i/(nF-1);
+      freqs.push(Math.exp(lerp(a,b,t)));
+    }
+
+    // linear dB
+    dBs = [];
+    for (let j=0;j<nD;j++){
+      const t = j/(nD-1);
+      dBs.push(lerp(dMin,dMax,t));
+    }
+
+    mean = Array.from({length:nD}, ()=>Array(nF).fill(0));
+    count = Array.from({length:nD}, ()=>Array(nF).fill(0));
+
+    buildSchedule();
+    schedIdx = 0;
+    updateStatsUI();
+    drawHeatmap();
+    drawMini();
+    setCurrentStim(null);
+    trialCountEl.textContent = "0";
+  }
+
+  function buildSchedule(){
+    const nF = freqs.length;
+    const nD = dBs.length;
+    const reps = clamp(Number(repsEl.value)|0, 1, 20);
+
+    schedule = [];
+    for (let r=0;r<reps;r++){
+      for (let di=0; di<nD; di++){
+        for (let fi=0; fi<nF; fi++){
+          schedule.push({fi,di});
+        }
+      }
+    }
+
+    const order = orderSel.value;
+    orderLabel.textContent = order === "random" ? "Random" : (order==="sweepF" ? "SweepF" : "SweepdB");
+
+    if (order === "random"){
+      // Fisher-Yates shuffle
+      for (let i=schedule.length-1;i>0;i--){
+        const j = Math.floor(rng()*(i+1));
+        const tmp = schedule[i]; schedule[i]=schedule[j]; schedule[j]=tmp;
+      }
+    } else if (order === "sweepF"){
+      // group by freq in order, within each freq sweep dB
+      schedule.sort((a,b)=> (a.fi-b.fi) || (a.di-b.di));
+    } else if (order === "sweepD"){
+      schedule.sort((a,b)=> (a.di-b.di) || (a.fi-b.fi));
+    }
+
+    condNEl.textContent = `${dBs.length}×${freqs.length}`;
+    totalNEl.textContent = `${schedule.length}`;
+  }
+
+  function updateStatsUI(){
+    const total = schedule.length;
+    const done = schedIdx;
+    progEl.textContent = total ? `${Math.round(100*done/total)}%` : "—";
+
+    // mean & peak from sampled cells
+    let sum=0, n=0, peak=0;
+    for (let di=0; di<dBs.length; di++){
+      for (let fi=0; fi<freqs.length; fi++){
+        if (count[di][fi] > 0){
+          const m = mean[di][fi];
+          sum += m; n++;
+          if (m > peak) peak = m;
+        }
+      }
+    }
+    meanFREl.textContent = n ? `${(sum/n).toFixed(1)}` : "—";
+    peakFREl.textContent = n ? `${peak.toFixed(1)}` : "—";
+  }
+
+  function setRunUI(state){
+    if (state === "running"){
+      runDot.classList.add("on");
+      runState.textContent = "Running";
+    } else if (state === "paused"){
+      runDot.classList.remove("on");
+      runState.textContent = "Paused";
+    } else {
+      runDot.classList.remove("on");
+      runState.textContent = "Stopped";
+    }
+  }
+
+  function setCurrentStim(obj){
+    if (!obj){
+      curStimEl.textContent = "—";
+      return;
+    }
+    const f = freqs[obj.fi];
+    const d = dBs[obj.di];
+    curStimEl.textContent = `${Math.round(f)} Hz @ ${d.toFixed(0)} dB`;
+  }
+
+  // ---------- Drawing ----------
+  function resizeCanvas(canvas, ctx){
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const w = Math.max(10, Math.floor(rect.width * dpr));
+    const h = Math.max(10, Math.floor(rect.height * dpr));
+    if (canvas.width !== w || canvas.height !== h){
+      canvas.width = w; canvas.height = h;
+      ctx.setTransform(dpr,0,0,dpr,0,0); // operate in CSS px
+    }
+  }
+
+  function heatColor(v, vMax){
+    // v in [0,vMax], map to a pleasant blue->cyan->yellow->red ramp
+    const t = vMax > 0 ? clamp(v / vMax, 0, 1) : 0;
+    // piecewise
+    let r,g,b;
+    if (t < 0.33){
+      const u = t/0.33;
+      r = lerp(30, 40, u);
+      g = lerp(80, 190, u);
+      b = lerp(160, 255, u);
+    } else if (t < 0.66){
+      const u = (t-0.33)/0.33;
+      r = lerp(40, 250, u);
+      g = lerp(190, 220, u);
+      b = lerp(255, 70, u);
+    } else {
+      const u = (t-0.66)/0.34;
+      r = lerp(250, 255, u);
+      g = lerp(220, 80, u);
+      b = lerp(70, 40, u);
+    }
+    return `rgb(${r|0},${g|0},${b|0})`;
+  }
+
+  function drawHeatmap(){
+    resizeCanvas(heat, ctxH);
+    const W = heat.getBoundingClientRect().width;
+    const H = heat.getBoundingClientRect().height;
+
+    // Layout
+    const padL = 64, padR = 18, padT = 18, padB = 44;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+
+    ctxH.clearRect(0,0,W,H);
+    // background
+    ctxH.fillStyle = "rgba(7,10,15,.65)";
+    ctxH.fillRect(0,0,W,H);
+
+    // compute vmax
+    let vmax = 0;
+    for (let di=0; di<dBs.length; di++){
+      for (let fi=0; fi<freqs.length; fi++){
+        vmax = Math.max(vmax, mean[di][fi]);
+      }
+    }
+    vmax = Math.max(vmax, 1);
+
+    const nF = freqs.length, nD = dBs.length;
+    const cw = plotW / nF;
+    const ch = plotH / nD;
+
+    // grid cells
+    for (let di=0; di<nD; di++){
+      for (let fi=0; fi<nF; fi++){
+        const x = padL + fi*cw;
+        const y = padT + (nD-1-di)*ch; // low dB bottom
+        const v = count[di][fi] ? mean[di][fi] : 0;
+        ctxH.fillStyle = count[di][fi] ? heatColor(v, vmax) : "rgba(25,32,46,.35)";
+        ctxH.fillRect(x+0.5, y+0.5, cw-1, ch-1);
+      }
+    }
+
+    // axes
+    ctxH.strokeStyle = "rgba(255,255,255,.18)";
+    ctxH.lineWidth = 1;
+    ctxH.strokeRect(padL, padT, plotW, plotH);
+
+    // labels
+    ctxH.fillStyle = "rgba(231,237,246,.9)";
+    ctxH.font = "12px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctxH.textAlign = "center";
+    ctxH.textBaseline = "top";
+
+    // x ticks (freq)
+    const xticks = 6;
+    for (let k=0;k<xticks;k++){
+      const t = k/(xticks-1);
+      const fi = Math.round(t*(nF-1));
+      const f = freqs[fi];
+      const x = padL + (fi+0.5)*cw;
+      ctxH.fillText(`${Math.round(f/1000)}k`, x, padT + plotH + 8);
+      ctxH.strokeStyle = "rgba(255,255,255,.10)";
+      ctxH.beginPath();
+      ctxH.moveTo(padL + fi*cw, padT);
+      ctxH.lineTo(padL + fi*cw, padT + plotH);
+      ctxH.stroke();
+    }
+
+    // y ticks (dB)
+    ctxH.textAlign = "right";
+    ctxH.textBaseline = "middle";
+    const yticks = 6;
+    for (let k=0;k<yticks;k++){
+      const t = k/(yticks-1);
+      const di = Math.round(t*(nD-1));
+      const d = dBs[di];
+      const y = padT + (nD-1-di+0.5)*ch;
+      ctxH.fillText(`${d.toFixed(0)}`, padL - 8, y);
+      ctxH.strokeStyle = "rgba(255,255,255,.10)";
+      ctxH.beginPath();
+      ctxH.moveTo(padL, padT + (nD-1-di)*ch);
+      ctxH.lineTo(padL + plotW, padT + (nD-1-di)*ch);
+      ctxH.stroke();
+    }
+
+    // axis titles
+    ctxH.save();
+    ctxH.fillStyle = "rgba(159,176,199,.95)";
+    ctxH.font = "12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
+    ctxH.textAlign = "center";
+    ctxH.fillText("Frequency (kHz, log-spaced)", padL + plotW/2, H - 18);
+    ctxH.translate(18, padT + plotH/2);
+    ctxH.rotate(-Math.PI/2);
+    ctxH.fillText("Intensity (dB)", 0, 0);
+    ctxH.restore();
+
+    // color legend
+    const lx = padL, ly = 10, lw = 140, lh = 10;
+    for (let i=0;i<lw;i++){
+      const v = i/(lw-1)*vmax;
+      ctxH.fillStyle = heatColor(v, vmax);
+      ctxH.fillRect(lx+i, ly, 1, lh);
+    }
+    ctxH.strokeStyle = "rgba(255,255,255,.18)";
+    ctxH.strokeRect(lx, ly, lw, lh);
+    ctxH.fillStyle = "rgba(159,176,199,.95)";
+    ctxH.font = "11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctxH.textAlign = "left";
+    ctxH.textBaseline = "bottom";
+    ctxH.fillText("spk/s", lx + lw + 8, ly + lh + 2);
+    ctxH.textBaseline = "top";
+    ctxH.fillText("0", lx, ly + lh + 4);
+    ctxH.textAlign = "right";
+    ctxH.fillText(vmax.toFixed(0), lx + lw, ly + lh + 4);
+  }
+
+  function drawMini(current){
+    resizeCanvas(last, ctxL);
+    const W = last.getBoundingClientRect().width;
+    const H = last.getBoundingClientRect().height;
+
+    ctxL.clearRect(0,0,W,H);
+    ctxL.fillStyle = "rgba(7,10,15,.55)";
+    ctxL.fillRect(0,0,W,H);
+
+    // axes
+    const pad = {l:44,r:10,t:14,b:28};
+    const plotW = W - pad.l - pad.r;
+    const plotH = H - pad.t - pad.b;
+
+    ctxL.strokeStyle = "rgba(255,255,255,.18)";
+    ctxL.strokeRect(pad.l, pad.t, plotW, plotH);
+
+    // x: log2 freq over range; y: threshold dB
+    const fMin = Math.max(50, Number(fMinEl.value));
+    const fMax = Math.max(fMin+50, Number(fMaxEl.value));
+    const dMin = Number(dMinEl.value);
+    const dMax = Number(dMaxEl.value);
+
+    function xOf(f){
+      const t = (Math.log(f)-Math.log(fMin)) / (Math.log(fMax)-Math.log(fMin));
+      return pad.l + clamp(t,0,1)*plotW;
+    }
+    function yOf(d){
+      const t = (d - dMin) / (dMax - dMin);
+      return pad.t + (1-clamp(t,0,1))*plotH;
+    }
+
+    // threshold curve
+    ctxL.setLineDash([5,4]);
+    ctxL.lineWidth = 2;
+    ctxL.strokeStyle = "rgba(125,211,252,.85)";
+    ctxL.beginPath();
+    const steps = 180;
+    for (let i=0;i<=steps;i++){
+      const t = i/steps;
+      const f = Math.exp(lerp(Math.log(fMin), Math.log(fMax), t));
+      const thr = thresholdAt(f);
+      const x = xOf(f);
+      const y = yOf(thr);
+      if (i===0) ctxL.moveTo(x,y);
+      else ctxL.lineTo(x,y);
+    }
+    ctxL.stroke();
+    ctxL.setLineDash([]);
+
+    // CF marker
+    const cf = Number(cfEl.value);
+    ctxL.strokeStyle = "rgba(255,255,255,.18)";
+    ctxL.beginPath();
+    ctxL.moveTo(xOf(cf), pad.t);
+    ctxL.lineTo(xOf(cf), pad.t + plotH);
+    ctxL.stroke();
+
+    // current point
+    if (current){
+      const f = freqs[current.fi];
+      const d = dBs[current.di];
+      const x = xOf(f), y = yOf(d);
+      ctxL.fillStyle = "rgba(251,191,36,.95)";
+      ctxL.beginPath();
+      ctxL.arc(x,y,5,0,Math.PI*2);
+      ctxL.fill();
+      // line to threshold at that f
+      const thr = thresholdAt(f);
+      ctxL.strokeStyle = "rgba(251,191,36,.35)";
+      ctxL.beginPath();
+      ctxL.moveTo(x,y);
+      ctxL.lineTo(x,yOf(thr));
+      ctxL.stroke();
+    }
+
+    // labels
+    ctxL.fillStyle = "rgba(159,176,199,.95)";
+    ctxL.font = "11px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace";
+    ctxL.textBaseline = "middle";
+    ctxL.textAlign = "right";
+    ctxL.fillText(`${dMin.toFixed(0)}`, pad.l - 8, yOf(dMin));
+    ctxL.fillText(`${dMax.toFixed(0)}`, pad.l - 8, yOf(dMax));
+    ctxL.textAlign = "center";
+    ctxL.textBaseline = "top";
+    ctxL.fillText(`${Math.round(fMin/1000)}k`, xOf(fMin), pad.t + plotH + 8);
+    ctxL.fillText(`${Math.round(fMax/1000)}k`, xOf(fMax), pad.t + plotH + 8);
+
+    ctxL.fillStyle = "rgba(231,237,246,.92)";
+    ctxL.font = "12px ui-sans-serif, system-ui";
+    ctxL.textAlign = "left";
+    ctxL.textBaseline = "top";
+    ctxL.fillText("Hidden threshold curve", 10, 8);
+  }
+
+  // ---------- Trial loop ----------
+  function scheduleNext(){
+    if (!running || paused) return;
+    if (schedIdx >= schedule.length){
+      stop(false); // finished
+      return;
+    }
+
+    const item = schedule[schedIdx];
+    setCurrentStim(item);
+    drawMini(item);
+
+    const f = freqs[item.fi];
+    const d = dBs[item.di];
+    const dur = clamp(Number(toneMsEl.value), 10, 800);
+
+    // play sound
+    playTone(f, d, dur);
+
+    // "record" response
+    const fr = noisyFR(f, d, rng);
+
+    // update mean
+    const c = count[item.di][item.fi] + 1;
+    count[item.di][item.fi] = c;
+    mean[item.di][item.fi] = mean[item.di][item.fi] + (fr - mean[item.di][item.fi]) / c;
+
+    schedIdx++;
+    trialCountEl.textContent = `${schedIdx}`;
+    updateStatsUI();
+    drawHeatmap();
+
+    // random-ish ISI around mean
+    const isi = clamp(Number(isiMsEl.value), 20, 3000);
+    const jitter = 0.45 * isi;
+    const nextMs = Math.max(20, isi + (rng()*2 - 1)*jitter);
+    timer = setTimeout(scheduleNext, nextMs + dur);
+  }
+
+  function start(){
+    ensureAudio();
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+
+    if (!running){
+      // new run uses current grid/schedule
+      buildSchedule();
+      schedIdx = 0;
+      running = true;
+      paused = false;
+      setRunUI("running");
+      scheduleNext();
+      return;
+    }
+    // if paused
+    if (paused){
+      paused = false;
+      setRunUI("running");
+      scheduleNext();
+    }
+  }
+
+  function pause(){
+    if (!running) return;
+    paused = true;
+    setRunUI("paused");
+    if (timer) clearTimeout(timer);
+    timer = null;
+  }
+
+  function stop(reset=true){
+    running = false;
+    paused = false;
+    setRunUI("stopped");
+    if (timer) clearTimeout(timer);
+    timer = null;
+    setCurrentStim(null);
+    drawMini(null);
+    if (reset){
+      rebuildGrid();
+    }
+  }
+
+  function newRandomNeuron(){
+    // randomize CF within range and tuning
+    const fMin = Math.max(50, Number(fMinEl.value));
+    const fMax = Math.max(fMin+50, Number(fMaxEl.value));
+    const u = rng();
+    const cf = Math.exp(lerp(Math.log(fMin), Math.log(fMax), u));
+    cfEl.value = Math.round(cf);
+
+    thrMinEl.value = Math.round(lerp(5, 30, rng()));
+    vSlopeEl.value = Math.round(lerp(10, 35, rng()));
+    maxFREl.value = Math.round(lerp(35, 85, rng()));
+    sharpEl.value = lerp(1.0, 2.4, rng()).toFixed(2);
+    noiseEl.value = lerp(2, 10, rng()).toFixed(1);
+
+    // reset measurement
+    stop(true);
+  }
+
+  function exportCSV(){
+    // One row per condition with mean and count
+    const rows = [];
+    rows.push(["freq_hz","intensity_db","mean_fr_sps","n_trials"].join(","));
+    for (let di=0; di<dBs.length; di++){
+      for (let fi=0; fi<freqs.length; fi++){
+        rows.push([
+          Math.round(freqs[fi]),
+          dBs[di].toFixed(2),
+          mean[di][fi].toFixed(4),
+          count[di][fi]
+        ].join(","));
+      }
+    }
+    const blob = new Blob([rows.join("\n")], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "fra_receptive_field.csv";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 2500);
+  }
+
+  // ---------- Event wiring ----------
+  function onParamsChange(){
+    if (running) stop(true);
+    else rebuildGrid();
+  }
+
+  // resize redraw
+  window.addEventListener("resize", ()=>{ drawHeatmap(); drawMini(null); });
+
+  // basic input listeners
+  [fMinEl,fMaxEl,nFEl,dMinEl,dMaxEl,nDEl,toneMsEl,isiMsEl,repsEl,orderSel].forEach(el=>{
+    el.addEventListener("change", onParamsChange);
+  });
+  [cfEl,thrMinEl,vSlopeEl,maxFREl].forEach(el=>{
+    el.addEventListener("change", ()=>{ if (!running){ drawMini(null); } else { /* during run, keep */ } drawHeatmap(); });
+  });
+  [sharpEl,noiseEl].forEach(el=>{
+    el.addEventListener("input", ()=>{ drawMini(null); drawHeatmap(); });
+  });
+
+  startBtn.addEventListener("click", start);
+  pauseBtn.addEventListener("click", pause);
+  stopBtn.addEventListener("click", ()=>stop(true));
+  newNeuronBtn.addEventListener("click", newRandomNeuron);
+  exportBtn.addEventListener("click", exportCSV);
+
+  // unlock audio on any first gesture
+  document.addEventListener("pointerdown", ()=>{ try{ ensureAudio(); if (audioCtx.state==="suspended") audioCtx.resume(); }catch(e){} }, {once:true});
+
+  // Init
+  rebuildGrid();
+  setRunUI("stopped");
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cochlear Basilar Membrane Simulator + Sound</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body { font-family: Arial, sans-serif; margin: 0; background: #f4f6fb; }
+  .container { max-width: 1100px; margin: 20px auto; padding: 10px; }
+  h1 { font-size: 20px; margin: 0 0 10px; }
+  canvas { width: 100%; height: 500px; background: white; border-radius: 12px; border: 1px solid #ddd; }
+  .controls { margin-top: 15px; }
+  .control-group { margin-bottom: 12px; }
+  label { font-size: 13px; display: block; margin-bottom: 4px; }
+  input[type=range] { width: 100%; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .btn { padding: 8px 12px; border-radius: 10px; border: 1px solid #d6d6e6; background: #fff; cursor: pointer; }
+  .btn:hover { background: #eef; }
+  .pill { font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid #eee; background: #fafafa; }
+  .note { font-size: 12px; background: #fff7e6; padding: 10px; border-radius: 10px; margin-top: 10px; line-height: 1.35; }
+  .warn { font-size: 12px; background: #ffecec; padding: 10px; border-radius: 10px; margin-top: 10px; line-height: 1.35; border: 1px solid #ffd0d0;}
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1>Interactive Cochlear Basilar Membrane Simulation (with Sound)</h1>
+
+  <canvas id="canvas" width="1000" height="500"></canvas>
+
+  <div class="controls">
+    <div class="control-group">
+      <label>Frequency (Hz): <span class="pill" id="freqVal"></span></label>
+      <input type="range" id="frequency" min="50" max="12000" value="1000">
+    </div>
+
+    <div class="control-group">
+      <label>Intensity (dB SPL → amplitude mapping): <span class="pill" id="intVal"></span></label>
+      <input type="range" id="intensity" min="0" max="90" value="40">
+    </div>
+
+    <div class="control-group">
+      <label>Tuning Sharpness: <span class="pill" id="sharpVal"></span></label>
+      <input type="range" id="sharpness" min="0" max="100" value="55">
+    </div>
+
+    <div class="control-group">
+      <label>Damping: <span class="pill" id="dampVal"></span></label>
+      <input type="range" id="damping" min="0" max="100" value="30">
+    </div>
+
+    <div class="control-group row">
+      <label style="margin:0;">
+        <input type="checkbox" id="animate" checked> Animate
+      </label>
+
+      <button class="btn" id="toggleSound">Play tone</button>
+      <span class="pill" id="soundStatus">Sound: OFF</span>
+    </div>
+
+    <div class="note">
+      <b>Model:</b> Educational toy. Base (left) prefers high frequency; Apex (right) prefers low frequency.
+      The red line marks the characteristic place. The green curve is the envelope. The blue curve is instantaneous displacement.
+      <br><br>
+      <b>Sound:</b> Click <b>Play tone</b> once to allow audio in your browser. Then frequency/intensity sliders will update the tone live.
+    </div>
+
+    <div class="warn">
+      <b>Safety:</b> Audio output depends on your system volume. Start with low volume. This demo caps gain, but please be cautious.
+    </div>
+  </div>
+</div>
+
+<script>
+  // ===== Canvas / Visual =====
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const frequency = document.getElementById("frequency");
+  const intensity = document.getElementById("intensity");
+  const sharpness = document.getElementById("sharpness");
+  const damping = document.getElementById("damping");
+  const animateToggle = document.getElementById("animate");
+
+  const freqVal = document.getElementById("freqVal");
+  const intVal = document.getElementById("intVal");
+  const sharpVal = document.getElementById("sharpVal");
+  const dampVal = document.getElementById("dampVal");
+
+  function updateLabels(){
+    freqVal.textContent = frequency.value + " Hz";
+    intVal.textContent = intensity.value + " dB";
+    sharpVal.textContent = sharpness.value;
+    dampVal.textContent = damping.value;
+  }
+  updateLabels();
+
+  // Characteristic place mapping (log frequency -> place along membrane)
+  function characteristicPlace(freq){
+    const fMin = 50;
+    const fMax = 12000;
+    const logF = Math.log10(freq);
+    const norm = (logF - Math.log10(fMin)) / (Math.log10(fMax) - Math.log10(fMin));
+    return 1 - norm; // high freq near base (x~0), low freq near apex (x~1)
+  }
+
+  // Visual amplitude mapping from dB (compressed)
+  function amplitudeFromDB_forVisual(db){
+    return Math.pow(10, db/40) / 100; // small, for drawing
+  }
+
+  let time = 0;
+
+  function draw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const midY = height * 0.65;
+
+    const freq = parseFloat(frequency.value);
+    const amp = amplitudeFromDB_forVisual(intensity.value);
+    const sharp = sharpness.value/100;
+    const damp = damping.value/100;
+
+    const x0 = characteristicPlace(freq);
+
+    // Background labels
+    ctx.fillStyle = "rgba(0,0,0,0.65)";
+    ctx.font = "12px Arial";
+    ctx.fillText("Base (high freq)", 10, 18);
+    const apexTxt = "Apex (low freq)";
+    const tw = ctx.measureText(apexTxt).width;
+    ctx.fillText(apexTxt, width - tw - 10, 18);
+
+    // Basilar "width" proxy (gray)
+    const points = 800;
+    ctx.beginPath();
+    ctx.strokeStyle = "#6b7280";
+    ctx.lineWidth = 1.8;
+    for(let i=0;i<=points;i++){
+      const x = i/points;
+      const px = x * width;
+      const widthProxy = 0.2 + x*1.0;       // base narrow -> apex wide
+      const y = height*0.15 + widthProxy*30;
+      if(i===0) ctx.moveTo(px,y);
+      else ctx.lineTo(px,y);
+    }
+    ctx.stroke();
+
+    // Displacement curve (blue)
+    ctx.beginPath();
+    ctx.strokeStyle = "#2563eb";
+    ctx.lineWidth = 2.2;
+
+    for(let i=0;i<=points;i++){
+      const x = i/points;
+      const px = x * width;
+
+      const sigma = 0.02 + (1-sharp)*0.25;                 // tuning width
+      const envelope = Math.exp(-0.5 * Math.pow((x-x0)/sigma,2));
+      const decay = Math.exp(-damp*2*x);                   // damping base->apex
+
+      const wave = Math.sin(time*3 - 15*x);                // traveling wave phase
+      const y = midY - wave * envelope * decay * amp * height*0.25;
+
+      if(i===0) ctx.moveTo(px,y);
+      else ctx.lineTo(px,y);
+    }
+    ctx.stroke();
+
+    // Envelope (green)
+    ctx.beginPath();
+    ctx.strokeStyle = "#16a34a";
+    ctx.lineWidth = 2.0;
+    for(let i=0;i<=points;i++){
+      const x = i/points;
+      const px = x * width;
+
+      const sigma = 0.02 + (1-sharp)*0.25;
+      const envelope = Math.exp(-0.5 * Math.pow((x-x0)/sigma,2));
+      const y = height*0.9 - envelope*height*0.4;
+
+      if(i===0) ctx.moveTo(px,y);
+      else ctx.lineTo(px,y);
+    }
+    ctx.stroke();
+
+    // Characteristic place marker (red)
+    ctx.strokeStyle = "#dc2626";
+    ctx.lineWidth = 1.7;
+    ctx.beginPath();
+    ctx.moveTo(x0*width, 0);
+    ctx.lineTo(x0*width, height);
+    ctx.stroke();
+
+    // Readout
+    ctx.fillStyle = "rgba(0,0,0,0.55)";
+    ctx.font = "12px Arial";
+    const placePct = Math.round(x0*100);
+    ctx.fillText("Characteristic place: ~" + placePct + "% from base → apex", 10, height - 10);
+  }
+
+  function animateLoop(){
+    if(animateToggle.checked) time += 0.03;
+    draw();
+    requestAnimationFrame(animateLoop);
+  }
+  requestAnimationFrame(animateLoop);
+
+  // ===== WebAudio / Sound =====
+  const toggleSoundBtn = document.getElementById("toggleSound");
+  const soundStatus = document.getElementById("soundStatus");
+
+  let audioCtx = null;
+  let osc = null;
+  let gainNode = null;
+  let isPlaying = false;
+
+  function dbToGain(db){
+    // Map 0..90 dB slider to safe gain 0..0.2 (cap).
+    // This is NOT literal SPL; it's just a perceptual-ish mapping for a demo.
+    const x = Math.min(Math.max(db, 0), 90) / 90; // 0..1
+    return Math.pow(x, 2.2) * 0.2;               // cap at 0.2
+  }
+
+  function ensureAudio(){
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0.0;
+    gainNode.connect(audioCtx.destination);
+  }
+
+  function startTone(){
+    ensureAudio();
+
+    osc = audioCtx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = Number(frequency.value);
+
+    gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+    gainNode.gain.setTargetAtTime(dbToGain(Number(intensity.value)), audioCtx.currentTime, 0.02);
+
+    osc.connect(gainNode);
+    osc.start();
+
+    isPlaying = true;
+    toggleSoundBtn.textContent = "Stop tone";
+    soundStatus.textContent = "Sound: ON";
+  }
+
+  function stopTone(){
+    if(!audioCtx || !osc) return;
+
+    gainNode.gain.setTargetAtTime(0.0, audioCtx.currentTime, 0.03);
+    const stopAt = audioCtx.currentTime + 0.08;
+    osc.stop(stopAt);
+    osc = null;
+
+    isPlaying = false;
+    toggleSoundBtn.textContent = "Play tone";
+    soundStatus.textContent = "Sound: OFF";
+  }
+
+  toggleSoundBtn.addEventListener("click", async () => {
+    if(!isPlaying){
+      ensureAudio();
+      if(audioCtx.state === "suspended") await audioCtx.resume();
+      startTone();
+    } else {
+      stopTone();
+    }
+  });
+
+  function updateAudioParams(){
+    updateLabels();
+    if(!isPlaying || !audioCtx) return;
+
+    const f = Number(frequency.value);
+    const g = dbToGain(Number(intensity.value));
+
+    if(osc){
+      osc.frequency.setTargetAtTime(f, audioCtx.currentTime, 0.02);
+    }
+    if(gainNode){
+      gainNode.gain.setTargetAtTime(g, audioCtx.currentTime, 0.03);
+    }
+  }
+
+  [frequency, intensity].forEach(el => el.addEventListener("input", updateAudioParams));
+  [sharpness, damping].forEach(el => el.addEventListener("input", updateLabels));
+
+  // Stop tone if tab hidden (prevents surprise audio)
+  document.addEventListener("visibilitychange", () => {
+    if(document.hidden && isPlaying) stopTone();
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Melody Loop + Real‑Time Harmonics (Timbre) Control</title>
+  <style>
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 24px; line-height: 1.4; background:#fafafa; }
+    h2 { margin: 0 0 6px 0; }
+    p { max-width: 980px; }
+    .card { background:#fff; border:1px solid #ddd; border-radius:14px; padding:18px; max-width:1100px; }
+    .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:12px; }
+    button { padding:8px 14px; border-radius:10px; border:1px solid #bbb; background:#f7f7f7; cursor:pointer; }
+    button:hover { background:#eee; }
+    .pill { display:inline-block; padding:2px 10px; border-radius:999px; border:1px solid #ddd; font-size:0.85rem; background:#fff; }
+    .row { display:grid; grid-template-columns: 170px 1fr 90px; gap:10px; align-items:center; margin:10px 0; }
+    input[type="range"]{ width:100%; }
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-top:12px; }
+    @media (max-width: 950px){ .grid{ grid-template-columns: 1fr; } }
+    canvas { width:100%; height:240px; border:1px solid #eee; border-radius:12px; background:#fff; }
+    .small { color:#444; font-size:0.95rem; }
+    code { background:#f2f2f2; padding:1px 6px; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <h2>Melody Loop + Real‑Time Harmonics (Timbre) Control</h2>
+  <p class="small">
+    This plays a looping melody while you adjust the strength of <b>multiples of the fundamental</b> (harmonics) in real time.
+    Pitch (notes) changes with the melody, but the harmonic mix controls <b>timbre</b> (quality).
+  </p>
+
+  <div class="card">
+    <div class="controls">
+      <button id="toggleBtn">▶ Start loop</button>
+      <button id="presetPure">Pure</button>
+      <button id="presetFlute">Flute‑like</button>
+      <button id="presetViolin">Violin‑like</button>
+      <span class="pill" id="statusPill">Stopped</span>
+      <span class="pill" id="notePill">Note: —</span>
+      <span class="pill" id="freqPill">f0: —</span>
+    </div>
+
+    <div class="row">
+      <div><b>Tempo</b></div>
+      <input id="tempo" type="range" min="50" max="180" value="110" step="1" />
+      <div><span id="tempoVal">110</span> BPM</div>
+    </div>
+
+    <div class="row">
+      <div><b>Volume</b></div>
+      <input id="vol" type="range" min="0" max="1" value="0.22" step="0.01" />
+      <div><span id="volVal">0.22</span></div>
+    </div>
+
+    <div class="row">
+      <div><b>Transpose</b></div>
+      <input id="transpose" type="range" min="-12" max="12" value="0" step="1" />
+      <div><span id="transposeVal">0</span> st</div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <h3 style="margin:0 0 8px 0;">Harmonic sliders (multiples of f0)</h3>
+        <div id="harmonicSliders"></div>
+        <p class="small">
+          While the loop plays, try moving higher harmonics up/down. The melody stays the same, but the instrument “character” changes.
+        </p>
+        <p class="small">
+          Tip: browsers require a user click to start audio. If you hear nothing, click <b>Start loop</b> again.
+        </p>
+      </div>
+
+      <div>
+        <h3 style="margin:0 0 8px 0;">Harmonic mix preview</h3>
+        <canvas id="spec" width="900" height="270"></canvas>
+        <p class="small">
+          Bars show the harmonic amplitudes you set (not an FFT). Harmonic <code>1×</code> is the fundamental; <code>2×</code>, <code>3×</code>, ... are multiples.
+        </p>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  // =======================
+  // UI
+  // =======================
+  const N_HARM = 12;
+
+  const toggleBtn = document.getElementById('toggleBtn');
+  const statusPill = document.getElementById('statusPill');
+  const notePill = document.getElementById('notePill');
+  const freqPill = document.getElementById('freqPill');
+
+  const tempoEl = document.getElementById('tempo');
+  const tempoVal = document.getElementById('tempoVal');
+  const volEl = document.getElementById('vol');
+  const volVal = document.getElementById('volVal');
+  const transposeEl = document.getElementById('transpose');
+  const transposeVal = document.getElementById('transposeVal');
+
+  const presetPure = document.getElementById('presetPure');
+  const presetFlute = document.getElementById('presetFlute');
+  const presetViolin = document.getElementById('presetViolin');
+
+  const slidersDiv = document.getElementById('harmonicSliders');
+
+  const specCanvas = document.getElementById('spec');
+  const ctx2d = specCanvas.getContext('2d');
+
+  // Harmonic amplitudes (1..N)
+  const amps = Array.from({length: N_HARM}, (_, i) => (i === 0 ? 1.0 : 0.0));
+  const sliderEls = [];
+
+  function clamp01(x){ return Math.max(0, Math.min(1, x)); }
+
+  // Build harmonic sliders
+  for (let k = 1; k <= N_HARM; k++) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.innerHTML = `
+      <div>Harmonic ${k} <span class="pill">${k}×f0</span></div>
+      <input type="range" min="0" max="1" step="0.01" value="${amps[k-1]}"/>
+      <div><span class="val">${amps[k-1].toFixed(2)}</span></div>
+    `;
+    const input = row.querySelector('input');
+    const valSpan = row.querySelector('.val');
+
+    input.addEventListener('input', () => {
+      amps[k-1] = parseFloat(input.value);
+      valSpan.textContent = amps[k-1].toFixed(2);
+      updateHarmonicGains(false);
+      drawSpectrum();
+    });
+
+    slidersDiv.appendChild(row);
+    sliderEls.push(input);
+  }
+
+  function setSliders(arr) {
+    for (let i = 0; i < N_HARM; i++) {
+      amps[i] = clamp01(arr[i] ?? 0);
+      sliderEls[i].value = amps[i];
+      sliderEls[i].parentElement.querySelector('.val').textContent = amps[i].toFixed(2);
+    }
+    updateHarmonicGains(false);
+    drawSpectrum();
+  }
+
+  presetPure.addEventListener('click', () => {
+    const arr = Array(N_HARM).fill(0);
+    arr[0] = 1.0;
+    setSliders(arr);
+  });
+
+  presetFlute.addEventListener('click', () => {
+    // Strong fundamental, fast decay of upper harmonics
+    const arr = Array.from({length:N_HARM}, (_,i)=> (i===0?1.0: 0.35*Math.exp(-0.60*i)));
+    setSliders(arr);
+  });
+
+  presetViolin.addEventListener('click', () => {
+    // Richer harmonics, slower decay + a bit of presence in 3–6
+    const arr = Array.from({length:N_HARM}, (_,i)=> (i===0?0.80: 0.75*Math.exp(-0.25*i)));
+    arr[2] *= 1.15; arr[3] *= 1.20; arr[4] *= 1.15; arr[5] *= 1.08;
+    setSliders(arr);
+  });
+
+  tempoEl.addEventListener('input', () => { tempoVal.textContent = tempoEl.value; });
+  volEl.addEventListener('input', () => { volVal.textContent = (+volEl.value).toFixed(2); updateMasterGain(false); });
+  transposeEl.addEventListener('input', () => { transposeVal.textContent = transposeEl.value; });
+
+  // =======================
+  // Audio: monophonic additive synth
+  // (one oscillator per harmonic running continuously)
+  // =======================
+  let audioCtx = null;
+  let masterGain = null;
+  let harm = []; // {osc, g, k}
+  let playing = false;
+
+  function ensureAudio() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0; // start silent until "Start loop"
+    masterGain.connect(audioCtx.destination);
+
+    harm = [];
+    const t = audioCtx.currentTime;
+    for (let k = 1; k <= N_HARM; k++) {
+      const osc = audioCtx.createOscillator();
+      osc.type = 'sine';
+      const g = audioCtx.createGain();
+      g.gain.setValueAtTime(0, t);
+      osc.connect(g).connect(masterGain);
+      osc.start();
+      harm.push({osc, g, k});
+    }
+
+    updateHarmonicGains(true);
+    updateMasterGain(true);
+  }
+
+  function rmsNorm() {
+    const sumsq = amps.reduce((acc,a)=>acc + a*a, 0) || 1e-6;
+    return 1 / Math.sqrt(sumsq);
+  }
+
+  function updateMasterGain(immediate=false){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const ramp = immediate ? 0.001 : 0.02;
+    const target = playing ? +volEl.value : 0;
+    masterGain.gain.cancelScheduledValues(t);
+    masterGain.gain.linearRampToValueAtTime(target, t + ramp);
+  }
+
+  function updateHarmonicGains(immediate=false){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const ramp = immediate ? 0.001 : 0.02;
+    const norm = rmsNorm();
+    for (const node of harm) {
+      const targetAmp = amps[node.k - 1] * norm;
+      node.g.gain.cancelScheduledValues(t);
+      node.g.gain.linearRampToValueAtTime(targetAmp, t + ramp);
+    }
+  }
+
+  function setFundamentalFreq(f0Hz, immediate=false){
+    if (!audioCtx) return;
+    const t = audioCtx.currentTime;
+    const ramp = immediate ? 0.001 : 0.01;
+    for (const node of harm) {
+      const f = f0Hz * node.k;
+      node.osc.frequency.cancelScheduledValues(t);
+      node.osc.frequency.linearRampToValueAtTime(f, t + ramp);
+    }
+  }
+
+  // =======================
+  // Melody scheduler (lookahead)
+  // =======================
+  // Melody: (midi note, beats)
+  // Simple, recognizable loop (C major-ish), monophonic
+  const melody = [
+    [60, 1], [62, 1], [64, 1], [67, 1],
+    [67, 1], [64, 1], [62, 1], [60, 1],
+    [64, 1], [65, 1], [67, 2],
+    [65, 1], [64, 1], [62, 2]
+  ];
+
+  function midiToHz(m){
+    return 440 * Math.pow(2, (m - 69) / 12);
+  }
+
+  function noteName(m){
+    const names = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const n = names[(m % 12 + 12) % 12];
+    const oct = Math.floor(m / 12) - 1;
+    return `${n}${oct}`;
+  }
+
+  let nextNoteTime = 0;
+  let noteIndex = 0;
+  let schedulerTimer = null;
+
+  const lookaheadMs = 25;
+  const scheduleAheadSec = 0.15;
+
+  function secondsPerBeat() {
+    const bpm = +tempoEl.value;
+    return 60 / bpm;
+  }
+
+  function schedule() {
+    if (!audioCtx) return;
+    while (nextNoteTime < audioCtx.currentTime + scheduleAheadSec) {
+      const [midi, beats] = melody[noteIndex];
+      const trans = +transposeEl.value;
+      const m = midi + trans;
+      const f0Hz = midiToHz(m);
+
+      // Set fundamental at the scheduled time
+      // (frequency ramps are short; this is "legato" for smoothness)
+      const t = nextNoteTime;
+
+      // Update UI "soon": we can't perfectly sync DOM, but close enough for teaching
+      setTimeout(() => {
+        notePill.textContent = `Note: ${noteName(m)}`;
+        freqPill.textContent = `f0: ${f0Hz.toFixed(1)} Hz`;
+      }, Math.max(0, (t - audioCtx.currentTime) * 1000));
+
+      // Schedule oscillator frequency changes
+      for (const node of harm) {
+        const f = f0Hz * node.k;
+        node.osc.frequency.setValueAtTime(f, t);
+      }
+
+      // Advance time
+      nextNoteTime += beats * secondsPerBeat();
+      noteIndex = (noteIndex + 1) % melody.length;
+    }
+  }
+
+  function startScheduler() {
+    if (schedulerTimer) return;
+    nextNoteTime = audioCtx.currentTime + 0.03;
+    noteIndex = 0;
+    schedulerTimer = setInterval(schedule, lookaheadMs);
+  }
+
+  function stopScheduler() {
+    if (schedulerTimer) {
+      clearInterval(schedulerTimer);
+      schedulerTimer = null;
+    }
+    notePill.textContent = "Note: —";
+    freqPill.textContent = "f0: —";
+  }
+
+  // =======================
+  // Start/Stop
+  // =======================
+  async function toggle() {
+    ensureAudio();
+    if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+    playing = !playing;
+    if (playing) {
+      toggleBtn.textContent = '⏸ Stop loop';
+      statusPill.textContent = 'Playing (adjust harmonics live)';
+      updateHarmonicGains(true);
+      updateMasterGain(false);
+      startScheduler();
+      drawSpectrum();
+    } else {
+      toggleBtn.textContent = '▶ Start loop';
+      statusPill.textContent = 'Stopped';
+      updateMasterGain(false);
+      stopScheduler();
+    }
+  }
+
+  toggleBtn.addEventListener('click', toggle);
+
+  // If tempo changes during play, it will take effect immediately as scheduler advances
+  // Volume changes are applied immediately (updateMasterGain)
+  // Harmonics change immediately (updateHarmonicGains)
+
+  // =======================
+  // Spectrum drawing (mix preview)
+  // =======================
+  function drawSpectrum() {
+    const w = specCanvas.width, h = specCanvas.height;
+    ctx2d.clearRect(0,0,w,h);
+
+    // axes
+    ctx2d.strokeStyle = '#ccc';
+    ctx2d.lineWidth = 1;
+    ctx2d.beginPath();
+    ctx2d.moveTo(40, 18);
+    ctx2d.lineTo(40, h-35);
+    ctx2d.lineTo(w-10, h-35);
+    ctx2d.stroke();
+
+    const maxAmp = Math.max(...amps, 1e-6);
+    const barAreaW = (w - 60);
+    const barW = barAreaW / N_HARM;
+
+    for (let i = 0; i < N_HARM; i++) {
+      const amp = amps[i] / maxAmp;
+      const barH = amp * (h - 70);
+      const x = 40 + i * barW + 6;
+      const y = (h - 35) - barH;
+
+      ctx2d.fillStyle = '#222';
+      ctx2d.fillRect(x, y, barW - 12, barH);
+
+      ctx2d.fillStyle = '#555';
+      ctx2d.font = '12px system-ui';
+      ctx2d.textAlign = 'center';
+      ctx2d.fillText(`${i+1}×`, x + (barW-12)/2, h - 16);
+    }
+
+    ctx2d.fillStyle = '#111';
+    ctx2d.font = '14px system-ui';
+    ctx2d.textAlign = 'left';
+    ctx2d.fillText('Harmonic mix (multiples of f0)', 40, 14);
+  }
+
+  drawSpectrum();
+})();
+</script>
+</body>
+</html>

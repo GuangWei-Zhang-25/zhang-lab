@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IID / ILD Binaural Level Difference Simulator (L/R mute)</title>
+<style>
+  :root{
+    --primary:#00ff88;
+    --bg:#111;
+    --surface:#1f1f1f;
+    --surface2:#171717;
+    --muted:#9a9a9a;
+    --danger:#ff5a5f;
+    --warn:#ffd166;
+    --ok:#00ff88;
+  }
+  *{box-sizing:border-box}
+  body{
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background:var(--bg); color:#eee; margin:0; min-height:100vh;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .wrap{
+    width:min(980px, 96vw);
+    background:linear-gradient(180deg, var(--surface), var(--surface2));
+    border:1px solid #2a2a2a;
+    border-radius:16px;
+    box-shadow:0 10px 30px rgba(0,0,0,.45);
+    padding:18px 18px 14px;
+  }
+  header{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:14px; margin-bottom:10px;
+  }
+  h1{font-size:18px; margin:0; letter-spacing:.2px}
+  .sub{color:var(--muted); font-size:12px; margin-top:4px; line-height:1.35}
+  .pill{
+    border:1px solid #2b2b2b;
+    background:#121212;
+    color:#d8d8d8;
+    padding:8px 10px;
+    border-radius:999px;
+    font-size:12px;
+    display:flex; gap:8px; align-items:center;
+    white-space:nowrap;
+  }
+  .pill b{color:var(--primary)}
+  .grid{
+    display:grid;
+    grid-template-columns: 1.3fr .9fr;
+    gap:14px;
+  }
+  @media (max-width: 860px){
+    .grid{grid-template-columns:1fr}
+  }
+  .card{
+    background:#141414;
+    border:1px solid #2a2a2a;
+    border-radius:14px;
+    padding:14px;
+  }
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  button{
+    background:#0f0f0f;
+    border:1px solid #2a2a2a;
+    color:#eee;
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:13px;
+    cursor:pointer;
+    transition: transform .05s ease, border-color .15s ease;
+  }
+  button:hover{border-color:#3a3a3a}
+  button:active{transform: translateY(1px)}
+  .primary{
+    border-color:rgba(0,255,136,.45);
+    box-shadow: 0 0 0 2px rgba(0,255,136,.08) inset;
+  }
+  .danger{
+    border-color:rgba(255,90,95,.55);
+    box-shadow: 0 0 0 2px rgba(255,90,95,.10) inset;
+  }
+  .tiny{padding:6px 10px; font-size:12px; border-radius:10px}
+  .muted{color:var(--muted)}
+  .divider{height:1px; background:#242424; margin:12px 0}
+  .ctrl{
+    display:grid;
+    grid-template-columns: 160px 1fr 120px;
+    gap:10px;
+    align-items:center;
+    margin:10px 0;
+  }
+  @media (max-width: 560px){
+    .ctrl{grid-template-columns: 1fr}
+  }
+  label{font-size:12px; color:#ddd}
+  input[type="range"]{width:100%}
+  select, input[type="number"]{
+    width:100%;
+    background:#0f0f0f;
+    border:1px solid #2a2a2a;
+    color:#eee;
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:13px;
+  }
+  .value{
+    font-variant-numeric: tabular-nums;
+    text-align:right;
+    color:#eaeaea;
+    font-size:12px;
+  }
+  .hint{font-size:12px; color:var(--muted); line-height:1.35}
+  .meters{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:10px;
+    align-items:center;
+  }
+  canvas{
+    width:100%;
+    height:92px;
+    background:#0c0c0c;
+    border:1px solid #242424;
+    border-radius:12px;
+  }
+  .meterTitle{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12px; color:#ddd; margin-bottom:6px;
+  }
+  .badge{
+    padding:3px 8px;
+    border-radius:999px;
+    border:1px solid #2a2a2a;
+    background:#101010;
+    color:#ddd;
+    font-size:11px;
+  }
+  .kbd{
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    padding:2px 6px;
+    border-radius:7px;
+    border:1px solid #2a2a2a;
+    background:#0f0f0f;
+    color:#ddd;
+    font-size:11px;
+  }
+  .warnbox{
+    margin-top:10px;
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid rgba(255,209,102,.35);
+    background: rgba(255,209,102,.06);
+    color:#f2e5c2;
+    font-size:12px;
+    line-height:1.35;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>IID / ILD Binaural Level Difference Simulator</h1>
+      <div class="sub">
+        This demo isolates <b>interaural intensity/level difference (IID/ILD)</b>: left vs right loudness mismatch with <b>zero timing delay</b>.
+        Use it to teach the “head-shadow” cue used mainly for azimuth at higher frequencies.
+      </div>
+    </div>
+    <div class="pill"><span class="kbd">Space</span><span class="muted">start/stop tone</span><span class="muted">•</span><b id="statusText">stopped</b></div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <div class="row">
+          <button id="btnStart" class="primary">Start audio</button>
+          <button id="btnPlay" class="primary" disabled>Play</button>
+          <button id="btnStop" class="danger" disabled>Stop</button>
+        </div>
+        <div class="row">
+          <button id="btnMuteL" class="tiny">Mute L</button>
+          <button id="btnMuteR" class="tiny">Mute R</button>
+          <button id="btnCenter" class="tiny">ILD = 0</button>
+          <button id="btnSwap" class="tiny">Swap L/R</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="ctrl">
+        <label for="src">Sound source</label>
+        <select id="src">
+          <option value="sine">Sine (pure tone)</option>
+          <option value="triangle">Triangle</option>
+          <option value="square">Square</option>
+          <option value="noise">White noise</option>
+        </select>
+        <div class="value" id="srcVal">sine</div>
+      </div>
+
+      <div class="ctrl">
+        <label for="freq">Frequency (log)</label>
+        <input id="freq" type="range" min="0" max="1000" value="650" />
+        <div class="value" id="freqVal">1000 Hz</div>
+      </div>
+
+      <div class="ctrl">
+        <label for="baseDb">Overall level (dB)</label>
+        <input id="baseDb" type="range" min="-60" max="-3" step="1" value="-18" />
+        <div class="value" id="baseVal">-18 dB</div>
+      </div>
+
+      <div class="ctrl">
+        <label for="ildDb">ILD (L − R, dB)</label>
+        <input id="ildDb" type="range" min="-30" max="30" step="1" value="0" />
+        <div class="value" id="ildVal">0 dB</div>
+      </div>
+
+      <div class="hint">
+        <b>Interpretation:</b> ILD is defined here as <b>L − R</b>.
+        Positive values make the <b>left ear louder</b>; negative values make the <b>right ear louder</b>.
+        Internally we set levels as: <span class="kbd">L = base + ILD/2</span>, <span class="kbd">R = base − ILD/2</span>.
+      </div>
+
+      <div class="warnbox">
+        Tip: Use headphones. Start at a low level (e.g., -24 dB) and increase gradually. Avoid discomfort.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="meters">
+        <div>
+          <div class="meterTitle">
+            <span>Left channel</span>
+            <span class="badge" id="leftDbBadge">— dB</span>
+          </div>
+          <canvas id="meterL" width="600" height="180"></canvas>
+        </div>
+        <div>
+          <div class="meterTitle">
+            <span>Right channel</span>
+            <span class="badge" id="rightDbBadge">— dB</span>
+          </div>
+          <canvas id="meterR" width="600" height="180"></canvas>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="hint">
+        The meters show a simple RMS-style level estimate for each channel.
+        When ILD ≠ 0, you should see the badges diverge accordingly.
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="hint muted">
+        Keyboard: <span class="kbd">Space</span> toggles play/stop after audio is started.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // -------- Utilities --------
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+  const dbToGain = (db) => Math.pow(10, db / 20);
+
+  // Map slider [0..1000] to frequency [20..20000] logarithmically
+  function sliderToFreq(v){
+    const fMin = 20, fMax = 20000;
+    const t = v / 1000;
+    const logMin = Math.log10(fMin), logMax = Math.log10(fMax);
+    const logF = logMin + (logMax - logMin) * t;
+    return Math.pow(10, logF);
+  }
+  function fmtHz(f){
+    if (f >= 1000) return (f/1000).toFixed(2) + " kHz";
+    return Math.round(f) + " Hz";
+  }
+
+  // -------- DOM --------
+  const btnStart = document.getElementById("btnStart");
+  const btnPlay  = document.getElementById("btnPlay");
+  const btnStop  = document.getElementById("btnStop");
+  const btnMuteL = document.getElementById("btnMuteL");
+  const btnMuteR = document.getElementById("btnMuteR");
+  const btnCenter= document.getElementById("btnCenter");
+  const btnSwap  = document.getElementById("btnSwap");
+
+  const statusText = document.getElementById("statusText");
+
+  const srcSel = document.getElementById("src");
+  const srcVal = document.getElementById("srcVal");
+
+  const freq = document.getElementById("freq");
+  const freqVal = document.getElementById("freqVal");
+
+  const baseDb = document.getElementById("baseDb");
+  const baseVal = document.getElementById("baseVal");
+
+  const ildDb = document.getElementById("ildDb");
+  const ildVal = document.getElementById("ildVal");
+
+  const meterL = document.getElementById("meterL");
+  const meterR = document.getElementById("meterR");
+  const leftDbBadge  = document.getElementById("leftDbBadge");
+  const rightDbBadge = document.getElementById("rightDbBadge");
+
+  // -------- Audio graph --------
+  let ac = null;
+  let master = null;
+
+  let osc = null;
+  let noiseNode = null;
+  let noiseBuf = null;
+
+  let split = null;
+  let gainL = null, gainR = null;
+  let muteL = false, muteR = false;
+
+  let analyserL = null, analyserR = null;
+  let playing = false;
+
+  function ensureAudio(){
+    if (ac) return;
+    ac = new (window.AudioContext || window.webkitAudioContext)();
+
+    master = ac.createGain();
+    master.gain.value = 1;
+
+    // Create stereo split -> independent gains -> merge
+    split = ac.createChannelSplitter(2);
+    const merger = ac.createChannelMerger(2);
+
+    gainL = ac.createGain();
+    gainR = ac.createGain();
+
+    analyserL = ac.createAnalyser();
+    analyserR = ac.createAnalyser();
+    analyserL.fftSize = 2048;
+    analyserR.fftSize = 2048;
+
+    // Routing: source -> master -> splitter
+    // splitter[0] -> gainL -> analyserL -> merger[0]
+    // splitter[1] -> gainR -> analyserR -> merger[1]
+    master.connect(split);
+    split.connect(gainL, 0);
+    split.connect(gainR, 1);
+
+    gainL.connect(analyserL);
+    gainR.connect(analyserR);
+
+    analyserL.connect(merger, 0, 0);
+    analyserR.connect(merger, 0, 1);
+
+    merger.connect(ac.destination);
+
+    // Initial levels
+    updateUI();
+    updateLevels();
+    setupMeters();
+  }
+
+  function buildSource(){
+    killSource();
+
+    const type = srcSel.value;
+    if (type === "noise"){
+      // White noise loop
+      const seconds = 2;
+      const frameCount = ac.sampleRate * seconds;
+      noiseBuf = ac.createBuffer(1, frameCount, ac.sampleRate);
+      const data = noiseBuf.getChannelData(0);
+      for (let i=0; i<frameCount; i++) data[i] = (Math.random()*2 - 1) * 0.5;
+      const src = ac.createBufferSource();
+      src.buffer = noiseBuf;
+      src.loop = true;
+
+      // Duplicate mono into stereo using ChannelMerger/Splitter trick:
+      // We'll use StereoPanner? Noise is mono -> connect to master; master into splitter uses same signal on both channels by default in many browsers,
+      // but to be safe, we explicitly make it stereo.
+      const merger = ac.createChannelMerger(2);
+      src.connect(merger, 0, 0);
+      src.connect(merger, 0, 1);
+      merger.connect(master);
+
+      noiseNode = { src, merger };
+    } else {
+      osc = ac.createOscillator();
+      osc.type = type;
+      osc.frequency.value = sliderToFreq(+freq.value);
+
+      // Make it stereo explicitly
+      const merger = ac.createChannelMerger(2);
+      osc.connect(merger, 0, 0);
+      osc.connect(merger, 0, 1);
+      merger.connect(master);
+
+      osc._merger = merger;
+    }
+  }
+
+  function killSource(){
+    try{
+      if (osc){
+        osc.stop();
+        osc.disconnect();
+        if (osc._merger) osc._merger.disconnect();
+      }
+    }catch(e){}
+    try{
+      if (noiseNode){
+        noiseNode.src.stop();
+        noiseNode.src.disconnect();
+        noiseNode.merger.disconnect();
+      }
+    }catch(e){}
+    osc = null;
+    noiseNode = null;
+    noiseBuf = null;
+  }
+
+  function startPlay(){
+    if (!ac) return;
+    if (playing) return;
+
+    buildSource();
+    if (osc) osc.start();
+    if (noiseNode) noiseNode.src.start();
+
+    playing = true;
+    statusText.textContent = "playing";
+    btnPlay.disabled = true;
+    btnStop.disabled = false;
+  }
+
+  function stopPlay(){
+    if (!ac) return;
+    if (!playing) return;
+    killSource();
+    playing = false;
+    statusText.textContent = "stopped";
+    btnPlay.disabled = false;
+    btnStop.disabled = true;
+  }
+
+  function updateLevels(){
+    if (!ac) return;
+
+    const base = +baseDb.value;     // dB
+    const ild  = +ildDb.value;      // L - R (dB)
+
+    // L = base + ild/2, R = base - ild/2
+    let lDb = base + ild/2;
+    let rDb = base - ild/2;
+
+    // Clamp to safe-ish range (avoid > 0 dB)
+    lDb = clamp(lDb, -80, 0);
+    rDb = clamp(rDb, -80, 0);
+
+    const lGain = dbToGain(lDb) * (muteL ? 0 : 1);
+    const rGain = dbToGain(rDb) * (muteR ? 0 : 1);
+
+    gainL.gain.setTargetAtTime(lGain, ac.currentTime, 0.01);
+    gainR.gain.setTargetAtTime(rGain, ac.currentTime, 0.01);
+
+    leftDbBadge.textContent  = (muteL ? "muted" : `${lDb.toFixed(1)} dB`);
+    rightDbBadge.textContent = (muteR ? "muted" : `${rDb.toFixed(1)} dB`);
+  }
+
+  function updateFreq(){
+    if (!ac) return;
+    if (osc){
+      osc.frequency.setTargetAtTime(sliderToFreq(+freq.value), ac.currentTime, 0.01);
+    }
+  }
+
+  function updateUI(){
+    srcVal.textContent = srcSel.value;
+    const f = sliderToFreq(+freq.value);
+    freqVal.textContent = fmtHz(f);
+    baseVal.textContent = `${baseDb.value} dB`;
+    ildVal.textContent  = `${ildDb.value} dB`;
+    btnMuteL.textContent = muteL ? "Unmute L" : "Mute L";
+    btnMuteR.textContent = muteR ? "Unmute R" : "Mute R";
+  }
+
+  // -------- Meters (simple RMS bar) --------
+  let raf = null;
+  function setupMeters(){
+    const ctxL = meterL.getContext("2d");
+    const ctxR = meterR.getContext("2d");
+
+    const bufL = new Float32Array(analyserL.fftSize);
+    const bufR = new Float32Array(analyserR.fftSize);
+
+    const draw = () => {
+      raf = requestAnimationFrame(draw);
+
+      function rms(analyser, buf){
+        analyser.getFloatTimeDomainData(buf);
+        let s = 0;
+        for (let i=0; i<buf.length; i++){
+          const x = buf[i];
+          s += x*x;
+        }
+        return Math.sqrt(s / buf.length);
+      }
+
+      const rL = rms(analyserL, bufL);
+      const rR = rms(analyserR, bufR);
+
+      // Convert RMS to pseudo dBFS for display (avoid log(0))
+      const dbL = 20 * Math.log10(Math.max(rL, 1e-6));
+      const dbR = 20 * Math.log10(Math.max(rR, 1e-6));
+
+      function drawMeter(ctx, db){
+        const w = ctx.canvas.width, h = ctx.canvas.height;
+        ctx.clearRect(0,0,w,h);
+
+        // Background grid
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = "#0c0c0c";
+        ctx.fillRect(0,0,w,h);
+
+        ctx.strokeStyle = "#1f1f1f";
+        ctx.lineWidth = 1;
+        for (let i=0;i<=6;i++){
+          const y = (h/6)*i;
+          ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+        }
+
+        // Map db [-60..0] to [0..1]
+        const t = clamp((db + 60)/60, 0, 1);
+        const barW = Math.round(w * t);
+
+        // Bar
+        ctx.fillStyle = "#00ff88";
+        ctx.fillRect(0, Math.round(h*0.55), barW, Math.round(h*0.30));
+
+        // Label
+        ctx.fillStyle = "#eaeaea";
+        ctx.font = "24px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace";
+        const label = isFinite(db) ? `${db.toFixed(1)} dBFS` : "—";
+        ctx.fillText(label, 16, 44);
+
+        // Mini indicator
+        ctx.fillStyle = "#9a9a9a";
+        ctx.font = "18px system-ui, -apple-system, Segoe UI, Roboto, sans-serif";
+        ctx.fillText("RMS level", 16, 74);
+      }
+
+      drawMeter(ctxL, muteL ? -120 : dbL);
+      drawMeter(ctxR, muteR ? -120 : dbR);
+    };
+    draw();
+  }
+
+  // -------- Events --------
+  btnStart.addEventListener("click", async () => {
+    ensureAudio();
+    if (ac.state === "suspended") await ac.resume();
+    btnStart.disabled = true;
+    btnPlay.disabled = false;
+    statusText.textContent = "ready";
+  });
+
+  btnPlay.addEventListener("click", () => {
+    if (!ac) return;
+    startPlay();
+  });
+
+  btnStop.addEventListener("click", () => {
+    stopPlay();
+  });
+
+  btnMuteL.addEventListener("click", () => {
+    muteL = !muteL;
+    updateUI(); updateLevels();
+  });
+  btnMuteR.addEventListener("click", () => {
+    muteR = !muteR;
+    updateUI(); updateLevels();
+  });
+
+  btnCenter.addEventListener("click", () => {
+    ildDb.value = 0;
+    updateUI(); updateLevels();
+  });
+
+  btnSwap.addEventListener("click", () => {
+    // Swap by negating ILD
+    ildDb.value = -Number(ildDb.value);
+    updateUI(); updateLevels();
+  });
+
+  srcSel.addEventListener("change", () => {
+    updateUI();
+    if (ac && playing){
+      // rebuild while playing
+      buildSource();
+      if (osc) osc.start();
+      if (noiseNode) noiseNode.src.start();
+    }
+  });
+
+  freq.addEventListener("input", () => {
+    updateUI();
+    updateFreq();
+  });
+
+  baseDb.addEventListener("input", () => {
+    updateUI();
+    updateLevels();
+  });
+
+  ildDb.addEventListener("input", () => {
+    updateUI();
+    updateLevels();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.code !== "Space") return;
+    e.preventDefault();
+    if (!ac || btnStart.disabled === false) return; // must click Start audio first
+    if (playing) stopPlay();
+    else startPlay();
+  });
+
+  // Initialize UI text
+  updateUI();
+})();
+</script>
+</body>
+</html>

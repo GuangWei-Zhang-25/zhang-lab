@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ITD / Binaural Delay Tuner (with L/R mute)</title>
+  <style>
+    :root { --primary:#00ff88; --bg:#111; --surface:#1f1f1f; --muted:#7a7a7a; }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background:var(--bg); color:#eee; margin:0; height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      user-select:none;
+    }
+    .box{
+      width:min(640px, 94vw);
+      background:var(--surface);
+      border:1px solid #2e2e2e;
+      border-radius:18px;
+      padding:28px 28px 22px;
+      box-shadow:0 16px 50px rgba(0,0,0,.55);
+    }
+    h1{ margin:0 0 6px; font-size:18px; font-weight:700; letter-spacing:.08em; }
+    .sub{ color:var(--muted); font-size:13px; margin-bottom:18px; }
+    .row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .panel{
+      background:#151515;
+      border:1px solid #2b2b2b;
+      border-radius:14px;
+      padding:14px;
+      flex:1;
+      min-width:260px;
+    }
+    .head{
+      width:110px; height:110px; border-radius:50%;
+      border:3px solid #3a3a3a;
+      margin:4px auto 8px;
+      position:relative;
+      display:flex; align-items:center; justify-content:center;
+      color:#3a3a3a; font-weight:800; font-size:12px;
+    }
+    .ear{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:14px; height:28px; border-radius:5px;
+      background:#3a3a3a;
+      transition:.12s;
+    }
+    .ear.l{ left:-18px; }
+    .ear.r{ right:-18px; }
+    .ear.active{ background:var(--primary); box-shadow:0 0 18px rgba(0,255,136,.55); }
+
+    .readout{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size:18px; color:var(--primary);
+      text-align:center; margin:8px 0 10px;
+    }
+
+    label{ display:block; font-size:12px; color:#bdbdbd; margin:10px 0 6px; }
+    input[type="range"]{ width:100%; }
+    .mini{
+      font-size:12px; color:#bdbdbd;
+      display:flex; justify-content:space-between;
+    }
+
+    select, button{
+      background:#262626; color:#eee;
+      border:1px solid #3a3a3a;
+      border-radius:10px;
+      padding:10px 12px;
+      font-size:14px;
+    }
+    select{ flex:1; min-width:180px; }
+    button{
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      padding:12px 16px;
+      transition:.18s;
+    }
+    button:hover{ filter:brightness(1.1); }
+    button.active{ background:var(--primary); color:#000; border-color:var(--primary); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    .small{ font-size:12px; color:var(--muted); line-height:1.35; margin-top:10px; }
+    .kbd{
+      font-family: ui-monospace, monospace;
+      border:1px solid #3a3a3a;
+      border-bottom-width:2px;
+      padding:1px 6px; border-radius:6px;
+      color:#ddd;
+    }
+
+    .toggleRow{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .chipBtn{
+      flex:1;
+      min-width:120px;
+      text-align:center;
+      padding:10px 10px;
+      border-radius:12px;
+      border:1px solid #3a3a3a;
+      background:#222;
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      user-select:none;
+      transition:.15s;
+    }
+    .chipBtn.on{ background: #1f2a22; border-color: rgba(0,255,136,.6); }
+    .chipBtn.off{ background: #2a1f1f; border-color: rgba(255,120,120,.45); color:#ffd8d8; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>ITD SIMULATOR</h1>
+    <div class="sub">Headphones required. Tune microsecond interaural delay (ITD). Independent Left/Right mute included.</div>
+
+    <div class="grid">
+      <div class="panel">
+        <div class="head">
+          YOU
+          <div class="ear l" id="earL"></div>
+          <div class="ear r" id="earR"></div>
+        </div>
+        <div class="readout" id="readout">CENTER (0 µs)</div>
+
+        <label for="itdSigned">Signed ITD (µs): negative → delay RIGHT (perceive LEFT)</label>
+        <input id="itdSigned" type="range" min="-2000" max="2000" step="10" value="0">
+        <div class="mini"><span>Left</span><span>0</span><span>Right</span></div>
+
+        <label for="itdAbs">Absolute delay amount (µs)</label>
+        <input id="itdAbs" type="range" min="0" max="2000" step="10" value="600">
+        <div class="mini"><span>0</span><span>600</span><span>2000</span></div>
+
+        <div class="small">
+          Demo: set ITD (e.g., 600 µs), then mute <span class="kbd">Left</span> / <span class="kbd">Right</span>
+          to show both sides play the same stimulus (only timing differs).
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="row">
+          <select id="stimulus">
+            <option value="clicks">Clicks (square blips)</option>
+            <option value="noise">Noise bursts (lowpass)</option>
+            <option value="tone">Tone (weaker localization)</option>
+          </select>
+          <button id="toggle">Start</button>
+        </div>
+
+        <div class="toggleRow">
+          <div class="chipBtn on" id="btnL">Left: ON</div>
+          <div class="chipBtn on" id="btnR">Right: ON</div>
+        </div>
+
+        <label for="rate">Rate / repetition (Hz)</label>
+        <input id="rate" type="range" min="1" max="12" step="0.5" value="6">
+        <div class="mini"><span>1</span><span id="rateVal">6</span><span>12</span></div>
+
+        <label for="toneHz">Tone frequency (Hz) (tone mode)</label>
+        <input id="toneHz" type="range" min="100" max="1200" step="10" value="400">
+        <div class="mini"><span>100</span><span id="toneVal">400</span><span>1200</span></div>
+
+        <label for="volume">Master volume</label>
+        <input id="volume" type="range" min="0" max="1" step="0.01" value="0.35">
+        <div class="mini"><span>0</span><span id="volVal">0.35</span><span>1</span></div>
+
+        <div class="small">
+          Keys: <span class="kbd">Space</span> start/stop • <span class="kbd">←</span>/<span class="kbd">→</span> ITD •
+          <span class="kbd">L</span>/<span class="kbd">R</span> mute.
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const earL = document.getElementById('earL');
+  const earR = document.getElementById('earR');
+  const readout = document.getElementById('readout');
+
+  const itdSigned = document.getElementById('itdSigned');
+  const itdAbs = document.getElementById('itdAbs');
+  const stimulus = document.getElementById('stimulus');
+  const toggleBtn = document.getElementById('toggle');
+
+  const rate = document.getElementById('rate');
+  const rateVal = document.getElementById('rateVal');
+  const toneHz = document.getElementById('toneHz');
+  const toneVal = document.getElementById('toneVal');
+  const volume = document.getElementById('volume');
+  const volVal = document.getElementById('volVal');
+
+  const btnL = document.getElementById('btnL');
+  const btnR = document.getElementById('btnR');
+
+  let ctx = null;
+  let isPlaying = false;
+  let timer = null;
+
+  let masterGain, splitter, merger, delayL, delayR, gainL, gainR, lpFilter;
+
+  let leftOn = true;
+  let rightOn = true;
+
+  function ensureAudio() {
+    if (ctx) return;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    ctx = new AudioContext({ latencyHint: "interactive" });
+
+    splitter = ctx.createChannelSplitter(2); // mono into ch0
+    merger = ctx.createChannelMerger(2);
+
+    delayL = ctx.createDelay(1.0);
+    delayR = ctx.createDelay(1.0);
+
+    gainL = ctx.createGain();
+    gainR = ctx.createGain();
+
+    masterGain = ctx.createGain();
+    masterGain.gain.value = Number(volume.value);
+
+    lpFilter = ctx.createBiquadFilter();
+    lpFilter.type = "lowpass";
+    lpFilter.frequency.value = 1500;
+
+    // Route mono -> splitter -> delays -> per-ear gains -> merger -> master -> destination
+    splitter.connect(delayL, 0);
+    splitter.connect(delayR, 0);
+
+    delayL.connect(gainL);
+    delayR.connect(gainR);
+
+    gainL.connect(merger, 0, 0);
+    gainR.connect(merger, 0, 1);
+
+    merger.connect(masterGain);
+    masterGain.connect(ctx.destination);
+
+    applyITD();
+    applyMutes();
+  }
+
+  function applyITD() {
+    const us = Number(itdSigned.value);
+    const s = Math.abs(us) / 1e6;
+
+    if (us === 0) {
+      readout.textContent = `CENTER (0 µs)`;
+      earL.classList.remove('active');
+      earR.classList.remove('active');
+    } else if (us < 0) {
+      readout.textContent = `${Math.abs(us)} µs (delay RIGHT → perceive LEFT)`;
+      earL.classList.remove('active');
+      earR.classList.add('active');
+    } else {
+      readout.textContent = `${us} µs (delay LEFT → perceive RIGHT)`;
+      earL.classList.add('active');
+      earR.classList.remove('active');
+    }
+
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    const tau = 0.015;
+
+    if (us < 0) {
+      delayL.delayTime.setTargetAtTime(0, t, tau);
+      delayR.delayTime.setTargetAtTime(s, t, tau);
+    } else {
+      delayL.delayTime.setTargetAtTime(s, t, tau);
+      delayR.delayTime.setTargetAtTime(0, t, tau);
+    }
+  }
+
+  function applyMutes() {
+    // update buttons regardless
+    btnL.textContent = `Left: ${leftOn ? 'ON' : 'OFF'}`;
+    btnR.textContent = `Right: ${rightOn ? 'ON' : 'OFF'}`;
+
+    btnL.classList.toggle('on', leftOn);
+    btnL.classList.toggle('off', !leftOn);
+    btnR.classList.toggle('on', rightOn);
+    btnR.classList.toggle('off', !rightOn);
+
+    if (!ctx) return;
+    const t = ctx.currentTime;
+    const tau = 0.01;
+    gainL.gain.setTargetAtTime(leftOn ? 1.0 : 0.0, t, tau);
+    gainR.gain.setTargetAtTime(rightOn ? 1.0 : 0.0, t, tau);
+  }
+
+  function updateVals() {
+    rateVal.textContent = rate.value;
+    toneVal.textContent = toneHz.value;
+    volVal.textContent = Number(volume.value).toFixed(2);
+    if (masterGain && ctx) masterGain.gain.setTargetAtTime(Number(volume.value), ctx.currentTime, 0.02);
+  }
+
+  function playClick(time) {
+    const osc = ctx.createOscillator();
+    osc.type = "square";
+    osc.frequency.value = 400;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0, time);
+    g.gain.linearRampToValueAtTime(0.7, time + 0.002);
+    g.gain.exponentialRampToValueAtTime(0.0008, time + 0.05);
+
+    osc.connect(g);
+    g.connect(splitter);
+
+    osc.start(time);
+    osc.stop(time + 0.06);
+  }
+
+  function playNoiseBurst(time) {
+    const dur = 0.06;
+    const len = Math.floor(ctx.sampleRate * dur);
+    const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1);
+
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0, time);
+    g.gain.linearRampToValueAtTime(0.6, time + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.001, time + dur);
+
+    src.connect(lpFilter);
+    lpFilter.connect(g);
+    g.connect(splitter);
+
+    src.start(time);
+    src.stop(time + dur);
+  }
+
+  function playTone(time) {
+    const dur = 0.08;
+    const osc = ctx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = Number(toneHz.value);
+
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0, time);
+    g.gain.linearRampToValueAtTime(0.35, time + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0008, time + dur);
+
+    osc.connect(g);
+    g.connect(splitter);
+
+    osc.start(time);
+    osc.stop(time + dur);
+  }
+
+  function scheduleLoop() {
+    const hz = Number(rate.value);
+    const interval = 1 / hz;
+    const now = ctx.currentTime;
+    const lookahead = 0.12;
+
+    if (!scheduleLoop.nextTime) scheduleLoop.nextTime = now + 0.03;
+
+    while (scheduleLoop.nextTime < now + lookahead) {
+      const t = scheduleLoop.nextTime;
+      const mode = stimulus.value;
+      if (mode === "clicks") playClick(t);
+      else if (mode === "noise") playNoiseBurst(t);
+      else playTone(t);
+      scheduleLoop.nextTime += interval;
+    }
+    timer = requestAnimationFrame(scheduleLoop);
+  }
+
+  function start() {
+    ensureAudio();
+    if (ctx.state === "suspended") ctx.resume();
+
+    isPlaying = true;
+    toggleBtn.classList.add("active");
+    toggleBtn.textContent = "Stop";
+    scheduleLoop.nextTime = ctx.currentTime + 0.04;
+    scheduleLoop();
+  }
+
+  function stop() {
+    isPlaying = false;
+    toggleBtn.classList.remove("active");
+    toggleBtn.textContent = "Start";
+    if (timer) cancelAnimationFrame(timer);
+    timer = null;
+  }
+
+  toggleBtn.addEventListener("click", () => isPlaying ? stop() : start());
+
+  itdSigned.addEventListener("input", () => {
+    itdAbs.value = String(Math.abs(Number(itdSigned.value)));
+    applyITD();
+  });
+
+  itdAbs.addEventListener("input", () => {
+    const sign = Math.sign(Number(itdSigned.value)) || 0;
+    if (sign === 0) itdSigned.value = "0";
+    else itdSigned.value = String(sign * Number(itdAbs.value));
+    applyITD();
+  });
+
+  btnL.addEventListener("click", () => {
+    leftOn = !leftOn;
+    if (!ctx) ensureAudio();
+    applyMutes();
+  });
+
+  btnR.addEventListener("click", () => {
+    rightOn = !rightOn;
+    if (!ctx) ensureAudio();
+    applyMutes();
+  });
+
+  rate.addEventListener("input", updateVals);
+  toneHz.addEventListener("input", updateVals);
+  volume.addEventListener("input", updateVals);
+
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space") { e.preventDefault(); toggleBtn.click(); }
+    if (e.code === "ArrowLeft") {
+      e.preventDefault();
+      itdSigned.value = String(Math.max(-2000, Number(itdSigned.value) - 20));
+      itdAbs.value = String(Math.abs(Number(itdSigned.value)));
+      applyITD();
+    }
+    if (e.code === "ArrowRight") {
+      e.preventDefault();
+      itdSigned.value = String(Math.min(2000, Number(itdSigned.value) + 20));
+      itdAbs.value = String(Math.abs(Number(itdSigned.value)));
+      applyITD();
+    }
+    if (e.key === "l" || e.key === "L") { e.preventDefault(); btnL.click(); }
+    if (e.key === "r" || e.key === "R") { e.preventDefault(); btnR.click(); }
+  });
+
+  updateVals();
+  applyITD();
+  applyMutes();
+})();
+</script>
+</body>
+</html>
