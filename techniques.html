@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Team | Zhang Lab</title>
-  <meta name="description" content="Meet the team at the Zhang Laboratory">
+  <title>Techniques | Zhang Lab</title>
+  <meta name="description" content="Research techniques and equipment at the Zhang Laboratory">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -153,105 +153,78 @@
     .page-header-subtitle {
       font-size: 1rem;
       color: var(--text-secondary);
-      max-width: 600px;
+      max-width: 650px;
       margin: 0 auto;
     }
 
-    /* Photo Wall Section */
-    .photo-wall {
-      padding: 50px 0;
-      background: var(--white);
+    /* Technique Cards */
+    .techniques-section {
+      padding: 50px 0 60px;
     }
 
-    .team-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .team-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .team-member {
-      text-align: center;
-      width: 180px;
-    }
-
-    .member-photo-container {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto 0.75rem;
-      border-radius: 50%;
-      overflow: hidden;
-      background: var(--bg-light);
-      border: 3px solid var(--border-light);
-      transition: var(--transition);
-    }
-
-    .team-member:hover .member-photo-container {
-      border-color: var(--primary-light);
-      transform: scale(1.05);
-    }
-
-    .member-photo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-    }
-
-    .member-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
+    .tech-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5rem;
       align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-warm) 100%);
+      margin-bottom: 3.5rem;
+      padding-bottom: 3.5rem;
+      border-bottom: 1px solid var(--border-light);
     }
 
-    .member-placeholder i {
-      font-size: 2.5rem;
-      color: var(--border-medium);
+    .tech-card:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
     }
 
-    .member-name {
-      font-family: var(--font-serif);
-      font-size: 1rem;
+    .tech-card:nth-child(even) {
+      direction: rtl;
+    }
+
+    .tech-card:nth-child(even) > * {
+      direction: ltr;
+    }
+
+    .tech-image-container {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .tech-image {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .tech-content {
+      padding: 0.5rem 0;
+    }
+
+    .tech-label {
+      font-size: 0.75rem;
       font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-name {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
       color: var(--primary-dark);
-      margin-bottom: 0.15rem;
+      margin-bottom: 0.75rem;
     }
 
-    .member-title {
-      font-size: 0.75rem;
+    .tech-desc {
+      font-size: 0.95rem;
       color: var(--text-secondary);
-      margin-bottom: 0.15rem;
-    }
-
-    .member-affiliation {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .member-links {
-      margin-top: 0.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .member-links a {
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      transition: var(--transition);
-    }
-
-    .member-links a:hover {
-      color: var(--primary);
+      line-height: 1.8;
     }
 
     /* Footer */
@@ -316,17 +289,14 @@
       .page-header { padding: 80px 0 30px; }
       .page-header h1 { font-size: 1.75rem; }
 
-      .team-row {
-        gap: 1rem;
+      .tech-card,
+      .tech-card:nth-child(even) {
+        grid-template-columns: 1fr;
+        direction: ltr;
       }
 
-      .team-member {
-        width: 140px;
-      }
-
-      .member-photo-container {
-        width: 120px;
-        height: 120px;
+      .tech-image {
+        height: 220px;
       }
 
       .footer-content {
@@ -371,101 +341,65 @@
 
 <header class="page-header">
   <div class="container">
-    <h1>Our Team</h1>
+    <h1>Techniques</h1>
     <p class="page-header-subtitle">
-      Meet the researchers driving discoveries in neural circuits and social behavior.
+      Our lab employs a range of cutting-edge neuroscience techniques to study neural circuits underlying sensory processing and social behavior.
     </p>
   </div>
 </header>
 
-<section class="photo-wall">
+<section class="techniques-section">
   <div class="container">
 
-    <!-- Leadership -->
-    <div class="team-row">
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Guangwei headshot_small.jpg" alt="Guang-Wei Zhang" class="member-photo">
-        </div>
-        <h3 class="member-name">Guang-Wei Zhang</h3>
-        <p class="member-title">MD, PhD | Principal Investigator</p>
-        <p class="member-affiliation">Assistant Professor, VCU</p>
-        <div class="member-links">
-          <a href="mailto:guangwei.zhang@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
-          <a href="https://scholar.google.com/citations?user=NXDtgwkAAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-        </div>
+    <div class="tech-card">
+      <div class="tech-image-container">
+        <img src="tech/fiber photometry.png" alt="Fiber photometry recording setup" class="tech-image">
       </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Catherine Tao headshort.png" alt="Can Tao" class="member-photo" style="object-position: center 35%;">
-        </div>
-        <h3 class="member-name">Can Tao</h3>
-        <p class="member-title">MD, PhD | Senior Research Scientist</p>
-        <p class="member-affiliation">VCU</p>
-        <div class="member-links">
-          <a href="mailto:can.tao@vcuhealth.org" title="Email"><i class="fas fa-envelope"></i> Email</a>
-          <a href="https://scholar.google.com/citations?user=XA2Ncs0AAAAJ&hl=en" target="_blank" title="Google Scholar"><i class="fas fa-graduation-cap"></i> Google Scholar</a>
-        </div>
+      <div class="tech-content">
+        <div class="tech-label">In Vivo Recording</div>
+        <h2 class="tech-name">Fiber Photometry</h2>
+        <p class="tech-desc">
+          Fiber photometry enables real-time monitoring of neural population activity in freely behaving animals. By delivering excitation light through an implanted optical fiber and collecting fluorescence from genetically encoded calcium or neurotransmitter indicators, we can track how specific cell types respond during social interactions and sensory processing.
+        </p>
       </div>
     </div>
 
-    <!-- Students Row 1 -->
-    <div class="team-row">
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo" class="member-photo" style="object-position: center 20%; transform: scale(0.85);">
-        </div>
-        <h3 class="member-name">Henry Oo</h3>
-        <p class="member-title">Rotation Graduate Student</p>
-        <p class="member-affiliation">Neuroscience PhD Program, VCU</p>
+    <div class="tech-card">
+      <div class="tech-image-container">
+        <img src="tech/neuropixel.png" alt="Neuropixels electrophysiology rig" class="tech-image">
       </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <div class="member-placeholder">
-            <i class="fas fa-user"></i>
-          </div>
-        </div>
-        <h3 class="member-name">Alisha Pillai</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
-      </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Jaden Headshot.png" alt="Jaden Harris" class="member-photo">
-        </div>
-        <h3 class="member-name">Jaden Harris</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
+      <div class="tech-content">
+        <div class="tech-label">Electrophysiology</div>
+        <h2 class="tech-name">Neuropixels Recording</h2>
+        <p class="tech-desc">
+          Neuropixels probes allow us to record from hundreds of neurons simultaneously across multiple brain regions. This high-density silicon probe technology provides single-unit resolution, enabling us to dissect the neural coding principles underlying circuit-level computations in sensory and social brain networks.
+        </p>
       </div>
     </div>
 
-    <!-- Students Row 2 -->
-    <div class="team-row">
-      <div class="team-member">
-        <div class="member-photo-container">
-          <div class="member-placeholder">
-            <i class="fas fa-user"></i>
-          </div>
-        </div>
-        <h3 class="member-name">Siara Shah</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
+    <div class="tech-card">
+      <div class="tech-image-container">
+        <img src="tech/stereotaxic injection.png" alt="Stereotaxic surgery and injection setup" class="tech-image">
       </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova" class="member-photo" style="object-position: center 30%;">
-        </div>
-        <h3 class="member-name">Elizabeth Ivanova</h3>
-        <p class="member-title">Post-Bacc Student</p>
-        <p class="member-affiliation">University of Southern California</p>
+      <div class="tech-content">
+        <div class="tech-label">Surgery</div>
+        <h2 class="tech-name">Stereotaxic Injection</h2>
+        <p class="tech-desc">
+          Stereotaxic surgery allows precise targeting of specific brain regions for viral vector delivery, enabling optogenetic and chemogenetic manipulation of defined neural circuits. Our setup includes precision microinjection systems and real-time coordinate tracking for accurate and reproducible targeting.
+        </p>
       </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" class="member-photo" style="object-position: center 15%; transform: scale(0.8);">
-        </div>
-        <h3 class="member-name">Wissem Gmach</h3>
-        <p class="member-title">MD</p>
-        <p class="member-affiliation">Odessa National Medical University</p>
+    </div>
+
+    <div class="tech-card">
+      <div class="tech-image-container">
+        <img src="tech/vibrotome.png" alt="Precisionary vibratome for tissue sectioning" class="tech-image">
+      </div>
+      <div class="tech-content">
+        <div class="tech-label">Histology</div>
+        <h2 class="tech-name">Vibratome Sectioning</h2>
+        <p class="tech-desc">
+          The vibratome produces precise brain tissue sections for histological analysis, including immunohistochemistry and fluorescence imaging. This enables us to verify injection sites, map viral expression patterns, and visualize neural circuit architecture with cellular resolution.
+        </p>
       </div>
     </div>
 
@@ -480,7 +414,7 @@
       <div class="footer-links">
         <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
         <a href="https://www.vcu.edu/" target="_blank">VCU</a>
-        <a href="contact.html">Contact</a>
+        <a href="contact.html">Join Us</a>
       </div>
     </div>
   </div>
