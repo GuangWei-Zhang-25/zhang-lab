@@ -159,16 +159,68 @@
 
     .pub-item {
       background: var(--white);
-      padding: 12px 16px;
-      margin-bottom: 8px;
+      padding: 16px;
+      margin-bottom: 10px;
       border-radius: 6px;
       border: 1px solid var(--border-light);
       transition: var(--transition);
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
     }
 
     .pub-item:hover {
       border-color: var(--primary-light);
       box-shadow: 0 2px 8px rgba(26, 54, 93, 0.06);
+    }
+
+    .pub-thumbnail {
+      flex-shrink: 0;
+      width: 120px;
+      height: 90px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: linear-gradient(135deg, var(--bg-light) 0%, var(--bg-warm) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pub-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .pub-thumbnail-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      color: var(--border-medium);
+      font-size: 0.6rem;
+      text-align: center;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .pub-thumbnail-placeholder i {
+      font-size: 1.5rem;
+    }
+
+    .pub-thumbnail-placeholder span {
+      font-weight: 600;
+      color: var(--text-muted);
+      font-size: 0.55rem;
+      line-height: 1.2;
+    }
+
+    .pub-content {
+      flex: 1;
+      min-width: 0;
     }
 
     .pub-top {
@@ -244,27 +296,6 @@
     }
 
     .pub-link i { font-size: 0.6rem; }
-
-    /* Section Divider */
-    .section-divider {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      margin: 35px 0 20px;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .section-divider::before,
-    .section-divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border-medium);
-    }
 
     /* Back to Top */
     .back-to-top {
@@ -343,6 +374,8 @@
       .nav-subtitle, .nav-divider { display: none; }
       .page-header { padding: 80px 0 20px; }
       .page-header h1 { font-size: 1.6rem; }
+      .pub-item { flex-direction: column; }
+      .pub-thumbnail { width: 100%; height: 160px; }
       .pub-top { flex-direction: column; gap: 6px; }
       .pub-links { flex-wrap: wrap; }
       .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
@@ -390,15 +423,23 @@
     <div class="year-group">
       <div class="year-label">2025</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Natural Social Behaviors</span>
-          <span class="pub-title">Reviving-like Prosocial Behavior in Response to Unconscious or Dead Conspecifics in Rodents</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Science</span>
+          </div>
         </div>
-        <p class="pub-authors">Sun W*, <strong>Zhang GW*</strong>, Huang JJ, Tao C*, Seo MB, Tao HW, Zhang LI</p>
-        <p class="pub-journal">Science. 387, eadq2677</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Natural Social Behaviors</span>
+            <span class="pub-title">Reviving-like Prosocial Behavior in Response to Unconscious or Dead Conspecifics in Rodents</span>
+          </div>
+          <p class="pub-authors">Sun W*, <strong>Zhang GW*</strong>, Huang JJ, Tao C*, Seo MB, Tao HW, Zhang LI</p>
+          <p class="pub-journal">Science. 387, eadq2677</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1126/science.adq2677" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -407,27 +448,63 @@
     <div class="year-group">
       <div class="year-label">2024</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Social Behavior & Stress</span>
-          <span class="pub-title">Excitation-Inhibition Imbalance in Medial Preoptic Area Circuits Underlies Chronic Stress-Induced Depressive-like States</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Nat Commun</span>
+          </div>
         </div>
-        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Sun W, Huang JJ, Zhang LI, Tao HW</p>
-        <p class="pub-journal">Nature Communications. 15, 8575</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Tao Zhang 2024 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Social Behavior & Stress</span>
+            <span class="pub-title">Excitation-Inhibition Imbalance in Medial Preoptic Area Circuits Underlies Chronic Stress-Induced Depressive-like States</span>
+          </div>
+          <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Sun W, Huang JJ, Zhang LI, Tao HW</p>
+          <p class="pub-journal">Nature Communications. 15, 8575</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Tao Zhang 2024 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">A Distributed Auditory Network Mediated by Pontine Central Gray Underlies Ultra-fast Awakening in Response to Alerting Sounds</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Curr Biol</span>
+          </div>
         </div>
-        <p class="pub-authors">Wei J, Xiao C, <strong>Zhang GW</strong>, Shen L, Tao HW, Zhang LI</p>
-        <p class="pub-journal">Current Biology. 34, 20, 4597-4611.e5</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1016/j.cub.2024.08.020" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Wei Xiao 2024 Current Biology.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">A Distributed Auditory Network Mediated by Pontine Central Gray Underlies Ultra-fast Awakening in Response to Alerting Sounds</span>
+          </div>
+          <p class="pub-authors">Wei J, Xiao C, <strong>Zhang GW</strong>, Shen L, Tao HW, Zhang LI</p>
+          <p class="pub-journal">Current Biology. 34, 20, 4597-4611.e5</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.cub.2024.08.020" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Wei Xiao 2024 Current Biology.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Front Aging Neurosci</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Alzheimer's Disease</span>
+            <span class="pub-title">The Neural Basis of Neuropsychiatric Symptoms in Alzheimer's Disease</span>
+          </div>
+          <p class="pub-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
+          <p class="pub-journal">Frontiers in Aging Neuroscience. 16, 1487875</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Zhang 2024 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -436,39 +513,103 @@
     <div class="year-group">
       <div class="year-label">2023</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Social Behavior & Hormones</span>
-          <span class="pub-title">The Medial Preoptic Area Mediates Depressive-like Behaviors Induced by Ovarian Hormone Withdrawal through Distinct GABAergic Projections</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Nat Neurosci</span>
+          </div>
         </div>
-        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Huang JJ, Li Z, Tao HW, Zhang LI</p>
-        <p class="pub-journal">Nature Neuroscience. 26, 1529-1540</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Tao Zhang 2023 Nature Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
-        </div>
-      </div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Glutamatergic and GABAergic Neurons in Pontine Central Gray Mediate Opposing Valence-Specific Behaviors through A Global Network</span>
-        </div>
-        <p class="pub-authors">Xiao C, Wei J, <strong>Zhang GW</strong>, Tao C, Huang JJ, Shen L, Wickersham R, Tao HW, Zhang LI</p>
-        <p class="pub-journal">Neuron. 111, 9, 1486-1503.e7</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Xiao Wei 2023 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Social Behavior & Hormones</span>
+            <span class="pub-title">The Medial Preoptic Area Mediates Depressive-like Behaviors Induced by Ovarian Hormone Withdrawal through Distinct GABAergic Projections</span>
+          </div>
+          <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Huang JJ, Li Z, Tao HW, Zhang LI</p>
+          <p class="pub-journal">Nature Neuroscience. 26, 1529-1540</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Tao Zhang 2023 Nature Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Enhancement and Contextual Modulation of Visuospatial Processing by Thalamocollicular Projections from Ventral Lateral Geniculate Nucleus</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Neuron</span>
+          </div>
         </div>
-        <p class="pub-authors">Li Z, Peng B, Huang JJ, Zhang Y, Fang Q, <strong>Zhang GW</strong>, Zhang X, Zhang LI, Tao HW</p>
-        <p class="pub-journal">Nature Communications. 14, 7278</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/s41467-023-43147-9" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Li Peng 2023 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Glutamatergic and GABAergic Neurons in Pontine Central Gray Mediate Opposing Valence-Specific Behaviors through A Global Network</span>
+          </div>
+          <p class="pub-authors">Xiao C, Wei J, <strong>Zhang GW</strong>, Tao C, Huang JJ, Shen L, Wickersham R, Tao HW, Zhang LI</p>
+          <p class="pub-journal">Neuron. 111, 9, 1486-1503.e7</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Xiao Wei 2023 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Nat Commun</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Enhancement and Contextual Modulation of Visuospatial Processing by Thalamocollicular Projections from Ventral Lateral Geniculate Nucleus</span>
+          </div>
+          <p class="pub-authors">Li Z, Peng B, Huang JJ, Zhang Y, Fang Q, <strong>Zhang GW</strong>, Zhang X, Zhang LI, Tao HW</p>
+          <p class="pub-journal">Nature Communications. 14, 7278</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41467-023-43147-9" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Li Peng 2023 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Front Aging Neurosci</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Alzheimer's Disease</span>
+            <span class="pub-title">Sensory Processing Deficits and Related Cortical Pathological Changes in Alzheimer's Disease</span>
+          </div>
+          <p class="pub-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
+          <p class="pub-journal">Frontiers in Aging Neuroscience. 15, 1213379</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Zhang 2023 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>bioRxiv</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Alzheimer's Disease</span>
+            <span class="pub-title">Integrative Mapping of Spatial Transcriptomic and Amyloid Pathology in Alzheimer's Disease at Single-Cell Resolution</span>
+          </div>
+          <p class="pub-authors"><strong>Zhang GW</strong>, Xia S, Zhang KN, Gao F, Zlokovic BV, Zhang LI, Zhao Z, Tao HW</p>
+          <p class="pub-journal">bioRxiv</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1101/2023.08.28.555156" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Xia 2023 bioRxiv.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -477,15 +618,23 @@
     <div class="year-group">
       <div class="year-label">2022</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Reward Learning</span>
-          <span class="pub-title">A Bottom-up Reward Pathway Mediated by Somatostatin Neurons in the Medial Septum Complex Underlying Appetitive Learning</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Nat Commun</span>
+          </div>
         </div>
-        <p class="pub-authors">Shen L*, <strong>Zhang GW*</strong>, Tao C, Seo MB, Zhang NK, Huang JJ, Zhang LI, Tao HW</p>
-        <p class="pub-journal">Nature Communications. 13, 1194</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Shen Zhang 2022 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Reward Learning</span>
+            <span class="pub-title">A Bottom-up Reward Pathway Mediated by Somatostatin Neurons in the Medial Septum Complex Underlying Appetitive Learning</span>
+          </div>
+          <p class="pub-authors">Shen L*, <strong>Zhang GW*</strong>, Tao C, Seo MB, Zhang NK, Huang JJ, Zhang LI, Tao HW</p>
+          <p class="pub-journal">Nature Communications. 13, 1194</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Shen Zhang 2022 Nature Communications.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -494,26 +643,67 @@
     <div class="year-group">
       <div class="year-label">2021</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Social Behavior & Stress</span>
-          <span class="pub-title">Medial Preoptic Area Antagonistically Mediates Stress-Induced Anxiety and Parental Behavior</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Nat Neurosci</span>
+          </div>
         </div>
-        <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Tao C, Jung AH, Peng B, Li Z, Zhang LI, Tao HW</p>
-        <p class="pub-journal">Nature Neuroscience. 24, 516-528</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Shen 2021 Nature Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Social Behavior & Stress</span>
+            <span class="pub-title">Medial Preoptic Area Antagonistically Mediates Stress-Induced Anxiety and Parental Behavior</span>
+          </div>
+          <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Tao C, Jung AH, Peng B, Li Z, Zhang LI, Tao HW</p>
+          <p class="pub-journal">Nature Neuroscience. 24, 516-528</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Shen 2021 Nature Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Corticostriatal Control of Defense Behavior in Mice Induced by Auditory Looming Cues</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Nat Commun</span>
+          </div>
         </div>
-        <p class="pub-authors">Li Z, Wei J, <strong>Zhang GW</strong>, Huang JJ, Zingg B, Wang X, Tao HW, Zhang LI</p>
-        <p class="pub-journal">Nature Communications. 12, 1040</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/s41467-021-21248-7" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Corticostriatal Control of Defense Behavior in Mice Induced by Auditory Looming Cues</span>
+          </div>
+          <p class="pub-authors">Li Z, Wei J, <strong>Zhang GW</strong>, Huang JJ, Zingg B, Wang X, Tao HW, Zhang LI</p>
+          <p class="pub-journal">Nature Communications. 12, 1040</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41467-021-21248-7" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2019 -->
+    <div class="year-group">
+      <div class="year-label">2019</div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>bioRxiv</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Methods</span>
+            <span class="pub-title">Track-Control: An Automatic Video-based Real-time Closed-loop Behavior Toolbox</span>
+          </div>
+          <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Li Z, Tao HW, Zhang LI</p>
+          <p class="pub-journal">bioRxiv</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1101/2019.12.11.873372" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Shen 2019 bioRxiv.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -522,27 +712,43 @@
     <div class="year-group">
       <div class="year-label">2018</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Transforming Sensory Cues into Aversive Emotion via Septal-Habenular Pathway</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Neuron</span>
+          </div>
         </div>
-        <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Zhong W, Xiong Y, Zhang LI, Tao HW</p>
-        <p class="pub-journal">Neuron. 99, 1016-1028.e5</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Shen 2018 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Transforming Sensory Cues into Aversive Emotion via Septal-Habenular Pathway</span>
+          </div>
+          <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Zhong W, Xiong Y, Zhang LI, Tao HW</p>
+          <p class="pub-journal">Neuron. 99, 1016-1028.e5</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.neuron.2018.07.023" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Shen 2018 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">A Non-canonical Reticular-Limbic Central Auditory Pathway via Medial Septum Contributes to Fear Conditioning</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Neuron</span>
+          </div>
         </div>
-        <p class="pub-authors"><strong>Zhang GW*</strong>, Sun W*, Zingg B, Shen L, He J, Xiong Y, Tao HW, Zhang LI</p>
-        <p class="pub-journal">Neuron. 97, 406-417.e4</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Sun 2018 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">A Non-canonical Reticular-Limbic Central Auditory Pathway via Medial Septum Contributes to Fear Conditioning</span>
+          </div>
+          <p class="pub-authors"><strong>Zhang GW*</strong>, Sun W*, Zingg B, Shen L, He J, Xiong Y, Tao HW, Zhang LI</p>
+          <p class="pub-journal">Neuron. 97, 406-417.e4</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Sun 2018 Neuron.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -551,50 +757,82 @@
     <div class="year-group">
       <div class="year-label">2017</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Diversity in Excitation-Inhibition Mismatch Underlies Local Functional Heterogeneity in the Rat Auditory Cortex</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Cell Rep</span>
+          </div>
         </div>
-        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Tao HW, Zhang LI, Zhou Y, Xiong Y</p>
-        <p class="pub-journal">Cell Reports. 19, 521-531</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1016/j.celrep.2017.03.061" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-        </div>
-      </div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Bidirectional Shifting Effects of the Sound Intensity on the Best Frequency in the Rat Auditory Cortex</span>
-        </div>
-        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhou Y, Xiong Y</p>
-        <p class="pub-journal">Scientific Reports. 7, 44493</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/srep44493" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Tao Zhang 2017 Scientific Reports.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Diversity in Excitation-Inhibition Mismatch Underlies Local Functional Heterogeneity in the Rat Auditory Cortex</span>
+          </div>
+          <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Tao HW, Zhang LI, Zhou Y, Xiong Y</p>
+          <p class="pub-journal">Cell Reports. 19, 521-531</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.celrep.2017.03.061" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+          </div>
         </div>
       </div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Excitatory Effects of the Primary Auditory Cortex on the Sound-Evoked Responses in the Ipsilateral Anterior Auditory Field in Rat</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Sci Rep</span>
+          </div>
         </div>
-        <p class="pub-authors"><strong>Zhang GW*</strong>, Tao C*, Zhou C, Yan S, Wang Z, Zhou Y, Xiong Y</p>
-        <p class="pub-journal">Neuroscience. 361, 157-166</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1016/j.neuroscience.2017.08.022" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Tao 2017 Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Bidirectional Shifting Effects of the Sound Intensity on the Best Frequency in the Rat Auditory Cortex</span>
+          </div>
+          <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhou Y, Xiong Y</p>
+          <p class="pub-journal">Scientific Reports. 7, 44493</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/srep44493" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Tao Zhang 2017 Scientific Reports.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Unbalanced Synaptic Inputs Underlying Multi-peaked Frequency Selectivity in Rat Auditory Cortex</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Neuroscience</span>
+          </div>
         </div>
-        <p class="pub-authors">Zhou C, Tao C, <strong>Zhang GW</strong>, Yan S, Wang L, Zhou Y, Xiong Y</p>
-        <p class="pub-journal">European Journal of Neuroscience. 45, 1078-1084</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1111/ejn.13544" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhou Tao 2017 European Journal Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Excitatory Effects of the Primary Auditory Cortex on the Sound-Evoked Responses in the Ipsilateral Anterior Auditory Field in Rat</span>
+          </div>
+          <p class="pub-authors"><strong>Zhang GW*</strong>, Tao C*, Zhou C, Yan S, Wang Z, Zhou Y, Xiong Y</p>
+          <p class="pub-journal">Neuroscience. 361, 157-166</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1016/j.neuroscience.2017.08.022" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhang Tao 2017 Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Eur J Neurosci</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Unbalanced Synaptic Inputs Underlying Multi-peaked Frequency Selectivity in Rat Auditory Cortex</span>
+          </div>
+          <p class="pub-authors">Zhou C, Tao C, <strong>Zhang GW</strong>, Yan S, Wang L, Zhou Y, Xiong Y</p>
+          <p class="pub-journal">European Journal of Neuroscience. 45, 1078-1084</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1111/ejn.13544" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Zhou Tao 2017 European Journal Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -603,15 +841,48 @@
     <div class="year-group">
       <div class="year-label">2016</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Synaptic Basis for the Generation of Response Variation in Auditory Cortex</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Sci Rep</span>
+          </div>
         </div>
-        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhang LI, Zhou Y, Xiong Y</p>
-        <p class="pub-journal">Scientific Reports. 6, 31024</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1038/srep31024" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Tao Zhang 2016 Scientific Reports.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Synaptic Basis for the Generation of Response Variation in Auditory Cortex</span>
+          </div>
+          <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Zhou C, Wang L, Yan S, Zhang LI, Zhou Y, Xiong Y</p>
+          <p class="pub-journal">Scientific Reports. 6, 31024</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.1038/srep31024" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Tao Zhang 2016 Scientific Reports.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2015 -->
+    <div class="year-group">
+      <div class="year-label">2015</div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Front Neural Circuits</span>
+          </div>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Methods</span>
+            <span class="pub-title">Functional Dissection of Synaptic Circuits: In Vivo Patch-Clamp Recording in Neuroscience</span>
+          </div>
+          <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Xiong Y, Zhou Y</p>
+          <p class="pub-journal">Frontiers in Neural Circuits. 9, 23</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.3389/fncir.2015.00023" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Tao Zhang 2015 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -620,101 +891,23 @@
     <div class="year-group">
       <div class="year-label">2014</div>
       <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Sensory Processing</span>
-          <span class="pub-title">Ventral Tegmental Area Activation Promotes Firing Precision and Strength through Circuit Inhibition in the Primary Auditory Cortex</span>
+        <div class="pub-thumbnail">
+          <div class="pub-thumbnail-placeholder">
+            <i class="fas fa-image"></i>
+            <span>Front Neural Circuits</span>
+          </div>
         </div>
-        <p class="pub-authors">Lou Y, Luo W, <strong>Zhang GW</strong>, Tao C, Chen P, Zhou Y, Xiong Y</p>
-        <p class="pub-journal">Frontiers in Neural Circuits. 8, 25</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.3389/fncir.2014.00025" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Lou Luo 2014 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Reviews Section -->
-    <div class="section-divider">Reviews & Commentaries</div>
-
-    <div class="year-group">
-      <div class="year-label">2024</div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Alzheimer's Disease</span>
-          <span class="pub-title">The Neural Basis of Neuropsychiatric Symptoms in Alzheimer's Disease</span>
-        </div>
-        <p class="pub-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
-        <p class="pub-journal">Frontiers in Aging Neuroscience. 16, 1487875</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Zhang 2024 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="year-group">
-      <div class="year-label">2023</div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Alzheimer's Disease</span>
-          <span class="pub-title">Sensory Processing Deficits and Related Cortical Pathological Changes in Alzheimer's Disease</span>
-        </div>
-        <p class="pub-authors">Zhang KN, Zhang KS, Zhang LI, Tao HW, <strong>Zhang GW</strong></p>
-        <p class="pub-journal">Frontiers in Aging Neuroscience. 15, 1213379</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.3389/fnagi.2023.1213379" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Zhang 2023 Frontiers Aging Neuroscience.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="year-group">
-      <div class="year-label">2015</div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Methods</span>
-          <span class="pub-title">Functional Dissection of Synaptic Circuits: In Vivo Patch-Clamp Recording in Neuroscience</span>
-        </div>
-        <p class="pub-authors">Tao C*, <strong>Zhang GW*</strong>, Xiong Y, Zhou Y</p>
-        <p class="pub-journal">Frontiers in Neural Circuits. 9, 23</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.3389/fncir.2015.00023" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Tao Zhang 2015 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
-        </div>
-      </div>
-    </div>
-
-    <!-- Preprints Section -->
-    <div class="section-divider">Preprints</div>
-
-    <div class="year-group">
-      <div class="year-label">2023</div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Alzheimer's Disease</span>
-          <span class="pub-title">Integrative Mapping of Spatial Transcriptomic and Amyloid Pathology in Alzheimer's Disease at Single-Cell Resolution</span>
-        </div>
-        <p class="pub-authors"><strong>Zhang GW</strong>, Xia S, Zhang KN, Gao F, Zlokovic BV, Zhang LI, Zhao Z, Tao HW</p>
-        <p class="pub-journal">bioRxiv</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1101/2023.08.28.555156" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Xia 2023 bioRxiv.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="year-group">
-      <div class="year-label">2019</div>
-      <div class="pub-item">
-        <div class="pub-top">
-          <span class="pub-keyword">Methods</span>
-          <span class="pub-title">Track-Control: An Automatic Video-based Real-time Closed-loop Behavior Toolbox</span>
-        </div>
-        <p class="pub-authors"><strong>Zhang GW</strong>, Shen L, Li Z, Tao HW, Zhang LI</p>
-        <p class="pub-journal">bioRxiv</p>
-        <div class="pub-links">
-          <a href="https://doi.org/10.1101/2019.12.11.873372" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-          <a href="publications/Zhang Shen 2019 bioRxiv.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Sensory Processing</span>
+            <span class="pub-title">Ventral Tegmental Area Activation Promotes Firing Precision and Strength through Circuit Inhibition in the Primary Auditory Cortex</span>
+          </div>
+          <p class="pub-authors">Lou Y, Luo W, <strong>Zhang GW</strong>, Tao C, Chen P, Zhou Y, Xiong Y</p>
+          <p class="pub-journal">Frontiers in Neural Circuits. 8, 25</p>
+          <div class="pub-links">
+            <a href="https://doi.org/10.3389/fncir.2014.00025" target="_blank" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
+            <a href="publications/Lou Luo 2014 Frontiers Neural Circuits.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
         </div>
       </div>
     </div>
@@ -734,7 +927,7 @@
       <div class="footer-links">
         <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
         <a href="https://www.vcu.edu/" target="_blank">VCU</a>
-        <a href="contact.html">Contact</a>
+        <a href="contact.html">Join Us</a>
       </div>
     </div>
   </div>
