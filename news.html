@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teaching | Zhang Lab</title>
-  <meta name="description" content="Teaching resources and interactive simulations from the Zhang Laboratory">
+  <title>News | Zhang Lab</title>
+  <meta name="description" content="Latest news and events from the Zhang Laboratory at Virginia Commonwealth University">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -157,91 +157,102 @@
       margin: 0 auto;
     }
 
-    /* Course Section */
-    .course-section {
-      padding: 50px 0;
+    /* News Section */
+    .news-section {
+      padding: 50px 0 80px;
     }
 
-    .course-title {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 0.25rem;
-    }
-
-    .course-meta {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    /* Simulation Cards */
-    .sim-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .sim-card {
+    .news-article {
+      max-width: 900px;
+      margin: 0 auto 3rem;
       background: var(--white);
       border: 1px solid var(--border-light);
       border-radius: 12px;
-      padding: 1.5rem;
+      overflow: hidden;
       transition: var(--transition);
-      display: flex;
-      flex-direction: column;
     }
 
-    .sim-card:hover {
-      border-color: var(--primary-light);
+    .news-article:hover {
       box-shadow: 0 4px 20px rgba(26, 54, 93, 0.08);
-      transform: translateY(-2px);
     }
 
-    .sim-number {
-      font-size: 0.75rem;
-      font-weight: 600;
+    .news-date {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 500;
       color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.5rem;
     }
 
-    .sim-name {
+    .news-body {
+      padding: 2rem;
+    }
+
+    .news-title {
       font-family: var(--font-serif);
-      font-size: 1.15rem;
-      font-weight: 600;
+      font-size: 1.4rem;
+      font-weight: 700;
       color: var(--primary-dark);
-      margin-bottom: 0.5rem;
+      margin: 0.75rem 0;
+      line-height: 1.4;
     }
 
-    .sim-desc {
-      font-size: 0.85rem;
+    .news-text {
+      font-size: 0.95rem;
       color: var(--text-secondary);
-      line-height: 1.6;
-      flex-grow: 1;
+      line-height: 1.8;
       margin-bottom: 1rem;
     }
 
-    .sim-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--primary-light);
-      text-decoration: none;
-      transition: var(--transition);
+    .news-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
     }
 
-    .sim-link:hover {
-      color: var(--primary-dark);
-      gap: 0.6rem;
+    .news-images.single {
+      grid-template-columns: 1fr;
     }
 
-    .sim-link i {
-      font-size: 0.75rem;
+    .news-image-wrapper {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    .news-image-wrapper img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .news-image-caption {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding: 0.5rem 0.75rem;
+      background: var(--bg-light);
+    }
+
+    .news-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .news-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: var(--bg-light);
+      padding: 3px 10px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
     }
 
     /* Footer */
@@ -306,7 +317,7 @@
       .page-header { padding: 80px 0 30px; }
       .page-header h1 { font-size: 1.75rem; }
 
-      .sim-grid {
+      .news-images {
         grid-template-columns: 1fr;
       }
 
@@ -353,87 +364,48 @@
 
 <header class="page-header">
   <div class="container">
-    <h1>Teaching</h1>
+    <h1>Lab News</h1>
     <p class="page-header-subtitle">
-      Interactive simulations and resources for neuroscience education.
+      Updates, events, and highlights from the Zhang Lab.
     </p>
   </div>
 </header>
 
-<section class="course-section">
+<section class="news-section">
   <div class="container">
-    <h2 class="course-title">ANAT-610-001: Systems Neuroscience — Auditory System</h2>
-    <p class="course-meta">Spring 2026 | Virginia Commonwealth University</p>
 
-    <div class="sim-grid">
-
-      <div class="sim-card">
-        <div class="sim-number">Simulation 1</div>
-        <h3 class="sim-name">Human Hearing Range Sweep</h3>
-        <p class="sim-desc">
-          An automatic frequency sweep from 20 Hz to 32 kHz across intensity levels (0–70 dB relative). Maps your personal hearing threshold by holding the spacebar when tones are audible, visualized on an octave-scaled audiogram.
+    <article class="news-article">
+      <div class="news-body">
+        <div class="news-date"><i class="fas fa-calendar-alt"></i> April 23-24, 2026</div>
+        <h2 class="news-title">Dr. Zhang Presents at the Chen Institute Symposium and Leads Workshop at USC</h2>
+        <p class="news-text">
+          Dr. Guang-Wei Zhang was invited as a speaker at the <strong>Chen Institute Symposia Series: Neuroscience and AI in Sensation and Motivation</strong>, held April 23-24, 2026 at the Zilkha Neurogenetic Institute of Keck School of Medicine, University of Southern California, Los Angeles. The symposium, organized by Dr. Li Zhang at the Center for Neural Circuits &amp; Sensory Processing Disorder, brought together leading researchers to explore how brain circuits integrate sensory information to drive motivated behaviors, and the growing interface between neuroscience and artificial intelligence.
         </p>
-        <a href="simulations/Simulation1_hearing_range_auto_octave_0_70dB_reversed_fixed.html" class="sim-link" target="_blank">
-          Launch Simulation <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-number">Simulation 2</div>
-        <h3 class="sim-name">Auditory Cortex Receptive Field Simulator</h3>
-        <p class="sim-desc">
-          Explore how auditory cortex neurons respond to combinations of frequency and intensity. Adjust tuning parameters to visualize receptive fields, characteristic frequencies, and response maps across the tonotopic axis.
+        <p class="news-text">
+          Dr. Zhang also co-led the <strong>Session 1: Sensation and Motivation</strong> discussion section at the Private Speakers Workshop on April 24, alongside Dr. Laura Busse from Ludwig-Maximilians-Universit&auml;t M&uuml;nchen. The workshop featured in-depth discussions on cutting-edge topics in sensory neuroscience and AI.
         </p>
-        <a href="simulations/Simulation2_auditory_cortex_receptive_field_simulator.html" class="sim-link" target="_blank">
-          Launch Simulation <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
 
-      <div class="sim-card">
-        <div class="sim-number">Simulation 3</div>
-        <h3 class="sim-name">Cochlear Basilar Membrane Simulator</h3>
-        <p class="sim-desc">
-          Visualize how the basilar membrane responds to sound. Adjust frequency, intensity, tuning sharpness, and damping to see traveling wave patterns and the tonotopic organization of the cochlea, with real-time audio output.
-        </p>
-        <a href="simulations/Simulation3_cochlear_basilar_membrane_simulator_with_sound.html" class="sim-link" target="_blank">
-          Launch Simulation <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
+        <div class="news-images">
+          <div class="news-image-wrapper">
+            <img src="news/image001.png" alt="Chen Institute Symposium 2026 - Speakers">
+            <p class="news-image-caption">Speakers at the Chen Institute Symposium on Neuroscience and AI in Sensation and Motivation, April 2026.</p>
+          </div>
+          <div class="news-image-wrapper">
+            <img src="news/Final 42426 Private Speakers Workshop Program Agenda.png" alt="Private Speakers Workshop Agenda">
+            <p class="news-image-caption">Private Speakers Workshop program — Dr. Zhang co-led the Sensation and Motivation discussion session.</p>
+          </div>
+        </div>
 
-      <div class="sim-card">
-        <div class="sim-number">Simulation 4</div>
-        <h3 class="sim-name">Interaural Time Difference (ITD) Tuner</h3>
-        <p class="sim-desc">
-          Demonstrates how the brain uses microsecond timing differences between ears to localize sound. Adjust the ITD delay and mute individual ears to experience binaural processing and the precedence effect.
-        </p>
-        <a href="simulations/Simulation4_itd_binaural_delay_tuner_with_lr_mute.html" class="sim-link" target="_blank">
-          Launch Simulation <i class="fas fa-arrow-right"></i>
-        </a>
+        <div class="news-tags">
+          <span class="news-tag">Invited Talk</span>
+          <span class="news-tag">Symposium</span>
+          <span class="news-tag">USC</span>
+          <span class="news-tag">Chen Institute</span>
+          <span class="news-tag">Neuroscience & AI</span>
+        </div>
       </div>
+    </article>
 
-      <div class="sim-card">
-        <div class="sim-number">Simulation 5</div>
-        <h3 class="sim-name">Interaural Intensity Difference (IID) Simulator</h3>
-        <p class="sim-desc">
-          Explore how level differences between the two ears contribute to sound localization, especially for high-frequency sounds. Adjust IID values and frequency to observe the head shadow effect and binaural level cues.
-        </p>
-        <a href="simulations/Simulation5 IID_binaural_level_difference_simulator.html" class="sim-link" target="_blank">
-          Launch Simulation <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
-
-      <div class="sim-card">
-        <div class="sim-number">Simulation 6</div>
-        <h3 class="sim-name">Harmonics & Timbre — Melody Loop</h3>
-        <p class="sim-desc">
-          Plays a looping melody while you adjust the strength of individual harmonics in real time. Demonstrates how the same pitch can sound like different instruments depending on harmonic content (timbre), with waveform and spectrum visualization.
-        </p>
-        <a href="simulations/Simulation6_harmonics_melody_loop.html" class="sim-link" target="_blank">
-          Launch Simulation <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
-
-    </div>
   </div>
 </section>
 
@@ -445,7 +417,7 @@
       <div class="footer-links">
         <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
         <a href="https://www.vcu.edu/" target="_blank">VCU</a>
-        <a href="contact.html">Contact</a>
+        <a href="contact.html">Join Us</a>
       </div>
     </div>
   </div>
