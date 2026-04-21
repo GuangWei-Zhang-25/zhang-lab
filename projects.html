@@ -170,6 +170,30 @@
       margin-bottom: 2rem;
     }
 
+    .project-media {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      background: var(--bg-light);
+      margin-bottom: 1.75rem;
+      box-shadow: 0 10px 25px rgba(26, 54, 93, 0.08);
+    }
+
+    .project-media video,
+    .project-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .project-media-caption {
+      padding: 0.6rem 0.9rem;
+      background: var(--white);
+      border-top: 1px solid var(--border-light);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
     .project-card:last-child {
       margin-bottom: 0;
     }
@@ -448,6 +472,13 @@
       </div>
       <h2 class="project-title">Animal Behavioral Dataset — Team Effort</h2>
 
+      <div class="project-media">
+        <video autoplay muted loop playsinline>
+          <source src="videos/behavior dataset example.mp4" type="video/mp4">
+        </video>
+        <div class="project-media-caption">Example clip from the behavioral dataset</div>
+      </div>
+
       <p class="project-description">
         We are building a large-scale, open <strong>animal behavioral dataset</strong> to support research at the intersection of neuroscience, behavior, and artificial intelligence. The dataset will combine rich video recordings of natural animal behaviors with expert annotations, enabling the development and benchmarking of new analysis tools such as <strong>TRACE</strong>.
       </p>
@@ -501,6 +532,13 @@
         <i class="fas fa-code"></i> Open-Source Tool
       </div>
       <h2 class="project-title">Social Behavior Annotator GUI</h2>
+
+      <div class="project-media">
+        <a href="software/social_annotator_V1.2.html" target="_blank">
+          <img src="images/projects/annotator_screenshot.png" alt="Social Behavior Annotator GUI">
+        </a>
+        <div class="project-media-caption">Screenshot of the Social Behavior Annotator (v1.2) — click to launch</div>
+      </div>
 
       <p class="project-description">
         We are developing an <strong>open, browser-based GUI</strong> for efficient annotation of social behaviors in mouse video recordings. The tool runs entirely in the browser — no installation required — and is designed to support the annotation workflow for our <strong>Animal Behavioral Dataset</strong> effort.
