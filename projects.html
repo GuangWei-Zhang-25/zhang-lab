@@ -167,6 +167,34 @@
       border-radius: 14px;
       padding: 2.5rem;
       box-shadow: 0 10px 30px rgba(26, 54, 93, 0.05);
+      margin-bottom: 2rem;
+    }
+
+    .project-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 1.75rem;
+      background: var(--white);
+      color: var(--primary);
+      text-decoration: none;
+      border: 2px solid var(--primary);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
+      margin-top: 1.5rem;
+      margin-right: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background: var(--primary);
+      color: var(--white);
+      transform: translateY(-2px);
     }
 
     .project-eyebrow {
@@ -465,6 +493,46 @@
 
       <a href="mailto:guangwei.zhang@vcuhealth.org?subject=Joining%20the%20Behavioral%20Dataset%20Project" class="btn-primary">
         <i class="fas fa-envelope"></i> Email to Join the Team
+      </a>
+    </div>
+
+    <div class="project-card">
+      <div class="project-eyebrow">
+        <i class="fas fa-code"></i> Open-Source Tool
+      </div>
+      <h2 class="project-title">Social Behavior Annotator GUI</h2>
+
+      <p class="project-description">
+        We are developing an <strong>open, browser-based GUI</strong> for efficient annotation of social behaviors in mouse video recordings. The tool runs entirely in the browser — no installation required — and is designed to support the annotation workflow for our <strong>Animal Behavioral Dataset</strong> effort.
+      </p>
+
+      <p class="project-description">
+        Launch the current development version directly from your browser and try it out. We welcome feedback, feature suggestions, and contributors interested in annotation tooling, UI/UX design, and computer vision.
+      </p>
+
+      <div class="project-highlights">
+        <h3>Features</h3>
+        <ul>
+          <li>Runs entirely in the browser — no install needed</li>
+          <li>Frame-by-frame navigation with keyboard shortcuts</li>
+          <li>Custom behavior labels and multi-animal annotation</li>
+          <li>Export annotations in standard formats for downstream analysis</li>
+        </ul>
+      </div>
+
+      <div class="project-cta">
+        <h3><i class="fas fa-handshake"></i> Contributing</h3>
+        <p>
+          Interested in contributing to the annotator development? Background in web development (JavaScript/HTML/CSS), computer vision, or behavioral neuroscience is especially welcome. Email Dr. Zhang at
+          <a href="mailto:guangwei.zhang@vcuhealth.org">guangwei.zhang@vcuhealth.org</a> to get involved.
+        </p>
+      </div>
+
+      <a href="software/social_annotator_V1.2.html" target="_blank" class="btn-primary">
+        <i class="fas fa-play"></i> Launch Annotator (v1.2)
+      </a>
+      <a href="mailto:guangwei.zhang@vcuhealth.org?subject=Social%20Behavior%20Annotator%20Project" class="btn-secondary">
+        <i class="fas fa-envelope"></i> Contact About Development
       </a>
     </div>
 
