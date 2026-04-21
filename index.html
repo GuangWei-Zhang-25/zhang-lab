@@ -526,6 +526,114 @@
       border-color: rgba(56, 178, 172, 0.2);
     }
 
+    .tech-badge-gold {
+      background: rgba(201, 162, 39, 0.12);
+      color: #7a5e18;
+      border-color: rgba(201, 162, 39, 0.25);
+    }
+
+    .tech-demo-video {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #000;
+    }
+
+    .tech-demo-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .tech-demo-network canvas {
+      width: 100%;
+      height: 100%;
+      min-height: 200px;
+    }
+
+    .tech-paper-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: var(--transition);
+      box-shadow: 0 25px 60px rgba(26, 54, 93, 0.15);
+    }
+
+    .tech-paper-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary-light);
+    }
+
+    .tech-paper-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: var(--bg-light);
+    }
+
+    .tech-paper-caption {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border-light);
+    }
+
+    .tech-paper-caption strong {
+      color: var(--primary-dark);
+    }
+
+    .tech-image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .tech-image-card {
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(26, 54, 93, 0.08);
+      transition: var(--transition);
+    }
+
+    .tech-image-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(26, 54, 93, 0.12);
+    }
+
+    .tech-image-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: var(--bg-light);
+    }
+
+    .tech-image-card figcaption {
+      padding: 0.6rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      text-align: center;
+      border-top: 1px solid var(--border-light);
+    }
+
+    @media (max-width: 768px) {
+      .tech-demo-row {
+        grid-template-columns: 1fr;
+      }
+      .tech-image-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .tech-badge-orange {
       background: rgba(237, 137, 54, 0.12);
       color: #c05621;
@@ -1239,7 +1347,7 @@
       <li><a href="index.html">Home</a></li>
       <li><a href="publications.html">Publications</a></li>
       <li><a href="team.html">Team</a></li>
-      <li><a href="techniques.html">Techniques</a></li>
+      <li><a href="projects.html">Projects</a></li>
       <li><a href="teaching.html">Teaching</a></li>
       <li><a href="news.html">News</a></li>
       <li><a href="contact.html">Join Us</a></li>
@@ -1354,32 +1462,36 @@
           </div>
         </div>
 
-        <!-- Neural Network Demo -->
-        <div class="tech-demo-simple">
-          <div class="demo-simple-header">
-            <span class="demo-simple-title">Neural Behavior Classification</span>
+        <!-- Neural Network Demo + TRACE Paper -->
+        <div class="tech-demo-row">
+          <div class="tech-demo-simple tech-demo-network">
+            <div class="demo-simple-header">
+              <span class="demo-simple-title">Neural Behavior Classification</span>
+            </div>
+            <canvas id="networkCanvas"></canvas>
           </div>
-          <canvas id="networkCanvas"></canvas>
+          <a href="publications/Shi Zhang 2026 Trace biorxiv.pdf" target="_blank" class="tech-paper-card">
+            <img src="publications/thumbnails/shi zhang 2026.png" alt="TRACE paper thumbnail">
+            <div class="tech-paper-caption">
+              <strong>TRACE</strong> — End-to-end temporal inference and annotation of animal behaviors from video (Shi, Zhang et al., bioRxiv 2026)
+            </div>
+          </a>
         </div>
       </div>
 
-      <!-- Right Column: Mouse Tracking Demo -->
+      <!-- Right Column: Group Tracking Video -->
       <div class="tech-right-column">
         <div class="tech-demo-simple tech-demo-main">
           <div class="demo-simple-header">
             <span class="demo-simple-title">Social Behavior Tracking</span>
             <div class="demo-simple-status">
               <span class="live-dot"></span>
-              Live Demo
+              Group Tracking
             </div>
           </div>
-          <canvas id="mouse-tracking-canvas"></canvas>
-          <div class="demo-legend-simple">
-            <div class="legend-item"><span class="legend-color mouse-1"></span>Mouse 1</div>
-            <div class="legend-item"><span class="legend-color mouse-2"></span>Mouse 2</div>
-            <div class="legend-item"><span class="legend-color mouse-3"></span>Mouse 3</div>
-            <div class="legend-item"><span class="legend-color mouse-4"></span>Mouse 4</div>
-          </div>
+          <video class="tech-demo-video" autoplay muted loop playsinline>
+            <source src="videos/group tracking.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </div>
@@ -1416,10 +1528,15 @@
       </div>
 
       <div class="tech-visual">
-        <div class="tech-visual-placeholder" id="neural-visual">
-          <div class="visual-icon"><i class="fas fa-brain"></i></div>
-          <p>Neural Activity Visualization</p>
-          <span class="visual-hint">Recording data coming soon</span>
+        <div class="tech-image-grid">
+          <figure class="tech-image-card">
+            <img src="tech/neuropixelv2.png" alt="Neuropixels 2.0 recording rig">
+            <figcaption>Neuropixels 2.0</figcaption>
+          </figure>
+          <figure class="tech-image-card">
+            <img src="tech/fiber photometry.png" alt="Fiber photometry system">
+            <figcaption>Fiber Photometry</figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -1540,6 +1657,52 @@
           <div class="visual-icon"><i class="fas fa-dna"></i></div>
           <p>Molecular Profiling Visualization</p>
           <span class="visual-hint">Sequencing data coming soon</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Animal Behavioral Dataset Section -->
+<section class="tech-showcase tech-showcase-dataset" id="behavioral-dataset">
+  <div class="container">
+    <div class="tech-content-grid">
+      <div class="tech-info">
+        <div class="tech-badge tech-badge-gold">
+          <i class="fas fa-database"></i>
+          Community Effort
+        </div>
+        <h2 class="tech-title">Building the <span>Animal Behavioral Dataset</span></h2>
+        <p class="tech-description">
+          We are establishing a large-scale, open animal behavioral dataset to accelerate research at the intersection of neuroscience and AI. The dataset integrates high-quality video recordings with rich annotations of natural behaviors.
+        </p>
+        <div class="tech-features">
+          <div class="tech-feature">
+            <i class="fas fa-video"></i>
+            <span><strong>Multi-view video</strong> of freely interacting animals</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-tags"></i>
+            <span><strong>Expert annotations</strong> of behavioral states and events</span>
+          </div>
+          <div class="tech-feature">
+            <i class="fas fa-users"></i>
+            <span><strong>Open to collaborators</strong> from all scientific backgrounds</span>
+          </div>
+        </div>
+        <a href="projects.html" class="publication-link" style="margin-top: 1.25rem; display: inline-flex;">
+          Join the Effort <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <div class="tech-visual">
+        <div class="tech-demo-simple tech-demo-main" style="margin:0;">
+          <div class="demo-simple-header">
+            <span class="demo-simple-title">Dataset Example</span>
+          </div>
+          <video class="tech-demo-video" autoplay muted loop playsinline>
+            <source src="videos/behavior dataset example.mp4" type="video/mp4">
+          </video>
         </div>
       </div>
     </div>
