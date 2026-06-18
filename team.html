@@ -236,6 +236,121 @@
       color: var(--text-muted);
     }
 
+    .member-period {
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-top: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .group-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-style: italic;
+      margin: 0 auto 1.5rem;
+    }
+
+    .group-heading {
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    /* Alumni List */
+    .alumni-section {
+      max-width: 900px;
+      margin: 3rem auto 0;
+      padding: 2rem;
+      background: var(--bg-light);
+      border-radius: 12px;
+      border: 1px solid var(--border-light);
+    }
+
+    .alumni-heading {
+      text-align: center;
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 0.25rem;
+    }
+
+    .alumni-list {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+    }
+
+    .alumni-row {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.6rem 0.25rem;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.9rem;
+    }
+
+    .alumni-row:last-child { border-bottom: none; }
+
+    .alumni-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--white);
+      border: 1px solid var(--border-light);
+      flex-shrink: 0;
+    }
+
+    .alumni-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .alumni-avatar.no-photo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--border-medium);
+      font-size: 0.85rem;
+    }
+
+    .alumni-name {
+      font-weight: 600;
+      color: var(--primary-dark);
+      flex-shrink: 0;
+      min-width: 130px;
+    }
+
+    .alumni-meta {
+      color: var(--text-secondary);
+      flex-grow: 1;
+      font-size: 0.85rem;
+    }
+
+    .alumni-period {
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 600px) {
+      .alumni-row {
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+      }
+      .alumni-name {
+        min-width: 0;
+      }
+    }
+
     .member-links {
       margin-top: 0.5rem;
       display: flex;
@@ -410,23 +525,27 @@
       </div>
     </div>
 
-    <!-- Students Row 1: with headshots -->
+    <p class="group-note">Lab members listed alphabetically by last name.</p>
+
+    <!-- Current Members with headshots -->
     <div class="team-row">
       <div class="team-member">
         <div class="member-photo-container">
-          <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo" class="member-photo" style="object-position: center 20%; transform: scale(0.85);">
+          <img src="images/Ava Gardner.jpeg" alt="Ava Gardner" class="member-photo" style="object-position: center 30%;">
         </div>
-        <h3 class="member-name">Henry Oo</h3>
-        <p class="member-title">Graduate Student</p>
-        <p class="member-affiliation">Neuroscience PhD Program, VCU</p>
+        <h3 class="member-name">Ava Gardner</h3>
+        <p class="member-title">Post-Bacc Pre-Med Student</p>
+        <p class="member-affiliation">VCU</p>
+        <p class="member-period">June 2026 – present</p>
       </div>
       <div class="team-member">
         <div class="member-photo-container">
-          <img src="images/Lindsey Wilson.jpeg" alt="Lindsey Wilson" class="member-photo" style="object-position: center 25%;">
+          <img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" class="member-photo" style="object-position: center 15%; transform: scale(0.8);">
         </div>
-        <h3 class="member-name">Lindsey Wilson</h3>
-        <p class="member-title">Rotation Student</p>
-        <p class="member-affiliation"><a href="https://medschool.vcu.edu/education/graduate/dual-degree/mdphd/" target="_blank" style="color: inherit; text-decoration: none;">MSTP (MD-PhD) Program, VCU</a></p>
+        <h3 class="member-name">Wissem Gmach</h3>
+        <p class="member-title">MD</p>
+        <p class="member-affiliation">Odessa National Medical University</p>
+        <p class="member-period">Nov 2025 – present</p>
       </div>
       <div class="team-member">
         <div class="member-photo-container">
@@ -435,6 +554,7 @@
         <h3 class="member-name">Jaden Harris</h3>
         <p class="member-title">Undergraduate Student</p>
         <p class="member-affiliation">VCU</p>
+        <p class="member-period">Jan 2026 – present</p>
       </div>
       <div class="team-member">
         <div class="member-photo-container">
@@ -443,26 +563,19 @@
         <h3 class="member-name">Elizabeth Ivanova</h3>
         <p class="member-title">Post-Bacc Student</p>
         <p class="member-affiliation">University of Southern California</p>
+        <p class="member-period">Oct 2025 – present</p>
       </div>
     </div>
 
-    <!-- Students Row 2: with headshots -->
     <div class="team-row">
       <div class="team-member">
         <div class="member-photo-container">
-          <img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" class="member-photo" style="object-position: center 15%; transform: scale(0.8);">
+          <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo" class="member-photo" style="object-position: center 20%; transform: scale(0.85);">
         </div>
-        <h3 class="member-name">Wissem Gmach</h3>
-        <p class="member-title">MD</p>
-        <p class="member-affiliation">Odessa National Medical University</p>
-      </div>
-      <div class="team-member">
-        <div class="member-photo-container">
-          <img src="images/Sara-Cristina Romanescu.jpeg" alt="Sara-Cristina Romanescu" class="member-photo" style="object-position: center 25%;">
-        </div>
-        <h3 class="member-name">Sara-Cristina Romanescu</h3>
-        <p class="member-title">International Visiting Scholar</p>
-        <p class="member-affiliation"><a href="https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/traineeships-abroad-for-students" target="_blank" style="color: inherit; text-decoration: none;">Erasmus+ Traineeship</a></p>
+        <h3 class="member-name">Henry Oo</h3>
+        <p class="member-title">Graduate Student</p>
+        <p class="member-affiliation">Neuroscience PhD Program, VCU</p>
+        <p class="member-period">Feb 2026 – present</p>
       </div>
       <div class="team-member">
         <div class="member-photo-container">
@@ -471,53 +584,74 @@
         <h3 class="member-name">Aarushi Rao</h3>
         <p class="member-title">WSURP Undergraduate Student</p>
         <p class="member-affiliation">VCU</p>
+        <p class="member-period">May 2026 – present</p>
       </div>
       <div class="team-member">
         <div class="member-photo-container">
-          <img src="images/Ava Gardner.jpeg" alt="Ava Gardner" class="member-photo" style="object-position: center 30%;">
+          <img src="images/Sara-Cristina Romanescu.jpeg" alt="Sara-Cristina Romanescu" class="member-photo" style="object-position: center 25%;">
         </div>
-        <h3 class="member-name">Ava Gardner</h3>
-        <p class="member-title">Post-Bacc Pre-Med Student</p>
-        <p class="member-affiliation">VCU</p>
+        <h3 class="member-name">Sara-Cristina Romanescu</h3>
+        <p class="member-title">International Visiting Scholar</p>
+        <p class="member-affiliation"><a href="https://erasmus-plus.ec.europa.eu/opportunities/individuals/students/traineeships-abroad-for-students" target="_blank" style="color: inherit; text-decoration: none;">Erasmus+ Traineeship</a></p>
+        <p class="member-period">Jan 2027 – Sept 2027</p>
+      </div>
+      <div class="team-member">
+        <div class="member-photo-container">
+          <img src="images/Lindsey Wilson.jpeg" alt="Lindsey Wilson" class="member-photo" style="object-position: center 25%;">
+        </div>
+        <h3 class="member-name">Lindsey Wilson</h3>
+        <p class="member-title">Rotation Student</p>
+        <p class="member-affiliation"><a href="https://medschool.vcu.edu/education/graduate/dual-degree/mdphd/" target="_blank" style="color: inherit; text-decoration: none;">MSTP (MD-PhD) Program, VCU</a></p>
+        <p class="member-period">June 2026 – present</p>
       </div>
     </div>
 
-    <!-- Students Row 3: without headshots -->
+    <!-- Current Members without headshots (remote high school students) -->
     <div class="team-row">
       <div class="team-member">
-        <h3 class="member-name">Alisha Pillai</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
+        <h3 class="member-name">Neha Yashawini Karthikeyan</h3>
+        <p class="member-title">Remote High School Student</p>
+        <p class="member-affiliation">Maggie L. Walker Governor's School, Richmond</p>
+        <p class="member-period">June 2026 – present</p>
       </div>
-      <div class="team-member">
-        <h3 class="member-name">Siara Shah</h3>
-        <p class="member-title">Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
-      </div>
-      <div class="team-member">
-        <h3 class="member-name">Wakas Mustafa</h3>
-        <p class="member-title">Summer Undergraduate Student</p>
-        <p class="member-affiliation">VCU</p>
-      </div>
-    </div>
-
-    <!-- Remote High School Students -->
-    <div class="team-row">
       <div class="team-member">
         <h3 class="member-name">Arjun Kode</h3>
         <p class="member-title">Remote High School Student</p>
         <p class="member-affiliation">Thomas Jefferson High School for Science and Technology</p>
+        <p class="member-period">June 2026 – present</p>
       </div>
       <div class="team-member">
         <h3 class="member-name">Jihyo Lee</h3>
         <p class="member-title">Remote High School Student</p>
         <p class="member-affiliation">Deep Run High School, Richmond</p>
+        <p class="member-period">June 2026 – present</p>
       </div>
-      <div class="team-member">
-        <h3 class="member-name">Neha Yashawini Karthikeyan</h3>
-        <p class="member-title">Remote High School Student</p>
-        <p class="member-affiliation">Maggie L. Walker Governor's School, Richmond</p>
-      </div>
+    </div>
+
+    <!-- Alumni -->
+    <div class="alumni-section">
+      <h3 class="alumni-heading">Alumni</h3>
+      <p class="group-note" style="margin-bottom: 0.5rem;">Listed alphabetically by last name.</p>
+      <ul class="alumni-list">
+        <li class="alumni-row">
+          <div class="alumni-avatar no-photo"><i class="fas fa-user"></i></div>
+          <span class="alumni-name">Wakas Mustafa</span>
+          <span class="alumni-meta">Summer Undergraduate Student · VCU</span>
+          <span class="alumni-period">May 2026 – June 2026</span>
+        </li>
+        <li class="alumni-row">
+          <div class="alumni-avatar no-photo"><i class="fas fa-user"></i></div>
+          <span class="alumni-name">Alisha Pillai</span>
+          <span class="alumni-meta">Undergraduate Student · VCU</span>
+          <span class="alumni-period">Oct 2025 – May 2026</span>
+        </li>
+        <li class="alumni-row">
+          <div class="alumni-avatar no-photo"><i class="fas fa-user"></i></div>
+          <span class="alumni-name">Siara Shah</span>
+          <span class="alumni-meta">Undergraduate Student · VCU</span>
+          <span class="alumni-period">Dec 2025 – May 2026</span>
+        </li>
+      </ul>
     </div>
 
   </div>
