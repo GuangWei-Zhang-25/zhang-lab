@@ -1088,6 +1088,50 @@
       transform: translateX(3px);
     }
 
+    /* Related Publications block inside tech showcase */
+    .tech-related-pubs {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(127, 127, 127, 0.15);
+    }
+
+    .tech-related-pubs .label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .tech-pub-link {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 0.25rem 0;
+      transition: var(--transition);
+      line-height: 1.5;
+    }
+
+    .tech-pub-link:hover {
+      color: var(--primary);
+    }
+
+    .tech-pub-link strong {
+      color: var(--primary-dark);
+    }
+
+    .tech-pub-link:hover strong {
+      color: var(--primary);
+    }
+
+    .tech-pub-link .pub-venue {
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
     /* ============================================
        TEAM SECTION
        ============================================ */
@@ -1388,44 +1432,14 @@
 </header>
 
 <!-- What We Study Section -->
-<section class="section research-section">
+<section class="section research-section" style="padding-bottom: 0;">
   <div class="container">
-    <div class="section-header">
+    <div class="section-header" style="margin-bottom: 1rem;">
       <span class="section-eyebrow">What We Study</span>
       <h2 class="section-title">Research Focus</h2>
       <p class="section-subtitle">
-        We study how neural circuits generate social behavior and how their dysfunction leads to social impairment in neuropsychiatric and neurodegenerative disorders.
+        We study how neural circuits generate naturalistic social behaviors and how their dysfunction leads to social impairment in neuropsychiatric and neurodegenerative disorders. Below is a tour of how we approach this — from automated behavior tracking, to neural recording, circuit mapping, causal manipulation, and molecular profiling.
       </p>
-    </div>
-    <div class="research-grid">
-      <div class="research-card">
-        <div class="research-icon">
-          <i class="fas fa-brain"></i>
-        </div>
-        <h3>Social Behavior and Circuits</h3>
-        <p>Defining how specific neural circuits control naturalistic social behaviors and emotional processing.</p>
-      </div>
-      <div class="research-card">
-        <div class="research-icon">
-          <i class="fas fa-users"></i>
-        </div>
-        <h3>Circuit Dysfunction in Disease</h3>
-        <p>Understanding how disruptions in social circuits give rise to social withdrawal and impairment in neuropsychiatric and neurodegenerative disorders.</p>
-      </div>
-      <div class="research-card">
-        <div class="research-icon">
-          <i class="fas fa-dna"></i>
-        </div>
-        <h3>Cellular and Molecular Identity</h3>
-        <p>Linking circuit function to cellular and molecular signatures of behavior relevant neuronal populations.</p>
-      </div>
-      <div class="research-card">
-        <div class="research-icon">
-          <i class="fas fa-bullseye"></i>
-        </div>
-        <h3>Therapeutic Circuit Targets</h3>
-        <p>Identifying circuit level intervention targets to restore normal social function.</p>
-      </div>
     </div>
   </div>
 </section>
@@ -1458,6 +1472,16 @@
               <i class="fas fa-check-circle"></i>
               <span><strong>High-throughput analysis</strong> with automated annotation</span>
             </div>
+          </div>
+
+          <div class="tech-related-pubs">
+            <span class="label">Related Publications</span>
+            <a class="tech-pub-link" href="https://doi.org/10.1126/science.adq2677" target="_blank">
+              <strong>Reviving-like prosocial behavior in response to unconscious or dead conspecifics</strong> — <span class="pub-venue">Science</span>, 2025
+            </a>
+            <a class="tech-pub-link" href="https://www.biorxiv.org/content/10.64898/2026.04.14.718392v1" target="_blank">
+              <strong>TRACE: end-to-end temporal inference of animal behaviors from video</strong> — <span class="pub-venue">bioRxiv</span>, 2026
+            </a>
           </div>
         </div>
 
@@ -1524,6 +1548,14 @@
             <span><strong>Open to collaborators</strong> from all scientific backgrounds</span>
           </div>
         </div>
+
+        <div class="tech-related-pubs">
+          <span class="label">Related Publication</span>
+          <a class="tech-pub-link" href="https://www.biorxiv.org/content/10.64898/2026.04.14.718392v1" target="_blank">
+            <strong>TRACE</strong> — end-to-end temporal inference and annotation of animal behaviors from video — <span class="pub-venue">bioRxiv</span>, 2026
+          </a>
+        </div>
+
         <a href="projects.html" class="publication-link" style="margin-top: 1.25rem; display: inline-flex;">
           Join the Effort <i class="fas fa-arrow-right"></i>
         </a>
@@ -1570,6 +1602,16 @@
             <span><strong>Neuropixels 2.0</strong> large-scale electrophysiology</span>
           </div>
         </div>
+
+        <div class="tech-related-pubs">
+          <span class="label">Related Publications</span>
+          <a class="tech-pub-link" href="https://doi.org/10.1038/s41593-020-00784-3" target="_blank">
+            <strong>Medial preoptic area antagonistically mediates stress-induced anxiety and parental behavior</strong> — <span class="pub-venue">Nature Neuroscience</span>, 2021
+          </a>
+          <a class="tech-pub-link" href="https://doi.org/10.1038/s41593-023-01397-2" target="_blank">
+            <strong>The medial preoptic area mediates depressive-like behaviors via distinct GABAergic projections</strong> — <span class="pub-venue">Nature Neuroscience</span>, 2023
+          </a>
+        </div>
       </div>
 
       <div class="tech-visual">
@@ -1615,6 +1657,16 @@
             <span><strong>Slice electrophysiology</strong> for synaptic properties</span>
           </div>
         </div>
+
+        <div class="tech-related-pubs">
+          <span class="label">Related Publications</span>
+          <a class="tech-pub-link" href="https://doi.org/10.1016/j.neuron.2017.12.010" target="_blank">
+            <strong>A non-canonical reticular–limbic central auditory pathway via medial septum contributes to fear conditioning</strong> — <span class="pub-venue">Neuron</span>, 2018
+          </a>
+          <a class="tech-pub-link" href="https://doi.org/10.1016/j.neuron.2023.02.012" target="_blank">
+            <strong>Glutamatergic and GABAergic neurons in pontine central gray mediate opposing valence-specific behaviors</strong> — <span class="pub-venue">Neuron</span>, 2023
+          </a>
+        </div>
       </div>
 
       <div class="tech-visual">
@@ -1653,6 +1705,16 @@
             <i class="fas fa-crosshairs"></i>
             <span><strong>Cell-type specific targeting</strong> with viral strategies</span>
           </div>
+        </div>
+
+        <div class="tech-related-pubs">
+          <span class="label">Related Publications</span>
+          <a class="tech-pub-link" href="https://doi.org/10.1038/s41467-024-52727-2" target="_blank">
+            <strong>Excitation–inhibition imbalance in medial preoptic area circuits underlies chronic stress-induced depressive-like states</strong> — <span class="pub-venue">Nature Communications</span>, 2024
+          </a>
+          <a class="tech-pub-link" href="https://doi.org/10.1038/s41467-022-28854-z" target="_blank">
+            <strong>A bottom-up reward pathway mediated by somatostatin neurons in the medial septum complex</strong> — <span class="pub-venue">Nature Communications</span>, 2022
+          </a>
         </div>
       </div>
 
@@ -1693,6 +1755,16 @@
             <i class="fas fa-layer-group"></i>
             <span><strong>Multi-modal integration</strong> linking genes to circuits</span>
           </div>
+        </div>
+
+        <div class="tech-related-pubs">
+          <span class="label">Related Publications</span>
+          <a class="tech-pub-link" href="https://doi.org/10.1101/2023.08.28.555156" target="_blank">
+            <strong>Integrative mapping of spatial transcriptomic and amyloid pathology in Alzheimer's disease at single-cell resolution</strong> — <span class="pub-venue">bioRxiv</span>, 2023
+          </a>
+          <a class="tech-pub-link" href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank">
+            <strong>The neural basis of neuropsychiatric symptoms in Alzheimer's disease</strong> — <span class="pub-venue">Frontiers in Aging Neuroscience</span>, 2024
+          </a>
         </div>
       </div>
 
