@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tools | Zhang Lab</title>
+  <meta name="description" content="Open-source software tools developed by the Zhang Laboratory at Virginia Commonwealth University">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2c5282;
+      --primary-dark: #0f2744;
+      --accent: #c9a227;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --bg-light: #f7fafc;
+      --bg-warm: #fffbf5;
+      --white: #ffffff;
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e0;
+      --font-serif: 'Crimson Text', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: all 0.3s ease;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .navbar .container {
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 24px;
+    }
+
+    .nav-brand a {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-medium);
+    }
+
+    .nav-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .nav-menu a:hover { color: var(--primary); }
+    .nav-menu a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 0 40px;
+      background: linear-gradient(165deg, var(--bg-light) 0%, var(--white) 50%, var(--bg-warm) 100%);
+      margin-top: 70px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3vw, 2.75rem);
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .page-header-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Tools Section */
+    .tools-section {
+      padding: 50px 0 70px;
+    }
+
+    /* Tool Card */
+    .tool-card {
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(26, 54, 93, 0.06);
+      margin-bottom: 3rem;
+    }
+
+    .tool-hero {
+      padding: 2.5rem 2.5rem 2rem;
+      background: linear-gradient(135deg, #0f2744 0%, #1a365d 55%, #2c5282 100%);
+      color: var(--white);
+    }
+
+    .tool-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.9rem;
+    }
+
+    .tool-name {
+      font-family: var(--font-serif);
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      line-height: 1.15;
+    }
+
+    .tool-tagline {
+      font-size: 1.05rem;
+      color: rgba(255, 255, 255, 0.85);
+      max-width: 640px;
+      margin-bottom: 1.5rem;
+    }
+
+    .tool-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-launch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.6rem;
+      background: var(--accent);
+      color: #3a2e0a;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-launch:hover {
+      background: #e0b736;
+      transform: translateY(-2px);
+    }
+
+    .tool-badge-note {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    /* Author credit */
+    .tool-author {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 1.25rem 2.5rem;
+      background: var(--bg-light);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .tool-author img {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 30%;
+      border: 2px solid var(--white);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .tool-author-text {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    .tool-author-text strong {
+      color: var(--primary-dark);
+    }
+
+    .tool-author-text a {
+      color: var(--primary-light);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .tool-author-text a:hover { text-decoration: underline; }
+
+    /* Tool body */
+    .tool-body {
+      padding: 2.25rem 2.5rem 2.5rem;
+      background: var(--white);
+    }
+
+    .tool-body h3 {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .tool-body p {
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    /* Pipeline steps */
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .pipeline-step {
+      position: relative;
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      padding: 1.25rem 1.1rem;
+      transition: var(--transition);
+    }
+
+    .pipeline-step:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(26, 54, 93, 0.08);
+    }
+
+    .pipeline-step .step-num {
+      position: absolute;
+      top: 0.9rem;
+      right: 1rem;
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--border-medium);
+      line-height: 1;
+    }
+
+    .pipeline-step .step-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.05rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .pipeline-step h4 {
+      font-size: 0.95rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+
+    .pipeline-step p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Feature chips */
+    .tool-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+
+    .feature-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: 999px;
+      padding: 0.45rem 0.9rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .feature-chip i {
+      color: var(--primary);
+      font-size: 0.8rem;
+    }
+
+    .quick-start {
+      background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-light) 100%);
+      border-left: 4px solid var(--accent);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 1.75rem;
+    }
+
+    .quick-start h4 {
+      font-family: var(--font-serif);
+      color: var(--primary-dark);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .quick-start p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    /* Coming soon / placeholder */
+    .tool-placeholder {
+      border: 2px dashed var(--border-medium);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      background: var(--bg-light);
+    }
+
+    .tool-placeholder i {
+      font-size: 2.25rem;
+      color: var(--border-medium);
+      margin-bottom: 1rem;
+    }
+
+    .tool-placeholder h3 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-placeholder p {
+      font-size: 0.9rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .tool-placeholder a {
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .tool-placeholder a:hover { text-decoration: underline; }
+
+    /* Footer */
+    .footer {
+      background: var(--primary-dark);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 3rem 0;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .footer-text { font-size: 0.875rem; }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: var(--white);
+        width: 100%;
+        text-align: center;
+        padding: 2rem 0;
+        gap: 1.5rem;
+        transition: var(--transition);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+      .nav-menu.active { left: 0; }
+      .nav-toggle { display: flex; }
+      .nav-subtitle, .nav-divider { display: none; }
+      .page-header { padding: 100px 0 30px; }
+      .tool-hero, .tool-author, .tool-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .tool-name { font-size: 1.7rem; }
+      .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <a href="index.html">
+        <span class="nav-logo">Zhang Lab</span>
+        <span class="nav-divider"></span>
+        <span class="nav-subtitle">Neuroscience at VCU</span>
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="teaching.html">Teaching</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="contact.html">Join Us</a></li>
+    </ul>
+    <div class="nav-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Tools</h1>
+    <p class="page-header-subtitle">
+      Open-source software developed in the Zhang Lab. Everything here runs directly in your web browser — no installation, no accounts, and your data never leaves your computer.
+    </p>
+  </div>
+</header>
+
+<section class="tools-section">
+  <div class="container">
+
+    <!-- NeuroFlow -->
+    <div class="tool-card">
+      <div class="tool-hero">
+        <div class="tool-eyebrow"><i class="fas fa-brain"></i> Neuroanatomy · Cell Mapping</div>
+        <h1 class="tool-name">NeuroFlow</h1>
+        <p class="tool-tagline">
+          A complete, browser-based pipeline for mapping labeled cells in histological brain sections onto a reference atlas — from raw images to region-by-region cell counts, all in one window.
+        </p>
+        <div class="tool-actions">
+          <a href="Tools/neuroflow-v1-manual-standalone.html" class="btn-launch" target="_blank">
+            <i class="fas fa-play"></i> Launch NeuroFlow
+          </a>
+          <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally — your images stay on your device</span>
+        </div>
+      </div>
+
+      <div class="tool-author">
+        <img src="images/Aarushi Rao.jpg" alt="Aarushi Rao">
+        <div class="tool-author-text">
+          Developed by <strong>Aarushi Rao</strong>, WSURP Undergraduate Researcher.
+          <a href="team.html">See the team page →</a>
+        </div>
+      </div>
+
+      <div class="tool-body">
+        <h3>What it does</h3>
+        <p>
+          NeuroFlow guides you through the full workflow of quantifying fluorescently labeled cells across the mouse brain. Import your section images, align them to the Allen Brain Atlas, detect labeled cells, and get a clean, exportable table of cell counts for every brain region — no coding required.
+        </p>
+
+        <h3>How it works — five simple steps</h3>
+        <div class="pipeline">
+          <div class="pipeline-step">
+            <span class="step-num">1</span>
+            <div class="step-icon"><i class="fas fa-crop-simple"></i></div>
+            <h4>Cropper</h4>
+            <p>Import your section images (PNG / JPG / WebP / BMP) and crop them to the tissue.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">2</span>
+            <div class="step-icon"><i class="fas fa-layer-group"></i></div>
+            <h4>Arranger</h4>
+            <p>Order your sections along the rostral–caudal axis of the brain.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">3</span>
+            <div class="step-icon"><i class="fas fa-crosshairs"></i></div>
+            <h4>Scaler</h4>
+            <p>Register each section to its matching coronal atlas plate to assign brain regions.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">4</span>
+            <div class="step-icon"><i class="fas fa-circle-dot"></i></div>
+            <h4>Quantifier</h4>
+            <p>Detect labeled cells and place them onto the registered atlas coordinates.</p>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">5</span>
+            <div class="step-icon"><i class="fas fa-chart-column"></i></div>
+            <h4>Analyzer</h4>
+            <p>Review per-region cell counts on a 3D brain and export the results to Excel.</p>
+          </div>
+        </div>
+
+        <h3>Highlights</h3>
+        <div class="tool-features">
+          <span class="feature-chip"><i class="fas fa-globe"></i> Allen Brain Atlas registration</span>
+          <span class="feature-chip"><i class="fas fa-cube"></i> Interactive 3D brain viewer</span>
+          <span class="feature-chip"><i class="fas fa-table"></i> One-click Excel export</span>
+          <span class="feature-chip"><i class="fas fa-floppy-disk"></i> Auto-saves your progress</span>
+          <span class="feature-chip"><i class="fas fa-wifi"></i> Works fully offline</span>
+          <span class="feature-chip"><i class="fas fa-shield-halved"></i> Private — nothing is uploaded</span>
+        </div>
+
+        <div class="quick-start">
+          <h4><i class="fas fa-bolt"></i> Quick start</h4>
+          <p>Click <strong>Launch NeuroFlow</strong>, then drag your first section image into the Cropper. Follow the tabs left to right — Cropper → Arranger → Scaler → Quantifier → Analyzer — and export your region counts at the end. The tool remembers your work between steps.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder for future tools -->
+    <div class="tool-placeholder">
+      <i class="fas fa-screwdriver-wrench"></i>
+      <h3>More tools coming soon</h3>
+      <p>
+        We are actively developing additional open-source tools for behavior analysis, neural data processing, and circuit mapping. Interested in contributing or collaborating? <a href="contact.html">Get in touch</a>.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container" style="max-width: 1200px;">
+    <div class="footer-content">
+      <div class="footer-brand">Zhang Lab</div>
+      <p class="footer-text">&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
+      <div class="footer-links">
+        <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
+        <a href="https://www.vcu.edu/" target="_blank">VCU</a>
+        <a href="contact.html">Join Us</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+navToggle.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+});
+</script>
+
+</body>
+</html>
