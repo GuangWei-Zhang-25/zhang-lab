@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neuropixels Planner · Allen CCFv3 · Qiu2018</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --line:#2b3441;
+    --txt:#e6edf3; --muted:#8b97a6; --accent:#4cc2ff; --accent2:#ffce56;
+    --good:#7ee787; --warn:#ff7b72;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);
+    font-family:"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;overflow:hidden}
+  #app{display:flex;height:100%}
+  #panel{width:340px;min-width:340px;height:100%;background:var(--panel);
+    border-right:1px solid var(--line);display:flex;flex-direction:column}
+  #panelHead{padding:12px 14px;border-bottom:1px solid var(--line)}
+  #panelHead h1{margin:0;font-size:15px;letter-spacing:.2px}
+  #panelHead .sub{color:var(--muted);font-size:11px;margin-top:3px}
+  #panelBody{overflow-y:auto;padding:12px 14px;flex:1}
+  .sec{margin-bottom:16px}
+  .sec h2{font-size:11px;text-transform:uppercase;letter-spacing:.8px;
+    color:var(--muted);margin:0 0 8px;font-weight:600}
+  .card{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+  .row{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;font-size:13px}
+  .row .k{color:var(--muted)}
+  .row .v{font-variant-numeric:tabular-nums;font-weight:600}
+  .row .v.big{font-size:16px;color:var(--accent)}
+  .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin-bottom:8px}
+  .seg button{flex:1;background:transparent;color:var(--muted);border:0;padding:7px 4px;
+    font-size:12px;cursor:pointer}
+  .seg button.on{background:var(--accent);color:#03263a;font-weight:700}
+  .btns{display:flex;flex-wrap:wrap;gap:6px}
+  .btns button{background:var(--panel2);border:1px solid var(--line);color:var(--txt);
+    border-radius:6px;padding:6px 9px;font-size:12px;cursor:pointer}
+  .btns button:hover{border-color:var(--accent)}
+  .btns button.on{border-color:var(--accent);color:var(--accent)}
+  label.tog{display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 0;cursor:pointer}
+  .reglist{max-height:210px;overflow-y:auto}
+  .regitem{display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 2px;border-bottom:1px solid #232b36}
+  .regitem:last-child{border-bottom:0}
+  .sw{width:12px;height:12px;border-radius:3px;flex:none;border:1px solid #0006}
+  .regitem .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .regitem .dp{color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px}
+  .slider{display:flex;align-items:center;gap:8px;margin-top:6px}
+  .slider input{flex:1}
+  .hint{font-size:11px;color:var(--muted);line-height:1.5}
+  .hint b{color:var(--txt)}
+  #stage{flex:1;position:relative}
+  #c{display:block;width:100%;height:100%}
+  #overlay{position:absolute;left:12px;top:12px;font-size:11px;color:var(--muted);
+    background:#0008;border:1px solid var(--line);border-radius:8px;padding:8px 10px;pointer-events:none;max-width:260px;line-height:1.5}
+  #overlay b{color:var(--accent)}
+  #loader{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;gap:14px;background:var(--bg);z-index:5}
+  #loader .ring{width:42px;height:42px;border:3px solid #2b3441;border-top-color:var(--accent);
+    border-radius:50%;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .pill{display:inline-block;background:#0c5460;color:#9fe;border-radius:10px;padding:1px 7px;font-size:10px;margin-left:6px}
+  .legend{position:absolute;right:12px;bottom:12px;font-size:11px;color:var(--muted);
+    background:#0008;border:1px solid var(--line);border-radius:8px;padding:8px 10px;line-height:1.6}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+  a{color:var(--accent)}
+  .foot{font-size:10px;color:#5b6675;margin-top:10px;line-height:1.5}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="panel">
+    <div id="panelHead">
+      <h1>Neuropixels Planner <span class="pill">CCFv3</span></h1>
+      <div class="sub">Allen Mouse Brain Atlas · drag-to-place trajectory</div>
+    </div>
+    <div id="panelBody">
+
+      <div class="sec">
+        <h2>Coordinate frame</h2>
+        <div class="seg" id="modeSeg">
+          <button data-mode="qiu" class="on">Qiu2018 in&#8209;vivo</button>
+          <button data-mode="ccf">CCF stereotaxic</button>
+        </div>
+        <div class="hint" id="modeHint"></div>
+      </div>
+
+      <div class="sec">
+        <h2>Surgery readout (from bregma)</h2>
+        <div class="card">
+          <div class="row"><span class="k">Entry&nbsp; AP</span><span class="v" id="e_ap">–</span></div>
+          <div class="row"><span class="k">Entry&nbsp; ML</span><span class="v" id="e_ml">–</span></div>
+          <div class="row" style="border-top:1px solid var(--line);margin-top:4px;padding-top:7px">
+            <span class="k">Target AP</span><span class="v" id="t_ap">–</span></div>
+          <div class="row"><span class="k">Target ML</span><span class="v" id="t_ml">–</span></div>
+          <div class="row"><span class="k">Target DV</span><span class="v" id="t_dv">–</span></div>
+          <div class="row"><span class="k">Target region</span><span class="v" id="t_reg" style="font-size:12px">–</span></div>
+          <div class="row" style="border-top:1px solid var(--line);margin-top:4px;padding-top:7px">
+            <span class="k">Depth (along&nbsp;probe)</span><span class="v big" id="depth">–</span></div>
+          <div class="row"><span class="k">ML tilt</span><span class="v" id="mlAng">–</span></div>
+          <div class="row"><span class="k">AP tilt</span><span class="v" id="apAng">–</span></div>
+          <div class="row"><span class="k">Angle from vertical</span><span class="v" id="polar">–</span></div>
+        </div>
+        <div class="hint" id="manip" style="margin-top:7px"></div>
+      </div>
+
+      <div class="sec">
+        <h2>Depth fine‑tune</h2>
+        <div class="slider">
+          <input type="range" id="depthSlider" min="0.2" max="10" step="0.05" value="3">
+          <span class="v" id="depthVal" style="width:54px;text-align:right">3.00</span>
+        </div>
+        <div class="hint">Or drag the orange <b>tip</b> ball in 3D to aim &amp; set depth at once.</div>
+      </div>
+
+      <div class="sec">
+        <h2>Regions along track</h2>
+        <div class="card reglist" id="regList"><div class="hint">Place a probe to see traversed regions.</div></div>
+      </div>
+
+      <div class="sec">
+        <h2>View</h2>
+        <div class="btns" id="viewBtns">
+          <button data-view="3d" class="on">3D</button>
+          <button data-view="coronal">Coronal</button>
+          <button data-view="sagittal">Sagittal</button>
+          <button data-view="horizontal">Horizontal</button>
+          <button data-view="top">Top</button>
+        </div>
+        <div class="btns" style="margin-top:8px">
+          <button id="cutBtn">✂ Cut at target</button>
+          <button id="resetBtn">⟳ Reset probe</button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h2>Structures <span style="color:var(--muted);font-weight:400">· 316 fine regions</span></h2>
+        <input id="search" placeholder="Search a region (VISp, CA1, LGd, SCm…)" autocomplete="off"
+          style="width:100%;padding:6px 8px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;color:var(--txt);font-size:12px">
+        <div class="reglist" id="searchRes" style="margin-top:6px"></div>
+        <label class="tog" style="margin-top:6px"><input type="checkbox" id="allReg"> Show all region surfaces</label>
+        <div class="hint">Regions the probe crosses are highlighted automatically. Click any region in the lists to pin/zoom it.</div>
+      </div>
+
+      <div class="sec">
+        <h2>How to use</h2>
+        <div class="hint">
+          • <b>Drag empty space</b> = orbit · <b>wheel</b> = zoom · <b>Shift‑drag</b> = pan.<br>
+          • <b>Click the brain</b> to set the entry point on the surface.<br>
+          • <b>Drag the orange tip ball</b> to aim the probe &amp; set depth.<br>
+          • <b>Drag the cyan entry ball</b> to slide the entry across the surface.<br>
+          • Numbers update live in both Qiu2018 in‑vivo and raw CCF stereotaxic frames.
+        </div>
+        <div class="foot">
+          Geometry: Allen Institute CCFv3 structure meshes (decimated). Bregma at CCF
+          (AP 5400, DV 440, ML 5700 µm). Qiu2018 live‑brain scaling AP×1.031, ML×0.952,
+          DV×0.885 with −5° pitch. Estimates only — verify against your stereotaxic atlas.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="stage">
+    <canvas id="c"></canvas>
+    <div id="overlay">
+      <b>Click</b> the brain to drop the entry, then <b>drag the orange tip</b> to aim.
+    </div>
+    <div class="legend">
+      <div><i style="background:#ff5a5a"></i>A → P (anterior/posterior)</div>
+      <div><i style="background:#5aff8d"></i>L → R (medial/lateral)</div>
+      <div><i style="background:#5a9dff"></i>D → V (dorsal/ventral)</div>
+    </div>
+    <div id="loader"><div class="ring"></div><div>Loading Allen CCF atlas…</div></div>
+  </div>
+</div>
+
+<script src="assets/three.min.js"></script>
+<script src="assets/ccf_data.js"></script>
+<script>
+(async function(){
+"use strict";
+const THREE = window.THREE;
+
+/* ---------- atlas constants ---------- */
+const BREG = {ap:5400, dv:440, ml:5700};      // bregma in CCF micrometres
+const S = 0.01;                                // scene units per micrometre (1 unit = 100 µm = 0.1 mm)
+const MM = 10;                                 // scene units per millimetre
+
+// CCF micrometres -> scene Vector3
+function ccfToScene(ap,dv,ml){
+  return new THREE.Vector3((ml-BREG.ml)*S, -(dv-BREG.dv)*S, (ap-BREG.ap)*S);
+}
+// scene Vector3 -> CCF micrometres
+function sceneToCCF(p){
+  return { ap: p.z/S + BREG.ap, dv: -p.y/S + BREG.dv, ml: p.x/S + BREG.ml };
+}
+
+/* ---------- CCF -> stereotaxic transform ---------- */
+// returns mm: AP(+anterior), ML(+right), DV(+ventral/down) relative to bregma
+function ccfToStereo(ap,dv,ml,mode){
+  let dap = ap-BREG.ap, ddv = dv-BREG.dv, dml = ml-BREG.ml;
+  const a = 5*Math.PI/180;                     // CCF pitched ~5 deg vs flat skull
+  let rap = dap*Math.cos(a) - ddv*Math.sin(a);
+  let rdv = dap*Math.sin(a) + ddv*Math.cos(a);
+  if(mode==='qiu'){ rap*=1.031; dml*=0.952; rdv*=0.885; }
+  else            { rdv*=0.9434; }
+  return { AP:-rap/1000, ML:dml/1000, DV:rdv/1000 };
+}
+
+/* ---------- decode embedded mesh blob ---------- */
+async function inflate(b64){
+  const bin = atob(b64);
+  const u8 = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+  if('DecompressionStream' in window){
+    const ds = new DecompressionStream('gzip');
+    const stream = new Blob([u8]).stream().pipeThrough(ds);
+    return await new Response(stream).arrayBuffer();
+  }
+  return u8.buffer; // (all modern browsers support DecompressionStream)
+}
+
+const buf = await inflate(window.NPP_BLOB);
+const MAN = window.NPP_MANIFEST;
+
+/* ---------- three.js scene ---------- */
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.localClippingEnabled = true;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0d1117);
+
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 5000);
+const camTarget = new THREE.Vector3(0,0,0);
+
+scene.add(new THREE.AmbientLight(0xffffff,0.65));
+const dl1 = new THREE.DirectionalLight(0xffffff,0.7); dl1.position.set(1,2,1.5); scene.add(dl1);
+const dl2 = new THREE.DirectionalLight(0xbcd4ff,0.35); dl2.position.set(-1,-0.5,-1); scene.add(dl2);
+
+// brain group with CCF->scene matrix baked in
+const brain = new THREE.Group();
+brain.matrixAutoUpdate = false;
+brain.matrix.set(
+  0,    0,  S, -S*BREG.ml,
+  0,   -S,  0,  S*BREG.dv,
+  S,    0,  0, -S*BREG.ap,
+  0,    0,  0,  1
+);
+scene.add(brain);
+
+const clipPlane = new THREE.Plane(new THREE.Vector3(0,0,-1), 1e6);
+const regionMeshes = {};     // id -> mesh
+const regionList = [];       // array of region meshes (fine structures)
+const meshById = {};
+let rootMesh = null;
+
+for(const m of MAN){
+  const pos = new Float32Array(buf, m.voff, m.vcount*3);
+  const idx = new Uint32Array(buf, m.ioff, m.icount*3);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  g.setIndex(new THREE.BufferAttribute(idx,1));
+  g.computeVertexNormals();
+  const col = new THREE.Color('#'+m.color);
+  const mat = new THREE.MeshPhongMaterial({
+    color: col, transparent:true, opacity:m.opacity,
+    side: THREE.DoubleSide, depthWrite:false,
+    shininess: 8, clippingPlanes:[], clipIntersection:false
+  });
+  const mesh = new THREE.Mesh(g, mat);
+  mesh.userData = m;
+  brain.add(mesh);
+  meshById[m.id] = mesh;
+  if(m.shell){ rootMesh = mesh; mat.opacity = m.opacity; mat.color.set(0xaab4c2); }
+  else { mesh.visible=false; mesh.userData.baseOpacity=m.opacity; regionMeshes[m.id]=mesh; regionList.push(mesh); }
+}
+
+/* ---------- axes + bregma marker ---------- */
+function axisLine(a,b,color){
+  const g=new THREE.BufferGeometry().setFromPoints([a,b]);
+  return new THREE.Line(g,new THREE.LineBasicMaterial({color}));
+}
+const AX=70;
+scene.add(axisLine(new THREE.Vector3(0,0,-AX),new THREE.Vector3(0,0,AX),0xff5a5a)); // AP
+scene.add(axisLine(new THREE.Vector3(-AX,0,0),new THREE.Vector3(AX,0,0),0x5aff8d)); // ML
+scene.add(axisLine(new THREE.Vector3(0,-AX,0),new THREE.Vector3(0,AX,0),0x5a9dff)); // DV
+const breg = new THREE.Mesh(new THREE.SphereGeometry(1.1,16,16),
+  new THREE.MeshBasicMaterial({color:0xffffff}));
+scene.add(breg); // bregma at origin
+
+function makeLabel(text,color,pos){
+  const cv=document.createElement('canvas');cv.width=64;cv.height=64;
+  const cx=cv.getContext('2d');cx.fillStyle=color;cx.font='bold 44px Segoe UI';
+  cx.textAlign='center';cx.textBaseline='middle';cx.fillText(text,32,34);
+  const tex=new THREE.CanvasTexture(cv);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,depthTest:false}));
+  sp.position.copy(pos);sp.scale.set(6,6,6);scene.add(sp);
+}
+makeLabel('A','#ff7b72',new THREE.Vector3(0,0,-AX-4));
+makeLabel('P','#ff7b72',new THREE.Vector3(0,0,AX+4));
+makeLabel('L','#7ee787',new THREE.Vector3(-AX-4,0,0));
+makeLabel('R','#7ee787',new THREE.Vector3(AX+4,0,0));
+makeLabel('D','#79b8ff',new THREE.Vector3(0,AX+4,0));
+makeLabel('V','#79b8ff',new THREE.Vector3(0,-AX-4,0));
+
+/* ---------- probe ---------- */
+// default probe = stereotaxic-vertical (arm 0°): CCF dir ∝ (tan5°, 1, 0)
+// entry over dorsal cortex (~AP −2.0, ML 1.3), 3 mm penetration into hippocampus/thalamus
+const PROBE = { entry:{ap:7400,dv:1050,ml:7000}, tip:{ap:7662,dv:4039,ml:7000} };
+
+const probeMat = new THREE.LineBasicMaterial({color:0xffffff});
+const probeGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);
+const probeLine = new THREE.Line(probeGeo, probeMat);
+scene.add(probeLine);
+
+// thicker shaft (cylinder) for visibility
+const shaft = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.45,0.45,1,12),
+  new THREE.MeshBasicMaterial({color:0xffce56}));
+scene.add(shaft);
+// recording length (active sites) marker
+const recShaft = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.7,0.7,1,12),
+  new THREE.MeshBasicMaterial({color:0x4cc2ff, transparent:true, opacity:0.55}));
+scene.add(recShaft);
+
+const tipHandle = new THREE.Mesh(new THREE.SphereGeometry(1.6,20,20),
+  new THREE.MeshBasicMaterial({color:0xff8c42}));
+const entryHandle = new THREE.Mesh(new THREE.SphereGeometry(1.6,20,20),
+  new THREE.MeshBasicMaterial({color:0x4cc2ff}));
+scene.add(tipHandle); scene.add(entryHandle);
+
+const REC_LEN_MM = 3.84;   // Neuropixels 1.0 active length
+
+function updateProbeGraphics(){
+  const e = ccfToScene(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml);
+  const t = ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml);
+  probeGeo.setFromPoints([e,t]); probeGeo.attributes.position.needsUpdate=true;
+  tipHandle.position.copy(t); entryHandle.position.copy(e);
+  // shaft cylinder between e and t
+  const dir = new THREE.Vector3().subVectors(t,e);
+  const len = dir.length(); const mid = new THREE.Vector3().addVectors(e,t).multiplyScalar(0.5);
+  shaft.position.copy(mid);
+  shaft.scale.set(1,Math.max(len,0.001),1);
+  shaft.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), dir.clone().normalize());
+  // recording length from tip upward
+  const u = dir.clone().normalize();
+  const recLen = Math.min(REC_LEN_MM*MM, len);
+  const recMid = t.clone().addScaledVector(u, -recLen/2);
+  recShaft.position.copy(recMid);
+  recShaft.scale.set(1,Math.max(recLen,0.001),1);
+  recShaft.quaternion.copy(shaft.quaternion);
+}
+
+/* ---------- readout ---------- */
+let MODE='qiu';
+let showAll=false, regionsDirty=true, lastReg=-1;
+const pinned=new Set();
+const $=id=>document.getElementById(id);
+function fmt(x,d){return (x>=0?'+':'')+x.toFixed(d===undefined?2:d);}
+function fmtML(x){const s=Math.abs(x).toFixed(2);return s+' '+(x>=0?'R':'L');}
+
+function refresh(){
+  updateProbeGraphics();
+  const e = ccfToStereo(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml,MODE);
+  const t = ccfToStereo(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml,MODE);
+  $('e_ap').textContent = fmt(e.AP)+' mm';
+  $('e_ml').textContent = fmtML(e.ML)+' mm';
+  $('t_ap').textContent = fmt(t.AP)+' mm';
+  $('t_ml').textContent = fmtML(t.ML)+' mm';
+  $('t_dv').textContent = fmt(t.DV)+' mm';
+  const vAP=t.AP-e.AP, vML=t.ML-e.ML, vDV=t.DV-e.DV;
+  const depth=Math.sqrt(vAP*vAP+vML*vML+vDV*vDV);
+  $('depth').textContent = depth.toFixed(2)+' mm';
+  const mlTilt=Math.atan2(vML,vDV)*180/Math.PI;
+  const apTilt=Math.atan2(vAP,vDV)*180/Math.PI;
+  const polar=Math.acos(Math.max(-1,Math.min(1,vDV/(depth||1))))*180/Math.PI;
+  $('mlAng').textContent = Math.abs(mlTilt).toFixed(1)+'° '+(mlTilt>=0?'→R':'→L');
+  $('apAng').textContent = Math.abs(apTilt).toFixed(1)+'° '+(apTilt>=0?'→A':'→P');
+  $('polar').textContent = polar.toFixed(1)+'°';
+  $('manip').innerHTML = 'Set arm: <b>'+Math.abs(mlTilt).toFixed(1)+'°</b> toward '+
+    (mlTilt>=0?'right':'left')+', <b>'+Math.abs(apTilt).toFixed(1)+'°</b> toward '+
+    (apTilt>=0?'anterior':'posterior')+'. Lower <b>'+depth.toFixed(2)+' mm</b> from surface.';
+  $('depthSlider').value = Math.min(10,Math.max(0.2,depth));
+  $('depthVal').textContent = depth.toFixed(2);
+  regionsDirty = true;
+  if(cutOn) updateClip();
+}
+
+/* ---------- region traversal via raycast (fine summary structures) ---------- */
+const tracer = new THREE.Raycaster();
+function togglePin(id){ if(pinned.has(id)) pinned.delete(id); else pinned.add(id); regionsDirty=true; }
+// which region contains a world-space point: +X ray-parity, bounding-sphere prefiltered
+const _pdir=new THREE.Vector3(1,0,0);
+function regionAt(p){
+  for(const mesh of regionList){
+    let bs=mesh.geometry.boundingSphere;
+    if(!bs){ mesh.geometry.computeBoundingSphere(); bs=mesh.geometry.boundingSphere; }
+    const cw=ccfToScene(bs.center.x,bs.center.y,bs.center.z);   // center.xyz = ap,dv,ml
+    if(p.distanceTo(cw) > bs.radius*S + 0.3) continue;
+    tracer.set(p, _pdir); tracer.far=1e4;
+    const hits=[]; mesh.raycast(tracer, hits);
+    if(hits.length % 2 === 1) return mesh;
+  }
+  return null;
+}
+function frameMesh(id){
+  const mesh=meshById[id]; if(!mesh) return;
+  scene.updateMatrixWorld();
+  mesh.geometry.computeBoundingSphere();
+  const c=mesh.geometry.boundingSphere.center.clone().applyMatrix4(mesh.matrixWorld);
+  camTarget.copy(c); applyCam();
+}
+function updateRegions(){
+  scene.updateMatrixWorld();
+  const e = ccfToScene(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml);
+  const t = ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml);
+  const dir = new THREE.Vector3().subVectors(t,e).normalize();
+  const totalLen = e.distanceTo(t);
+  const SURF0 = 40;                                   // depth reference = entry point
+  const origin = e.clone().addScaledVector(dir,-SURF0);
+  tracer.set(origin, dir); tracer.far = 1e4;
+
+  // depth measured in the SAME stereotaxic frame as the headline readout
+  const eS=ccfToStereo(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml,MODE);
+  const tS=ccfToStereo(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml,MODE);
+  const stereoDepth=Math.hypot(tS.AP-eS.AP,tS.ML-eS.ML,tS.DV-eS.DV);
+  const factor = totalLen>1e-6 ? stereoDepth/(totalLen*0.1) : 0;   // CCF-mm -> stereo-mm
+
+  // reset every region to its default (hidden unless show-all / pinned)
+  for(const mesh of regionList){
+    const id=mesh.userData.id;
+    const pin=pinned.has(id);
+    mesh.visible = showAll || pin;
+    mesh.material.opacity = pin ? 0.5 : mesh.userData.baseOpacity;
+  }
+  const rows=[];
+  for(const mesh of regionList){
+    const hits=[]; mesh.raycast(tracer, hits);
+    if(hits.length<2) continue;
+    hits.sort((a,b)=>a.distance-b.distance);
+    for(let i=0;i+1<hits.length;i+=2){
+      const d0=(hits[i].distance-SURF0)*0.1*factor, d1=(hits[i+1].distance-SURF0)*0.1*factor;
+      const a=Math.max(0,Math.min(d0,d1));
+      const b=Math.min(stereoDepth,Math.max(d0,d1));
+      if(b<=a+0.02) continue;
+      rows.push({mesh, m:mesh.userData, a, b});
+    }
+  }
+  rows.sort((x,y)=>x.a-y.a);
+
+  // highlight all traversed regions
+  for(const r of rows){
+    r.mesh.visible=true;
+    r.mesh.material.opacity=Math.max(r.mesh.material.opacity,0.5);
+  }
+  // robust point-in-region test for the exact tip location
+  const tgt = regionAt(ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml));
+  if(tgt){
+    tgt.visible=true; tgt.material.opacity=0.85;
+    const m=tgt.userData;
+    $('t_reg').innerHTML='<span class="sw" style="background:#'+m.color+
+      ';display:inline-block;vertical-align:middle;margin-right:5px"></span>'+m.acr;
+    $('t_reg').title=m.name;
+  } else { $('t_reg').textContent='— (outside atlas)'; }
+
+  const box=$('regList');
+  if(!rows.length){ box.innerHTML='<div class="hint">No region crossed (tip outside atlas?).</div>'; return; }
+  box.innerHTML = rows.map((r,i)=>
+    '<div class="regitem" data-i="'+i+'"><span class="sw" style="background:#'+r.m.color+'"></span>'+
+    '<span class="nm" title="'+r.m.name+'">'+r.m.acr+' · '+r.m.name+'</span>'+
+    '<span class="dp">'+r.a.toFixed(2)+'–'+r.b.toFixed(2)+'</span></div>').join('');
+  box.querySelectorAll('.regitem').forEach(el=>{
+    el.onclick=()=>{ const r=rows[+el.dataset.i]; togglePin(r.m.id); frameMesh(r.m.id); };
+  });
+}
+
+/* ---------- clipping ---------- */
+let cutOn=false;
+function updateClip(){
+  const t = ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml);
+  clipPlane.normal.set(0,0,-1);
+  clipPlane.constant = t.z;     // hide everything anterior of target plane (scene z<tz)
+}
+function setClip(on){
+  cutOn=on;
+  for(const id in meshById){
+    meshById[id].material.clippingPlanes = on ? [clipPlane] : [];
+    meshById[id].material.needsUpdate=true;
+  }
+  if(on) updateClip();
+  $('cutBtn').classList.toggle('on',on);
+}
+
+/* ---------- camera controls ---------- */
+let dist=180, az=Math.PI*0.25, el=Math.PI*0.18;
+function applyCam(){
+  const cx=camTarget.x+dist*Math.cos(el)*Math.sin(az);
+  const cy=camTarget.y+dist*Math.sin(el);
+  const cz=camTarget.z+dist*Math.cos(el)*Math.cos(az);
+  camera.position.set(cx,cy,cz);
+  camera.lookAt(camTarget);
+}
+function resize(){
+  const w=canvas.clientWidth,h=canvas.clientHeight;
+  renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+}
+window.addEventListener('resize',resize);
+
+/* ---------- pointer interaction ---------- */
+const ray=new THREE.Raycaster();
+const ndc=new THREE.Vector2();
+let drag=null;       // 'orbit'|'pan'|'tip'|'entry'
+let downXY=null, moved=0;
+let dragPlane=new THREE.Plane();
+
+function setNDC(ev){
+  const r=canvas.getBoundingClientRect();
+  ndc.x=((ev.clientX-r.left)/r.width)*2-1;
+  ndc.y=-((ev.clientY-r.top)/r.height)*2+1;
+}
+function rayHit(objs){
+  ray.setFromCamera(ndc,camera);
+  return ray.intersectObjects(objs,false);
+}
+canvas.addEventListener('pointerdown',ev=>{
+  setNDC(ev); downXY=[ev.clientX,ev.clientY]; moved=0;
+  const h=rayHit([tipHandle,entryHandle]);
+  if(h.length){
+    drag = (h[0].object===tipHandle)?'tip':'entry';
+    const anchor = (drag==='tip')?tipHandle.position:entryHandle.position;
+    dragPlane.setFromNormalAndCoplanarPoint(
+      camera.getWorldDirection(new THREE.Vector3()).negate(), anchor);
+  } else if(ev.shiftKey || ev.button===1){
+    drag='pan';
+  } else {
+    drag='orbit';
+  }
+  canvas.setPointerCapture(ev.pointerId);
+});
+canvas.addEventListener('pointermove',ev=>{
+  if(!drag) return;
+  setNDC(ev);
+  moved += Math.abs(ev.clientX-(downXY?downXY[0]:ev.clientX))+Math.abs(ev.clientY-(downXY?downXY[1]:ev.clientY));
+  if(drag==='orbit'){
+    az -= ev.movementX*0.006; el += ev.movementY*0.006;
+    el=Math.max(-1.5,Math.min(1.5,el)); applyCam();
+  } else if(drag==='pan'){
+    const right=new THREE.Vector3().setFromMatrixColumn(camera.matrix,0);
+    const up=new THREE.Vector3().setFromMatrixColumn(camera.matrix,1);
+    const k=dist*0.0016;
+    camTarget.addScaledVector(right,-ev.movementX*k);
+    camTarget.addScaledVector(up,ev.movementY*k);
+    applyCam();
+  } else if(drag==='tip'||drag==='entry'){
+    ray.setFromCamera(ndc,camera);
+    const p=new THREE.Vector3();
+    if(drag==='entry'){
+      // prefer snapping onto the brain surface
+      const h=rayHit([rootMesh]);
+      if(h.length){ p.copy(h[0].point); }
+      else if(!ray.ray.intersectPlane(dragPlane,p)) return;
+      const before=ccfToScene(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml);
+      const delta=new THREE.Vector3().subVectors(p,before);
+      PROBE.entry=sceneToCCF(p);
+      const tp=ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml).add(delta);
+      PROBE.tip=sceneToCCF(tp);
+    } else {
+      if(!ray.ray.intersectPlane(dragPlane,p)) return;
+      PROBE.tip=sceneToCCF(p);
+    }
+    refresh();
+  }
+});
+canvas.addEventListener('pointerup',ev=>{
+  if(drag==='orbit' && moved<4){
+    // treat as click: set entry on brain surface
+    setNDC(ev);
+    const h=rayHit([rootMesh, ...Object.values(regionMeshes)]);
+    if(h.length){
+      const p=h[0].point.clone();
+      const dir=new THREE.Vector3().subVectors(
+        ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml),
+        ccfToScene(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml)).normalize();
+      const depthU=ccfToScene(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml)
+        .distanceTo(ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml));
+      PROBE.entry=sceneToCCF(p);
+      PROBE.tip=sceneToCCF(p.clone().addScaledVector(dir,depthU));
+      refresh();
+    }
+  }
+  drag=null; downXY=null;
+});
+canvas.addEventListener('wheel',ev=>{
+  ev.preventDefault();
+  dist*=Math.exp(ev.deltaY*0.0009);
+  dist=Math.max(30,Math.min(600,dist)); applyCam();
+},{passive:false});
+
+/* ---------- depth slider (operates in the selected stereotaxic frame) ---------- */
+// stereo-space mm travelled per 1 scene unit along a CCF direction
+function stereoMmPerUnit(es, dir){
+  const c1=sceneToCCF(es), c2=sceneToCCF(es.clone().addScaledVector(dir,1));
+  const s1=ccfToStereo(c1.ap,c1.dv,c1.ml,MODE), s2=ccfToStereo(c2.ap,c2.dv,c2.ml,MODE);
+  return Math.hypot(s2.AP-s1.AP, s2.ML-s1.ML, s2.DV-s1.DV) || (0.1);
+}
+$('depthSlider').addEventListener('input',e=>{
+  const mm=parseFloat(e.target.value);
+  const es=ccfToScene(PROBE.entry.ap,PROBE.entry.dv,PROBE.entry.ml);
+  const ts=ccfToScene(PROBE.tip.ap,PROBE.tip.dv,PROBE.tip.ml);
+  let dir=new THREE.Vector3().subVectors(ts,es);
+  if(dir.length()<1e-4) dir.set(0,-1,0);
+  dir.normalize();
+  const step = mm / stereoMmPerUnit(es,dir);   // scene units giving `mm` of stereo depth
+  PROBE.tip=sceneToCCF(es.clone().addScaledVector(dir,step));
+  refresh();
+});
+
+/* ---------- mode toggle ---------- */
+const modeHints={
+  qiu:'Live‑brain estimate (Qiu et al. 2018 MRI warp). Best match for in‑vivo surgery in adult C57BL/6.',
+  ccf:'Raw CCF→flat‑skull stereotaxic (5° pitch, DV ×0.9434). Matches perfused‑atlas coordinates.'
+};
+document.querySelectorAll('#modeSeg button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); MODE=b.dataset.mode; $('modeHint').textContent=modeHints[MODE]; refresh();
+  };
+});
+$('modeHint').textContent=modeHints.qiu;
+
+/* ---------- view buttons ---------- */
+const views={
+  '3d':[Math.PI*0.25,0.18], 'coronal':[0,0], 'sagittal':[Math.PI/2,0],
+  'horizontal':[0,Math.PI/2-0.001], 'top':[0,Math.PI/2-0.001]
+};
+document.querySelectorAll('#viewBtns button').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('#viewBtns button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const v=views[b.dataset.view]; az=v[0]; el=v[1]; applyCam();
+  };
+});
+
+/* ---------- show-all + search ---------- */
+$('allReg').onchange=e=>{ showAll=e.target.checked; regionsDirty=true; };
+const REG_IDX = MAN.filter(m=>!m.shell);
+const searchRes=$('searchRes');
+function renderSearch(q){
+  q=q.trim().toLowerCase();
+  if(!q){ searchRes.innerHTML=''; return; }
+  const hits=REG_IDX.filter(m=>m.acr.toLowerCase().includes(q)||m.name.toLowerCase().includes(q)).slice(0,16);
+  if(!hits.length){ searchRes.innerHTML='<div class="hint">No match.</div>'; return; }
+  searchRes.innerHTML=hits.map(m=>
+    '<div class="regitem" data-id="'+m.id+'"><span class="sw" style="background:#'+m.color+'"></span>'+
+    '<span class="nm" title="'+m.name+'">'+m.acr+' · '+m.name+'</span>'+
+    '<span class="dp">'+(pinned.has(m.id)?'📌':'')+'</span></div>').join('');
+  searchRes.querySelectorAll('.regitem').forEach(el=>{
+    el.onclick=()=>{ const id=+el.dataset.id; pinned.add(id); frameMesh(id); regionsDirty=true; renderSearch($('search').value); };
+  });
+}
+$('search').addEventListener('input',e=>renderSearch(e.target.value));
+
+/* ---------- buttons ---------- */
+$('cutBtn').onclick=()=>setClip(!cutOn);
+$('resetBtn').onclick=()=>{
+  PROBE.entry={ap:7400,dv:1050,ml:7000}; PROBE.tip={ap:7662,dv:4039,ml:7000};
+  pinned.clear(); $('search').value=''; renderSearch('');
+  az=Math.PI*0.25; el=0.18; dist=180; camTarget.set(0,0,0); applyCam(); refresh();
+};
+
+/* ---------- go ---------- */
+resize(); applyCam(); refresh();
+$('loader').style.display='none';
+(function loop(){
+  requestAnimationFrame(loop);
+  const now=performance.now();
+  if(regionsDirty && now-lastReg>55){ updateRegions(); regionsDirty=false; lastReg=now; }
+  renderer.render(scene,camera);
+})();
+})();
+</script>
+</body>
+</html>

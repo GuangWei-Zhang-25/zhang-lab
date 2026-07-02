@@ -1,0 +1,7 @@
+# Build-only source meshes for the Neuropixels Planner (runtime uses assets/ccf_data.js)
+Tools/neuropixel planner/assets/meshes/
+Tools/neuropixel planner/pack_meshes.py
+Tools/neuropixel planner/summary_structs.json
+
+# macOS
+.DS_Store
