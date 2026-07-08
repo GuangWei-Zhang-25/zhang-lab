@@ -159,59 +159,62 @@
 
     /* News Section */
     .news-section {
-      padding: 50px 0 80px;
+      padding: 32px 0 60px;
     }
 
     .news-article {
-      max-width: 900px;
-      margin: 0 auto 3rem;
+      max-width: 760px;
+      margin: 0 auto 0.9rem;
       background: var(--white);
       border: 1px solid var(--border-light);
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
       transition: var(--transition);
     }
 
     .news-article:hover {
-      box-shadow: 0 4px 20px rgba(26, 54, 93, 0.08);
+      box-shadow: 0 3px 14px rgba(26, 54, 93, 0.08);
     }
 
     .news-date {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      font-weight: 500;
+      gap: 0.4rem;
+      font-size: 0.7rem;
+      font-weight: 600;
       color: var(--accent);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
 
     .news-body {
-      padding: 2rem;
+      padding: 1rem 1.4rem;
     }
 
     .news-title {
       font-family: var(--font-serif);
-      font-size: 1.4rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--primary-dark);
-      margin: 0.75rem 0;
-      line-height: 1.4;
+      margin: 0.3rem 0 0.35rem;
+      line-height: 1.3;
     }
 
     .news-text {
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       color: var(--text-secondary);
-      line-height: 1.8;
-      margin-bottom: 1rem;
+      line-height: 1.6;
+      margin-bottom: 0.4rem;
     }
+
+    .news-text:last-child { margin-bottom: 0; }
 
     .news-images {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 1.5rem 0;
+      gap: 0.75rem;
+      margin: 0.75rem 0 0.25rem;
+      max-width: 420px;
     }
 
     .news-images.single {
@@ -219,29 +222,30 @@
     }
 
     .news-image-wrapper {
-      border-radius: 8px;
+      border-radius: 6px;
       overflow: hidden;
       border: 1px solid var(--border-light);
     }
 
     .news-image-wrapper img {
       width: 100%;
-      height: auto;
+      max-height: 220px;
+      object-fit: cover;
       display: block;
     }
 
     .news-image-caption {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      padding: 0.5rem 0.75rem;
+      padding: 0.4rem 0.6rem;
       background: var(--bg-light);
     }
 
     .news-tags {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.4rem;
       flex-wrap: wrap;
-      margin-top: 1rem;
+      margin-top: 0.6rem;
     }
 
     .news-tag {
@@ -376,17 +380,22 @@
 
     <article class="news-article">
       <div class="news-body">
+        <div class="news-date"><i class="fas fa-flask-vial"></i> July 7–13, 2026</div>
+        <h2 class="news-title">Zhang Lab Selected for Anthropic's "Built with Claude: Life Sciences" Hackathon</h2>
+        <p class="news-text">
+          The Zhang Lab has been selected to participate in <strong>Built with Claude: Life Sciences</strong>, a global virtual hackathon hosted by <strong>Anthropic &amp; Cerebral Valley</strong> in partnership with the <strong>Gladstone Institutes</strong> (July 7–13, 2026). Just 500 participants were chosen worldwide to build with Claude Science and Claude Code across a Research track and a Build track, competing for $100k in credits. Excited to see what we can build in one week!
+        </p>
+      </div>
+    </article>
+
+    <article class="news-article">
+      <div class="news-body">
         <div class="news-date"><i class="fas fa-laptop"></i> Summer 2026</div>
         <h2 class="news-title">Welcome Our Remote High School Researchers</h2>
         <p class="news-text">
-          We are thrilled to welcome three talented high school students who will be joining the lab remotely (off-campus, virtual):
+          We are thrilled to welcome three talented high school students joining the lab remotely (off-campus, virtual):
+          <strong>Arjun Kode</strong> (Thomas Jefferson High School for Science and Technology), <strong>Jihyo Lee</strong> (Deep Run High School, Richmond), and <strong>Neha Yashawini Karthikeyan</strong> (Maggie L. Walker Governor's School, Richmond). Welcome to the team!
         </p>
-        <ul style="margin: 0.5rem 0 0.75rem 1.25rem; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.8;">
-          <li><strong>Arjun Kode</strong> — Thomas Jefferson High School for Science and Technology</li>
-          <li><strong>Jihyo Lee</strong> — Deep Run High School, Richmond</li>
-          <li><strong>Neha Yashawini Karthikeyan</strong> — Maggie L. Walker Governor's School, Richmond</li>
-        </ul>
-        <p class="news-text">Welcome to the team!</p>
       </div>
     </article>
 
