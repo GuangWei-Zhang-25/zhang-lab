@@ -1,0 +1,2722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Social Behavior Annotator V3</title>
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    background: #1e1e2e;
+    color: #cdd6f4;
+}
+
+/* ── Welcome Screen ── */
+.welcome {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 20px;
+    text-align: center;
+}
+.welcome.hidden { display: none; }
+.welcome h1 { font-size: 28px; color: #cba6f7; font-weight: 600; }
+.welcome .subtitle { font-size: 13px; color: #a6adc8; letter-spacing: 1px; margin-top: -10px; }
+.welcome p { color: #a6adc8; max-width: 580px; line-height: 1.6; }
+.open-folder-btn {
+    background: #cba6f7;
+    color: #1e1e2e;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.open-folder-btn:hover { background: #b4befe; }
+.welcome .note { color: #585b70; font-size: 11px; max-width: 420px; line-height: 1.4; }
+.drop-zone {
+    width: 360px;
+    height: 120px;
+    border: 2px dashed #45475a;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+.drop-zone:hover, .drop-zone.dragover {
+    border-color: #cba6f7;
+    background: rgba(203,166,247,0.05);
+}
+.drop-zone .icon { font-size: 32px; color: #585b70; }
+.drop-zone .text { color: #a6adc8; font-size: 14px; }
+.drop-zone .sub { color: #585b70; font-size: 11px; }
+.hidden-input { display: none; }
+
+/* ── App Layout ── */
+.app {
+    display: none;
+    height: 100%;
+    grid-template-rows: 42px 1fr;
+    grid-template-columns: 240px 1fr;
+}
+.app.active { display: grid; }
+
+/* ── Toolbar ── */
+.toolbar {
+    grid-column: 1 / -1;
+    background: #181825;
+    border-bottom: 1px solid #313244;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+}
+.toolbar .title { font-weight: 600; font-size: 14px; color: #cba6f7; margin-right: 8px; }
+.toolbar .version-tag {
+    font-size: 10px;
+    color: #a6adc8;
+    background: #313244;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    margin-right: 8px;
+}
+.autosave-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    padding: 2px 10px;
+    border-radius: 4px;
+    border: 1px solid #45475a;
+    background: #313244;
+    max-width: 280px;
+    cursor: pointer;
+}
+.autosave-indicator.on  { border-color: #a6e3a1; background: rgba(166,227,161,0.10); color: #a6e3a1; }
+.autosave-indicator.off { border-color: #f38ba8; background: rgba(243,139,168,0.10); color: #f38ba8; }
+.autosave-indicator .dot {
+    width: 8px; height: 8px; border-radius: 50%; flex: 0 0 8px;
+    background: currentColor;
+}
+.autosave-indicator .folder-name {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;
+    color: #cdd6f4;
+}
+.toolbar .spacer { flex: 1; }
+.toolbar .status { color: #a6adc8; font-size: 12px; }
+.toolbar .save-status { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+.save-ok { background: #a6e3a1; color: #1e1e2e; }
+.save-saving { background: #f9e2af; color: #1e1e2e; }
+.fps-group { display: flex; align-items: center; gap: 4px; }
+.fps-group label { font-size: 11px; color: #a6adc8; }
+.fps-input {
+    width: 50px;
+    background: #313244;
+    border: 1px solid #45475a;
+    border-radius: 4px;
+    color: #cdd6f4;
+    padding: 2px 5px;
+    font-size: 12px;
+    text-align: center;
+    outline: none;
+}
+.fps-input:focus { border-color: #cba6f7; }
+
+/* ── Buttons ── */
+button {
+    background: #313244;
+    color: #cdd6f4;
+    border: 1px solid #45475a;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+button:hover { background: #45475a; }
+button:active { background: #585b70; }
+button.primary { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; }
+button.primary:hover { background: #b4befe; }
+
+/* ── Sidebar ── */
+.sidebar {
+    background: #181825;
+    border-right: 1px solid #313244;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.sidebar-section { padding: 8px; border-bottom: 1px solid #313244; }
+.sidebar-section h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #a6adc8;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+.sidebar-top input {
+    width: 100%;
+    background: #313244;
+    border: 1px solid #45475a;
+    border-radius: 4px;
+    color: #cdd6f4;
+    padding: 3px 6px;
+    font-size: 12px;
+    outline: none;
+}
+.sidebar-top input:focus { border-color: #cba6f7; }
+
+/* Video list */
+.video-list { flex: 1; overflow-y: auto; }
+.video-list-item {
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    border-left: 3px solid transparent;
+}
+.video-list-item:hover { background: #313244; }
+.video-list-item.active { background: #313244; border-left-color: #cba6f7; }
+.video-list-item .check { color: #a6e3a1; margin-left: auto; font-size: 13px; }
+.video-list-item .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+}
+
+/* ── Main area ── */
+.main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Player area */
+.player-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 8px;
+    gap: 6px;
+}
+.video-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #11111b;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+.video-container video {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    transform-origin: 0 0;
+    will-change: transform;
+}
+.video-container.zoomed video { cursor: grab; }
+.video-container.zoomed.panning video { cursor: grabbing; }
+.video-container .no-video { color: #585b70; font-size: 16px; }
+
+/* Video zoom indicator (top-right of player) */
+.video-zoom-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(30,30,46,0.78);
+    border: 1px solid #45475a;
+    color: #cba6f7;
+    font: 600 11px 'SF Mono','Fira Code','Consolas',monospace;
+    padding: 3px 8px;
+    border-radius: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 4;
+}
+.video-zoom-badge.visible { opacity: 1; }
+.video-zoom-badge .reset-hint { color: #a6adc8; font-weight: 400; margin-left: 6px; }
+
+/* Live behavior-label HUD overlaid on top of the video */
+.video-overlay {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 92%;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+.video-overlay.visible { opacity: 1; }
+.behavior-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 14px;
+    border-radius: 999px;
+    color: #1e1e2e;
+    font: 700 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.55);
+    border: 1px solid rgba(0,0,0,0.25);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.18);
+    max-width: 360px;
+}
+.behavior-pill .bp-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Toggle button in toolbar */
+.behavior-overlay-toggle.off { opacity: 0.55; }
+
+/* ── Edit Annotation Modal ── */
+.edit-modal {
+    background: #1e1e2e;
+    border: 1px solid #45475a;
+    border-radius: 10px;
+    padding: 22px 28px;
+    min-width: 520px;
+    max-width: 720px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.edit-modal h3 { font-size: 17px; color: #cba6f7; }
+.edit-modal .em-meta {
+    font-size: 12px;
+    color: #a6adc8;
+    font-family: 'SF Mono','Fira Code','Consolas',monospace;
+    background: #11111b;
+    border-radius: 6px;
+    padding: 8px 12px;
+}
+.edit-modal .em-meta .em-curlabel {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    color: #1e1e2e;
+    margin-right: 6px;
+}
+.edit-modal .em-section-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #a6adc8;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+}
+.em-label-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+.em-lbl-btn {
+    padding: 16px 10px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.12s, transform 0.08s;
+    text-align: center;
+    color: #1e1e2e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.em-lbl-btn:hover { border-color: rgba(255,255,255,0.35); transform: scale(1.02); }
+.em-lbl-btn.selected { border-color: #fff; box-shadow: 0 0 14px rgba(255,255,255,0.25); }
+.em-actions { display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-top: 4px; }
+.em-actions .em-right { display: flex; gap: 8px; }
+.em-actions .em-delete { background: #f38ba8; color: #1e1e2e; border-color: #f38ba8; }
+.em-actions .em-delete:hover { background: #f38ba8; opacity: 0.85; }
+
+/* Timeline — one row per behavior category + shared playhead/zoom strip */
+.timeline-wrapper {
+    height: 210px;
+    position: relative;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+.timeline-canvas {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    display: block;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.controls .transport { display: flex; gap: 2px; }
+.controls .transport button { padding: 4px 8px; font-size: 14px; min-width: 32px; }
+.controls .frame-info {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    color: #a6adc8;
+    min-width: 200px;
+}
+.controls .speed-group { display: flex; gap: 2px; align-items: center; }
+.controls .speed-group span { font-size: 11px; color: #a6adc8; margin-right: 4px; }
+.speed-btn { padding: 2px 6px; font-size: 11px; }
+.speed-btn.active { background: #cba6f7; color: #1e1e2e; }
+.mark-indicator {
+    background: #fab387;
+    color: #1e1e2e;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    animation: pulse 1s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+/* Box-select (marquee) toggle */
+.marquee-btn.active { background: #89b4fa; color: #1e1e2e; border-color: #89b4fa; }
+.select-status {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1e1e2e;
+    background: #89b4fa;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+/* ── Bottom Panel: Four Big Category Buttons (from 4cat V1) ── */
+.bottom-panel {
+    height: 120px;
+    min-height: 80px;
+    border-top: 1px solid #313244;
+    background: #181825;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.cat-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-bottom: 1px solid #313244;
+    flex-shrink: 0;
+}
+.cat-header h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #a6adc8;
+    letter-spacing: 0.5px;
+}
+.cat-header .ann-count { font-size: 11px; color: #585b70; margin-left: auto; }
+.social-buttons {
+    flex: 1;
+    display: flex;
+    gap: 12px;
+    padding: 10px 16px;
+    align-items: stretch;
+}
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+    user-select: none;
+    color: #1e1e2e;
+    text-align: center;
+}
+.social-btn:hover { transform: scale(1.02); }
+.social-btn:active { transform: scale(0.98); }
+.social-btn.selected {
+    border-color: #fff;
+    box-shadow: 0 0 16px rgba(255,255,255,0.25);
+}
+.social-btn .shortcut { font-size: 14px; font-weight: 400; opacity: 0.7; }
+
+/* ── Modals ── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+.modal-overlay.hidden { display: none; }
+.label-picker {
+    background: #1e1e2e;
+    border: 1px solid #45475a;
+    border-radius: 10px;
+    padding: 24px 32px;
+    min-width: 560px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.label-picker h3 { font-size: 18px; color: #cdd6f4; text-align: center; }
+.label-picker .lp-info { font-size: 13px; color: #585b70; text-align: center; }
+.lp-buttons { display: flex; gap: 12px; }
+.lp-btn {
+    flex: 1;
+    padding: 22px 16px;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: border-color 0.15s, transform 0.1s;
+    text-align: center;
+    color: #1e1e2e;
+}
+.lp-btn:hover { transform: scale(1.03); border-color: rgba(255,255,255,0.3); }
+.lp-btn:active { transform: scale(0.97); }
+.lp-btn .lp-shortcut {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.7;
+    margin-top: 6px;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #45475a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #585b70; }
+
+/* ── Toast ── */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #313244;
+    border: 1px solid #45475a;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    z-index: 200;
+    transition: opacity 0.3s;
+}
+.toast.success { border-color: #a6e3a1; }
+.toast.error { border-color: #f38ba8; }
+.toast.hidden { opacity: 0; pointer-events: none; }
+
+/* ── Timeline Hover Tooltip ── */
+.timeline-tooltip {
+    position: fixed;
+    pointer-events: none;
+    z-index: 250;
+    background: rgba(30, 30, 46, 0.96);
+    border: 1px solid #585b70;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #cdd6f4;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+    white-space: nowrap;
+    transition: opacity 0.08s;
+    opacity: 0;
+}
+.timeline-tooltip.visible { opacity: 1; }
+.timeline-tooltip .tt-label {
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    color: #1e1e2e;
+}
+.timeline-tooltip .tt-meta {
+    color: #a6adc8;
+    font-size: 11px;
+    margin-top: 2px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+}
+
+/* ── Help ── */
+.help-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 150;
+}
+.help-overlay.hidden { display: none; }
+.help-box {
+    background: #1e1e2e;
+    border: 1px solid #45475a;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 560px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.help-box h3 { font-size: 16px; margin-bottom: 12px; color: #cba6f7; }
+.help-box table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.help-box td { padding: 3px 8px; }
+.help-box td:first-child { font-family: monospace; color: #fab387; white-space: nowrap; width: 150px; }
+.help-box .section { color: #cba6f7; font-weight: 600; padding-top: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ═════════════ Welcome Screen ═════════════ -->
+<div class="welcome" id="welcome">
+    <h1>Social Behavior Annotator</h1>
+    <div class="subtitle">V3 · four-track social behavior timeline</div>
+    <p>Label video segments as
+        <strong style="color:#f38ba8">Active Social</strong>,
+        <strong style="color:#89b4fa">Passive Social</strong>,
+        <strong style="color:#a6e3a1">Reactive Social</strong>, or
+        <strong style="color:#fab387">Mounting</strong> — each shown on its own timeline track.</p>
+    <button class="open-folder-btn" onclick="openFolder()">Open Video Folder</button>
+    <button class="open-folder-btn" id="reopenLastBtn" onclick="reopenLastFolder()" style="display:none;background:#94e2d5">Reopen last folder</button>
+    <p class="note" id="reopenNote" style="margin-top:4px;display:none;color:#a6e3a1;">Last opened folder remembered — single click to continue without re-picking.</p>
+    <p class="note" style="margin-top:4px;">Annotation JSONs auto-save into the same folder as the source videos. Requires Chrome or Edge.</p>
+    <div style="display:flex;align-items:center;gap:12px;color:#585b70;font-size:12px;margin:4px 0;">
+        <span style="flex:0 0 40px;border-top:1px solid #45475a;"></span> or <span style="flex:0 0 40px;border-top:1px solid #45475a;"></span>
+    </div>
+    <div class="drop-zone" id="dropZone">
+        <div class="icon">&#128249;</div>
+        <div class="text">Drop MP4 files (or a folder) here</div>
+        <div class="sub">or click to browse (manual save)</div>
+    </div>
+    <input type="file" id="fileInput" class="hidden-input" accept="video/mp4,.mp4" multiple>
+</div>
+
+<!-- ═════════════ Main App ═════════════ -->
+<div class="app" id="app">
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <span class="title">Social Annotator</span>
+        <span class="version-tag">V3</span>
+        <button onclick="openFolder()">Open Folder</button>
+        <button onclick="addMoreVideos()">+ Add Videos</button>
+        <div class="fps-group">
+            <label>FPS:</label>
+            <input type="number" class="fps-input" id="fpsInput" value="30" min="1" max="240" step="0.001" onchange="onFpsChange()">
+        </div>
+        <button onclick="showHelp()">Shortcuts (?)</button>
+        <button id="overlayToggleBtn" class="behavior-overlay-toggle" onclick="toggleBehaviorOverlay()" title="Show/hide live behavior label on video (B)">Label: ON</button>
+        <div class="autosave-indicator off" id="autosaveIndicator" title="Click to choose the folder where annotation JSONs are saved" onclick="setSaveFolder()">
+            <span class="dot"></span>
+            <span id="autosaveText">Auto-save OFF — click to set save folder</span>
+        </div>
+        <span class="spacer"></span>
+        <button class="primary" onclick="exportCombinedJSON()">Export Combined JSON</button>
+        <span class="save-status" id="saveStatus"></span>
+        <span class="status" id="statusText"></span>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h3>Videos</h3>
+            <div class="sidebar-top">
+                <input type="text" id="videoSearch" placeholder="Filter...">
+            </div>
+        </div>
+        <div class="video-list" id="videoList"></div>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+        <div class="player-area">
+            <div class="video-container" id="videoContainer">
+                <span class="no-video" id="noVideoMsg">Select a video from the sidebar</span>
+                <video id="videoEl" style="display:none" preload="auto"></video>
+                <div class="video-overlay" id="behaviorOverlay"></div>
+                <div class="video-zoom-badge" id="videoZoomBadge">1.0&times;<span class="reset-hint">double-click to reset</span></div>
+            </div>
+            <div class="timeline-wrapper" id="timelineWrapper">
+                <canvas class="timeline-canvas" id="timelineCanvas"></canvas>
+            </div>
+            <div class="controls">
+                <div class="transport">
+                    <button onclick="seekFirst()" title="First frame (Home)">|&lt;</button>
+                    <button onclick="stepBack()" title="Prev frame (&larr;)">&lt;</button>
+                    <button id="playBtn" onclick="togglePlay()" title="Play/Pause (Space)">&#9654;</button>
+                    <button onclick="stepForward()" title="Next frame (&rarr;)">&gt;</button>
+                    <button onclick="seekLast()" title="Last frame (End)">&gt;|</button>
+                </div>
+                <span class="frame-info" id="frameInfo">Frame: -- / --</span>
+                <div class="speed-group">
+                    <span>Speed:</span>
+                    <button class="speed-btn" onclick="setSpeed(0.25)">0.25x</button>
+                    <button class="speed-btn" onclick="setSpeed(0.5)">0.5x</button>
+                    <button class="speed-btn active" onclick="setSpeed(1)">1x</button>
+                    <button class="speed-btn" onclick="setSpeed(2)">2x</button>
+                    <button class="speed-btn" onclick="setSpeed(4)">4x</button>
+                </div>
+                <button id="marqueeBtn" class="marquee-btn" onclick="toggleSelectionMode()" title="Box-select mode (M) — drag a rectangle over the timeline to select multiple segments, then Delete. Tip: right-click + drag works without toggling.">&#9645; Box-Select</button>
+                <span id="selectStatus" class="select-status" style="display:none"></span>
+                <span class="spacer" style="flex:1"></span>
+                <button id="markStartBtn" onclick="markStart()">I &mdash; Mark In</button>
+                <span id="markIndicator" class="mark-indicator" style="display:none">MARKING from <span id="markFromFrame">0</span></span>
+                <button id="markEndBtn" onclick="markEnd()" style="display:none">O &mdash; Mark Out</button>
+                <button onclick="cancelMark()" id="cancelMarkBtn" style="display:none">Esc Cancel</button>
+            </div>
+        </div>
+
+        <!-- Bottom panel: four fixed category buttons -->
+        <div class="bottom-panel">
+            <div class="cat-header">
+                <h3>Social Behavior</h3>
+                <span style="font-size:11px;color:#585b70;">(click a behavior, then I/O to mark &mdash; or press 1/2/3/4 · double-click a segment to edit)</span>
+                <span class="ann-count" id="annCount"></span>
+            </div>
+            <div class="social-buttons" id="socialButtons"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Label Picker Modal -->
+<div class="modal-overlay hidden" id="labelModal">
+    <div class="label-picker">
+        <h3>Select Label</h3>
+        <div class="lp-info" id="lpInfo"></div>
+        <div class="lp-buttons" id="lpButtons"></div>
+        <div style="text-align:center;margin-top:4px;">
+            <button onclick="cancelMark()" style="padding:6px 20px;">Cancel (Esc)</button>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Annotation Modal -->
+<div class="modal-overlay hidden" id="editModal">
+    <div class="edit-modal">
+        <h3>Edit Annotation</h3>
+        <div class="em-meta" id="emMeta"></div>
+        <div>
+            <div class="em-section-label">Behavior Type</div>
+            <div class="em-label-grid" id="emLabelGrid"></div>
+        </div>
+        <div class="em-actions">
+            <button class="em-delete" onclick="deleteFromEdit()">Delete Annotation</button>
+            <div class="em-right">
+                <button onclick="hideEditModal()">Cancel (Esc)</button>
+                <button class="primary" onclick="applyEdit()">Apply (Enter)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Help Modal -->
+<div class="help-overlay hidden" id="helpOverlay" onclick="hideHelp()">
+    <div class="help-box" onclick="event.stopPropagation()">
+        <h3>Keyboard Shortcuts</h3>
+        <table>
+            <tr><td class="section" colspan="2">Playback</td></tr>
+            <tr><td>Space</td><td>Play / Pause</td></tr>
+            <tr><td>&larr; / &rarr;</td><td>Step one frame back / forward — hold to accelerate (pauses video)</td></tr>
+            <tr><td>Shift+&larr;/&rarr;</td><td>Jump &plusmn;10 frames</td></tr>
+            <tr><td>Home / End</td><td>First / Last frame</td></tr>
+            <tr><td>, / .</td><td>Slower / Faster playback</td></tr>
+            <tr><td class="section" colspan="2">Annotation</td></tr>
+            <tr><td>I</td><td>Mark In (start of segment)</td></tr>
+            <tr><td>O</td><td>Mark Out &rarr; pick label (or auto-assign the selected behavior)</td></tr>
+            <tr><td>1 / 2 / 3 / 4</td><td>Active / Passive / Reactive / Mounting — select behavior, end a mark, or reassign selected segment</td></tr>
+            <tr><td>Drag a segment sideways</td><td>Move the whole segment along the timeline</td></tr>
+            <tr><td>Drag a segment up / down</td><td>Drop it on another track to reassign its behavior category</td></tr>
+            <tr><td>Drag a segment edge</td><td>Resize start / end</td></tr>
+            <tr><td>Right-click a segment</td><td>Quick reassign behavior</td></tr>
+            <tr><td>Double-click a segment</td><td>Open the full Edit modal</td></tr>
+            <tr><td>E</td><td>Edit the currently selected segment</td></tr>
+            <tr><td>Escape</td><td>Cancel mark / close modal / deselect</td></tr>
+            <tr><td>Del / Backspace</td><td>Delete selected segment(s)</td></tr>
+            <tr><td>Ctrl+Z</td><td>Undo last add / delete / reassign / move / resize</td></tr>
+            <tr><td class="section" colspan="2">Multi-Select (Box-Select)</td></tr>
+            <tr><td>M  /  ▥ button</td><td>Toggle box-select mode</td></tr>
+            <tr><td>Right-click + drag</td><td>Drag over the timeline to batch-select every segment the box touches</td></tr>
+            <tr><td>Alt/Option + drag</td><td>Same batch-select without toggling the mode</td></tr>
+            <tr><td>Shift / Cmd + click</td><td>Add / remove a single segment to/from the selection</td></tr>
+            <tr><td class="section" colspan="2">Video Zoom</td></tr>
+            <tr><td>Mouse wheel over video</td><td>Zoom in / out, anchored on the cursor</td></tr>
+            <tr><td>Ctrl + wheel over video</td><td>Faster zoom step (handy on trackpads)</td></tr>
+            <tr><td>Click + drag on video</td><td>Pan the zoomed view</td></tr>
+            <tr><td>Double-click on video</td><td>Reset video zoom to 1×</td></tr>
+            <tr><td class="section" colspan="2">Timeline Zoom &amp; Pan</td></tr>
+            <tr><td>Mouse wheel</td><td>Zoom timeline in/out (anchored on cursor)</td></tr>
+            <tr><td>Middle-click + drag</td><td>Pan timeline left / right (continuous)</td></tr>
+            <tr><td>Shift + wheel</td><td>Pan timeline left / right (discrete)</td></tr>
+            <tr><td>Double-click playhead strip</td><td>Reset zoom to fit clip</td></tr>
+            <tr><td>Hover a segment</td><td>Tooltip with behavior, time, duration</td></tr>
+            <tr><td class="section" colspan="2">Navigation</td></tr>
+            <tr><td>N / P</td><td>Next / Previous video</td></tr>
+            <tr><td>B</td><td>Toggle live behavior label on video</td></tr>
+            <tr><td>?</td><td>Show this help</td></tr>
+        </table>
+        <p style="margin-top:12px;font-size:11px;color:#585b70;"><b>Four tracks:</b> each behavior category has its own timeline row. Overlapping segments within a category split into sub-lanes so nothing collides.</p>
+        <p style="margin-top:6px;font-size:11px;color:#585b70;">Annotations auto-save to the video folder as individual JSON files.</p>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="toast hidden" id="toast"></div>
+
+<!-- Timeline Hover Tooltip -->
+<div class="timeline-tooltip" id="timelineTooltip"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════
+// Constants & State
+// ═══════════════════════════════════════════════════════════════════
+const ANNOTATION_VERSION = 'social-annotator-4cat-v3';
+
+// Fixed behavioral categories (kept from 4cat V1). One timeline row each.
+const CATEGORIES = [
+    { name: 'active_social',   display: 'Active Social',   color: '#f38ba8', rowBg: '#3a2a30' },
+    { name: 'passive_social',  display: 'Passive Social',  color: '#89b4fa', rowBg: '#26304a' },
+    { name: 'reactive_social', display: 'Reactive Social', color: '#a6e3a1', rowBg: '#28382a' },
+    { name: 'mounting',        display: 'Mounting',        color: '#fab387', rowBg: '#3a3026' },
+];
+const CAT_NAMES = CATEGORIES.map(c => c.name);
+
+function catIndex(label) { return CAT_NAMES.indexOf(label); }
+function catColor(label) { const i = catIndex(label); return i >= 0 ? CATEGORIES[i].color : '#585b70'; }
+function catDisplay(label) { const i = catIndex(label); return i >= 0 ? CATEGORIES[i].display : label; }
+// Which timeline row an annotation belongs to (by its label). Unknown → row 0.
+function rowOf(ann) { const i = catIndex(ann.label); return i >= 0 ? i : 0; }
+
+const S = {
+    videos: [],
+    currentIndex: -1,
+    database: {},       // key -> {duration, frame, fps, subset, annotations:[{frame_segment,time_segment,duration_sec,label,type}]}
+    dirHandle: null,
+    markMode: false,
+    markStartFrame: null,
+    selectedAnnIdx: -1,
+    selectedAnnIdxs: new Set(),   // multi-selection (box-select) of annotation orig indices
+    selectedCat: -1,
+    globalFps: 30,
+};
+
+const SPEEDS = [0.25, 0.5, 1, 2, 4];
+const rvfcOk = 'requestVideoFrameCallback' in HTMLVideoElement.prototype;
+
+let curFps = 30, curFrameCount = 0, curFrame = 0;
+// Timeline view (for wheel-zoom). viewZoom=1 shows the whole clip; >1 zooms in.
+let viewZoom = 1.0, viewStartFrame = 0;
+let selectionMode = false;
+let marqueeRect = null;
+const MAX_ZOOM = 200;
+const MIN_VIEW_FRAMES = 8;
+
+function getViewWindow() {
+    const span = Math.max(MIN_VIEW_FRAMES, Math.round(curFrameCount / viewZoom));
+    const start = Math.max(0, Math.min(viewStartFrame, Math.max(0, curFrameCount - span)));
+    return { start, span, end: Math.min(curFrameCount, start + span) };
+}
+function frameToX(frame, w) { const v = getViewWindow(); return ((frame - v.start) / v.span) * w; }
+function xToFrame(x, w)    { const v = getViewWindow(); return v.start + (x / w) * v.span; }
+function resetView() { viewZoom = 1.0; viewStartFrame = 0; }
+
+let pendingSeg = null;
+let pendingReassignIdx = -1;
+let saveTimer = null;
+let savingKeys = new Set();
+let undoHistory = {};
+
+// ═══════════════════════════════════════════════════════════════════
+// DOM
+// ═══════════════════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const welcome = $('welcome'), app = $('app');
+const videoEl = $('videoEl'), noVideoMsg = $('noVideoMsg'), playBtn = $('playBtn');
+const videoContainer = $('videoContainer'), videoZoomBadge = $('videoZoomBadge');
+const behaviorOverlay = $('behaviorOverlay'), overlayToggleBtn = $('overlayToggleBtn');
+let behaviorOverlayEnabled = true;
+const editModal = $('editModal'), emMeta = $('emMeta'), emLabelGrid = $('emLabelGrid');
+let editingAnnIdx = -1, editPendingLabel = null;
+const frameInfo = $('frameInfo'), timelineCanvas = $('timelineCanvas'), timelineWrapper = $('timelineWrapper');
+const videoListEl = $('videoList'), videoSearch = $('videoSearch'), fpsInput = $('fpsInput');
+const annCount = $('annCount');
+const statusText = $('statusText'), saveStatusEl = $('saveStatus');
+const markIndicator = $('markIndicator'), markFromFrame = $('markFromFrame');
+const markStartBtn = $('markStartBtn'), markEndBtn = $('markEndBtn'), cancelMarkBtn = $('cancelMarkBtn');
+const labelModal = $('labelModal'), lpInfo = $('lpInfo'), lpButtons = $('lpButtons');
+const helpOverlay = $('helpOverlay'), toastEl = $('toast');
+const dropZone = $('dropZone'), fileInput = $('fileInput');
+const socialButtonsEl = $('socialButtons');
+const autosaveIndicator = $('autosaveIndicator'), autosaveText = $('autosaveText');
+const marqueeBtn = $('marqueeBtn'), selectStatus = $('selectStatus');
+const timelineTooltip = $('timelineTooltip');
+
+function updateAutosaveIndicator() {
+    if (S.dirHandle) {
+        autosaveIndicator.classList.add('on');
+        autosaveIndicator.classList.remove('off');
+        autosaveText.innerHTML = `Auto-saving to: <span class="folder-name">${S.dirHandle.name || 'folder'}</span>`;
+        autosaveIndicator.title = `Annotation JSONs save to "${S.dirHandle.name}" (same folder as the source videos). Click to change.`;
+    } else {
+        autosaveIndicator.classList.add('off');
+        autosaveIndicator.classList.remove('on');
+        autosaveText.textContent = 'Auto-save OFF — click to set save folder';
+        autosaveIndicator.title = 'Click to pick a folder to auto-save annotation JSONs into (should be the same folder as your videos).';
+    }
+}
+
+async function setSaveFolder() {
+    if (!window.showDirectoryPicker) {
+        alert('Your browser does not support the File System Access API.\nPlease use Chrome or Edge, or use the Export Combined JSON button instead.');
+        return;
+    }
+    try {
+        const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        S.dirHandle = dirHandle;
+        updateAutosaveIndicator();
+        for (const v of S.videos) {
+            if (S.database[v.key]?.annotations?.length) savingKeys.add(v.key);
+        }
+        scheduleSave(null);
+        showToast(`Auto-save enabled → ${dirHandle.name}`, 'success');
+    } catch (e) {
+        if (e.name !== 'AbortError') showToast('Error: ' + e.message, 'error');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Drag-and-drop / file picker
+// ═══════════════════════════════════════════════════════════════════
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+dropZone.addEventListener('drop', async e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    const items = [...(e.dataTransfer.items || [])];
+    if (items.length && items[0].getAsFileSystemHandle) {
+        const handles = await Promise.all(items.map(it => it.getAsFileSystemHandle().catch(() => null)));
+        const dirHandle = handles.find(h => h && h.kind === 'directory');
+        if (dirHandle) { await openFolderFromHandle(dirHandle); return; }
+    }
+    const files = [...e.dataTransfer.files].filter(f => f.name.toLowerCase().endsWith('.mp4'));
+    if (files.length) handleDroppedFiles(files);
+});
+fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) handleDroppedFiles([...fileInput.files]);
+    fileInput.value = '';
+});
+
+function addMoreVideos() {
+    const inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'video/mp4,.mp4';
+    inp.multiple = true;
+    inp.onchange = () => { if (inp.files.length) handleDroppedFiles([...inp.files]); };
+    inp.click();
+}
+
+async function handleDroppedFiles(files) {
+    const fps = S.globalFps;
+    for (const file of files) {
+        if (!file.name.toLowerCase().endsWith('.mp4')) continue;
+        if (S.videos.some(v => v.name === file.name)) continue;
+        const url = URL.createObjectURL(file);
+        const meta = await probeVideo(url);
+        const key = file.name.replace(/\.mp4$/i, '');
+        const frameCount = Math.round(meta.duration * fps);
+        S.videos.push({ name: file.name, key, objectUrl: url, duration: meta.duration, fps, frameCount });
+        if (!S.database[key]) {
+            S.database[key] = { duration: meta.duration, frame: frameCount, fps, subset: 'train', annotations: [] };
+        }
+    }
+    S.videos.sort((a, b) => a.name.localeCompare(b.name));
+    showApp();
+    renderVideoList();
+    renderCatButtons();
+    updateAutosaveIndicator();
+    updateStatus();
+    if (S.currentIndex < 0 && S.videos.length > 0) loadVideo(0);
+    if (!S.dirHandle) {
+        showToast('Save folder not set — drag the videos folder onto the page, or click "Open Folder", to enable auto-save. Otherwise use Export Combined JSON.', 'error');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Open Folder
+// ═══════════════════════════════════════════════════════════════════
+async function openFolder() {
+    if (!window.showDirectoryPicker) {
+        alert('Your browser does not support the File System Access API.\nPlease use Chrome or Edge.');
+        return;
+    }
+    try {
+        const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        await openFolderFromHandle(dirHandle);
+    } catch (e) {
+        if (e.name !== 'AbortError') showToast('Error: ' + e.message, 'error');
+    }
+}
+
+async function openFolderFromHandle(dirHandle) {
+    if (dirHandle.requestPermission) {
+        const perm = await dirHandle.queryPermission({ mode: 'readwrite' });
+        if (perm !== 'granted') {
+            const req = await dirHandle.requestPermission({ mode: 'readwrite' });
+            if (req !== 'granted') {
+                showToast('Read-only access; saves will fail. Use Open Folder for full access.', 'error');
+            }
+        }
+    }
+    try {
+        S.dirHandle = dirHandle;
+        S.videos = [];
+        S.currentIndex = -1;
+        S.database = {};
+        S.selectedCat = -1;
+        S.selectedAnnIdx = -1;
+        S.selectedAnnIdxs.clear();
+        S.markMode = false;
+        S.markStartFrame = null;
+
+        const mp4Handles = [];
+        for await (const [name, handle] of dirHandle) {
+            if (handle.kind === 'file' && name.toLowerCase().endsWith('.mp4')) {
+                mp4Handles.push({ name, handle });
+            }
+        }
+        mp4Handles.sort((a, b) => a.name.localeCompare(b.name));
+
+        if (!mp4Handles.length) {
+            showToast('No .mp4 files found in folder', 'error');
+            return;
+        }
+
+        const fps = S.globalFps;
+        for (const { name, handle } of mp4Handles) {
+            const file = await handle.getFile();
+            const url = URL.createObjectURL(file);
+            const meta = await probeVideo(url);
+            const key = name.replace(/\.mp4$/i, '');
+            const frameCount = Math.round(meta.duration * fps);
+            S.videos.push({ name, key, fileHandle: handle, objectUrl: url, duration: meta.duration, fps, frameCount });
+            S.database[key] = { duration: meta.duration, frame: frameCount, fps, subset: 'train', annotations: [] };
+        }
+
+        // Load per-video JSONs
+        let loadedCount = 0;
+        for await (const [name, handle] of dirHandle) {
+            if (handle.kind === 'file' && name.toLowerCase().endsWith('.json')
+                && name !== 'annotations.json' && name !== 'categories.json') {
+                const videoKey = name.replace(/\.json$/i, '');
+                if (S.database[videoKey]) {
+                    try {
+                        const file = await handle.getFile();
+                        const data = JSON.parse(await file.text());
+                        if (data.database && data.database[videoKey]) {
+                            const entry = data.database[videoKey];
+                            S.database[videoKey].subset = entry.subset || 'train';
+                            S.database[videoKey].annotations = (entry.annotations || [])
+                                .map(a => normalizeAnn(a, S.database[videoKey].fps));
+                            loadedCount++;
+                        }
+                    } catch (e) { /* skip bad json */ }
+                }
+            }
+        }
+
+        // Combined annotations.json fallback
+        try {
+            const annHandle = await dirHandle.getFileHandle('annotations.json');
+            const annData = JSON.parse(await (await annHandle.getFile()).text());
+            if (annData.database) {
+                for (const [key, entry] of Object.entries(annData.database)) {
+                    if (S.database[key] && S.database[key].annotations.length === 0) {
+                        S.database[key].subset = entry.subset || 'train';
+                        S.database[key].annotations = (entry.annotations || [])
+                            .map(a => normalizeAnn(a, S.database[key].fps));
+                        loadedCount++;
+                    }
+                }
+            }
+        } catch (e) { /* no combined file */ }
+
+        cancelMark();
+        showApp();
+        renderVideoList();
+        renderCatButtons();
+        updateAutosaveIndicator();
+        updateStatus();
+        if (S.videos.length > 0) loadVideo(0);
+
+        if (loadedCount > 0) showToast(`Loaded ${S.videos.length} videos, restored ${loadedCount} annotation(s)`, 'success');
+        else showToast(`Loaded ${S.videos.length} videos`, 'success');
+
+        saveLastFolderHandle(dirHandle).catch(() => {});
+    } catch (e) {
+        if (e.name !== 'AbortError') showToast('Error: ' + e.message, 'error');
+    }
+}
+
+function normalizeAnn(a, fps) {
+    const f0 = a.frame_segment[0], f1 = a.frame_segment[1];
+    const t0 = a.time_segment ? a.time_segment[0] : (fps > 0 ? f0 / fps : 0);
+    const t1 = a.time_segment ? a.time_segment[1] : (fps > 0 ? (f1 + 1) / fps : 0);
+    const isPoint = a.type === 'point' || (f0 === f1 && Math.abs(t1 - t0) < 0.05);
+    return {
+        frame_segment: [f0, f1],
+        time_segment:  [parseFloat(t0.toFixed(4)), parseFloat(t1.toFixed(4))],
+        duration_sec:  parseFloat((t1 - t0).toFixed(4)),
+        label:         a.label,
+        type:          isPoint ? 'point' : 'state',
+    };
+}
+
+function probeVideo(url) {
+    return new Promise(resolve => {
+        const v = document.createElement('video');
+        v.preload = 'metadata';
+        v.onloadedmetadata = () => resolve({ duration: v.duration });
+        v.onerror = () => resolve({ duration: 0 });
+        v.src = url;
+    });
+}
+
+function showApp() {
+    welcome.classList.add('hidden');
+    app.classList.add('active');
+    setupTimeline();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Save
+// ═══════════════════════════════════════════════════════════════════
+async function writeFile(dirHandle, filename, content) {
+    const fh = await dirHandle.getFileHandle(filename, { create: true });
+    const writable = await fh.createWritable();
+    await writable.write(content);
+    await writable.close();
+}
+
+function buildAnnPayload(a, fps) {
+    const f0 = a.frame_segment[0], f1 = a.frame_segment[1];
+    const isPoint = a.type === 'point' || f0 === f1;
+    const t0 = a.time_segment ? a.time_segment[0] : (fps > 0 ? f0 / fps : 0);
+    const t1 = a.time_segment ? a.time_segment[1] : (isPoint ? t0 : (fps > 0 ? (f1 + 1) / fps : 0));
+    return {
+        frame_segment: [f0, f1],
+        time_segment:  [parseFloat(t0.toFixed(4)), parseFloat(t1.toFixed(4))],
+        duration_sec:  parseFloat((t1 - t0).toFixed(4)),
+        label:         a.label,
+        type:          isPoint ? 'point' : 'state',
+    };
+}
+
+async function saveVideoAnnotation(videoKey) {
+    if (!S.dirHandle || !S.database[videoKey]) return;
+    const entry = S.database[videoKey];
+    const fps = entry.fps || S.globalFps;
+    const data = {
+        annotation_version: ANNOTATION_VERSION,
+        database: {
+            [videoKey]: {
+                duration: entry.duration,
+                frame:    entry.frame,
+                fps,
+                subset:   entry.subset || 'train',
+                annotations: (entry.annotations || []).map(a => buildAnnPayload(a, fps)),
+            }
+        }
+    };
+    try {
+        setSaveStatus('saving');
+        await writeFile(S.dirHandle, videoKey + '.json', JSON.stringify(data, null, 2) + '\n');
+        setSaveStatus('saved');
+    } catch (e) {
+        showToast('Save failed: ' + e.message, 'error');
+        setSaveStatus('');
+    }
+}
+
+async function saveCategoriesFile() {
+    if (!S.dirHandle) return;
+    try {
+        await writeFile(S.dirHandle, 'category_idx.txt', CAT_NAMES.join('\n') + '\n');
+    } catch (e) { /* ignore */ }
+}
+
+function scheduleSave(videoKey) {
+    if (videoKey) savingKeys.add(videoKey);
+    if (saveTimer) clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+        const keys = [...savingKeys];
+        savingKeys.clear();
+        for (const k of keys) await saveVideoAnnotation(k);
+        await saveCategoriesFile();
+    }, 500);
+}
+
+function setSaveStatus(state) {
+    if (state === 'saving') {
+        saveStatusEl.textContent = 'Saving...';
+        saveStatusEl.className = 'save-status save-saving';
+    } else if (state === 'saved') {
+        saveStatusEl.textContent = 'Saved';
+        saveStatusEl.className = 'save-status save-ok';
+        setTimeout(() => { saveStatusEl.textContent = ''; saveStatusEl.className = 'save-status'; }, 2000);
+    } else {
+        saveStatusEl.textContent = '';
+        saveStatusEl.className = 'save-status';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Export
+// ═══════════════════════════════════════════════════════════════════
+async function exportCombinedJSON() {
+    const database = {};
+    for (const v of S.videos) {
+        const entry = S.database[v.key];
+        const fps = entry?.fps || v.fps;
+        database[v.key] = {
+            duration: parseFloat(v.duration.toFixed(6)),
+            frame:    v.frameCount,
+            fps,
+            subset:   entry?.subset || 'train',
+            annotations: (entry?.annotations || []).map(a => buildAnnPayload(a, fps)),
+        };
+    }
+    const payload = { annotation_version: ANNOTATION_VERSION, categories: CAT_NAMES, database };
+    const json = JSON.stringify(payload, null, 2) + '\n';
+
+    if (S.dirHandle) {
+        try {
+            await writeFile(S.dirHandle, 'annotations.json', json);
+            showToast('Exported annotations.json to folder', 'success');
+            return;
+        } catch (e) { /* fall through */ }
+    }
+    const blob = new Blob([json], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'annotations.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    showToast('Downloaded annotations.json', 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// FPS
+// ═══════════════════════════════════════════════════════════════════
+function onFpsChange() {
+    const val = parseFloat(fpsInput.value);
+    if (!val || val <= 0) return;
+    S.globalFps = val;
+    for (const v of S.videos) {
+        v.fps = val;
+        v.frameCount = Math.round(v.duration * val);
+        if (S.database[v.key]) { S.database[v.key].frame = v.frameCount; S.database[v.key].fps = val; }
+    }
+    if (S.currentIndex >= 0) {
+        curFps = val;
+        curFrameCount = S.videos[S.currentIndex].frameCount;
+        curFrame = Math.min(curFrame, curFrameCount - 1);
+        updateFrameInfo();
+        renderAnnotations();
+        drawTimeline();
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Video List
+// ═══════════════════════════════════════════════════════════════════
+function renderVideoList() {
+    const filt = (videoSearch.value || '').toLowerCase();
+    videoListEl.innerHTML = '';
+    S.videos.forEach((v, i) => {
+        if (filt && !v.name.toLowerCase().includes(filt)) return;
+        const entry = S.database[v.key];
+        const hasAnns = entry?.annotations?.length > 0;
+        const div = document.createElement('div');
+        div.className = 'video-list-item' + (i === S.currentIndex ? ' active' : '');
+        div.onclick = () => loadVideo(i);
+        div.innerHTML = `
+            <span class="name" title="${v.name}">${v.name}</span>
+            ${hasAnns ? '<span class="check">&#10003;</span>' : ''}
+        `;
+        videoListEl.appendChild(div);
+    });
+}
+videoSearch.addEventListener('input', () => renderVideoList());
+
+// ═══════════════════════════════════════════════════════════════════
+// Load & Play
+// ═══════════════════════════════════════════════════════════════════
+function loadVideo(index) {
+    if (index < 0 || index >= S.videos.length) return;
+    cancelMark();
+    S.currentIndex = index;
+    S.selectedAnnIdx = -1;
+    S.selectedAnnIdxs.clear();
+    updateSelectStatus();
+
+    const v = S.videos[index];
+    curFps = v.fps;
+    curFrameCount = v.frameCount;
+    curFrame = 0;
+    resetView();
+    resetVideoZoom();
+
+    videoEl.src = v.objectUrl;
+    videoEl.style.display = 'block';
+    noVideoMsg.style.display = 'none';
+    videoEl.muted = true;
+    videoEl.load();
+    videoEl.addEventListener('error', function onErr() {
+        videoEl.removeEventListener('error', onErr);
+        showToast('Video failed to load: ' + v.name, 'error');
+    });
+    videoEl.addEventListener('canplay', function autoPlay() {
+        videoEl.removeEventListener('canplay', autoPlay);
+        const p = videoEl.play();
+        if (p && p.catch) p.catch(() => {});
+    });
+
+    if (!S.database[v.key]) {
+        S.database[v.key] = { duration: v.duration, frame: v.frameCount, fps: v.fps, subset: 'train', annotations: [] };
+    }
+
+    renderVideoList();
+    renderAnnotations();
+    updateFrameInfo();
+    drawTimeline();
+
+    if (rvfcOk) videoEl.requestVideoFrameCallback(onVideoFrame);
+}
+
+function onVideoFrame(now, meta) {
+    // Only let playback drive the frame counter while actually playing. While
+    // paused (manual frame-stepping), curFrame is set explicitly by seekToFrame
+    // and must NOT be overwritten by a lagging mediaTime — otherwise a single
+    // step snaps back to the old frame and later jumps all at once.
+    if (!videoEl.paused) {
+        curFrame = Math.round(meta.mediaTime * curFps);
+        curFrame = Math.max(0, Math.min(curFrame, curFrameCount - 1));
+    }
+    updateFrameInfo();
+    drawTimeline();
+    videoEl.requestVideoFrameCallback(onVideoFrame);
+}
+
+videoEl.addEventListener('seeked', () => {
+    if (!rvfcOk) {
+        curFrame = Math.round(videoEl.currentTime * curFps);
+        curFrame = Math.max(0, Math.min(curFrame, curFrameCount - 1));
+    }
+    updateFrameInfo();
+    drawTimeline();
+});
+videoEl.addEventListener('timeupdate', () => {
+    if (!rvfcOk) {
+        curFrame = Math.round(videoEl.currentTime * curFps);
+        curFrame = Math.max(0, Math.min(curFrame, curFrameCount - 1));
+        updateFrameInfo();
+        drawTimeline();
+    }
+});
+videoEl.addEventListener('play',  () => { playBtn.innerHTML = '&#9646;&#9646;'; });
+videoEl.addEventListener('pause', () => { playBtn.innerHTML = '&#9654;'; });
+
+// ═══════════════════════════════════════════════════════════════════
+// Playback Controls
+// ═══════════════════════════════════════════════════════════════════
+function togglePlay() { if (S.currentIndex >= 0) videoEl.paused ? videoEl.play() : videoEl.pause(); }
+function seekToFrame(f) {
+    if (S.currentIndex < 0) return;
+    f = Math.max(0, Math.min(f, curFrameCount - 1));
+    videoEl.currentTime = (f + 0.5) / curFps;
+    curFrame = f;
+    updateFrameInfo();
+    drawTimeline();
+}
+function stepForward() { if (S.currentIndex < 0) return; videoEl.pause(); seekToFrame(curFrame + 1); }
+function stepBack()    { if (S.currentIndex < 0) return; videoEl.pause(); seekToFrame(curFrame - 1); }
+function seekFirst() { seekToFrame(0); }
+function seekLast()  { seekToFrame(curFrameCount - 1); }
+function setSpeed(s) {
+    videoEl.playbackRate = s;
+    document.querySelectorAll('.speed-btn').forEach(b =>
+        b.classList.toggle('active', parseFloat(b.textContent) === s)
+    );
+}
+function updateFrameInfo() {
+    const t = curFps > 0 ? (curFrame / curFps).toFixed(2) : '0.00';
+    frameInfo.textContent = `Frame: ${curFrame} / ${curFrameCount - 1}  |  ${t}s`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Timeline Canvas — one row per behavior category + shared playhead strip
+// ═══════════════════════════════════════════════════════════════════
+let timelineInited = false;
+function setupTimeline() {
+    if (timelineInited) return;
+    timelineInited = true;
+    new ResizeObserver(() => {
+        const r = timelineWrapper.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        timelineCanvas.width = r.width * dpr;
+        timelineCanvas.height = r.height * dpr;
+        timelineCanvas.style.width = r.width + 'px';
+        timelineCanvas.style.height = r.height + 'px';
+        drawTimeline();
+    }).observe(timelineWrapper);
+}
+
+function isAnnSelected(idx) { return idx === S.selectedAnnIdx || S.selectedAnnIdxs.has(idx); }
+
+// Greedy lane assignment within a single category row. Input: [{ann, origIdx}].
+function computeLanes(annList) {
+    const sorted = annList.slice().sort((a, b) => {
+        if (a.ann.frame_segment[0] !== b.ann.frame_segment[0])
+            return a.ann.frame_segment[0] - b.ann.frame_segment[0];
+        return a.origIdx - b.origIdx;
+    });
+    const laneEnds = [];
+    const laneOf = new Map();
+    for (const item of sorted) {
+        const start = item.ann.frame_segment[0];
+        const end   = item.ann.frame_segment[1];
+        let assigned = -1;
+        for (let L = 0; L < laneEnds.length; L++) {
+            if (laneEnds[L] < start) { assigned = L; break; }
+        }
+        if (assigned === -1) { assigned = laneEnds.length; laneEnds.push(end); }
+        else laneEnds[assigned] = end;
+        laneOf.set(item.origIdx, assigned);
+    }
+    return { laneOf, totalLanes: Math.max(1, laneEnds.length) };
+}
+
+function timelineLayout(h) {
+    const n = CATEGORIES.length;
+    const sepH = 2;
+    const phH = 26;                    // shared playhead / zoom strip
+    const phTop = h - phH;
+    const rowH = phTop / n;            // equal-height category rows
+    const rows = [];
+    for (let i = 0; i < n; i++) {
+        rows.push({ idx: i, top: i * rowH, bot: (i + 1) * rowH, h: rowH - sepH });
+    }
+    return { rows, rowH, sepH, phTop, phH, n };
+}
+
+// Build {catIdx -> [{ann,origIdx}]} plus lane info, from the current anns.
+function rowBuckets() {
+    const anns = getCurAnns();
+    const buckets = CATEGORIES.map(() => []);
+    anns.forEach((a, i) => { buckets[rowOf(a)].push({ ann: a, origIdx: i }); });
+    return { buckets, lanes: buckets.map(items => computeLanes(items)) };
+}
+
+function drawTimeline() {
+    updateBehaviorOverlay();
+    const c = timelineCanvas, ctx = c.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = c.width / dpr, h = c.height / dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+
+    const L = timelineLayout(h);
+    const { buckets, lanes } = rowBuckets();
+
+    CATEGORIES.forEach((cat, ri) => {
+        const row = L.rows[ri];
+        drawCategoryRow(ctx, w, row.top, row.h, ri, buckets[ri], lanes[ri]);
+        ctx.fillStyle = '#1e1e2e';
+        ctx.fillRect(0, row.bot - L.sepH, w, L.sepH);
+    });
+
+    // Mark-in preview band (in the selected category row)
+    if (S.markMode && S.markStartFrame !== null && curFrameCount > 0) {
+        const sx = frameToX(S.markStartFrame, w);
+        const cx = frameToX(curFrame, w);
+        const ri = S.selectedCat >= 0 ? S.selectedCat : 0;
+        const row = L.rows[ri];
+        ctx.fillStyle = 'rgba(250, 179, 135, 0.35)';
+        ctx.fillRect(Math.min(sx, cx), row.top, Math.abs(cx - sx), row.h);
+        ctx.strokeStyle = '#fab387';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(Math.min(sx, cx) + 0.5, row.top + 0.5, Math.abs(cx - sx), row.h - 1);
+    }
+
+    // Playhead / zoom strip
+    ctx.fillStyle = '#252535';
+    ctx.fillRect(0, L.phTop, w, L.phH);
+
+    if (curFrameCount > 0) {
+        const v = getViewWindow();
+        const step = tickStep(v.span, w);
+        const f0 = Math.ceil(v.start / step) * step;
+        for (let f = f0; f < v.end; f += step) {
+            const tx = frameToX(f, w);
+            ctx.fillStyle = '#45475a';
+            ctx.fillRect(tx, L.phTop, 1, w > 200 ? L.phH - 10 : L.phH);
+            if (w > 200) {
+                ctx.fillStyle = '#a6adc8';
+                ctx.font = '9px sans-serif';
+                ctx.fillText(f, tx + 2, h - 2);
+            }
+        }
+        if (viewZoom > 1.001) {
+            ctx.fillStyle = 'rgba(203,166,247,0.9)';
+            ctx.font = 'bold 10px sans-serif';
+            ctx.fillText(`${viewZoom.toFixed(1)}x  [${v.start}–${v.end}]`, 4, L.phTop + L.phH - 14);
+        }
+        // Playhead cursor crossing every row
+        const px = frameToX(curFrame, w);
+        ctx.strokeStyle = '#f38ba8';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, h); ctx.stroke();
+        ctx.fillStyle = '#f38ba8';
+        ctx.beginPath();
+        ctx.moveTo(px - 5, L.phTop);
+        ctx.lineTo(px + 5, L.phTop);
+        ctx.lineTo(px, L.phTop + 7);
+        ctx.closePath();
+        ctx.fill();
+    }
+
+    // Box-select marquee rectangle
+    if (marqueeRect) {
+        const rx = Math.min(marqueeRect.x0, marqueeRect.x1);
+        const ry = Math.min(marqueeRect.y0, marqueeRect.y1);
+        const rw = Math.abs(marqueeRect.x1 - marqueeRect.x0);
+        const rh = Math.abs(marqueeRect.y1 - marqueeRect.y0);
+        ctx.fillStyle = 'rgba(137,180,250,0.18)';
+        ctx.fillRect(rx, ry, rw, rh);
+        ctx.strokeStyle = '#89b4fa';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([4, 3]);
+        ctx.strokeRect(rx + 0.5, ry + 0.5, rw, rh);
+        ctx.setLineDash([]);
+    }
+}
+
+function drawCategoryRow(ctx, w, top, rowH, ri, rowItems, lanes) {
+    const cat = CATEGORIES[ri];
+    // Row background: dark base + faint category tint
+    ctx.fillStyle = cat.rowBg;
+    ctx.fillRect(0, top, w, rowH);
+    // Left color tab
+    ctx.fillStyle = cat.color;
+    ctx.globalAlpha = 0.9;
+    ctx.fillRect(0, top, 3, rowH);
+    ctx.globalAlpha = 1;
+    // Row label
+    ctx.fillStyle = 'rgba(205,214,244,0.5)';
+    ctx.font = 'bold 10px sans-serif';
+    ctx.fillText(cat.display, 8, top + 12);
+
+    if (S.selectedCat === ri) {
+        ctx.strokeStyle = cat.color;
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(0.75, top + 0.75, w - 1.5, rowH - 1.5);
+    }
+
+    if (curFrameCount <= 0) return;
+
+    const laneCount = lanes.totalLanes;
+    const laneH = rowH / laneCount;
+
+    const pointItems = [];
+    for (const item of rowItems) {
+        const a = item.ann;
+        const isPoint = a.type === 'point' || a.frame_segment[0] === a.frame_segment[1];
+        if (isPoint) { pointItems.push(item); continue; }
+
+        const lane = lanes.laneOf.get(item.origIdx) || 0;
+        const x1 = frameToX(a.frame_segment[0], w);
+        const x2 = frameToX(a.frame_segment[1] + 1, w);
+        const y1 = top + lane * laneH;
+        const isSel = isAnnSelected(item.origIdx);
+
+        ctx.fillStyle = cat.color;
+        ctx.fillRect(x1, y1, x2 - x1, laneH);
+        ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x1 + 0.5, y1 + 0.5, Math.max(0, x2 - x1 - 1), Math.max(0, laneH - 1));
+
+        if (isSel) {
+            ctx.fillStyle = 'rgba(255,255,255,0.30)';
+            ctx.fillRect(x1, y1, x2 - x1, laneH);
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x1 + 1, y1 + 1, Math.max(0, x2 - x1 - 2), Math.max(0, laneH - 2));
+        }
+
+        if ((x2 - x1) > 46 && laneH > 12) {
+            ctx.fillStyle = isSel ? '#fff' : '#1e1e2e';
+            ctx.font = isSel ? 'bold 11px sans-serif' : '11px sans-serif';
+            const lbl = isSel ? `✕ ${cat.display}` : cat.display;
+            ctx.fillText(lbl, x1 + 4, y1 + laneH / 2 + 4, x2 - x1 - 8);
+        }
+    }
+
+    // Point-event markers
+    const triH = Math.min(rowH * 0.6, 14);
+    const triHalf = triH * 0.55;
+    for (const item of pointItems) {
+        const a = item.ann;
+        const x = frameToX(a.frame_segment[0], w);
+        if (x < -triHalf || x > w + triHalf) continue;
+        const cy = top + rowH / 2;
+        const isSel = isAnnSelected(item.origIdx);
+        ctx.strokeStyle = cat.color;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(x + 0.5, top + 1); ctx.lineTo(x + 0.5, top + rowH - 1); ctx.stroke();
+        ctx.fillStyle = cat.color;
+        ctx.beginPath();
+        ctx.moveTo(x - triHalf, cy - triH / 2);
+        ctx.lineTo(x + triHalf, cy - triH / 2);
+        ctx.lineTo(x, cy + triH / 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = isSel ? '#ffffff' : 'rgba(0,0,0,0.55)';
+        ctx.lineWidth = isSel ? 2 : 1;
+        ctx.stroke();
+    }
+}
+
+function tickStep(total, w) {
+    const max = w / 60, raw = total / max;
+    for (const m of [1, 5, 10, 25, 50, 100, 250, 500, 1000, 5000])
+        if (m >= raw) return m;
+    return Math.ceil(raw / 1000) * 1000;
+}
+
+// Return orig indices of all annotations whose drawn rectangle intersects
+// the given pixel rectangle on the timeline (across every category row).
+function annsIntersectingRect(px0, py0, px1, py1) {
+    const r = timelineWrapper.getBoundingClientRect();
+    const L = timelineLayout(r.height);
+    const rx0 = Math.min(px0, px1), rx1 = Math.max(px0, px1);
+    const ry0 = Math.min(py0, py1), ry1 = Math.max(py0, py1);
+    const { buckets, lanes } = rowBuckets();
+    const out = [];
+    CATEGORIES.forEach((cat, ri) => {
+        const row = L.rows[ri];
+        const laneH = row.h / lanes[ri].totalLanes;
+        for (const item of buckets[ri]) {
+            const a = item.ann;
+            const isPoint = a.type === 'point' || a.frame_segment[0] === a.frame_segment[1];
+            const lane = lanes[ri].laneOf.get(item.origIdx) || 0;
+            const sy0 = row.top + lane * laneH;
+            const sy1 = sy0 + laneH;
+            let sx0, sx1;
+            if (isPoint) {
+                const mx = frameToX(a.frame_segment[0], r.width);
+                sx0 = mx - 4; sx1 = mx + 4;
+            } else {
+                sx0 = frameToX(a.frame_segment[0], r.width);
+                sx1 = frameToX(a.frame_segment[1] + 1, r.width);
+            }
+            if (sx1 >= rx0 && sx0 <= rx1 && sy1 >= ry0 && sy0 <= ry1) out.push(item.origIdx);
+        }
+    });
+    return out;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Live Behavior Label HUD on top of the video
+// ═══════════════════════════════════════════════════════════════════
+function escHtml(s) {
+    return String(s).replace(/[&<>"']/g, ch => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[ch]));
+}
+
+function updateBehaviorOverlay() {
+    if (!behaviorOverlay) return;
+    if (!behaviorOverlayEnabled || S.currentIndex < 0 || videoEl.style.display === 'none') {
+        behaviorOverlay.classList.remove('visible');
+        behaviorOverlay.innerHTML = '';
+        return;
+    }
+    const anns = getCurAnns();
+    const active = [];
+    for (const a of anns) {
+        const f0 = a.frame_segment[0], f1 = a.frame_segment[1];
+        const isPoint = a.type === 'point' || f0 === f1;
+        if (isPoint) { if (Math.abs(curFrame - f0) <= 1) active.push(a); }
+        else if (curFrame >= f0 && curFrame <= f1) active.push(a);
+    }
+    if (!active.length) {
+        behaviorOverlay.classList.remove('visible');
+        behaviorOverlay.innerHTML = '';
+        return;
+    }
+    behaviorOverlay.innerHTML = active.map(a =>
+        `<span class="behavior-pill" style="background:${catColor(a.label)}">
+            <span class="bp-label">${escHtml(catDisplay(a.label))}</span>
+        </span>`).join('');
+    behaviorOverlay.classList.add('visible');
+}
+
+function toggleBehaviorOverlay() {
+    behaviorOverlayEnabled = !behaviorOverlayEnabled;
+    overlayToggleBtn.textContent = behaviorOverlayEnabled ? 'Label: ON' : 'Label: OFF';
+    overlayToggleBtn.classList.toggle('off', !behaviorOverlayEnabled);
+    updateBehaviorOverlay();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Video Zoom — cursor-anchored mouse-wheel zoom
+// ═══════════════════════════════════════════════════════════════════
+const VIDEO_MIN_ZOOM = 1, VIDEO_MAX_ZOOM = 12;
+let videoZoom = 1, videoTx = 0, videoTy = 0;
+let videoPan = null;
+let zoomBadgeTimer = null;
+
+function applyVideoTransform() {
+    videoEl.style.transform = `translate(${videoTx.toFixed(2)}px, ${videoTy.toFixed(2)}px) scale(${videoZoom})`;
+    videoContainer.classList.toggle('zoomed', videoZoom > 1.001);
+}
+
+function showZoomBadge() {
+    videoZoomBadge.firstChild.nodeValue = videoZoom.toFixed(2) + '×';
+    videoZoomBadge.classList.add('visible');
+    if (zoomBadgeTimer) clearTimeout(zoomBadgeTimer);
+    if (videoZoom <= 1.001) zoomBadgeTimer = setTimeout(() => videoZoomBadge.classList.remove('visible'), 800);
+}
+
+function videoNaturalRect() {
+    const cr = videoContainer.getBoundingClientRect();
+    const W = videoEl.offsetWidth, H = videoEl.offsetHeight;
+    const x0 = cr.left + (cr.width  - W) / 2;
+    const y0 = cr.top  + (cr.height - H) / 2;
+    return { cr, W, H, x0, y0 };
+}
+
+function clampVideoPan(z, tx, ty) {
+    const { cr, W, H, x0, y0 } = videoNaturalRect();
+    const dispW = W * z, dispH = H * z;
+    const leftInCont = (x0 - cr.left) + tx;
+    const topInCont  = (y0 - cr.top)  + ty;
+    let clampedLeft, clampedTop;
+    if (dispW <= cr.width) clampedLeft = (cr.width - dispW) / 2;
+    else { const minL = cr.width - dispW, maxL = 0; clampedLeft = Math.max(minL, Math.min(maxL, leftInCont)); }
+    if (dispH <= cr.height) clampedTop = (cr.height - dispH) / 2;
+    else { const minT = cr.height - dispH, maxT = 0; clampedTop = Math.max(minT, Math.min(maxT, topInCont)); }
+    return { tx: tx + (clampedLeft - leftInCont), ty: ty + (clampedTop - topInCont) };
+}
+
+function resetVideoZoom() {
+    videoZoom = 1; videoTx = 0; videoTy = 0; videoPan = null;
+    applyVideoTransform();
+    videoZoomBadge.classList.remove('visible');
+}
+
+videoContainer.addEventListener('wheel', e => {
+    if (S.currentIndex < 0 || videoEl.style.display === 'none') return;
+    e.preventDefault();
+    const { W, H, x0, y0 } = videoNaturalRect();
+    if (W <= 0 || H <= 0) return;
+    const px = (e.clientX - x0 - videoTx) / videoZoom;
+    const py = (e.clientY - y0 - videoTy) / videoZoom;
+    const factor = Math.exp(e.deltaY * (e.ctrlKey ? 0.004 : 0.0015));
+    let newZoom = videoZoom * factor;
+    newZoom = Math.max(VIDEO_MIN_ZOOM, Math.min(VIDEO_MAX_ZOOM, newZoom));
+    let newTx = e.clientX - x0 - newZoom * px;
+    let newTy = e.clientY - y0 - newZoom * py;
+    if (newZoom <= 1.0001) { newZoom = 1; newTx = 0; newTy = 0; }
+    else { const c = clampVideoPan(newZoom, newTx, newTy); newTx = c.tx; newTy = c.ty; }
+    videoZoom = newZoom; videoTx = newTx; videoTy = newTy;
+    applyVideoTransform();
+    showZoomBadge();
+}, { passive: false });
+
+videoEl.addEventListener('mousedown', e => {
+    if (e.button !== 0 || videoZoom <= 1.001) return;
+    e.preventDefault();
+    videoPan = { startX: e.clientX, startY: e.clientY, baseTx: videoTx, baseTy: videoTy };
+    videoContainer.classList.add('panning');
+});
+document.addEventListener('mousemove', e => {
+    if (!videoPan) return;
+    const c = clampVideoPan(videoZoom,
+        videoPan.baseTx + (e.clientX - videoPan.startX),
+        videoPan.baseTy + (e.clientY - videoPan.startY));
+    videoTx = c.tx; videoTy = c.ty;
+    applyVideoTransform();
+});
+document.addEventListener('mouseup', () => {
+    if (videoPan) { videoPan = null; videoContainer.classList.remove('panning'); }
+});
+videoEl.addEventListener('dblclick', e => {
+    if (videoZoom > 1.001) { e.preventDefault(); resetVideoZoom(); showToast('Video zoom reset', 'success'); }
+});
+new ResizeObserver(() => {
+    if (videoZoom > 1.001) {
+        const c = clampVideoPan(videoZoom, videoTx, videoTy);
+        videoTx = c.tx; videoTy = c.ty;
+        applyVideoTransform();
+    }
+}).observe(videoContainer);
+
+// ═══════════════════════════════════════════════════════════════════
+// Timeline interaction
+// ═══════════════════════════════════════════════════════════════════
+const EDGE_PX = 6;
+let tlDrag = null;
+let suppressNextContextMenu = false;
+function suppressTimelineContextMenuOnce() {
+    suppressNextContextMenu = true;
+    setTimeout(() => { suppressNextContextMenu = false; }, 500);
+}
+
+function tlFrameFromEvent(e) {
+    const r = timelineWrapper.getBoundingClientRect();
+    const x = Math.max(0, Math.min(e.clientX - r.left, r.width));
+    const f = Math.round(xToFrame(x, r.width));
+    return Math.max(0, Math.min(f, curFrameCount - 1));
+}
+
+// Which category row (0..n-1) or 'playhead' the event's Y falls in.
+function rowOfEvent(e) {
+    const r = timelineWrapper.getBoundingClientRect();
+    const y = e.clientY - r.top;
+    const L = timelineLayout(r.height);
+    if (y >= L.phTop) return 'playhead';
+    for (const row of L.rows) if (y < row.bot) return row.idx;
+    return L.rows.length - 1;
+}
+function isRow(region) { return typeof region === 'number'; }
+
+// Context for a specific category row: its geometry + items + lanes.
+function rowContext(ri) {
+    const r = timelineWrapper.getBoundingClientRect();
+    const L = timelineLayout(r.height);
+    const anns = getCurAnns();
+    const rowItems = anns.map((a, i) => ({ ann: a, origIdx: i })).filter(x => rowOf(x.ann) === ri);
+    const lanes = computeLanes(rowItems);
+    return { L, row: L.rows[ri], rowItems, lanes, canvasW: r.width };
+}
+
+function hitTestEdgeInRow(e, ri) {
+    if (curFrameCount <= 0) return null;
+    const r = timelineWrapper.getBoundingClientRect();
+    const ctx = rowContext(ri);
+    const y = e.clientY - r.top;
+    const laneH = ctx.row.h / ctx.lanes.totalLanes;
+    const laneIdx = Math.min(ctx.lanes.totalLanes - 1, Math.max(0, Math.floor((y - ctx.row.top) / laneH)));
+    const mx = e.clientX - r.left;
+    for (const item of ctx.rowItems) {
+        const a = item.ann;
+        if (a.type === 'point' || a.frame_segment[0] === a.frame_segment[1]) continue;
+        if (ctx.lanes.laneOf.get(item.origIdx) !== laneIdx) continue;
+        const startPx = frameToX(a.frame_segment[0], ctx.canvasW);
+        const endPx   = frameToX(a.frame_segment[1] + 1, ctx.canvasW);
+        if (Math.abs(mx - startPx) <= EDGE_PX) return { annIdx: item.origIdx, edge: 'start' };
+        if (Math.abs(mx - endPx)   <= EDGE_PX) return { annIdx: item.origIdx, edge: 'end' };
+    }
+    return null;
+}
+
+function hitTestSegmentInRow(e, ri) {
+    if (curFrameCount <= 0) return -1;
+    const r = timelineWrapper.getBoundingClientRect();
+    const ctx = rowContext(ri);
+    const y = e.clientY - r.top;
+    const laneH = ctx.row.h / ctx.lanes.totalLanes;
+    const laneIdx = Math.min(ctx.lanes.totalLanes - 1, Math.max(0, Math.floor((y - ctx.row.top) / laneH)));
+    const frame = tlFrameFromEvent(e);
+    const mx = e.clientX - r.left;
+    for (const item of ctx.rowItems) {
+        const a = item.ann;
+        const isPoint = a.type === 'point' || a.frame_segment[0] === a.frame_segment[1];
+        if (!isPoint) continue;
+        const px = frameToX(a.frame_segment[0], r.width);
+        if (Math.abs(mx - px) <= 7) return item.origIdx;
+    }
+    for (const item of ctx.rowItems) {
+        const a = item.ann;
+        if (a.type === 'point' || a.frame_segment[0] === a.frame_segment[1]) continue;
+        if (ctx.lanes.laneOf.get(item.origIdx) !== laneIdx) continue;
+        if (frame >= a.frame_segment[0] && frame <= a.frame_segment[1]) return item.origIdx;
+    }
+    return -1;
+}
+
+function fmtTime(s) {
+    const m = Math.floor(s / 60), sec = (s - m * 60);
+    return m > 0 ? `${m}:${sec.toFixed(2).padStart(5, '0')}` : `${sec.toFixed(2)}s`;
+}
+
+function showSegmentTooltip(e, ann) {
+    const color = catColor(ann.label);
+    const t0 = ann.time_segment[0], t1 = ann.time_segment[1];
+    const dur = ann.duration_sec ?? Math.max(0, t1 - t0);
+    const f0 = ann.frame_segment[0], f1 = ann.frame_segment[1];
+    const isPoint = ann.type === 'point' || f0 === f1;
+    const meta = isPoint
+        ? `point event @ ${fmtTime(t0)}  (frame ${f0})`
+        : `${fmtTime(t0)} → ${fmtTime(t1)} &nbsp; (${dur.toFixed(2)}s, ${f1 - f0 + 1} frames)`;
+    timelineTooltip.innerHTML = `
+        <span class="tt-label" style="background:${color}">${escHtml(catDisplay(ann.label))}</span>
+        <div class="tt-meta">${meta}</div>
+    `;
+    timelineTooltip.classList.add('visible');
+    const ttRect = timelineTooltip.getBoundingClientRect();
+    let x = e.clientX + 14;
+    let y = e.clientY - ttRect.height - 12;
+    if (y < 4) y = e.clientY + 18;
+    if (x + ttRect.width > window.innerWidth - 4) x = window.innerWidth - ttRect.width - 4;
+    timelineTooltip.style.left = x + 'px';
+    timelineTooltip.style.top  = y + 'px';
+}
+function hideSegmentTooltip() { timelineTooltip.classList.remove('visible'); }
+
+timelineWrapper.addEventListener('mousemove', e => {
+    if (tlDrag) { hideSegmentTooltip(); return; }
+    if (selectionMode) { timelineWrapper.style.cursor = 'crosshair'; hideSegmentTooltip(); return; }
+    const region = rowOfEvent(e);
+    if (isRow(region)) {
+        const edgeHit = hitTestEdgeInRow(e, region);
+        const segIdx = edgeHit ? edgeHit.annIdx : hitTestSegmentInRow(e, region);
+        if (edgeHit) timelineWrapper.style.cursor = 'col-resize';
+        else if (segIdx >= 0) timelineWrapper.style.cursor = 'grab';
+        else timelineWrapper.style.cursor = 'pointer';
+        const anns = getCurAnns();
+        if (segIdx >= 0 && segIdx < anns.length) showSegmentTooltip(e, anns[segIdx]);
+        else hideSegmentTooltip();
+    } else {
+        timelineWrapper.style.cursor = 'pointer';
+        hideSegmentTooltip();
+    }
+});
+timelineWrapper.addEventListener('mouseleave', hideSegmentTooltip);
+
+// Wheel zoom (cursor-anchored) + Shift+wheel pan
+timelineWrapper.addEventListener('wheel', e => {
+    if (curFrameCount <= 0) return;
+    e.preventDefault();
+    const r = timelineWrapper.getBoundingClientRect();
+    const x = Math.max(0, Math.min(e.clientX - r.left, r.width));
+    if (e.shiftKey) {
+        const v = getViewWindow();
+        const panFrames = (e.deltaY + e.deltaX) * (v.span / r.width) * 0.6;
+        viewStartFrame = Math.max(0, Math.min(curFrameCount - v.span, viewStartFrame + panFrames));
+    } else {
+        const frameAtCursor = xToFrame(x, r.width);
+        const factor = Math.exp(e.deltaY * 0.0015);
+        const newZoom = Math.max(1.0, Math.min(MAX_ZOOM, viewZoom * factor));
+        viewZoom = newZoom;
+        const newSpan = Math.max(MIN_VIEW_FRAMES, Math.round(curFrameCount / viewZoom));
+        const cursorFrac = x / r.width;
+        viewStartFrame = Math.max(0, Math.min(curFrameCount - newSpan, frameAtCursor - cursorFrac * newSpan));
+    }
+    drawTimeline();
+    const region = rowOfEvent(e);
+    if (isRow(region)) {
+        const edgeHit = hitTestEdgeInRow(e, region);
+        const segIdx = edgeHit ? edgeHit.annIdx : hitTestSegmentInRow(e, region);
+        const anns = getCurAnns();
+        if (segIdx >= 0 && segIdx < anns.length) showSegmentTooltip(e, anns[segIdx]);
+        else hideSegmentTooltip();
+    }
+}, { passive: false });
+
+// Double-click: playhead strip resets zoom; segment opens edit modal
+timelineWrapper.addEventListener('dblclick', e => {
+    const region = rowOfEvent(e);
+    if (region === 'playhead') {
+        e.preventDefault();
+        resetView();
+        drawTimeline();
+        showToast('Zoom reset', 'success');
+        return;
+    }
+    if (isRow(region)) {
+        const segIdx = hitTestSegmentInRow(e, region);
+        if (segIdx >= 0) { e.preventDefault(); showEditModal(segIdx); }
+    }
+});
+
+timelineWrapper.addEventListener('mousedown', e => {
+    if (e.button === 1) {
+        e.preventDefault();
+        tlDrag = { kind: 'pan', startX: e.clientX, startView: viewStartFrame };
+        timelineWrapper.style.cursor = 'grabbing';
+        hideSegmentTooltip();
+        return;
+    }
+    const region = rowOfEvent(e);
+    if (e.button === 2) {
+        if (!isRow(region) || curFrameCount <= 0) return;
+        e.preventDefault();
+        const r = timelineWrapper.getBoundingClientRect();
+        const mx = e.clientX - r.left, my = e.clientY - r.top;
+        tlDrag = { kind: 'marquee', button: 2, startSegIdx: hitTestSegmentInRow(e, region) };
+        marqueeRect = { x0: mx, y0: my, x1: mx, y1: my };
+        hideSegmentTooltip();
+        timelineWrapper.style.cursor = 'crosshair';
+        drawTimeline();
+        return;
+    }
+    if (e.button !== 0) return;
+
+    if (isRow(region) && (selectionMode || e.altKey)) {
+        e.preventDefault();
+        const r = timelineWrapper.getBoundingClientRect();
+        const mx = e.clientX - r.left, my = e.clientY - r.top;
+        tlDrag = { kind: 'marquee', button: 0, startSegIdx: -1 };
+        marqueeRect = { x0: mx, y0: my, x1: mx, y1: my };
+        hideSegmentTooltip();
+        timelineWrapper.style.cursor = 'crosshair';
+        return;
+    }
+
+    if (isRow(region)) {
+        if (e.shiftKey || e.metaKey) {
+            const segIdx = hitTestSegmentInRow(e, region);
+            if (segIdx >= 0) {
+                e.preventDefault();
+                if (S.selectedAnnIdxs.has(segIdx)) S.selectedAnnIdxs.delete(segIdx);
+                else S.selectedAnnIdxs.add(segIdx);
+                S.selectedAnnIdx = -1;
+                tlDrag = null;
+                updateSelectStatus();
+                drawTimeline();
+                return;
+            }
+        }
+        const hit = hitTestEdgeInRow(e, region);
+        if (hit) {
+            pushUndo();
+            tlDrag = hit;
+            S.selectedAnnIdx = hit.annIdx;
+            S.selectedAnnIdxs.clear();
+            updateSelectStatus();
+            drawTimeline();
+            return;
+        }
+        const segIdx = hitTestSegmentInRow(e, region);
+        if (segIdx >= 0) {
+            const ann = getCurAnns()[segIdx];
+            tlDrag = {
+                kind: 'pendingMove',
+                annIdx: segIdx,
+                startX: e.clientX,
+                startY: e.clientY,
+                origF0: ann.frame_segment[0],
+                origF1: ann.frame_segment[1],
+                origType: ann.type || (ann.frame_segment[0] === ann.frame_segment[1] ? 'point' : 'state'),
+                origLabel: ann.label,
+            };
+            S.selectedAnnIdx = segIdx;
+            S.selectedAnnIdxs.clear();
+            updateSelectStatus();
+            drawTimeline();
+            seekToFrame(tlFrameFromEvent(e));
+        } else {
+            S.selectedAnnIdx = -1;
+            S.selectedAnnIdxs.clear();
+            updateSelectStatus();
+            tlDrag = 'seek';
+            drawTimeline();
+            seekToFrame(tlFrameFromEvent(e));
+        }
+    } else {
+        S.selectedAnnIdx = -1;
+        S.selectedAnnIdxs.clear();
+        updateSelectStatus();
+        tlDrag = 'seek';
+        drawTimeline();
+        seekToFrame(tlFrameFromEvent(e));
+    }
+});
+
+timelineWrapper.addEventListener('auxclick', e => { if (e.button === 1) e.preventDefault(); });
+
+timelineWrapper.addEventListener('contextmenu', e => {
+    const region = rowOfEvent(e);
+    if (!isRow(region)) return;
+    e.preventDefault();
+    if (suppressNextContextMenu) { suppressNextContextMenu = false; return; }
+    const segIdx = hitTestSegmentInRow(e, region);
+    if (segIdx < 0) return;
+    showReassignPicker(segIdx);
+});
+
+document.addEventListener('mousemove', e => {
+    if (!tlDrag) return;
+    if (tlDrag === 'seek') { seekToFrame(tlFrameFromEvent(e)); return; }
+    if (tlDrag.kind === 'marquee') {
+        e.preventDefault();
+        const r = timelineWrapper.getBoundingClientRect();
+        marqueeRect.x1 = Math.max(0, Math.min(e.clientX - r.left, r.width));
+        marqueeRect.y1 = Math.max(0, Math.min(e.clientY - r.top, r.height));
+        S.selectedAnnIdxs = new Set(annsIntersectingRect(marqueeRect.x0, marqueeRect.y0, marqueeRect.x1, marqueeRect.y1));
+        S.selectedAnnIdx = -1;
+        updateSelectStatus();
+        drawTimeline();
+        return;
+    }
+    if (tlDrag.kind === 'pan') {
+        const r = timelineWrapper.getBoundingClientRect();
+        const dx = e.clientX - tlDrag.startX;
+        const v = getViewWindow();
+        const deltaFrames = -(dx / r.width) * v.span;
+        viewStartFrame = Math.max(0, Math.min(curFrameCount - v.span, tlDrag.startView + deltaFrames));
+        drawTimeline();
+        return;
+    }
+    if (tlDrag.kind === 'pendingMove') {
+        // Promote to an active move once the cursor travels past the click
+        // threshold in EITHER axis (vertical drag lets you jump between tracks).
+        if (Math.abs(e.clientX - tlDrag.startX) > 3 || Math.abs(e.clientY - tlDrag.startY) > 3) {
+            pushUndo();
+            tlDrag = { ...tlDrag, kind: 'move' };
+            timelineWrapper.style.cursor = 'grabbing';
+            hideSegmentTooltip();
+        }
+        return;
+    }
+    if (tlDrag.kind === 'move') {
+        const r = timelineWrapper.getBoundingClientRect();
+        const v = getViewWindow();
+        const dFrames = Math.round(((e.clientX - tlDrag.startX) / r.width) * v.span);
+        const dur = tlDrag.origF1 - tlDrag.origF0;
+        let newF0 = Math.max(0, Math.min(curFrameCount - 1 - dur, tlDrag.origF0 + dFrames));
+        let newF1 = newF0 + dur;
+        const anns = getCurAnns();
+        const a = anns[tlDrag.annIdx];
+        if (!a) return;
+        // Cross-row drag: if the cursor is over a different category's track,
+        // reassign the block to that behavior (it visually jumps rows live).
+        const targetRow = rowOfEvent(e);
+        if (isRow(targetRow)) a.label = CATEGORIES[targetRow].name;
+        a.frame_segment[0] = newF0;
+        a.frame_segment[1] = newF1;
+        const fps = curFps > 0 ? curFps : S.globalFps;
+        const isPoint = tlDrag.origType === 'point' || dur === 0;
+        const t0 = newF0 / fps;
+        const t1 = isPoint ? t0 : (newF1 + 1) / fps;
+        a.time_segment = [parseFloat(t0.toFixed(4)), parseFloat(t1.toFixed(4))];
+        a.duration_sec = parseFloat((t1 - t0).toFixed(4));
+        seekToFrame(newF0);
+        drawTimeline();
+        return;
+    }
+    // Edge-resize
+    const anns = getCurAnns();
+    const a = anns[tlDrag.annIdx];
+    if (!a) return;
+    const frame = tlFrameFromEvent(e);
+    if (tlDrag.edge === 'start') a.frame_segment[0] = Math.min(frame, a.frame_segment[1]);
+    else a.frame_segment[1] = Math.max(frame, a.frame_segment[0]);
+    const fps = curFps > 0 ? curFps : S.globalFps;
+    a.time_segment = [parseFloat((a.frame_segment[0] / fps).toFixed(4)), parseFloat(((a.frame_segment[1] + 1) / fps).toFixed(4))];
+    a.duration_sec = parseFloat((a.time_segment[1] - a.time_segment[0]).toFixed(4));
+    seekToFrame(frame);
+    drawTimeline();
+});
+
+document.addEventListener('mouseup', e => {
+    if (tlDrag) {
+        if (tlDrag.kind === 'marquee') {
+            const wasRightDrag = tlDrag.button === 2;
+            const startSegIdx = tlDrag.startSegIdx ?? -1;
+            const tiny = marqueeRect &&
+                Math.abs(marqueeRect.x1 - marqueeRect.x0) < 3 &&
+                Math.abs(marqueeRect.y1 - marqueeRect.y0) < 3;
+            if (wasRightDrag) { e.preventDefault(); suppressTimelineContextMenuOnce(); }
+            if (tiny && wasRightDrag && startSegIdx >= 0) {
+                S.selectedAnnIdx = startSegIdx;
+                S.selectedAnnIdxs.clear();
+                marqueeRect = null;
+                updateSelectStatus();
+                drawTimeline();
+                showReassignPicker(startSegIdx);
+                tlDrag = null;
+                timelineWrapper.style.cursor = selectionMode ? 'crosshair' : 'pointer';
+                return;
+            }
+            const hits = (!tiny && marqueeRect)
+                ? annsIntersectingRect(marqueeRect.x0, marqueeRect.y0, marqueeRect.x1, marqueeRect.y1)
+                : [];
+            S.selectedAnnIdxs = new Set(hits);
+            S.selectedAnnIdx = -1;
+            marqueeRect = null;
+            updateSelectStatus();
+            drawTimeline();
+            if (hits.length) showToast(`${hits.length} segment(s) selected — Delete to remove`, 'success');
+            else if (!tiny) showToast('No segments in box', 'error');
+        } else if (tlDrag.kind === 'move') {
+            const a2 = getCurAnns()[tlDrag.annIdx];
+            const reassigned = a2 && tlDrag.origLabel && a2.label !== tlDrag.origLabel;
+            renderAnnotations();
+            scheduleSave(getCurKey());
+            showToast(reassigned ? `Moved → ${catDisplay(a2.label)}` : 'Segment moved & saved', 'success');
+        } else if (tlDrag === 'seek' || tlDrag.kind === 'pan' || tlDrag.kind === 'pendingMove') {
+            // click without drag — nothing to save
+        } else {
+            scheduleSave(getCurKey());
+            showToast('Segment resized & saved', 'success');
+        }
+    }
+    tlDrag = null;
+    timelineWrapper.style.cursor = selectionMode ? 'crosshair' : 'pointer';
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Category buttons (four fixed behaviors)
+// ═══════════════════════════════════════════════════════════════════
+function selectCat(i) {
+    if (i < 0 || i >= CATEGORIES.length) return;
+    S.selectedCat = (S.selectedCat === i) ? -1 : i;
+    renderCatButtons();
+    drawTimeline();
+}
+
+function renderCatButtons() {
+    socialButtonsEl.innerHTML = '';
+    CATEGORIES.forEach((cat, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'social-btn' + (S.selectedCat === i ? ' selected' : '');
+        btn.style.background = cat.color;
+        btn.innerHTML = `<span>${cat.display}</span><span class="shortcut">[${i + 1}]</span>`;
+        btn.onclick = () => selectCat(i);
+        socialButtonsEl.appendChild(btn);
+    });
+    renderLabelPickerButtons();
+}
+
+function renderLabelPickerButtons() {
+    lpButtons.innerHTML = '';
+    CATEGORIES.forEach((cat, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'lp-btn';
+        btn.style.background = cat.color;
+        btn.innerHTML = `${cat.display}<span class="lp-shortcut">Press ${i + 1}</span>`;
+        btn.onclick = () => {
+            if (pendingReassignIdx >= 0) { reassignAnn(i); pendingReassignIdx = -1; hideLabelPicker(); }
+            else finishMark(cat.name);
+        };
+        lpButtons.appendChild(btn);
+    });
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Annotations
+// ═══════════════════════════════════════════════════════════════════
+function getCurKey() { return S.currentIndex >= 0 ? S.videos[S.currentIndex].key : null; }
+function getCurAnns() { const k = getCurKey(); return k ? (S.database[k]?.annotations || []) : []; }
+function setCurAnns(anns) {
+    const k = getCurKey();
+    if (!k) return;
+    if (!S.database[k]) {
+        const v = S.videos[S.currentIndex];
+        S.database[k] = { duration: v.duration, frame: v.frameCount, fps: v.fps, subset: 'train', annotations: [] };
+    }
+    S.database[k].annotations = anns;
+}
+
+function renderAnnotations() {
+    const anns = getCurAnns();
+    const counts = CATEGORIES.map(c => anns.filter(a => a.label === c.name).length);
+    const parts = CATEGORIES.map((c, i) => counts[i] ? `${counts[i]} ${c.display.split(' ')[0].toLowerCase()}` : null).filter(Boolean);
+    annCount.textContent = anns.length ? `${anns.length} segment${anns.length > 1 ? 's' : ''}${parts.length ? '  ·  ' + parts.join(' · ') : ''}` : '';
+}
+
+function addAnn(start, end, label) {
+    if (start > end) [start, end] = [end, start];
+    const anns = getCurAnns();
+    const fps = curFps > 0 ? curFps : S.globalFps;
+    const t0 = fps > 0 ? start / fps : 0;
+    const t1 = fps > 0 ? (end + 1) / fps : 0;
+    anns.push({
+        frame_segment: [start, end],
+        time_segment:  [parseFloat(t0.toFixed(4)), parseFloat(t1.toFixed(4))],
+        duration_sec:  parseFloat((t1 - t0).toFixed(4)),
+        label,
+        type: start === end ? 'point' : 'state',
+    });
+    anns.sort((a, b) => a.frame_segment[0] - b.frame_segment[0]);
+    setCurAnns(anns);
+    renderAnnotations();
+    renderVideoList();
+    drawTimeline();
+    updateStatus();
+    scheduleSave(getCurKey());
+    return true;
+}
+
+function pushUndo() {
+    const k = getCurKey();
+    if (!k) return;
+    if (!undoHistory[k]) undoHistory[k] = [];
+    undoHistory[k].push(JSON.parse(JSON.stringify(getCurAnns())));
+    if (undoHistory[k].length > 50) undoHistory[k].shift();
+}
+
+function undoAction() {
+    const k = getCurKey();
+    if (!k || !undoHistory[k] || !undoHistory[k].length) { showToast('Nothing to undo', 'error'); return; }
+    setCurAnns(undoHistory[k].pop());
+    S.selectedAnnIdx = -1;
+    S.selectedAnnIdxs.clear();
+    updateSelectStatus();
+    renderAnnotations();
+    renderVideoList();
+    drawTimeline();
+    updateStatus();
+    scheduleSave(k);
+    showToast('Undo', 'success');
+}
+
+function delAnn(i) {
+    pushUndo();
+    const anns = getCurAnns();
+    anns.splice(i, 1);
+    setCurAnns(anns);
+    S.selectedAnnIdx = -1;
+    S.selectedAnnIdxs.clear();
+    updateSelectStatus();
+    renderAnnotations();
+    renderVideoList();
+    drawTimeline();
+    updateStatus();
+    scheduleSave(getCurKey());
+}
+
+function delAnnMany(indices) {
+    const uniq = [...new Set(indices)].filter(i => i >= 0);
+    if (!uniq.length) return;
+    if (uniq.length > 1 && !confirm(`Delete ${uniq.length} annotations? (Ctrl+Z to undo)`)) return;
+    pushUndo();
+    const anns = getCurAnns();
+    uniq.sort((a, b) => b - a);
+    for (const i of uniq) if (i < anns.length) anns.splice(i, 1);
+    setCurAnns(anns);
+    S.selectedAnnIdx = -1;
+    S.selectedAnnIdxs.clear();
+    updateSelectStatus();
+    renderAnnotations();
+    renderVideoList();
+    drawTimeline();
+    updateStatus();
+    scheduleSave(getCurKey());
+    showToast(`Deleted ${uniq.length} annotation(s)`, 'success');
+}
+
+function toggleSelectionMode() {
+    selectionMode = !selectionMode;
+    marqueeBtn.classList.toggle('active', selectionMode);
+    marqueeBtn.innerHTML = selectionMode ? '▥ Box-Select: ON' : '▥ Box-Select';
+    timelineWrapper.style.cursor = selectionMode ? 'crosshair' : 'pointer';
+    if (!selectionMode) { marqueeRect = null; drawTimeline(); }
+    showToast(selectionMode ? 'Box-select ON — drag a rectangle over the timeline, then Delete' : 'Box-select OFF', 'success');
+}
+
+function updateSelectStatus() {
+    const n = S.selectedAnnIdxs.size;
+    if (n > 0) { selectStatus.style.display = ''; selectStatus.textContent = `${n} selected · Del to remove`; }
+    else selectStatus.style.display = 'none';
+}
+
+function reassignAnn(catIdx) {
+    if (catIdx < 0 || catIdx >= CATEGORIES.length) return;
+    const anns = getCurAnns();
+    if (S.selectedAnnIdx < 0 || S.selectedAnnIdx >= anns.length) return;
+    pushUndo();
+    anns[S.selectedAnnIdx].label = CATEGORIES[catIdx].name;
+    setCurAnns(anns);
+    renderAnnotations();
+    drawTimeline();
+    scheduleSave(getCurKey());
+    showToast(`Reassigned → ${CATEGORIES[catIdx].display}`, 'success');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Edit modal
+// ═══════════════════════════════════════════════════════════════════
+function showEditModal(annIdx) {
+    if (annIdx < 0) return;
+    const ann = getCurAnns()[annIdx];
+    if (!ann) return;
+    editingAnnIdx = annIdx;
+    editPendingLabel = ann.label;
+    S.selectedAnnIdx = annIdx;
+    drawTimeline();
+    renderEditModal();
+    editModal.classList.remove('hidden');
+}
+function hideEditModal() {
+    editingAnnIdx = -1;
+    editPendingLabel = null;
+    editModal.classList.add('hidden');
+}
+function renderEditModal() {
+    const ann = getCurAnns()[editingAnnIdx];
+    if (!ann) { hideEditModal(); return; }
+    const fps = curFps > 0 ? curFps : S.globalFps;
+    const f0 = ann.frame_segment[0], f1 = ann.frame_segment[1];
+    const t0 = (f0 / fps).toFixed(2), t1 = (f1 / fps).toFixed(2);
+    const isPoint = ann.type === 'point' || f0 === f1;
+    const range = isPoint ? `point @ ${t0}s (frame ${f0})` : `${t0}s – ${t1}s &nbsp;(${(f1 - f0 + 1)} frames)`;
+    emMeta.innerHTML = `<span class="em-curlabel" style="background:${catColor(ann.label)}">${escHtml(catDisplay(ann.label))}</span> &nbsp;·&nbsp; ${range}`;
+    emLabelGrid.innerHTML = '';
+    CATEGORIES.forEach((cat, i) => {
+        const btn = document.createElement('div');
+        btn.className = 'em-lbl-btn' + (cat.name === editPendingLabel ? ' selected' : '');
+        btn.style.background = cat.color;
+        btn.innerHTML = `${cat.display} <span style="opacity:0.6;font-weight:400">[${i + 1}]</span>`;
+        btn.onclick = () => { editPendingLabel = cat.name; renderEditModal(); };
+        emLabelGrid.appendChild(btn);
+    });
+}
+function applyEdit() {
+    if (editingAnnIdx < 0) return;
+    const anns = getCurAnns();
+    const ann = anns[editingAnnIdx];
+    if (!ann) { hideEditModal(); return; }
+    if (!editPendingLabel || !CAT_NAMES.includes(editPendingLabel)) { showToast('Pick a behavior', 'error'); return; }
+    if (ann.label === editPendingLabel) { hideEditModal(); return; }
+    pushUndo();
+    ann.label = editPendingLabel;
+    setCurAnns(anns);
+    drawTimeline();
+    renderAnnotations();
+    scheduleSave(getCurKey());
+    showToast(`label → ${catDisplay(editPendingLabel)}`, 'success');
+    hideEditModal();
+}
+function deleteFromEdit() {
+    if (editingAnnIdx < 0) return;
+    const idx = editingAnnIdx;
+    hideEditModal();
+    delAnn(idx);
+}
+
+function showReassignPicker(annIdx) {
+    if (annIdx < 0) return;
+    const ann = getCurAnns()[annIdx];
+    if (!ann) return;
+    pendingReassignIdx = annIdx;
+    S.selectedAnnIdx = annIdx;
+    drawTimeline();
+    const fps = curFps > 0 ? curFps : S.globalFps;
+    const t0 = (ann.frame_segment[0] / fps).toFixed(2);
+    const t1 = (ann.frame_segment[1] / fps).toFixed(2);
+    const isPoint = ann.type === 'point' || ann.frame_segment[0] === ann.frame_segment[1];
+    const range = isPoint ? `point @ ${t0}s` : `${t0}s – ${t1}s`;
+    lpInfo.textContent = `Reassign  "${catDisplay(ann.label)}"  →  ?    [${range}]`;
+    labelModal.classList.remove('hidden');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Mark Mode
+// ═══════════════════════════════════════════════════════════════════
+function markStart() {
+    if (S.currentIndex < 0) return;
+    S.markMode = true;
+    S.markStartFrame = curFrame;
+    const catLabel = S.selectedCat >= 0 ? ` [${CATEGORIES[S.selectedCat].display}]` : '';
+    markIndicator.style.display = '';
+    markFromFrame.textContent = curFrame + catLabel;
+    markStartBtn.style.display = 'none';
+    markEndBtn.style.display = '';
+    cancelMarkBtn.style.display = '';
+    drawTimeline();
+}
+function markEnd() {
+    if (!S.markMode) return;
+    videoEl.pause();
+    pendingSeg = { start: Math.min(S.markStartFrame, curFrame), end: Math.max(S.markStartFrame, curFrame) };
+    if (S.selectedCat >= 0 && S.selectedCat < CATEGORIES.length) finishMark(CATEGORIES[S.selectedCat].name);
+    else showLabelPicker();
+}
+function cancelMark() {
+    pendingReassignIdx = -1;
+    S.markMode = false;
+    S.markStartFrame = null;
+    pendingSeg = null;
+    markIndicator.style.display = 'none';
+    markStartBtn.style.display = '';
+    markEndBtn.style.display = 'none';
+    cancelMarkBtn.style.display = 'none';
+    hideLabelPicker();
+    drawTimeline();
+}
+function finishMark(label) {
+    if (!pendingSeg) return;
+    pushUndo();
+    if (addAnn(pendingSeg.start, pendingSeg.end, label)) {
+        S.markMode = false;
+        S.markStartFrame = null;
+        pendingSeg = null;
+        markIndicator.style.display = 'none';
+        markStartBtn.style.display = '';
+        markEndBtn.style.display = 'none';
+        cancelMarkBtn.style.display = 'none';
+        hideLabelPicker();
+        showToast('Segment added & saved', 'success');
+    }
+}
+function quickAssign(catIdx) {
+    if (catIdx < 0 || catIdx >= CATEGORIES.length) return;
+    if (S.markMode && !pendingSeg) {
+        videoEl.pause();
+        pendingSeg = { start: Math.min(S.markStartFrame, curFrame), end: Math.max(S.markStartFrame, curFrame) };
+    }
+    if (pendingSeg) finishMark(CATEGORIES[catIdx].name);
+}
+function showLabelPicker() {
+    labelModal.classList.remove('hidden');
+    lpInfo.textContent = `frame ${pendingSeg.start} - ${pendingSeg.end} (${pendingSeg.end - pendingSeg.start + 1} frames)`;
+}
+function hideLabelPicker() { labelModal.classList.add('hidden'); }
+
+// ═══════════════════════════════════════════════════════════════════
+// Status
+// ═══════════════════════════════════════════════════════════════════
+function updateStatus() {
+    let done = 0;
+    for (const v of S.videos) if (S.database[v.key]?.annotations?.length > 0) done++;
+    statusText.textContent = `${done}/${S.videos.length} annotated`;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Arrow-key frame stepping with hold-to-accelerate.
+//   A single tap moves exactly one frame. Holding an arrow fires key-repeat;
+//   the step size ramps up the longer it is held, then resets on release.
+// ═══════════════════════════════════════════════════════════════════
+let arrowHold = { dir: 0, count: 0, last: 0 };
+function arrowStepSize(count) {
+    if (count < 8)  return 1;
+    if (count < 16) return 2;
+    if (count < 28) return 4;
+    if (count < 48) return 8;
+    return 15;
+}
+function arrowStep(dir) {
+    if (S.currentIndex < 0) return;
+    const now = performance.now();
+    // A gap longer than a key-repeat interval (or a direction change) means this
+    // is a fresh, deliberate tap — restart at a single-frame step. Only a key
+    // held down (repeats firing every ~30-50 ms) accumulates into acceleration.
+    if (dir !== arrowHold.dir || (now - arrowHold.last) > 250) arrowHold.count = 0;
+    arrowHold.dir = dir;
+    arrowHold.last = now;
+    arrowHold.count++;
+    videoEl.pause();
+    seekToFrame(curFrame + dir * arrowStepSize(arrowHold.count));
+}
+document.addEventListener('keyup', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') arrowHold.count = 0;
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Keyboard
+// ═══════════════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+    if (!editModal.classList.contains('hidden')) {
+        if (e.key === 'Enter') { e.preventDefault(); applyEdit(); return; }
+        if (e.key === 'Escape') { e.preventDefault(); hideEditModal(); return; }
+        if (e.key >= '1' && e.key <= '4') {
+            const idx = parseInt(e.key, 10) - 1;
+            if (idx < CATEGORIES.length) { e.preventDefault(); editPendingLabel = CATEGORIES[idx].name; renderEditModal(); }
+            return;
+        }
+        return;
+    }
+    if (!labelModal.classList.contains('hidden')) {
+        if (e.key >= '1' && e.key <= '4') {
+            const idx = parseInt(e.key, 10) - 1;
+            if (idx < CATEGORIES.length) {
+                e.preventDefault();
+                if (pendingReassignIdx >= 0) { reassignAnn(idx); pendingReassignIdx = -1; hideLabelPicker(); }
+                else finishMark(CATEGORIES[idx].name);
+            }
+            return;
+        }
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            if (pendingReassignIdx >= 0) { pendingReassignIdx = -1; hideLabelPicker(); }
+            else cancelMark();
+            return;
+        }
+        return;
+    }
+    const tag = document.activeElement.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
+        if (e.key === 'Escape') { document.activeElement.blur(); e.preventDefault(); }
+        return;
+    }
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); exportCombinedJSON(); return; }
+    if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undoAction(); return; }
+
+    switch (e.key) {
+        case ' ': e.preventDefault(); togglePlay(); break;
+        case 'ArrowLeft':  e.preventDefault(); e.shiftKey ? seekToFrame(curFrame - 10) : arrowStep(-1); break;
+        case 'ArrowRight': e.preventDefault(); e.shiftKey ? seekToFrame(curFrame + 10) : arrowStep(1); break;
+        case 'Home': e.preventDefault(); seekFirst(); break;
+        case 'End':  e.preventDefault(); seekLast();  break;
+        case 'i': case 'I': e.preventDefault(); markStart(); break;
+        case 'o': case 'O': e.preventDefault(); markEnd();   break;
+        case 'b': case 'B': e.preventDefault(); toggleBehaviorOverlay(); break;
+        case 'r': case 'R':
+            if (S.selectedAnnIdx >= 0) { e.preventDefault(); showReassignPicker(S.selectedAnnIdx); }
+            break;
+        case 'e': case 'E':
+            if (S.selectedAnnIdx >= 0) { e.preventDefault(); showEditModal(S.selectedAnnIdx); }
+            else showToast('Select a segment first (click it)', 'error');
+            break;
+        case 'm': case 'M': e.preventDefault(); toggleSelectionMode(); break;
+        case 'Escape':
+            e.preventDefault();
+            if (!helpOverlay.classList.contains('hidden')) hideHelp();
+            else if (S.markMode) cancelMark();
+            else if (selectionMode) toggleSelectionMode();
+            else if (S.selectedAnnIdxs.size > 0) { S.selectedAnnIdxs.clear(); updateSelectStatus(); drawTimeline(); }
+            else if (S.selectedAnnIdx >= 0) { S.selectedAnnIdx = -1; drawTimeline(); }
+            break;
+        case 'Delete': case 'Backspace':
+            if (S.selectedAnnIdxs.size > 0) { e.preventDefault(); delAnnMany([...S.selectedAnnIdxs]); }
+            else if (S.selectedAnnIdx >= 0) { e.preventDefault(); delAnn(S.selectedAnnIdx); }
+            break;
+        case 'n': case 'N': if (S.currentIndex < S.videos.length - 1) loadVideo(S.currentIndex + 1); break;
+        case 'p': case 'P': if (S.currentIndex > 0) loadVideo(S.currentIndex - 1); break;
+        case ',': { const ci = SPEEDS.indexOf(videoEl.playbackRate); if (ci > 0) setSpeed(SPEEDS[ci - 1]); break; }
+        case '.': { const ci = SPEEDS.indexOf(videoEl.playbackRate); if (ci < SPEEDS.length - 1) setSpeed(SPEEDS[ci + 1]); break; }
+        case '?': showHelp(); break;
+        case '1': case '2': case '3': case '4': {
+            const idx = parseInt(e.key, 10) - 1;
+            if (idx >= CATEGORIES.length) break;
+            if (S.markMode) { e.preventDefault(); quickAssign(idx); }
+            else if (S.selectedAnnIdx >= 0) { e.preventDefault(); reassignAnn(idx); }
+            else selectCat(idx);
+            break;
+        }
+    }
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Help & Toast
+// ═══════════════════════════════════════════════════════════════════
+function showHelp() { helpOverlay.classList.remove('hidden'); }
+function hideHelp() { helpOverlay.classList.add('hidden'); }
+
+let toastTimer = null;
+function showToast(msg, type = 'success') {
+    toastEl.textContent = msg;
+    toastEl.className = 'toast ' + type;
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.add('hidden'), 2500);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// Persist last opened folder in IndexedDB
+// ═══════════════════════════════════════════════════════════════════
+const IDB_NAME  = 'social-annotator-4cat-v3';
+const IDB_STORE = 'state';
+const IDB_KEY   = 'lastFolder';
+
+function openIdb() {
+    return new Promise((resolve, reject) => {
+        if (!window.indexedDB) return reject(new Error('no IndexedDB'));
+        const req = indexedDB.open(IDB_NAME, 1);
+        req.onupgradeneeded = () => req.result.createObjectStore(IDB_STORE);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+async function saveLastFolderHandle(handle) {
+    try {
+        const db = await openIdb();
+        const tx = db.transaction(IDB_STORE, 'readwrite');
+        tx.objectStore(IDB_STORE).put(handle, IDB_KEY);
+        await new Promise((res, rej) => { tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
+        db.close();
+    } catch (e) { /* best-effort */ }
+}
+async function loadLastFolderHandle() {
+    try {
+        const db = await openIdb();
+        const tx = db.transaction(IDB_STORE, 'readonly');
+        const req = tx.objectStore(IDB_STORE).get(IDB_KEY);
+        const handle = await new Promise((res, rej) => {
+            req.onsuccess = () => res(req.result || null);
+            req.onerror = () => rej(req.error);
+        });
+        db.close();
+        return handle;
+    } catch (e) { return null; }
+}
+
+let _restoredHandle = null;
+const reopenLastBtn = $('reopenLastBtn');
+const reopenNote = $('reopenNote');
+
+async function reopenLastFolder() {
+    if (!_restoredHandle) return;
+    try {
+        const perm = await _restoredHandle.requestPermission({ mode: 'readwrite' });
+        if (perm === 'granted') await openFolderFromHandle(_restoredHandle);
+        else showToast('Permission denied — pick the folder manually', 'error');
+    } catch (e) { showToast('Reopen failed: ' + e.message, 'error'); }
+}
+
+async function tryRestoreLastFolder() {
+    const handle = await loadLastFolderHandle();
+    if (!handle) return;
+    _restoredHandle = handle;
+    let perm = 'prompt';
+    try { perm = await handle.queryPermission({ mode: 'readwrite' }); } catch {}
+    if (perm === 'granted') {
+        openFolderFromHandle(handle);
+    } else {
+        if (reopenLastBtn) { reopenLastBtn.textContent = `Reopen "${handle.name}"`; reopenLastBtn.style.display = ''; }
+        if (reopenNote) reopenNote.style.display = '';
+    }
+}
+
+// Initial UI
+renderCatButtons();
+updateAutosaveIndicator();
+tryRestoreLastFolder();
+</script>
+</body>
+</html>
