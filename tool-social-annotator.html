@@ -56,6 +56,9 @@
     .tool-author { display: flex; align-items: center; gap: 0.9rem; padding: 1.25rem 2.5rem; background: var(--bg-light); border-bottom: 1px solid var(--border-light); }
     .tool-author img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: center 30%; border: 2px solid var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .tool-author .author-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--white); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; color: var(--primary); }
+    .tool-author-avatars { display: inline-flex; flex-shrink: 0; }
+    .tool-author-avatars img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: center 30%; border: 2px solid var(--white); box-shadow: 0 0 0 1px var(--border-light); margin-left: -12px; }
+    .tool-author-avatars img:first-child { margin-left: 0; }
     .tool-author-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; }
     .tool-author-text strong { color: var(--primary-dark); }
     .tool-author-text a { color: var(--primary-light); text-decoration: none; font-weight: 500; }
@@ -133,7 +136,11 @@
         </div>
       </div>
       <div class="tool-author">
-        <div class="author-icon"><i class="fas fa-users"></i></div>
+        <div class="tool-author-avatars">
+          <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
+          <img src="images/Jaden Headshot.png" alt="Jaden Harris">
+          <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova">
+        </div>
         <div class="tool-author-text">
           Co-developed by <strong>Dr. Guang-Wei Zhang</strong>, <strong>Jaden Harris</strong>, and <strong>Elizabeth Ivanova</strong>.
           <a href="team.html">See the team page →</a>

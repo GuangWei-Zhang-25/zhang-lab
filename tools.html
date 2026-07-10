@@ -263,6 +263,24 @@
       color: var(--border-medium);
     }
 
+    .summary-avatars {
+      display: inline-flex;
+      flex-shrink: 0;
+    }
+
+    .summary-avatars img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 30%;
+      border: 2px solid var(--white);
+      box-shadow: 0 0 0 1px var(--border-light);
+      margin-left: -9px;
+    }
+
+    .summary-avatars img:first-child { margin-left: 0; }
+
     .summary-author strong { color: var(--text-secondary); font-weight: 600; }
 
     .summary-actions {
@@ -548,8 +566,12 @@
           <p class="summary-desc">
             Score social interactions in mouse videos across four dedicated timeline tracks — Active, Passive, Reactive Social, and Mounting — frame by frame.
           </p>
-          <div class="summary-author no-photo">
-            <i class="fas fa-users"></i>
+          <div class="summary-author">
+            <div class="summary-avatars">
+              <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
+              <img src="images/Jaden Headshot.png" alt="Jaden Harris">
+              <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova">
+            </div>
             <span>By <strong>Dr. Guang-Wei Zhang</strong>, Jaden Harris &amp; Elizabeth Ivanova</span>
           </div>
           <div class="summary-actions">
@@ -568,12 +590,15 @@
         </div>
         <div class="summary-body">
           <p class="summary-desc">
-            Fast, lightweight trackers that follow multiple mice at once — trained by distilling from a vision foundation model and benchmarked on the hard cases where animals huddle and occlude each other.
+            A machine-learning system for tracking multiple mice at once, built on a foundational vision model. This page will primarily host the front-end visualization tool for exploring the tracking results.
           </p>
           <span class="summary-support"><i class="fas fa-flask-vial"></i> Supported by the Claude Science Hackathon</span>
           <div class="summary-author">
-            <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo" style="object-position: center 20%;">
-            <span>By <strong>Henry Oo</strong></span>
+            <div class="summary-avatars">
+              <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
+              <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo" style="object-position: center 20%;">
+            </div>
+            <span>Developed by <strong>Dr. Guang-Wei Zhang</strong> &amp; Henry Oo</span>
           </div>
           <div class="summary-actions">
             <span class="summary-soon"><i class="fas fa-clock"></i> Details coming soon</span>
