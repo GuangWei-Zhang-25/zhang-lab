@@ -107,6 +107,12 @@
 
     .code-block { background: #0f1622; color: #cdd6f4; border-radius: 8px; padding: 1rem 1.2rem; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; line-height: 1.5; overflow-x: auto; margin: 0.6rem 0 1.1rem; white-space: pre; }
 
+    .guide-fig { margin: 0.5rem 0 1.25rem; border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; background: var(--white); box-shadow: 0 4px 16px rgba(26,54,93,0.05); }
+    .guide-fig img { width: 100%; display: block; }
+    .guide-fig figcaption { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; padding: 0.6rem 0.9rem; border-top: 1px solid var(--border-light); background: var(--bg-light); }
+    .guide-fig.hero { margin: 1.5rem 0 2rem; box-shadow: 0 12px 32px rgba(26,54,93,0.1); }
+    .guide-fig.hero figcaption { font-size: 0.85rem; }
+
     .tool-features { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
     .feature-chip { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 999px; padding: 0.45rem 0.9rem; font-size: 0.82rem; color: var(--text-secondary); }
     .feature-chip i { color: var(--primary); font-size: 0.8rem; }
@@ -184,6 +190,11 @@
       <div class="tool-body">
 
         <div class="callout"><strong>Core rule:</strong> a manually corrected box is always an exact, non-interpolatable <strong>anchor (◆)</strong>. The tool only helps neighboring frames when the correction can be propagated safely — it never averages or alters a box you set by hand.</div>
+
+        <figure class="guide-fig hero">
+          <img src="images/mmt_guide/fig-workspace.jpg" alt="The Multiple Mouse Tracking workspace with numbered callouts">
+          <figcaption>The workspace at a glance — <strong>(1)</strong> clip browser, <strong>(2)</strong> main video with box / ID / trace overlays, <strong>(3)</strong> display controls, <strong>(4)</strong> the per-mouse timeline with hard-anchor diamonds, <strong>(5)</strong> the View tab, and <strong>(6)</strong> the optional arena ROI.</figcaption>
+        </figure>
 
         <div class="toc">
           <h4>In this guide</h4>
@@ -288,6 +299,10 @@
         <div class="guide-section">
           <h3 id="navigate">4 · Navigate &amp; tune the display</h3>
           <p class="lead">Navigation and styling controls never change annotation data.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-navigate.png" alt="Playback, keyboard shortcuts, and mouse gestures">
+            <figcaption>Playback controls plus the keyboard shortcuts and mouse gestures for navigating frames and styling the overlays.</figcaption>
+          </figure>
           <h4>Playback &amp; frame stepping</h4>
           <ul class="action-list">
             <li><strong>Play/Pause:</strong> the button or <kbd>Space</kbd>. At the end, Play restarts from frame 1.</li>
@@ -312,6 +327,10 @@
         <div class="guide-section">
           <h3 id="bbox">5 · Correct bounding boxes</h3>
           <p class="lead">A box drag edits the current frame — even though clicking selects the full contiguous timeline block.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-bbox.jpg" alt="Select, move or resize, then release to create a hard anchor">
+            <figcaption>Select the box, drag inside / edge / corner to move or resize, then release — the corrected frame becomes an exact hard anchor (yellow diamond in the timeline).</figcaption>
+          </figure>
           <div class="table-wrap">
             <table class="guide-table">
               <tr><th>Pointer</th><th>Action</th></tr>
@@ -329,6 +348,10 @@
         <div class="guide-section">
           <h3 id="oversized">6 · Smartly shrink a continuous oversized run</h3>
           <p class="lead">Use one representative correction to reduce adjacent over-large predictions without touching normal boxes.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-oversized.png" alt="Oversized neighbors shrink toward the anchor until a normal box stops the run">
+            <figcaption>A severe large-to-small edit shrinks only adjacent still-oversized frames; a normal box (f7) stops the run, and frames beyond that barrier stay unchanged.</figcaption>
+          </figure>
           <p>When you reduce a box dimension by roughly <strong>2× or more</strong> (without substantially enlarging the other), the tool treats it as a likely correction of an oversized run and shrinks contiguous over-large neighbors toward your anchor.</p>
           <ul class="action-list">
             <li>Only contiguous frames that are still clearly oversized are eligible; an already-small dimension is never enlarged.</li>
@@ -350,6 +373,10 @@
         <div class="guide-section">
           <h3 id="rings">7 · Reach suspicious frames with red jump rings</h3>
           <p class="lead">A jump ring is a navigation cue — not proof that the tracking is wrong.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-rings.jpg" alt="Hover a red ring for context, then click or press J to reach the destination frame">
+            <figcaption>A red ring marks a large center jump in a visible trace. Hover for context (ID and source → destination frames), then click it or press <kbd>J</kbd> to jump with the ID selected.</figcaption>
+          </figure>
           <p>With traces enabled, the tool flags when an ID's center jumps by more than roughly <strong>7.5%</strong> of the larger video dimension between consecutive detections, drawing the destination as a red ring.</p>
           <ul class="action-list">
             <li><strong>Hover</strong> a ring to enlarge it and read the HUD's ID and source/destination frames.</li>
@@ -364,6 +391,10 @@
         <div class="guide-section">
           <h3 id="addbox">8 · Recover a missing detection with Add bbox</h3>
           <p class="lead">Add bbox creates a new track to the clip end — trim it immediately when recovering only a short gap.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-addbox.jpg" alt="Draw a new ID, trim its generated tail, and add anchors through the recovered interval">
+            <figcaption>Draw a box at the first missing frame; the new ID extends to the clip end. Trim the timeline block's right edge to the true last frame, then add anchors across the recovered span.</figcaption>
+          </figure>
           <ol class="steps">
             <li>Go to the first frame where the missing animal should reappear.</li>
             <li>Click <strong>add bbox</strong> or press <kbd>A</kbd>, then drag a rectangle (smaller than ~6×6 px is rejected).</li>
@@ -379,6 +410,10 @@
         <div class="guide-section">
           <h3 id="timeline">9 · Timeline identity repair</h3>
           <p class="lead">The timeline operates on contiguous identity blocks, not arbitrary interior lassos.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-timeline.png" alt="Presence blocks, hard anchors, selection, and structural drop targets">
+            <figcaption>Each row is one ID; solid segments are presence blocks and yellow diamonds are manual anchors. Drag a block onto another ID to merge, Shift-drop to swap, or drop on <strong>＋ new id</strong> / <strong>delete</strong> to split or remove.</figcaption>
+          </figure>
           <p>Each colored row is one ID; a solid segment is a contiguous presence block. Yellow diamonds mark manual anchors and the blue line is the current frame. <strong>Clicking a box or block selects that ID's complete contiguous block</strong> — so Delete may remove many frames even though a box drag edits only one.</p>
           <ul class="action-list">
             <li>Click a block to select its span; <strong>Shift-click</strong> to append more.</li>
@@ -403,6 +438,10 @@
         <div class="guide-section">
           <h3 id="view">10 · Use View &amp; define an arena</h3>
           <p class="lead">View summarizes the same corrected annotations without creating a second copy.</p>
+          <figure class="guide-fig">
+            <img src="images/mmt_guide/fig-view.jpg" alt="The View dashboard: annotated video, time-space, trajectory, density, velocity, distance, pair distance">
+            <figcaption>The View dashboard: annotated video and overlap timebar, plus Time-Space, trajectory, spatial density, velocity, distance, and pair-distance plots. These are QC aids from box centers — not calibrated measurements.</figcaption>
+          </figure>
           <div class="table-wrap">
             <table class="guide-table">
               <tr><th>Panel</th><th>Look for</th><th>Interpretation limit</th></tr>
