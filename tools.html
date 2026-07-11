@@ -178,6 +178,26 @@
       gap: 1.75rem;
     }
 
+    .tool-group-head {
+      margin: 2.75rem 0 1.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .tool-group-head h2 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.2rem;
+    }
+
+    .tool-group-head p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
     /* Summary card */
     .tool-summary {
       display: flex;
@@ -539,54 +559,6 @@
         </div>
       </div>
 
-      <!-- Behavioral Annotator -->
-      <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-tags"></i></div>
-          <div class="summary-eyebrow">Behavior · Video Annotation</div>
-          <div class="summary-name">Behavioral Annotator</div>
-        </div>
-        <div class="summary-body">
-          <p class="summary-desc">
-            A browser-based GUI for annotating animal behaviors in videos, frame by frame — built to power our Animal Behavioral Dataset effort.
-          </p>
-          <div class="summary-author">
-            <img src="images/Catherine Tao headshort.png" alt="Can Tao" style="object-position: center 35%;">
-            <span>By <strong>Dr. Can Tao</strong></span>
-          </div>
-          <div class="summary-actions">
-            <a href="tool-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
-            <a href="Tools/Behavior_Annotator_V3.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Social Behavior Annotator -->
-      <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-people-arrows"></i></div>
-          <div class="summary-eyebrow">Behavior · Social Interaction</div>
-          <div class="summary-name">Social Behavior Annotator</div>
-        </div>
-        <div class="summary-body">
-          <p class="summary-desc">
-            Score social interactions in mouse videos across four dedicated timeline tracks — Active, Passive, Reactive Social, and Mounting — frame by frame.
-          </p>
-          <div class="summary-author">
-            <div class="summary-avatars">
-              <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
-              <img src="images/Jaden Headshot.png" alt="Jaden Harris">
-              <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova">
-            </div>
-            <span>By <strong>Dr. Guang-Wei Zhang</strong>, Jaden Harris &amp; Elizabeth Ivanova</span>
-          </div>
-          <div class="summary-actions">
-            <a href="tool-social-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
-            <a href="Tools/Behavior_Annotator_Jaden_Elizabeth_V4.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
-          </div>
-        </div>
-      </div>
-
       <!-- Multiple Mouse Tracking -->
       <div class="tool-summary">
         <div class="summary-top">
@@ -609,6 +581,86 @@
           <div class="summary-actions">
             <a href="tool-mouse-tracking.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
             <a href="Tools/tracker_standalone_V7.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Behavior Annotators group -->
+    <div class="tool-group-head">
+      <h2>Behavior Annotators</h2>
+      <p>Browser-based tools for scoring behaviors frame by frame — each tailored to a specific project's ethogram.</p>
+    </div>
+
+    <div class="tool-grid">
+
+      <!-- Behavioral Annotator -->
+      <div class="tool-summary">
+        <div class="summary-top">
+          <div class="summary-icon"><i class="fas fa-tags"></i></div>
+          <div class="summary-eyebrow">General · Single Animal</div>
+          <div class="summary-name">Behavioral Annotator</div>
+        </div>
+        <div class="summary-body">
+          <p class="summary-desc">
+            A browser-based GUI for annotating animal behaviors in videos, frame by frame — built to power our Animal Behavioral Dataset effort.
+          </p>
+          <div class="summary-author">
+            <img src="images/Catherine Tao headshort.png" alt="Can Tao" style="object-position: center 35%;">
+            <span>By <strong>Dr. Can Tao</strong></span>
+          </div>
+          <div class="summary-actions">
+            <a href="tool-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
+            <a href="Tools/Behavior_Annotator_V3.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Behavior Annotator -->
+      <div class="tool-summary">
+        <div class="summary-top">
+          <div class="summary-icon"><i class="fas fa-people-arrows"></i></div>
+          <div class="summary-eyebrow">Social Interaction · 4 Tracks</div>
+          <div class="summary-name">Social Behavior Annotator</div>
+        </div>
+        <div class="summary-body">
+          <p class="summary-desc">
+            Score social interactions in mouse videos across four dedicated timeline tracks — Active, Passive, Reactive Social, and Mounting — frame by frame.
+          </p>
+          <div class="summary-author">
+            <div class="summary-avatars">
+              <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
+              <img src="images/Jaden Headshot.png" alt="Jaden Harris">
+              <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova">
+            </div>
+            <span>By <strong>Dr. Guang-Wei Zhang</strong>, Jaden Harris &amp; Elizabeth Ivanova</span>
+          </div>
+          <div class="summary-actions">
+            <a href="tool-social-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
+            <a href="Tools/Behavior_Annotator_Jaden_Elizabeth_V4.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parenting Behavior Annotator -->
+      <div class="tool-summary">
+        <div class="summary-top">
+          <div class="summary-icon"><i class="fas fa-hand-holding-heart"></i></div>
+          <div class="summary-eyebrow">Parenting · 7 Tracks</div>
+          <div class="summary-name">Parenting Behavior Annotator</div>
+        </div>
+        <div class="summary-body">
+          <p class="summary-desc">
+            Score parenting behaviors across seven timeline tracks — a pooled parenting prediction plus Attack, Crouch, Lick, Nest building, Retrieve, and Sniff. Built for a collaborating lab.
+          </p>
+          <div class="summary-author">
+            <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
+            <span>By <strong>Dr. Guang-Wei Zhang</strong></span>
+          </div>
+          <div class="summary-actions">
+            <a href="tool-parenting-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
+            <a href="Tools/parenting_annotator_jie_V4.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
           </div>
         </div>
       </div>
