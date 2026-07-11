@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>NeuroFlow | Zhang Lab Tools</title>
-  <meta name="description" content="NeuroFlow — an open-source tool from the Zhang Laboratory at VCU">
+  <meta name="description" content="NeuroFlow — a self-contained, browser-based workflow for mouse brain atlas registration and region-resolved quantification, from the Zhang Laboratory at VCU">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -55,27 +55,39 @@
     .tool-badge-note { font-size: 0.8rem; color: rgba(255,255,255,0.7); display: inline-flex; align-items: center; gap: 0.4rem; }
     .tool-author { display: flex; align-items: center; gap: 0.9rem; padding: 1.25rem 2.5rem; background: var(--bg-light); border-bottom: 1px solid var(--border-light); }
     .tool-author img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: center 30%; border: 2px solid var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .tool-author .author-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--white); border: 1px solid var(--border-light); display: flex; align-items: center; justify-content: center; color: var(--primary); }
     .tool-author-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; }
     .tool-author-text strong { color: var(--primary-dark); }
     .tool-author-text a { color: var(--primary-light); text-decoration: none; font-weight: 500; }
     .tool-author-text a:hover { text-decoration: underline; }
     .tool-body { padding: 2.25rem 2.5rem 2.5rem; background: var(--white); }
-    .tool-body h3 { font-family: var(--font-serif); font-size: 1.3rem; color: var(--primary-dark); margin-bottom: 0.75rem; }
-    .tool-body p { color: var(--text-secondary); margin-bottom: 1.25rem; }
-    .pipeline { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 1rem; margin: 1.5rem 0 2rem; }
-    .pipeline-step { position: relative; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 12px; padding: 1.25rem 1.1rem; transition: var(--transition); }
-    .pipeline-step:hover { border-color: var(--primary-light); transform: translateY(-2px); box-shadow: 0 6px 18px rgba(26,54,93,0.08); }
-    .pipeline-step .step-num { position: absolute; top: 0.9rem; right: 1rem; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--border-medium); line-height: 1; }
-    .pipeline-step .step-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 1.05rem; margin-bottom: 0.75rem; }
-    .pipeline-step h4 { font-size: 0.95rem; color: var(--primary-dark); margin-bottom: 0.3rem; font-weight: 600; }
-    .pipeline-step p { font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+    .tool-body h3 { font-family: var(--font-serif); font-size: 1.35rem; color: var(--primary-dark); margin: 0 0 0.75rem; }
+    .tool-body p { color: var(--text-secondary); margin-bottom: 1.1rem; }
+    .tool-body strong { color: var(--primary-dark); }
+
+    .paper-fig { margin: 0.75rem 0 1.25rem; border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; background: var(--white); box-shadow: 0 4px 16px rgba(26,54,93,0.05); }
+    .paper-fig img { width: 100%; display: block; }
+    .paper-fig figcaption { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; padding: 0.6rem 0.9rem; border-top: 1px solid var(--border-light); background: var(--bg-light); }
+    .paper-fig figcaption strong { color: var(--primary-dark); }
+    .paper-fig.hero { margin: 1.25rem 0 2rem; box-shadow: 0 12px 32px rgba(26,54,93,0.1); }
+
+    .stage { border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 1.5rem; }
+    .stage-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .stage-num { width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+    .stage-head h4 { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-dark); margin: 0; }
+    .stage-head .stage-tag { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+    .stage p { font-size: 0.93rem; }
+
     .tool-features { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
     .feature-chip { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 999px; padding: 0.45rem 0.9rem; font-size: 0.82rem; color: var(--text-secondary); }
     .feature-chip i { color: var(--primary); font-size: 0.8rem; }
+
     .quick-start { background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-light) 100%); border-left: 4px solid var(--accent); border-radius: 8px; padding: 1.25rem 1.5rem; margin-top: 1.75rem; }
     .quick-start h4 { font-family: var(--font-serif); color: var(--primary-dark); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
     .quick-start p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+
+    .reference { margin-top: 1.75rem; padding: 1rem 1.25rem; border: 1px solid var(--border-light); border-radius: 8px; background: var(--bg-light); font-size: 0.85rem; color: var(--text-secondary); }
+    .reference strong { color: var(--primary-dark); }
+
     .footer { background: var(--primary-dark); color: rgba(255,255,255,0.8); padding: 3rem 0; }
     .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
     .footer-brand { font-family: var(--font-serif); font-size: 1.25rem; color: var(--white); font-weight: 600; }
@@ -123,48 +135,107 @@
     <a href="tools.html" class="back-link"><i class="fas fa-arrow-left"></i> All Tools</a>
     <div class="tool-card">
       <div class="tool-hero">
-        <div class="tool-eyebrow"><i class="fas fa-brain"></i> Neuroanatomy · Cell Mapping</div>
+        <div class="tool-eyebrow"><i class="fas fa-brain"></i> Neuroanatomy · Atlas Registration</div>
         <h1 class="tool-name">NeuroFlow</h1>
         <p class="tool-tagline">
-          A complete, browser-based pipeline for mapping labeled cells in histological brain sections onto a reference atlas — from raw images to region-by-region cell counts, all in one window.
+          A self-contained, browser-based workflow that takes mouse brain sections from raw histology images to region-resolved counts — registering each section to the Allen Mouse Brain atlas and quantifying labeled signal per brain region, entirely on your own computer.
         </p>
         <div class="tool-actions">
-          <a href="Tools/neuroflow-v1-manual-standalone.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch NeuroFlow</a>
-          <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally — your images stay on your device</span>
+          <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch NeuroFlow</a>
+          <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally — no upload, no server</span>
         </div>
       </div>
       <div class="tool-author">
         <img src="images/Aarushi Rao.jpg" alt="Aarushi Rao">
         <div class="tool-author-text">
-          Developed by <strong>Aarushi Rao</strong>, WSURP Undergraduate Researcher.
+          Developed by <strong>Aarushi Rao</strong>, with Henry Oo, Dr. Can Tao &amp; Dr. Guang-Wei Zhang.
           <a href="team.html">See the team page →</a>
         </div>
       </div>
+
       <div class="tool-body">
         <h3>What it does</h3>
         <p>
-          NeuroFlow guides you through the full workflow of quantifying fluorescently labeled cells across the mouse brain. Import your section images, align them to the Allen Brain Atlas, detect labeled cells, and get a clean, exportable table of cell counts for every brain region — no coding required.
+          Mapping histological sections onto a common reference atlas is an essential — but usually fiddly — step in neuroscience: existing workflows are powerful, yet an analysis often spans several programs, operating-system-specific components, or specialized software dependencies. <strong>NeuroFlow</strong> brings the whole pipeline into a single web page that runs locally in your browser — your images are never uploaded and there is no backend server.
         </p>
-        <h3>How it works — five simple steps</h3>
-        <div class="pipeline">
-          <div class="pipeline-step"><span class="step-num">1</span><div class="step-icon"><i class="fas fa-crop-simple"></i></div><h4>Cropper</h4><p>Import your section images (PNG / JPG / WebP / BMP) and crop them to the tissue.</p></div>
-          <div class="pipeline-step"><span class="step-num">2</span><div class="step-icon"><i class="fas fa-layer-group"></i></div><h4>Arranger</h4><p>Order your sections along the rostral–caudal axis of the brain.</p></div>
-          <div class="pipeline-step"><span class="step-num">3</span><div class="step-icon"><i class="fas fa-crosshairs"></i></div><h4>Scaler</h4><p>Register each section to its matching coronal atlas plate to assign brain regions.</p></div>
-          <div class="pipeline-step"><span class="step-num">4</span><div class="step-icon"><i class="fas fa-circle-dot"></i></div><h4>Quantifier</h4><p>Detect labeled cells and place them onto the registered atlas coordinates.</p></div>
-          <div class="pipeline-step"><span class="step-num">5</span><div class="step-icon"><i class="fas fa-chart-column"></i></div><h4>Analyzer</h4><p>Review per-region cell counts on a 3D brain and export the results to Excel.</p></div>
+        <p>
+          It integrates section cropping, anterior–posterior ordering and coarse atlas-plane assignment, affine and nonlinear registration, real-time 3D oblique atlas reslicing, selected-color signal detection, atlas-based regional quantification, series-level aggregation, and interactive 3D inspection — as one coherent, six-stage pipeline. Major controls and intermediate results stay inspectable throughout, and a project file preserves your section, registration, mask, and result state.
+        </p>
+
+        <figure class="paper-fig hero">
+          <img src="images/neuroflow_paper/fig1-overview.png" alt="Overview of the NeuroFlow six-stage pipeline">
+          <figcaption><strong>The pipeline at a glance.</strong> Six interface stages — Cropper, Arranger, Scaler, Quantifier, Analyzer, and Visualizer — carry a section series from preparation through registration, signal detection, regional aggregation, and 3D inspection.</figcaption>
+        </figure>
+
+        <h3>The six-stage pipeline</h3>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">1</span><h4>Cropper <span class="stage-tag">· optional</span></h4></div>
+          <p>Turn a whole-slide or multi-section source image into clean, editable per-section crops. Draw, move, and resize regions of interest; preview black/white and gamma; and export the prepared sections — each keeping a stable identity so it can be tracked through the rest of the pipeline.</p>
+          <figure class="paper-fig">
+            <img src="images/neuroflow_paper/fig2-cropper-arranger.png" alt="Cropper and Arranger stages">
+            <figcaption><strong>Cropper &amp; Arranger.</strong> Source images become editable crops that preserve section identity (A); sections are oriented and ordered anterior→posterior (B); and each is matched to the closest plate from a 24-plate Allen CCFv3 reference grid as a coarse starting point (C).</figcaption>
+          </figure>
         </div>
-        <h3>Highlights</h3>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">2</span><h4>Arranger</h4></div>
+          <p>Orient each section (rotate 90°, flip horizontally or vertically) and drag them directly into anterior-to-posterior order. Center midlines and exclude or pin sections as needed. Section identity is preserved so you can inspect the series before any registration.</p>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">3</span><h4>Scaler <span class="stage-tag">· registration</span></h4></div>
+          <p>Register each section to the <strong>Allen Mouse Brain CCFv3</strong>. Start from a coarse plane, then dial in anterior–posterior position, pitch, and yaw in a real-time <strong>3D oblique reslice</strong> shown side-by-side with the matched atlas plane. Refine with <strong>affine</strong> transforms (translate, rotate, scale) and then a <strong>nonlinear</strong> control-point warp for local alignment. Each section's transform is saved.</p>
+          <figure class="paper-fig">
+            <img src="images/neuroflow_paper/fig3-scaler.png" alt="Scaler registration stage">
+            <figcaption><strong>Scaler.</strong> From an intentionally mismatched coarse plate (A) to a matched oblique atlas reslice (B), then affine (C) and nonlinear control-point (D) refinement, ending in a final overlay aligned to the tissue boundary with the transform saved (E).</figcaption>
+          </figure>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">4</span><h4>Quantifier <span class="stage-tag">· signal detection</span></h4></div>
+          <p>Detect labeled signal by color. Pick a representative signal color by typing it or sampling with the eyedropper, restrict analysis to valid tissue with brush/lasso/erase mask tools, then set a contrast threshold (for green, the score is <em>G − max(R, B)</em>) and a connected-component size cutoff. A cyan preview shows every threshold-positive pixel. NeuroFlow works from <strong>source-image pixels only</strong> — it does not invent cells or synthetic centroids.</p>
+          <figure class="paper-fig">
+            <img src="images/neuroflow_paper/fig4-quantifier.png" alt="Quantifier signal-pixel detection stage">
+            <figcaption><strong>Quantifier.</strong> Choose the signal color (A), define the tissue mask (B), apply a contrast threshold (C) and a component-size cutoff (D), and review the detected pixels in a cyan preview (E) — with every parameter inspectable.</figcaption>
+          </figure>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">5</span><h4>Analyzer <span class="stage-tag">· regional quantification</span></h4></div>
+          <p>Turn detected pixels into region-resolved numbers. Each qualifying pixel inherits the CCFv3 region label at its registered coordinate, producing a ranked table of regions (acronym, pixel count, density), a two-level <strong>sunburst</strong> of major divisions and their constituent regions, and an Allen region-<strong>hierarchy tree</strong>. Results aggregate across the whole section series.</p>
+          <figure class="paper-fig">
+            <img src="images/neuroflow_paper/fig5-analyzer.png" alt="Analyzer regional quantification stage">
+            <figcaption><strong>Analyzer.</strong> Qualifying pixels (A–B) are assigned CCFv3 regions at their registered coordinates (C); a sunburst summarizes major divisions and their regions (D), and a root-to-region hierarchy lists the leading contributions (E) — colored to match the Allen atlas.</figcaption>
+          </figure>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">6</span><h4>Visualizer <span class="stage-tag">· 3D inspection</span></h4></div>
+          <p>Inspect the result in 3D. The registered section appears as a clipped plane sitting at its true intersection with the actual Allen CCFv3 whole-brain surface, with the measured signal pixels shown in place and a linked 2D view for full context. Rotate, pan, zoom, and hover to explore.</p>
+          <figure class="paper-fig">
+            <img src="images/neuroflow_paper/fig6-visualizer.png" alt="Visualizer 3D inspection stage">
+            <figcaption><strong>Visualizer.</strong> The registered section (A) and its measured signal pixels (B) are shown on the true 3D intersection with the CCFv3 whole-brain surface, alongside a linked 2D section for context (C).</figcaption>
+          </figure>
+        </div>
+
+        <h3 style="border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 1.5rem;">Highlights</h3>
         <div class="tool-features">
-          <span class="feature-chip"><i class="fas fa-globe"></i> Allen Brain Atlas registration</span>
-          <span class="feature-chip"><i class="fas fa-cube"></i> Interactive 3D brain viewer</span>
-          <span class="feature-chip"><i class="fas fa-table"></i> One-click Excel export</span>
-          <span class="feature-chip"><i class="fas fa-floppy-disk"></i> Auto-saves your progress</span>
-          <span class="feature-chip"><i class="fas fa-wifi"></i> Works fully offline</span>
-          <span class="feature-chip"><i class="fas fa-shield-halved"></i> Private — nothing is uploaded</span>
+          <span class="feature-chip"><i class="fas fa-lock"></i> Runs locally — no upload, no server</span>
+          <span class="feature-chip"><i class="fas fa-globe"></i> Allen Mouse Brain CCFv3</span>
+          <span class="feature-chip"><i class="fas fa-cube"></i> Real-time 3D oblique reslicing</span>
+          <span class="feature-chip"><i class="fas fa-vector-square"></i> Affine + nonlinear registration</span>
+          <span class="feature-chip"><i class="fas fa-chart-pie"></i> Region-resolved quantification</span>
+          <span class="feature-chip"><i class="fas fa-floppy-disk"></i> Project file preserves state</span>
         </div>
+
         <div class="quick-start">
           <h4><i class="fas fa-bolt"></i> Quick start</h4>
-          <p>Click <strong>Launch NeuroFlow</strong>, then drag your first section image into the Cropper. Follow the tabs left to right — Cropper → Arranger → Scaler → Quantifier → Analyzer — and export your region counts at the end. The tool remembers your work between steps.</p>
+          <p>Click <strong>Launch NeuroFlow</strong>, load your section images, and follow the stages left to right — Cropper → Arranger → Scaler → Quantifier → Analyzer → Visualizer. Everything runs in your browser and your images never leave your computer. Questions? Reach out at <a href="mailto:guangwei.zhang@vcuhealth.org?subject=NeuroFlow" style="color: var(--primary); font-weight: 500;">guangwei.zhang@vcuhealth.org</a>.</p>
+        </div>
+
+        <div class="reference">
+          <strong>Reference.</strong> Rao A, Oo H, Tao C, Zhang G-W. <em>NeuroFlow: An Integrated, Cross-Platform Workflow for Mouse Brain Atlas Registration and Quantification.</em> Department of Neuroscience and Anatomy, Virginia Commonwealth University (preprint, 2026). Figures adapted from the manuscript.
         </div>
       </div>
     </div>
