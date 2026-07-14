@@ -249,6 +249,31 @@
       font-size: 1.15rem;
       font-weight: 700;
       line-height: 1.2;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Media banner (illustration or gradient+icon) */
+    .summary-media {
+      height: 118px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f2744 0%, #1a365d 60%, #2c5282 100%);
+    }
+
+    .summary-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .summary-media .media-icon {
+      font-size: 2.1rem;
+      color: rgba(255, 255, 255, 0.85);
     }
 
     .summary-body {
@@ -521,12 +546,10 @@
 
       <!-- NeuroFlow -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-brain"></i></div>
+        <div class="summary-media"><img src="images/tool_thumbs/neuroflow.jpg" alt="NeuroFlow 3D brain quantification"></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Neuroanatomy · Cell Mapping</div>
           <div class="summary-name">NeuroFlow</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Map labeled cells in brain sections onto the Allen atlas — from raw images to region-by-region counts.
           </p>
@@ -543,12 +566,10 @@
 
       <!-- Neuropixels Planner -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-microchip"></i></div>
+        <div class="summary-media"><i class="fas fa-microchip media-icon"></i></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Electrophysiology · Surgery</div>
           <div class="summary-name">Neuropixels Planner</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Plan Neuropixels probe trajectories in 3D on the Allen atlas — coordinates, arm angles, and the regions crossed.
           </p>
@@ -565,12 +586,10 @@
 
       <!-- Multiple Mouse Tracking -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-object-group"></i></div>
+        <div class="summary-media"><img src="images/tool_thumbs/mouse-tracking.jpg" alt="Multiple mice with tracking bounding boxes"></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Behavior · Multi-Animal Tracking</div>
           <div class="summary-name">Multiple Mouse Tracking</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Visualize and correct multi-mouse tracking results — now with rotatable boxes and per-animal ID tags.
           </p>
@@ -580,7 +599,7 @@
               <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
               <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo" style="object-position: center 20%;">
             </div>
-            <span>Developed by <strong>Dr. Guang-Wei Zhang</strong> &amp; Henry Oo</span>
+            <span>Developed by <strong>Dr. Guang-Wei Zhang</strong> &amp; <strong>Henry Oo</strong></span>
           </div>
           <div class="summary-actions">
             <a href="tool-mouse-tracking.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
@@ -601,12 +620,10 @@
 
       <!-- Behavioral Annotator -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-tags"></i></div>
+        <div class="summary-media"><i class="fas fa-tags media-icon"></i></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">General · Single Animal</div>
           <div class="summary-name">Behavioral Annotator</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             A browser-based GUI for annotating animal behaviors in videos, frame by frame — built to power our Animal Behavioral Dataset effort.
           </p>
@@ -623,12 +640,10 @@
 
       <!-- Social Behavior Annotator -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-people-arrows"></i></div>
+        <div class="summary-media"><i class="fas fa-people-arrows media-icon"></i></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Social Interaction · 4 Tracks</div>
           <div class="summary-name">Social Behavior Annotator</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Score social interactions in mouse videos across four dedicated timeline tracks — Active, Passive, Reactive Social, and Mounting — frame by frame.
           </p>
@@ -638,7 +653,7 @@
               <img src="images/Jaden Headshot.png" alt="Jaden Harris">
               <img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova">
             </div>
-            <span>By <strong>Dr. Guang-Wei Zhang</strong>, Jaden Harris &amp; Elizabeth Ivanova</span>
+            <span>By <strong>Dr. Guang-Wei Zhang</strong>, <strong>Jaden Harris</strong> &amp; <strong>Elizabeth Ivanova</strong></span>
           </div>
           <div class="summary-actions">
             <a href="tool-social-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
@@ -649,12 +664,10 @@
 
       <!-- Parenting Behavior Annotator -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-hand-holding-heart"></i></div>
+        <div class="summary-media"><i class="fas fa-hand-holding-heart media-icon"></i></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Parenting · 7 Tracks</div>
           <div class="summary-name">Parenting Behavior Annotator</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Score parenting behaviors across seven timeline tracks — a pooled parenting prediction plus Attack, Crouch, Lick, Nest building, Retrieve, and Sniff. Built for a collaborating lab.
           </p>
@@ -681,12 +694,10 @@
 
       <!-- USV Call Annotator -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-wave-square"></i></div>
+        <div class="summary-media"><i class="fas fa-wave-square media-icon"></i></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Audio · Vocalization</div>
           <div class="summary-name">USV Call Annotator</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Load a recording, view its spectrogram, and mark ultrasonic vocalization calls as time–frequency boxes with labels — then export the annotations.
           </p>
@@ -703,12 +714,10 @@
 
       <!-- Audio-Video Synchronizer -->
       <div class="tool-summary">
-        <div class="summary-top">
-          <div class="summary-icon"><i class="fas fa-clapperboard"></i></div>
+        <div class="summary-media"><i class="fas fa-clapperboard media-icon"></i></div>
+        <div class="summary-body">
           <div class="summary-eyebrow">Audio · Video Sync</div>
           <div class="summary-name">Audio–Video Synchronizer</div>
-        </div>
-        <div class="summary-body">
           <p class="summary-desc">
             Align audio recordings with their video streams so vocalizations and behavior can be reviewed on a common timeline.
           </p>
