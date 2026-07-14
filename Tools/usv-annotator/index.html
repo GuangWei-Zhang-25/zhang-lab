@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>USV Annotator</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f12;
+  --panel: #141720;
+  --border: #252a35;
+  --accent: #00e5ff;
+  --accent2: #ff3d6b;
+  --accent3: #aaff00;
+  --text: #d4dae8;
+  --muted: #5a6278;
+  --handle: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+}
+
+#topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(90deg, #051428 0%, #0c1e3a 40%, #0e1a30 100%);
+  border-bottom: 2px solid rgba(0,229,255,0.35);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 24px rgba(0,229,255,0.10);
+}
+
+#topbar h1 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: #00e5ff;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgba(0,229,255,0.9), 0 0 24px rgba(0,229,255,0.5);
+}
+
+.sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+
+button {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  background: #1e2330;
+  color: var(--text);
+  cursor: pointer;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+button:hover { border-color: var(--accent); color: var(--accent); }
+button.primary { border-color: var(--accent); color: var(--accent); }
+button.danger  { border-color: var(--accent2); color: var(--accent2); }
+button.active  { border-color: var(--accent3); color: var(--accent3); background: rgba(170,255,0,0.08); }
+button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+#file-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 5px 12px;
+  border: 1px dashed var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+#file-label:hover { background: rgba(0,229,255,0.08); }
+#file-input { display: none; }
+
+#status {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: auto;
+  white-space: nowrap;
+}
+#status.active { color: var(--accent3); }
+
+#topbar-progress { height: 3px; background: #1a1f2e; flex-shrink: 0; display: none; }
+#topbar-progress-bar { height: 100%; background: linear-gradient(90deg,#00e5ff,#aaff00); width: 0%; transition: width 0.15s; }
+
+#main { display: flex; flex: 1; overflow: hidden; }
+
+#spec-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+#navbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+#navbar label { color: var(--muted); font-size: 11px; white-space: nowrap; }
+#navbar input[type=range] { width: 90px; accent-color: var(--accent); }
+#navbar input[type=number] {
+  width: 50px; background: #1e2330; border: 1px solid var(--border);
+  color: var(--text); padding: 3px 5px;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px; border-radius: 3px;
+}
+.nv { font-family: monospace; font-size: 11px; color: var(--accent); min-width: 28px; }
+#time-display { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); margin-left: auto; white-space: nowrap; }
+
+#rows-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg);
+}
+#rows-container::-webkit-scrollbar { width: 6px; }
+#rows-container::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.spec-row-wrap {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.row-label {
+  width: 52px;
+  flex-shrink: 0;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2px 4px;
+  position: relative;
+}
+.row-label canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
+.row-time-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  writing-mode: horizontal-tb;
+  align-self: flex-start;
+}
+
+.row-canvas-wrap {
+  flex: 1;
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}
+.row-spec-canvas  { position: absolute; top: 0; left: 0; display: block; }
+.row-annot-canvas { position: absolute; top: 0; left: 0; display: block; pointer-events: none; }
+.row-draw-canvas  { position: absolute; top: 0; left: 0; display: block; }
+
+.row-time-axis {
+  height: 18px;
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+}
+.row-time-axis-spacer { width: 52px; flex-shrink: 0; border-right: 1px solid var(--border); }
+.row-time-axis-canvas-wrap { flex: 1; position: relative; }
+.row-time-axis-canvas-wrap canvas { position: absolute; top: 0; left: 0; }
+
+#annot-panel {
+  width: 265px;
+  flex-shrink: 0;
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#annot-panel h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  padding: 9px 12px 8px;
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+}
+#annot-list { flex: 1; overflow-y: auto; padding: 5px; }
+#annot-list::-webkit-scrollbar { width: 4px; }
+#annot-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.annot-item {
+  background: #1a1f2e;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 7px 9px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  transition: border-color 0.12s;
+  position: relative;
+}
+.annot-item:hover { border-color: #3a4060; }
+.annot-item.selected { border-color: var(--accent); background: #1b2540; }
+.annot-item .a-id { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--accent); font-weight: 600; }
+.annot-item .a-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text); margin-top: 2px; }
+.annot-item .a-freq { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); margin-top: 1px; }
+.annot-item select {
+  margin-top: 5px; width: 100%;
+  background: #0d0f12; border: 1px solid var(--border);
+  color: var(--text); padding: 3px 5px;
+  font-size: 11px; font-family: 'IBM Plex Mono', monospace; border-radius: 2px;
+}
+.del-btn {
+  position: absolute; top: 5px; right: 6px;
+  background: none; border: none; color: var(--muted);
+  font-size: 15px; cursor: pointer; padding: 0; line-height: 1;
+}
+.del-btn:hover { color: var(--accent2) !important; border: none !important; }
+
+#annot-footer { padding: 8px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 5px; }
+#annot-count { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted); text-align: center; }
+
+#tooltip {
+  position: fixed; background: #1e2330; border: 1px solid var(--border);
+  padding: 3px 7px; font-family: 'IBM Plex Mono', monospace; font-size: 10px;
+  color: var(--accent); pointer-events: none; display: none; z-index: 50; border-radius: 3px;
+}
+</style>
+</head>
+<body>
+
+<div id="tooltip"></div>
+
+<div id="topbar">
+  <h1>USV ANNOTATOR</h1>
+  <div class="sep"></div>
+  <label id="file-label" for="file-input">⊕ Load WAV</label>
+  <input type="file" id="file-input" accept=".wav">
+  <div class="sep"></div>
+  <button id="btn-folder">📁 Set Folder</button>
+  <span id="folder-status" style="font-family:monospace;font-size:10px;color:var(--muted)">no folder</span>
+  <div class="sep"></div>
+  <button id="btn-play" disabled>▶ Play</button>
+  <button id="btn-export" class="primary" disabled>↓ CSV</button>
+  <button id="btn-clear" class="danger" disabled>✕ Clear</button>
+  <span id="status">Set folder → Load WAV · L-drag=draw · Mid-drag=pan · Ctrl+scroll=zoom · Space=play</span>
+</div>
+
+<div id="topbar-progress"><div id="topbar-progress-bar"></div></div>
+
+<div id="main">
+  <div id="spec-area">
+    <div id="navbar">
+      <label>Rows:</label>
+      <input type="number" id="n-rows" value="1" min="1" max="20" step="1">
+      <label>Sec/row:</label>
+      <input type="number" id="sec-per-row" value="2" min="0.1" max="60" step="0.5">s
+      <label>Thresh:</label>
+      <input type="range" id="thresh" min="0" max="25" value="5" step="0.5">
+      <span class="nv" id="thresh-val">5dB</span>
+      <label>Gain:</label>
+      <input type="range" id="gain" min="0.5" max="15" value="4" step="0.5">
+      <span class="nv" id="gain-val">×4</span>
+      <label>Freq:</label>
+      <input type="number" id="freq-min" value="0" min="0" max="120" step="1">–
+      <input type="number" id="freq-max" value="125" min="1" max="125" step="1">kHz
+      <span id="time-display">t = —</span>
+    </div>
+    <div id="rows-container"></div>
+  </div>
+
+  <div id="annot-panel">
+    <h2>Annotations</h2>
+    <div id="annot-list"></div>
+    <div id="annot-footer">
+      <div id="annot-count">0 annotations</div>
+      <button id="btn-export2" class="primary" disabled>↓ Export CSV</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const statusEl    = document.getElementById('status');
+const tooltip     = document.getElementById('tooltip');
+const annotList   = document.getElementById('annot-list');
+const annotCount  = document.getElementById('annot-count');
+const timeDisplay = document.getElementById('time-display');
+const rowsContainer = document.getElementById('rows-container');
+
+let audioBuffer  = null;
+let audioCtx     = null;
+let sourceNode   = null;
+let isPlaying    = false;
+let playStartAC  = 0;
+let playOffset   = 0;
+let playTime     = 0;
+let playRAF      = null;
+let draggingPlayhead = false;
+
+let specData     = null;
+let specFreqs    = null;
+let specNFreq    = 0;
+let specNTime    = 0;
+let specDuration = 0;
+
+let viewStart    = 0;
+let freqMin      = 0;
+let freqMax      = 125;
+let threshold    = 5;
+let gain         = 4;
+let nRows        = 1;
+let secPerRow    = 2;
+
+let annotations    = [];
+let selectedId     = null;
+let annotIdCounter = 1;
+
+let dirHandle    = null;
+let currentWavName = null;
+let saveTimer    = null;
+
+let interact = {
+  active: false,
+  type: null,
+  rowIdx: null,
+  startX: 0, startY: 0,
+  startT: 0,
+  annotId: null,
+  handle: null,
+  origAnnot: null,
+  panViewStart: 0,
+};
+
+const HANDLE_R = 7;
+const HANDLE_CURSOR = {
+  'tl':'nw-resize','tr':'ne-resize','bl':'sw-resize','br':'se-resize',
+  'l':'w-resize','r':'e-resize','t':'n-resize','b':'s-resize',
+  'move':'move'
+};
+
+function setProgress(pct) {
+  const wrap = document.getElementById('topbar-progress');
+  const bar  = document.getElementById('topbar-progress-bar');
+  if (pct < 0) { wrap.style.display='none'; bar.style.width='0%'; return; }
+  wrap.style.display = 'block';
+  bar.style.width = pct + '%';
+}
+
+function tick() { return new Promise(r => setTimeout(r, 0)); }
+
+function parseWAV(ab) {
+  const dv = new DataView(ab);
+  const sr = dv.getUint32(24,true), nch = dv.getUint16(22,true), bps = dv.getUint16(34,true);
+  const ns = (ab.byteLength - 44) / (bps/8) / nch;
+  const ch = new Float32Array(ns);
+  for (let i=0;i<ns;i++) ch[i] = dv.getInt16(44+i*nch*2,true)/32768;
+  return { sampleRate:sr, length:ns, duration:ns/sr, getChannelData:()=>ch };
+}
+
+async function loadFile(file) {
+  setProgress(0); statusEl.textContent='Decoding…'; statusEl.className='active';
+  await tick();
+  const ab = await file.arrayBuffer();
+  setProgress(20); await tick();
+  if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+  let decoded;
+  try { decoded = await audioCtx.decodeAudioData(ab.slice(0)); } catch(e) { decoded = parseWAV(ab); }
+  audioBuffer = decoded;
+  currentWavName = file.name;
+  setProgress(40); statusEl.textContent='Computing spectrogram…'; await tick();
+  await computeSpectrogram(decoded);
+  setProgress(-1);
+  viewStart = 0;
+  annotations = []; selectedId = null; annotIdCounter = 1;
+  buildRows();
+  await loadAnnotations();
+  statusEl.textContent = `${file.name}  |  ${specDuration.toFixed(1)}s  |  ${decoded.sampleRate}Hz`;
+  statusEl.className = '';
+  document.getElementById('btn-play').disabled    = false;
+  document.getElementById('btn-export').disabled  = false;
+  document.getElementById('btn-export2').disabled = false;
+  document.getElementById('btn-clear').disabled   = false;
+}
+
+function jsonNameFor(wavName) {
+  return wavName.replace(/\.wav$/i, '') + '.usv.json';
+}
+
+async function setFolder() {
+  if (!window.showDirectoryPicker) {
+    alert('Your browser does not support the File System Access API. Use Chrome or Edge.');
+    return;
+  }
+  try {
+    dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    document.getElementById('folder-status').textContent = dirHandle.name + '/';
+    document.getElementById('folder-status').style.color = 'var(--accent3)';
+    statusEl.textContent = 'Folder set. Now load a WAV from this folder.';
+  } catch(e) {}
+}
+
+function autoSave() {
+  if (!dirHandle || !currentWavName) return;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(saveAnnotations, 400);
+}
+
+async function saveAnnotations() {
+  if (!dirHandle || !currentWavName) return;
+  try {
+    const data = {
+      wav_file: currentWavName,
+      created: new Date().toISOString(),
+      n_annotations: annotations.length,
+      annotations: annotations.map(a => ({
+        id: a.id, t_start: a.t1, t_end: a.t2,
+        f_min: a.f1, f_max: a.f2,
+        duration_ms: +((a.t2-a.t1)*1000).toFixed(1),
+        bandwidth_khz: +((a.f2-a.f1)).toFixed(2),
+        label: a.label
+      }))
+    };
+    const fh = await dirHandle.getFileHandle(jsonNameFor(currentWavName), { create: true });
+    const w = await fh.createWritable();
+    await w.write(JSON.stringify(data, null, 2));
+    await w.close();
+    const fs2 = document.getElementById('folder-status');
+    fs2.textContent = dirHandle.name + '/ ✓ saved';
+    setTimeout(()=>{ fs2.textContent = dirHandle.name + '/'; }, 1200);
+  } catch(e) { console.warn('Save failed', e); }
+}
+
+async function loadAnnotations() {
+  if (!dirHandle || !currentWavName) return;
+  try {
+    const fh = await dirHandle.getFileHandle(jsonNameFor(currentWavName), { create: false });
+    const file = await fh.getFile();
+    const data = JSON.parse(await file.text());
+    annotations = (data.annotations||[]).map(a => ({
+      id: a.id, t1: a.t_start, t2: a.t_end,
+      f1: a.f_min, f2: a.f_max, label: a.label||'USV'
+    }));
+    annotIdCounter = annotations.length ? Math.max(...annotations.map(a=>a.id))+1 : 1;
+    renderAllRows(); updatePanel();
+    statusEl.textContent = `Loaded ${annotations.length} saved annotations`;
+  } catch(e) {
+    // No existing annotation file — fresh start
+  }
+}
+
+async function computeSpectrogram(decoded) {
+  const fs = decoded.sampleRate, samples = decoded.getChannelData(0);
+  specDuration = decoded.duration;
+  const NPERSEG=1024, STRIDE=128, nFFT=NPERSEG/2+1;
+  const freqRes = fs/NPERSEG;
+  const fMaxBin = Math.min(nFFT-1, Math.floor(125000/freqRes));
+  const nFreqK  = fMaxBin+1;
+  const nTime   = Math.floor((samples.length-NPERSEG)/STRIDE)+1;
+  specFreqs = new Float32Array(nFreqK);
+  for (let i=0;i<nFreqK;i++) specFreqs[i]=i*freqRes/1000;
+  specData  = new Float32Array(nFreqK*nTime);
+  specNFreq = nFreqK; specNTime = nTime;
+  const win=new Float32Array(NPERSEG);
+  for (let i=0;i<NPERSEG;i++) win[i]=0.5*(1-Math.cos(2*Math.PI*i/(NPERSEG-1)));
+  const re=new Float32Array(NPERSEG), im=new Float32Array(NPERSEG);
+  const fSum=new Float64Array(nFreqK);
+  const BATCH=400;
+  for (let ti=0;ti<nTime;ti++) {
+    const s=ti*STRIDE;
+    for (let k=0;k<NPERSEG;k++){re[k]=(s+k<samples.length?samples[s+k]:0)*win[k];im[k]=0;}
+    fftInPlace(re,im);
+    for (let fi=0;fi<nFreqK;fi++){const r=re[fi],iv=im[fi];const db=10*Math.log10(r*r+iv*iv+1e-12);specData[fi*nTime+ti]=db;fSum[fi]+=db;}
+    if (ti%BATCH===0){setProgress(40+(ti/nTime)*58);await tick();}
+  }
+  for (let fi=0;fi<nFreqK;fi++){const m=fSum[fi]/nTime;for (let ti=0;ti<nTime;ti++) specData[fi*nTime+ti]-=m;}
+}
+
+function fftInPlace(re,im) {
+  const n=re.length; let j=0;
+  for (let i=1;i<n;i++){let bit=n>>1;for(;j&bit;bit>>=1)j^=bit;j^=bit;if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t;}}
+  for (let len=2;len<=n;len<<=1){const ang=-2*Math.PI/len,wRe=Math.cos(ang),wIm=Math.sin(ang);for(let i=0;i<n;i+=len){let cRe=1,cIm=0;for(let k=0;k<len/2;k++){const uRe=re[i+k],uIm=im[i+k],vRe=re[i+k+len/2]*cRe-im[i+k+len/2]*cIm,vIm=re[i+k+len/2]*cIm+im[i+k+len/2]*cRe;re[i+k]=uRe+vRe;im[i+k]=uIm+vIm;re[i+k+len/2]=uRe-vRe;im[i+k+len/2]=uIm-vIm;const nr=cRe*wRe-cIm*wIm;cIm=cRe*wIm+cIm*wRe;cRe=nr;}}}
+}
+
+let rowMeta = [];
+
+function buildRows() {
+  rowsContainer.innerHTML = '';
+  rowMeta = [];
+  const containerH = rowsContainer.clientHeight || 300;
+  const rowH = Math.max(60, Math.floor((containerH - nRows * 19) / nRows));
+
+  for (let ri = 0; ri < nRows; ri++) {
+    const tStart = viewStart + ri * secPerRow;
+    const tEnd   = tStart + secPerRow;
+
+    const wrap = document.createElement('div');
+    wrap.className = 'spec-row-wrap';
+    wrap.style.height = (rowH + 19) + 'px';
+
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'row-label';
+    labelDiv.style.height = rowH + 'px';
+
+    const freqCv = document.createElement('canvas');
+    freqCv.width  = 52; freqCv.height = rowH;
+    freqCv.style.width = '52px'; freqCv.style.height = rowH + 'px';
+    labelDiv.appendChild(freqCv);
+
+    const canvasWrap = document.createElement('div');
+    canvasWrap.className = 'row-canvas-wrap';
+    canvasWrap.style.height = rowH + 'px';
+
+    const specCv  = document.createElement('canvas');
+    const annotCv = document.createElement('canvas');
+    const drawCv  = document.createElement('canvas');
+    [specCv, annotCv, drawCv].forEach(c => {
+      c.width = canvasWrap.clientWidth || 800;
+      c.height = rowH;
+      c.style.width  = '100%';
+      c.style.height = rowH + 'px';
+    });
+    specCv.className  = 'row-spec-canvas';
+    annotCv.className = 'row-annot-canvas';
+    drawCv.className  = 'row-draw-canvas';
+    canvasWrap.appendChild(specCv);
+    canvasWrap.appendChild(annotCv);
+    canvasWrap.appendChild(drawCv);
+
+    const timeAxisRow = document.createElement('div');
+    timeAxisRow.className = 'row-time-axis';
+    timeAxisRow.style.height = '19px';
+    const taSpacerEl = document.createElement('div');
+    taSpacerEl.className = 'row-time-axis-spacer';
+    const taCwEl = document.createElement('div');
+    taCwEl.className = 'row-time-axis-canvas-wrap';
+    const taCv = document.createElement('canvas');
+    taCv.style.width='100%'; taCv.style.height='19px';
+    taCwEl.appendChild(taCv);
+    timeAxisRow.appendChild(taSpacerEl);
+    timeAxisRow.appendChild(taCwEl);
+
+    const rowDiv = document.createElement('div');
+    rowDiv.style.display='flex'; rowDiv.style.flexDirection='column'; rowDiv.style.flex='1';
+    rowDiv.appendChild(canvasWrap);
+    rowDiv.appendChild(timeAxisRow);
+
+    wrap.appendChild(labelDiv);
+    wrap.appendChild(rowDiv);
+    rowsContainer.appendChild(wrap);
+
+    const meta = { ri, tStart, tEnd, rowH, specCv, annotCv, drawCv, freqCv, taCv, canvasWrap, taCwEl };
+    rowMeta.push(meta);
+
+    attachRowEvents(meta);
+  }
+
+  requestAnimationFrame(() => {
+    rowMeta.forEach(m => {
+      const W = m.canvasWrap.clientWidth;
+      [m.specCv, m.annotCv, m.drawCv].forEach(c => { c.width = W; c.style.width = W+'px'; });
+      const taW = m.taCwEl.clientWidth;
+      m.taCv.width = taW; m.taCv.style.width = taW+'px'; m.taCv.height = 19; m.taCv.style.height='19px';
+      renderRow(m);
+      renderTimeAxisRow(m);
+      renderFreqAxis(m);
+    });
+  });
+}
+
+function renderRow(m) {
+  renderSpecRow(m);
+  renderAnnotRow(m);
+}
+
+let _offCv = document.createElement('canvas');
+let _offCtx = _offCv.getContext('2d');
+
+function renderSpecRow(m) {
+  if (!specData) return;
+  const W = m.specCv.width, H = m.rowH;
+  const ctx = m.specCv.getContext('2d');
+  const tiS = Math.max(0, Math.floor(m.tStart / specDuration * specNTime));
+  const tiE = Math.min(specNTime-1, Math.ceil(m.tEnd / specDuration * specNTime));
+  let fiS=0, fiE=specNFreq-1;
+  for (let i=0;i<specNFreq;i++){if(specFreqs[i]>=freqMin){fiS=i;break;}}
+  for (let i=specNFreq-1;i>=0;i--){if(specFreqs[i]<=freqMax){fiE=i;break;}}
+  const nT=tiE-tiS+1, nF=fiE-fiS+1;
+  if (nT<1||nF<1) return;
+
+  _offCv.width = nT; _offCv.height = nF;
+  const img=_offCtx.createImageData(nT,nF);
+  const px=img.data;
+  for (let row=0;row<nF;row++) {
+    const fi=fiE-row;
+    const base=fi*specNTime;
+    for (let col=0;col<nT;col++) {
+      const ti=tiS+col;
+      let v=specData[base+ti];
+      v=v<threshold?0:Math.min((v-threshold)*gain*10,255);
+      const g=255-v;
+      const idx=(row*nT+col)*4;
+      px[idx]=g;px[idx+1]=g;px[idx+2]=g;px[idx+3]=255;
+    }
+  }
+  _offCtx.putImageData(img,0,0);
+
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality='high';
+  ctx.clearRect(0,0,W,H);
+  ctx.drawImage(_offCv, 0,0,nT,nF, 0,0,W,H);
+}
+
+function renderAnnotRow(m) {
+  const W=m.annotCv.width, H=m.rowH;
+  const ctx=m.annotCv.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  annotations.forEach(a => {
+    const x1=rTToX(m,a.t1), x2=rTToX(m,a.t2);
+    const y1=rFToY(m,a.f2), y2=rFToY(m,a.f1);
+    if (x2 < 0 || x1 > W) return;
+    const lx=Math.min(x1,x2), ly=Math.min(y1,y2);
+    const bw=Math.abs(x2-x1), bh=Math.abs(y2-y1);
+    const sel=a.id===selectedId;
+    ctx.strokeStyle=sel?'#ff3d6b':'rgba(0,229,255,0.9)';
+    ctx.lineWidth=sel?2:1.5;
+    ctx.strokeRect(lx,ly,bw,bh);
+    ctx.fillStyle=sel?'rgba(255,61,107,0.07)':'rgba(0,229,255,0.04)';
+    ctx.fillRect(lx,ly,bw,bh);
+    ctx.font='9px IBM Plex Mono';
+    ctx.fillStyle=sel?'#ff3d6b':'rgba(0,229,255,0.9)';
+    ctx.textAlign='left';
+    ctx.fillText(`#${a.id} ${a.label}`,lx+3,ly+10);
+    if (sel) drawHandles(ctx,lx,ly,bw,bh);
+  });
+}
+
+function drawHandles(ctx,lx,ly,bw,bh) {
+  const s=7;
+  const pts=[
+    {x:lx,y:ly},{x:lx+bw/2,y:ly},{x:lx+bw,y:ly},
+    {x:lx,y:ly+bh/2},{x:lx+bw,y:ly+bh/2},
+    {x:lx,y:ly+bh},{x:lx+bw/2,y:ly+bh},{x:lx+bw,y:ly+bh}
+  ];
+  pts.forEach(p=>{
+    ctx.fillStyle='#ff3d6b';
+    ctx.strokeStyle='#fff';
+    ctx.lineWidth=1.5;
+    ctx.fillRect(p.x-s/2,p.y-s/2,s,s);
+    ctx.strokeRect(p.x-s/2,p.y-s/2,s,s);
+  });
+}
+
+function renderFreqAxis(m) {
+  const W=m.freqCv.width, H=m.rowH;
+  const ctx=m.freqCv.getContext('2d');
+  ctx.fillStyle='#141720';
+  ctx.fillRect(0,0,W,H);
+  ctx.font='9px IBM Plex Mono'; ctx.textAlign='right';
+  const range=freqMax-freqMin;
+  const step=range>60?20:range>30?10:range>15?5:2;
+  for (let f=Math.ceil(freqMin/step)*step;f<=freqMax;f+=step) {
+    const y=H-(f-freqMin)/(freqMax-freqMin)*H;
+    ctx.fillStyle='#5a6278';
+    ctx.fillText(f,W-4,y+3);
+    ctx.strokeStyle='#252a35'; ctx.lineWidth=0.5;
+    ctx.beginPath(); ctx.moveTo(W-2,y); ctx.lineTo(W,y); ctx.stroke();
+  }
+  ctx.save(); ctx.translate(10,H/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center'; ctx.fillStyle='#5a6278'; ctx.fillText('kHz',0,0);
+  ctx.restore();
+}
+
+function renderTimeAxisRow(m) {
+  const W=m.taCv.width, H=19;
+  const ctx=m.taCv.getContext('2d');
+  ctx.fillStyle='#141720'; ctx.fillRect(0,0,W,H);
+  ctx.font='9px IBM Plex Mono'; ctx.textAlign='center';
+  const range=m.tEnd-m.tStart;
+  const step=range>20?2:range>8?1:range>3?0.5:range>1?0.2:0.05;
+  for (let t=Math.ceil(m.tStart/step)*step;t<=m.tEnd;t=Math.round((t+step)*1e6)/1e6) {
+    const x=(t-m.tStart)/(m.tEnd-m.tStart)*W;
+    ctx.fillStyle='#5a6278';
+    ctx.fillText(t.toFixed(2),x,H-3);
+  }
+}
+
+function rTToX(m,t) { return (t-m.tStart)/(m.tEnd-m.tStart)*m.specCv.width; }
+function rXToT(m,x) { return m.tStart+x/m.specCv.width*(m.tEnd-m.tStart); }
+function rFToY(m,f) { return (1-(f-freqMin)/(freqMax-freqMin))*m.rowH; }
+function rYToF(m,y) { return freqMax-y/m.rowH*(freqMax-freqMin); }
+
+function getHandleAtPoint(m,a,px,py) {
+  const x1=rTToX(m,a.t1), x2=rTToX(m,a.t2);
+  const y1=rFToY(m,a.f2), y2=rFToY(m,a.f1);
+  const lx=Math.min(x1,x2), ly=Math.min(y1,y2);
+  const bw=Math.abs(x2-x1), bh=Math.abs(y2-y1);
+  const hr=HANDLE_R+2;
+  const pts=[
+    {x:lx,    y:ly,    h:'tl'},
+    {x:lx+bw/2,y:ly,  h:'t'},
+    {x:lx+bw, y:ly,   h:'tr'},
+    {x:lx,    y:ly+bh/2,h:'l'},
+    {x:lx+bw, y:ly+bh/2,h:'r'},
+    {x:lx,    y:ly+bh,  h:'bl'},
+    {x:lx+bw/2,y:ly+bh, h:'b'},
+    {x:lx+bw, y:ly+bh,  h:'br'},
+  ];
+  for (const p of pts) {
+    if (Math.abs(px-p.x)<=hr && Math.abs(py-p.y)<=hr) return p.h;
+  }
+  if (px>=lx&&px<=lx+bw&&py>=ly&&py<=ly+bh) return 'move';
+  return null;
+}
+
+function applyHandleDrag(a,handle,dt,df,origAnnot) {
+  const o=origAnnot;
+  if (handle==='move') {
+    a.t1=+(o.t1+dt).toFixed(4); a.t2=+(o.t2+dt).toFixed(4);
+    a.f1=+(o.f1+df).toFixed(2); a.f2=+(o.f2+df).toFixed(2);
+  } else {
+    if (handle.includes('l')) a.t1=+Math.min(o.t2-0.001, o.t1+dt).toFixed(4);
+    if (handle.includes('r')) a.t2=+Math.max(o.t1+0.001, o.t2+dt).toFixed(4);
+    if (handle.includes('t')) a.f2=+Math.max(o.f1+0.1, o.f2+df).toFixed(2);
+    if (handle.includes('b')) a.f1=+Math.min(o.f2-0.1, o.f1+df).toFixed(2);
+  }
+}
+
+function attachRowEvents(m) {
+  const dc = m.drawCv;
+
+  dc.addEventListener('mousedown', e => {
+    if (!specData) return;
+    const r=dc.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+
+    if (e.button===1) {
+      e.preventDefault();
+      interact.active=true; interact.type='pan'; interact.rowIdx=m.ri;
+      interact.startX=x; interact.panViewStart=viewStart;
+      dc.style.cursor='grabbing';
+      return;
+    }
+
+    if (e.button!==0) return;
+
+    const phX=rTToX(m,playTime);
+    if(Math.abs(x-phX)<6 && playTime>=m.tStart && playTime<=m.tEnd){
+      draggingPlayhead=true;
+      interact.active=true; interact.type='playhead'; interact.rowIdx=m.ri;
+      stopPlayback();
+      dc.style.cursor='ew-resize';
+      return;
+    }
+
+    const reversed=[...annotations].reverse();
+    const hit=reversed.find(a=>getHandleAtPoint(m,a,x,y)!==null);
+    if (hit) {
+      selectedId=hit.id;
+      const h=getHandleAtPoint(m,hit,x,y);
+      interact.active=true; interact.type='resize'; interact.rowIdx=m.ri;
+      interact.annotId=hit.id; interact.handle=h;
+      interact.startX=x; interact.startY=y;
+      interact.origAnnot={...hit};
+      dc.style.cursor=HANDLE_CURSOR[h]||'move';
+      renderAllRows(); updatePanel();
+      return;
+    }
+    selectedId=null;
+    interact.active=true; interact.type='newbox'; interact.rowIdx=m.ri;
+    interact.startX=x; interact.startY=y;
+    renderAllRows(); updatePanel();
+  });
+
+  dc.addEventListener('mousemove', e => {
+    const r=dc.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+    const t=rXToT(m,x), f=rYToF(m,y);
+
+    tooltip.style.display='block';
+    tooltip.style.left=(e.clientX+14)+'px';
+    tooltip.style.top=(e.clientY+14)+'px';
+    tooltip.textContent=`t=${t.toFixed(3)}s  f=${f.toFixed(1)}kHz`;
+    timeDisplay.textContent=`t=${t.toFixed(3)}s  f=${f.toFixed(1)}kHz`;
+
+    if (!interact.active || interact.rowIdx!==m.ri) {
+      let cursor='crosshair';
+      const phX=rTToX(m,playTime);
+      if(Math.abs(x-phX)<6 && playTime>=m.tStart && playTime<=m.tEnd){
+        cursor='ew-resize';
+      } else {
+        const allReversed=[...annotations].reverse();
+        for (const a of allReversed) {
+          const h=getHandleAtPoint(m,a,x,y);
+          if (h) { cursor=HANDLE_CURSOR[h]||'move'; break; }
+        }
+      }
+      dc.style.cursor=cursor;
+      return;
+    }
+
+    if (interact.type==='playhead') {
+      playTime=Math.max(0,Math.min(specDuration,rXToT(m,x)));
+      renderPlayheads();
+    } else if (interact.type==='pan') {
+      const totalRange=nRows*secPerRow;
+      const dt=-(x-interact.startX)/dc.width*secPerRow;
+      viewStart=Math.max(0, Math.min(specDuration-totalRange, interact.panViewStart+dt));
+      rebuildRowTimes();
+      renderAllRows();
+    } else if (interact.type==='resize') {
+      const a=annotations.find(a=>a.id===interact.annotId);
+      if (!a) return;
+      const dt=rXToT(m,x)-rXToT(m,interact.startX);
+      const df=rYToF(m,y)-rYToF(m,interact.startY);
+      applyHandleDrag(a,interact.handle,dt,df,interact.origAnnot);
+      renderAllRows();
+      updatePanel();
+    } else if (interact.type==='newbox') {
+      const dCtx2=dc.getContext('2d');
+      dCtx2.clearRect(0,0,dc.width,m.rowH);
+      const lx=Math.min(interact.startX,x), ly=Math.min(interact.startY,y);
+      const bw=Math.abs(x-interact.startX), bh=Math.abs(y-interact.startY);
+      dCtx2.strokeStyle='rgba(0,229,255,0.9)'; dCtx2.lineWidth=1.5;
+      dCtx2.setLineDash([4,3]); dCtx2.strokeRect(lx,ly,bw,bh);
+      dCtx2.setLineDash([]);
+      dCtx2.fillStyle='rgba(0,229,255,0.06)'; dCtx2.fillRect(lx,ly,bw,bh);
+    }
+  });
+
+  dc.addEventListener('mouseup', e => {
+    if (!interact.active || interact.rowIdx!==m.ri) return;
+    const r=dc.getBoundingClientRect();
+    const x2=e.clientX-r.left, y2=e.clientY-r.top;
+
+    if (interact.type==='playhead') {
+      draggingPlayhead=false;
+      dc.style.cursor='crosshair';
+    } else if (interact.type==='pan') {
+      dc.style.cursor='crosshair';
+    } else if (interact.type==='resize') {
+      dc.style.cursor='crosshair';
+      updatePanel(); autoSave();
+    } else if (interact.type==='newbox') {
+      dc.getContext('2d').clearRect(0,0,dc.width,m.rowH);
+      if (Math.abs(x2-interact.startX)>5 && Math.abs(y2-interact.startY)>5) {
+        const t1=Math.min(rXToT(m,interact.startX),rXToT(m,x2));
+        const t2=Math.max(rXToT(m,interact.startX),rXToT(m,x2));
+        const f1=Math.min(rYToF(m,interact.startY),rYToF(m,y2));
+        const f2=Math.max(rYToF(m,interact.startY),rYToF(m,y2));
+        const a={id:annotIdCounter++,t1:+t1.toFixed(4),t2:+t2.toFixed(4),f1:+f1.toFixed(2),f2:+f2.toFixed(2),label:'USV'};
+        annotations.push(a);
+        selectedId=a.id;
+        renderAllRows(); updatePanel(); autoSave();
+      }
+    }
+    interact.active=false; interact.type=null;
+  });
+
+  dc.addEventListener('mouseleave', () => {
+    tooltip.style.display='none';
+    if (interact.active && interact.type==='newbox' && interact.rowIdx===m.ri) {
+      dc.getContext('2d').clearRect(0,0,dc.width,m.rowH);
+      interact.active=false;
+    }
+  });
+
+  dc.addEventListener('wheel', e => {
+    e.preventDefault();
+    if (!specData) return;
+    const r=dc.getBoundingClientRect();
+    const mx=e.clientX-r.left;
+    const tAtMouse=rXToT(m,mx);
+
+    if (e.ctrlKey||e.metaKey) {
+      const factor=e.deltaY>0?1.2:0.83;
+      const newSec=Math.max(0.05,Math.min(specDuration/nRows,secPerRow*factor));
+      const frac=mx/dc.width;
+      viewStart=Math.max(0,tAtMouse-frac*newSec-m.ri*newSec);
+      secPerRow=+newSec.toFixed(3);
+      document.getElementById('sec-per-row').value=secPerRow.toFixed(2);
+    } else {
+      const dt=(e.deltaY/300)*secPerRow;
+      const total=nRows*secPerRow;
+      viewStart=Math.max(0,Math.min(specDuration-total,viewStart+dt));
+    }
+    rebuildRowTimes();
+    renderAllRows();
+  }, {passive:false});
+}
+
+function rebuildRowTimes() {
+  rowMeta.forEach((m,ri) => {
+    m.tStart = viewStart + ri * secPerRow;
+    m.tEnd   = m.tStart + secPerRow;
+  });
+}
+
+function renderAllRows() {
+  rowMeta.forEach(m => {
+    renderRow(m);
+    renderTimeAxisRow(m);
+  });
+  if(playTime>0) renderPlayheads();
+}
+
+function updatePanel() {
+  annotList.innerHTML='';
+  [...annotations].sort((a,b)=>a.t1-b.t1).forEach(a=>{
+    const dur=((a.t2-a.t1)*1000).toFixed(0);
+    const bw=(a.f2-a.f1).toFixed(1);
+    const div=document.createElement('div');
+    div.className='annot-item'+(a.id===selectedId?' selected':'');
+    div.innerHTML=`
+      <button class="del-btn">×</button>
+      <div class="a-id">#${a.id}</div>
+      <div class="a-time">${a.t1.toFixed(3)}s → ${a.t2.toFixed(3)}s (${dur}ms)</div>
+      <div class="a-freq">${a.f1.toFixed(1)}–${a.f2.toFixed(1)} kHz | BW ${bw} kHz</div>
+      <select>
+        <option ${a.label==='USV'?'selected':''}>USV</option>
+        <option ${a.label==='V-sweep'?'selected':''}>V-sweep</option>
+        <option ${a.label==='inverted-V'?'selected':''}>inverted-V</option>
+        <option ${a.label==='flat'?'selected':''}>flat</option>
+        <option ${a.label==='noise'?'selected':''}>noise</option>
+        <option ${a.label==='other'?'selected':''}>other</option>
+      </select>`;
+    div.querySelector('.del-btn').addEventListener('click',ev=>{
+      ev.stopPropagation();
+      annotations=annotations.filter(x=>x.id!==a.id);
+      if(selectedId===a.id)selectedId=null;
+      renderAllRows(); updatePanel(); autoSave();
+    });
+    div.querySelector('select').addEventListener('change',ev=>{
+      const ann=annotations.find(x=>x.id===a.id);
+      if(ann){ann.label=ev.target.value;renderAllRows();autoSave();}
+    });
+    div.addEventListener('click',ev=>{
+      if(ev.target.tagName==='SELECT'||ev.target.tagName==='BUTTON')return;
+      selectedId=a.id;
+      const mid=(a.t1+a.t2)/2;
+      viewStart=Math.max(0,Math.min(specDuration-nRows*secPerRow,mid-secPerRow/2));
+      rebuildRowTimes(); renderAllRows(); updatePanel();
+    });
+    annotList.appendChild(div);
+  });
+  annotCount.textContent=`${annotations.length} annotation${annotations.length!==1?'s':''}`;
+  annotList.querySelector('.selected')?.scrollIntoView({block:'nearest'});
+}
+
+function startPlayback(fromTime){
+  if(!audioBuffer)return;
+  stopPlayback();
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  sourceNode=audioCtx.createBufferSource();
+  sourceNode.buffer=audioBuffer;
+  sourceNode.connect(audioCtx.destination);
+  playOffset=fromTime;
+  playStartAC=audioCtx.currentTime;
+  const remaining=specDuration-fromTime;
+  sourceNode.start(0,fromTime,remaining);
+  isPlaying=true;
+  document.getElementById('btn-play').textContent='■ Stop';
+  sourceNode.onended=()=>{
+    if(!draggingPlayhead){isPlaying=false;document.getElementById('btn-play').textContent='▶ Play';}
+  };
+  function animPH(){
+    if(!isPlaying)return;
+    playTime=playOffset+(audioCtx.currentTime-playStartAC);
+    if(playTime>specDuration){playTime=specDuration;}
+    renderPlayheads();
+    playRAF=requestAnimationFrame(animPH);
+  }
+  animPH();
+}
+
+function stopPlayback(){
+  if(sourceNode){try{sourceNode.stop();}catch(e){}}
+  isPlaying=false;
+  if(playRAF)cancelAnimationFrame(playRAF);
+  document.getElementById('btn-play').textContent='▶ Play';
+}
+
+function renderPlayheads(){
+  rowMeta.forEach(m=>{
+    renderAnnotRow(m);
+    const x=rTToX(m,playTime);
+    if(x>=0&&x<=m.annotCv.width){
+      const ctx=m.annotCv.getContext('2d');
+      ctx.strokeStyle='#aaff00';
+      ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.moveTo(x,0); ctx.lineTo(x,m.rowH);
+      ctx.stroke();
+      ctx.fillStyle='#aaff00';
+      ctx.beginPath();
+      ctx.moveTo(x-4,0); ctx.lineTo(x+4,0); ctx.lineTo(x,7);
+      ctx.closePath(); ctx.fill();
+    }
+  });
+}
+
+document.getElementById('btn-play').addEventListener('click',()=>{
+  if(!audioBuffer)return;
+  if(isPlaying){stopPlayback();}
+  else{startPlayback(playTime<specDuration?playTime:viewStart);}
+});
+
+function exportCSV(){
+  if(!annotations.length){alert('No annotations yet.');return;}
+  const rows=['id,t_start_s,t_end_s,duration_ms,f_min_khz,f_max_khz,bandwidth_khz,label'];
+  [...annotations].sort((a,b)=>a.t1-b.t1).forEach(a=>{
+    rows.push(`${a.id},${a.t1},${a.t2},${((a.t2-a.t1)*1000).toFixed(1)},${a.f1},${a.f2},${(a.f2-a.f1).toFixed(2)},${a.label}`);
+  });
+  const url=URL.createObjectURL(new Blob([rows.join('\n')],{type:'text/csv'}));
+  Object.assign(document.createElement('a'),{href:url,download:'usv_annotations.csv'}).click();
+}
+document.getElementById('btn-export').addEventListener('click',exportCSV);
+document.getElementById('btn-export2').addEventListener('click',exportCSV);
+document.getElementById('btn-clear').addEventListener('click',()=>{
+  if(!confirm('Clear all annotations?'))return;
+  annotations=[];selectedId=null;renderAllRows();updatePanel();autoSave();
+});
+
+document.addEventListener('keydown',e=>{
+  const tag=document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='SELECT')return;
+  if((e.key==='Delete'||e.key==='Backspace')&&selectedId){
+    annotations=annotations.filter(x=>x.id!==selectedId);
+    selectedId=null; renderAllRows(); updatePanel(); autoSave();
+  }
+  if(e.key==='ArrowRight'&&specData){
+    viewStart=Math.min(specDuration-nRows*secPerRow,viewStart+secPerRow*0.75);
+    rebuildRowTimes(); renderAllRows();
+  }
+  if(e.key==='ArrowLeft'&&specData){
+    viewStart=Math.max(0,viewStart-secPerRow*0.75);
+    rebuildRowTimes(); renderAllRows();
+  }
+});
+
+document.getElementById('n-rows').addEventListener('change',e=>{
+  nRows=Math.max(1,parseInt(e.target.value)||1);
+  if(specData)buildRows();
+});
+document.getElementById('sec-per-row').addEventListener('change',e=>{
+  secPerRow=Math.max(0.05,parseFloat(e.target.value)||2);
+  rebuildRowTimes(); renderAllRows();
+});
+document.getElementById('thresh').addEventListener('input',e=>{
+  threshold=parseFloat(e.target.value);
+  document.getElementById('thresh-val').textContent=threshold+'dB';
+  if(specData)rowMeta.forEach(m=>renderSpecRow(m));
+});
+document.getElementById('gain').addEventListener('input',e=>{
+  gain=parseFloat(e.target.value);
+  document.getElementById('gain-val').textContent='×'+gain;
+  if(specData)rowMeta.forEach(m=>renderSpecRow(m));
+});
+document.getElementById('freq-min').addEventListener('change',e=>{
+  freqMin=parseFloat(e.target.value);
+  if(specData){rowMeta.forEach(m=>{renderRow(m);renderFreqAxis(m);});}
+});
+document.getElementById('freq-max').addEventListener('change',e=>{
+  freqMax=parseFloat(e.target.value);
+  if(specData){rowMeta.forEach(m=>{renderRow(m);renderFreqAxis(m);});}
+});
+document.getElementById('btn-folder').addEventListener('click',setFolder);
+document.getElementById('file-input').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(f)loadFile(f);
+});
+document.body.addEventListener('dragover',e=>e.preventDefault());
+document.body.addEventListener('drop',e=>{
+  e.preventDefault();
+  const f=e.dataTransfer.files[0];
+  if(f&&f.name.endsWith('.wav'))loadFile(f);
+});
+window.addEventListener('resize',()=>{ if(specData)buildRows(); });
+
+rowsContainer.addEventListener('mousedown',e=>{ if(e.button===1)e.preventDefault(); });
+document.addEventListener('auxclick',e=>{ if(e.button===1)e.preventDefault(); });
+
+document.addEventListener('keydown',e=>{
+  if(e.key===' '&&specData){
+    const tag=document.activeElement.tagName;
+    if(tag==='INPUT'||tag==='SELECT')return;
+    e.preventDefault();
+    if(isPlaying)stopPlayback();
+    else startPlayback(playTime<specDuration?playTime:viewStart);
+  }
+});
+</script>
+</body>
+</html>

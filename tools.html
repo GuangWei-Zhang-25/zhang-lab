@@ -174,8 +174,8 @@
 
     .tool-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.75rem;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 1.25rem;
     }
 
     .tool-group-head {
@@ -217,81 +217,82 @@
     }
 
     .summary-top {
-      padding: 1.5rem 1.5rem 1.25rem;
+      padding: 1.1rem 1.2rem 0.95rem;
       background: linear-gradient(135deg, #0f2744 0%, #1a365d 60%, #2c5282 100%);
       color: var(--white);
     }
 
     .summary-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
       background: rgba(255, 255, 255, 0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.25rem;
+      font-size: 1.05rem;
       color: var(--white);
-      margin-bottom: 1rem;
+      margin-bottom: 0.7rem;
     }
 
     .summary-eyebrow {
-      font-size: 0.68rem;
+      font-size: 0.63rem;
       font-weight: 600;
-      letter-spacing: 0.09em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.3rem;
     }
 
     .summary-name {
       font-family: var(--font-serif);
-      font-size: 1.4rem;
+      font-size: 1.15rem;
       font-weight: 700;
       line-height: 1.2;
     }
 
     .summary-body {
-      padding: 1.25rem 1.5rem 1.5rem;
+      padding: 1rem 1.2rem 1.1rem;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
     }
 
     .summary-desc {
-      font-size: 0.9rem;
+      font-size: 0.83rem;
       color: var(--text-secondary);
-      line-height: 1.6;
+      line-height: 1.55;
       flex-grow: 1;
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .summary-author {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      font-size: 0.8rem;
+      gap: 0.5rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
-      margin-bottom: 1.25rem;
+      margin-bottom: 0.9rem;
     }
 
     .summary-author img {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       object-fit: cover;
       object-position: center 30%;
     }
 
     .summary-author.no-photo i {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: var(--bg-light);
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--border-medium);
+      font-size: 0.8rem;
     }
 
     .summary-avatars {
@@ -300,14 +301,14 @@
     }
 
     .summary-avatars img {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       object-fit: cover;
       object-position: center 30%;
       border: 2px solid var(--white);
       box-shadow: 0 0 0 1px var(--border-light);
-      margin-left: -9px;
+      margin-left: -8px;
     }
 
     .summary-avatars img:first-child { margin-left: 0; }
@@ -323,8 +324,8 @@
     .btn-launch {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.6rem 1.1rem;
+      gap: 0.4rem;
+      padding: 0.5rem 0.95rem;
       background: var(--accent);
       color: #3a2e0a;
       text-decoration: none;
@@ -339,8 +340,8 @@
     .btn-details {
       display: inline-flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.6rem 1.1rem;
+      gap: 0.4rem;
+      padding: 0.5rem 0.95rem;
       background: var(--white);
       color: var(--primary);
       text-decoration: none;
@@ -568,7 +569,7 @@
         </div>
         <div class="summary-body">
           <p class="summary-desc">
-            A machine-learning system for tracking multiple mice at once, built on a foundational vision model. This page will primarily host the front-end tool for visualizing and correcting the tracking results.
+            A machine-learning system for tracking multiple mice at once, built on a foundational vision model. The front-end tool visualizes and corrects tracking results — now with rotatable bounding boxes and per-animal ID tags.
           </p>
           <span class="summary-support"><i class="fas fa-flask-vial"></i> Supported by the Claude Science Hackathon Competition</span>
           <div class="summary-author">
@@ -661,6 +662,59 @@
           <div class="summary-actions">
             <a href="tool-parenting-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
             <a href="Tools/parenting-annotator/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Audio & Video group -->
+    <div class="tool-group-head">
+      <h2>Audio &amp; Video</h2>
+      <p>Tools for working with vocalizations and multi-stream recordings alongside behavior.</p>
+    </div>
+
+    <div class="tool-grid">
+
+      <!-- USV Call Annotator -->
+      <div class="tool-summary">
+        <div class="summary-top">
+          <div class="summary-icon"><i class="fas fa-wave-square"></i></div>
+          <div class="summary-eyebrow">Audio · Vocalization</div>
+          <div class="summary-name">USV Call Annotator</div>
+        </div>
+        <div class="summary-body">
+          <p class="summary-desc">
+            Load a recording, view its spectrogram, and mark ultrasonic vocalization calls as time–frequency boxes with labels — then export the annotations.
+          </p>
+          <div class="summary-author no-photo">
+            <i class="fas fa-user"></i>
+            <span>By <strong>Arjun Kode</strong></span>
+          </div>
+          <div class="summary-actions">
+            <a href="tool-usv-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
+            <a href="Tools/usv-annotator/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Audio-Video Synchronizer -->
+      <div class="tool-summary">
+        <div class="summary-top">
+          <div class="summary-icon"><i class="fas fa-clapperboard"></i></div>
+          <div class="summary-eyebrow">Audio · Video Sync</div>
+          <div class="summary-name">Audio–Video Synchronizer</div>
+        </div>
+        <div class="summary-body">
+          <p class="summary-desc">
+            Align audio recordings with their video streams so vocalizations and behavior can be reviewed on a common timeline.
+          </p>
+          <div class="summary-author no-photo">
+            <i class="fas fa-user"></i>
+            <span>By <strong>Jihyo Lee</strong></span>
+          </div>
+          <div class="summary-actions">
+            <span class="summary-soon"><i class="fas fa-clock"></i> Coming soon</span>
           </div>
         </div>
       </div>

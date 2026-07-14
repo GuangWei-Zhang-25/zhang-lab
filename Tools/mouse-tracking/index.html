@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Mouse Tracking V7 — Standalone Review &amp; Correct</title>
+<title>Mouse Tracking V14 — Rotatable Boxes, Review Status, Tags &amp; Onion Skin</title>
 <style>
   :root{--bg:#f3f5f8;--panel:#ffffff;--line:#d7dee8;--fg:#2f3640;--mut:#74808e;--accent:#4b8fc8}
   *{box-sizing:border-box}
@@ -17,15 +17,28 @@
   .clip{padding:6px 12px;border-bottom:1px solid #e3e8ef;cursor:pointer;display:flex;justify-content:space-between;gap:6px}
   .clip:hover{background:#f0f4f8}.clip.sel{background:#e8f1f8;border-left:3px solid var(--accent)}
   .clip .cid{font-size:11px;word-break:break-all}.clip .sus{font-weight:700;flex:0 0 auto}
+  .clip .rev{flex:0 0 auto;width:15px;text-align:center;font-size:11px}
+  .rev.none{color:#aab4c0}.rev.viewed{color:#3f8fd4}.rev.inspected{color:#2f7a4f;font-weight:700}
+  #exportInspected{margin:0 10px 6px;width:calc(100% - 20px);background:#eefaf2;border-color:#bfe3cc;color:#2f7a4f;font-weight:700}
+  #markInspected.on{background:#eefaf2;border-color:#2f7a4f;color:#2f7a4f}
   #idPanel{border-top:1px solid var(--line);background:#fbfcfe;max-height:220px;display:flex;flex-direction:column}
   .idPanelHead{display:flex;align-items:center;gap:5px;padding:7px 8px;border-bottom:1px solid var(--line)}
   .idPanelHead h2{margin:0 auto 0 0}
   .idPanelHead button{font-size:10px;padding:3px 6px}
   #idChips{overflow:auto;padding:7px;display:grid;gap:5px}
-  .idChip{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:7px;width:100%;text-align:left;background:#ffffff;border:1px solid var(--line);border-radius:7px;color:var(--fg);padding:5px 7px}
+  .idChip{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:4px 7px;width:100%;text-align:left;background:#ffffff;border:1px solid var(--line);border-radius:7px;color:var(--fg);padding:5px 7px}
   .idChip.off{opacity:.42}
   .idSwatch{width:13px;height:13px;border-radius:50%;border:0;background:var(--idc);cursor:pointer}
   .idChip b{font-size:12px}.idChip span{font-size:10px;color:var(--mut)}
+  .idTagPill{grid-column:2/4;justify-self:start;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;font-style:normal;font-weight:700;padding:2px 8px;border-radius:9px;border:1px solid var(--tagc,#c3ccd8);background:var(--tagbg,transparent);color:var(--tagfg,#6b7684);cursor:pointer}
+  .idTagPill.empty{border-style:dashed;font-weight:400}
+  #tagMenu{position:fixed;z-index:31;display:none;width:236px;background:#ffffff;border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 28px #59627336;padding:10px}
+  #tagMenu b{font-size:12px}
+  #tagText{width:100%;margin:7px 0;background:#ffffff;border:1px solid var(--line);border-radius:5px;padding:5px 6px;font:12px system-ui,sans-serif;color:var(--fg);box-sizing:border-box}
+  #tagColors{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+  .tagColorSwatch{width:20px;height:20px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0}
+  .tagColorSwatch.sel{border-color:#2f3640}
+  #tagMenu .row{justify-content:flex-end}
   #workspace{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
   #toolTabs{height:39px;flex:0 0 39px;background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:6px;padding:6px 10px}
   #toolTabs button{height:27px;padding:4px 12px}
@@ -39,7 +52,10 @@
   #ov{position:absolute;pointer-events:auto;touch-action:none;cursor:crosshair;left:0;top:0}
   #ctl{flex:0 0 auto;background:var(--panel);border-top:1px solid var(--line);padding:4px 8px;display:flex;flex-direction:column;gap:3px}
   #ctl button{padding:4px 7px}
-  #idTextSizeInput{width:50px;background:#ffffff;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:3px 4px;text-align:center;font:12px system-ui,sans-serif}
+  #idTextSizeInput,#interpReachInput{width:50px;background:#ffffff;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:3px 4px;text-align:center;font:12px system-ui,sans-serif}
+  #bboxPropagation,#segmentTarget,#onionDepth{background:#ffffff;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:3px 5px;font:12px system-ui,sans-serif}
+  #segmentTarget{max-width:112px}
+  #boxEditRead{max-width:230px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .row{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
   button{background:#ffffff;color:var(--fg);border:1px solid var(--line);border-radius:5px;padding:5px 9px;cursor:pointer;font-size:12px}
   button:hover{background:#eef3f8}button.on{background:#edf6fc;border-color:var(--accent);color:#2d6f9f}
@@ -76,9 +92,11 @@
 <div id="side">
   <button id="openWritable" type="button">open folder</button>
   <div id="saveState">Open a folder to enable JSON autosave.</div>
+  <button id="exportInspected" type="button" title="Download every clip marked ✓ inspected as a single .zip of their annotation JSONs">⬇ export inspected (.zip)</button>
   <div id="filt">
     <select id="fCorpus"><option value="">all corpora</option></select>
     <select id="fSort"><option value="suspicion">most suspicious</option><option value="clip_id">name</option></select>
+    <select id="fStatus"><option value="">any status</option><option value="none">○ not inspected</option><option value="viewed">👁 viewed</option><option value="inspected">✓ inspected</option></select>
     <input id="fSearch" placeholder="filter…">
   </div>
   <h2>Clips <span id="cnt" class="mut"></span></h2>
@@ -98,6 +116,8 @@
     <button id="viewArenaBtn" type="button">set arena</button>
     <button id="resetArenaBtn" type="button">reset arena</button>
     <span id="arenaRead" class="mut">full frame</span>
+    <span class="sep"></span>
+    <button id="markInspected" type="button" title="Toggle whether this clip is marked as fully inspected (I)">✓ mark inspected</button>
   </div>
 
 <div id="main" class="toolTab">
@@ -112,15 +132,18 @@
     <div class="row">
       <button id="play">▶</button>
       <select id="speed" style="background:#ffffff;color:#2f3640;border:1px solid #d7dee8;border-radius:5px"><option value="1">1x</option><option value="2">2x</option><option value="4">4x</option><option value="0.5">.5x</option></select>
-      <button id="tId" class="on">IDs</button><button id="tBox" class="on">boxes</button><button id="tTrace" class="on">traces</button><button id="addBox">add bbox</button>
+      <button id="tId" class="on">IDs</button><button id="tBox" class="on">boxes</button><button id="tTrace" class="on">traces</button><button id="tOnion" title="Onion skin: blend the neighboring frames (and their boxes) over the current frame while paused">onion</button><select id="onionDepth" aria-label="How many neighbor frames to show on each side"><option value="1">±1</option><option value="2">±2</option><option value="3">±3</option><option value="5">±5</option></select><button id="addBox">add bbox</button>
+      <span class="mut">bbox edit</span><select id="bboxPropagation" aria-label="Bounding box edit propagation"><option value="smart">interpolate keyframes</option><option value="frame">this frame only</option></select><span class="mut">reach</span><input id="interpReachInput" type="number" min="0.5" max="30" step="0.5" value="2" aria-label="Keyframe reach in seconds beyond the outermost keyframe"><span class="mut">s</span><span id="boxEditRead" class="mut" aria-live="polite"></span>
       <span class="mut">ID text</span><button id="idTextSmall" type="button" aria-label="Smaller ID text">−</button><input id="idTextSizeInput" type="number" min="8" max="72" step="2" value="22" aria-label="ID text size in screen pixels"><span class="mut">px</span><button id="idTextLarge" type="button" aria-label="Larger ID text">＋</button>
       <span class="mut">bbox</span><button id="boxThin">−</button><b id="boxStrokeLbl">5px</b><button id="boxThick">＋</button>
       <span class="mut">track</span><button id="traceThin">−</button><b id="traceStrokeLbl">4px</b><button id="traceThick">＋</button>
       <span class="sep"></span>
       <span class="mut">sel:</span><b id="selLbl">none</b>
       <button id="undo">undo</button><button id="delSel">delete sel</button>
+      <span class="sep"></span>
+      <span class="mut">segment:</span><button id="segmentStart" type="button" title="Set the selected segment start to the current frame">set start</button><button id="segmentEnd" type="button" title="Set the selected segment end to the current frame">set end</button><select id="segmentTarget" aria-label="Reassign selected segment to"></select><button id="segmentAssign" type="button">reassign</button><button id="segmentSplit" type="button" title="Split the selected ID at the current frame: everything from here on becomes a new ID you can drag onto another lane (S)">✂ split</button>
     </div>
-    <div id="hint">Large→small edits shrink only adjacent oversized boxes; a normal box stops the run. Manual edits stay hard anchors (◆). Red ring: click or <kbd>J</kbd>/<kbd>Shift-J</kbd>.</div>
+    <div id="hint">Every bbox edit is a keyframe (◆) with live preview — including rotation: select a box and drag its ⟳ knob (Shift snaps 15°, double-click the knob resets, angles interpolate between keyframes; training [x,y,w,h] rows stay axis-aligned). Onion blends neighbor frames while paused. ✂ split (or <kbd>S</kbd>) cuts the selected ID at the playhead; “＋ tag” gives each animal a colored research label.</div>
   </div>
   <div id="tlwrap"><canvas id="tl"></canvas></div>
 </div>
@@ -146,7 +169,13 @@
   </div>
 </div>
 </div>
-<div id="tlMenu"><button id="mergeSel" type="button">merge selected IDs</button></div>
+<div id="tlMenu"><button id="mergeSel" type="button">merge selected IDs</button><button id="splitSel" type="button">✂ split at playhead</button></div>
+<div id="tagMenu">
+  <b id="tagMenuFor">research tag</b>
+  <input id="tagText" maxlength="40" placeholder="e.g. 5xFAD, WT-male, subject A">
+  <div id="tagColors"></div>
+  <div class="row"><button id="tagRemove" type="button">remove</button><button id="tagCancel" type="button">cancel</button><button id="tagSave" type="button">save</button></div>
+</div>
 
 <script>
 const PAL=[[79,209,197],[246,173,85],[159,122,234],[104,211,145],[245,101,101],[99,179,237],[246,135,179],[236,201,75],[129,140,248],[56,178,172],[237,137,54],[183,148,244]];
@@ -154,7 +183,9 @@ let colorMap={}, hiddenIds=new Set();
 try{ colorMap=JSON.parse(localStorage.getItem('mmt2_colors')||'{}'); }catch(err){}
 const baseCol=i=>PAL[((i%PAL.length)+PAL.length)%PAL.length], col=i=>colorMap[i]||baseCol(i), rgb=c=>`rgb(${c[0]},${c[1]},${c[2]})`, rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-const ID_TEXT_MIN=8, ID_TEXT_MAX=72, ID_TEXT_STORE='mmt2_id_text_px_v1';
+const ID_TEXT_MIN=8, ID_TEXT_MAX=72, ID_TEXT_STORE='mmt2_id_text_px_v1', BBOX_PROPAGATION_STORE='mmt2_bbox_propagation_v1';
+const INTERP_REACH_MIN=0.5, INTERP_REACH_MAX=30, INTERP_REACH_DEFAULT=2, INTERP_REACH_STORE='mmt2_interp_reach_s_v1';
+let interpReachSeconds=INTERP_REACH_DEFAULT;
 let files={}, manifest=[], clip=null, loadedClip=null, meta=null, frames=[], cur=0, playing=false, sel=null;
 let show={id:true,box:true,trace:true}, undoStack=[], boxKeys={}, boxKeyRevision=0, manualCacheDirty=false, structuralStateDirty=false, saveSerial=0, clipFingerprint='', timelineSel=null, addMode=false, timelineZoom=1, videoZoom=1, boxStroke=5, traceStroke=4, idTextSize=22, panDrag=null, activeTool='correct', arenaRect=null, arenaMode=false, arenaDrag=null, suppressFrameClick=false;
 try{ const raw=localStorage.getItem(ID_TEXT_STORE), stored=Number(raw); if(raw!=null&&raw.trim()!==''&&Number.isFinite(stored))idTextSize=clamp(Math.round(stored),ID_TEXT_MIN,ID_TEXT_MAX); }catch(err){}
@@ -162,7 +193,9 @@ let fileHandles={}, writableDir=null, folderPickerBusy=false, clipData=null, jso
 let traceJumpMarkers=[], hoveredTraceJumpKey=null, traceJumpEditHandoff=null;
 const vidwrap=document.getElementById('vidwrap'), vid=document.getElementById('vid'), ov=document.getElementById('ov'), viewbox=document.getElementById('viewbox'), octx=ov.getContext('2d');
 const idTextSmallBtn=document.getElementById('idTextSmall'), idTextLargeBtn=document.getElementById('idTextLarge'), idTextSizeInput=document.getElementById('idTextSizeInput');
-const tl=document.getElementById('tl'), tctx=tl.getContext('2d'), tlMenu=document.getElementById('tlMenu'), mergeSel=document.getElementById('mergeSel');
+const bboxPropagation=document.getElementById('bboxPropagation'), boxEditRead=document.getElementById('boxEditRead'), interpReachInput=document.getElementById('interpReachInput');
+const tl=document.getElementById('tl'), tctx=tl.getContext('2d'), tlMenu=document.getElementById('tlMenu'), mergeSel=document.getElementById('mergeSel'), splitSel=document.getElementById('splitSel');
+const segmentStartBtn=document.getElementById('segmentStart'), segmentEndBtn=document.getElementById('segmentEnd'), segmentTarget=document.getElementById('segmentTarget'), segmentAssignBtn=document.getElementById('segmentAssign'), segmentSplitBtn=document.getElementById('segmentSplit');
 const tabCorrectBtn=document.getElementById('tabCorrect'), tabViewBtn=document.getElementById('tabView'), correctTab=document.getElementById('main'), viewTabEl=document.getElementById('viewTab');
 const viewArenaBtn=document.getElementById('viewArenaBtn'), resetArenaBtn=document.getElementById('resetArenaBtn'), arenaRead=document.getElementById('arenaRead');
 const vis={
@@ -171,6 +204,25 @@ const vis={
   frameRead:document.getElementById('visFrameRead'), trajRead:document.getElementById('visTrajRead'), heatRead:document.getElementById('visHeatRead'), speedRead:document.getElementById('visSpeedRead'), distRead:document.getElementById('visDistRead'), pairRead:document.getElementById('visPairRead')
 };
 let vis3d={yaw:-0.72,pitch:0.56,zoom:1.05,drag:null};
+let segmentUiSignature='';
+try{ const stored=localStorage.getItem(BBOX_PROPAGATION_STORE); if(stored==='frame'||stored==='smart')bboxPropagation.value=stored; }catch(err){}
+bboxPropagation.onchange=()=>{ try{ localStorage.setItem(BBOX_PROPAGATION_STORE,bboxPropagation.value); }catch(err){} boxEditRead.textContent=bboxPropagation.value==='smart'?'next edit will interpolate to neighboring keyframes':'next edit will change one frame'; };
+try{ const raw=localStorage.getItem(INTERP_REACH_STORE), stored=Number(raw); if(raw!=null&&raw.trim()!==''&&Number.isFinite(stored))interpReachSeconds=clamp(stored,INTERP_REACH_MIN,INTERP_REACH_MAX); }catch(err){}
+interpReachInput.value=String(interpReachSeconds);
+function setInterpReach(v){
+  const next=Number(v);
+  if(!Number.isFinite(next)){ interpReachInput.value=String(interpReachSeconds); return; }
+  const reach=clamp(next,INTERP_REACH_MIN,INTERP_REACH_MAX);
+  interpReachInput.value=String(reach);
+  if(reach===interpReachSeconds)return;
+  interpReachSeconds=reach;
+  try{ localStorage.setItem(INTERP_REACH_STORE,String(interpReachSeconds)); }catch(err){}
+  if(!meta)return;
+  boxKeyRevision=Math.max(Date.now(),boxKeyRevision+1); manualCacheDirty=true;
+  recomputeAllCorrections(); drawAll(); saveWork();
+  boxEditRead.textContent='keyframe reach set to '+interpReachSeconds+'s';
+}
+interpReachInput.onchange=()=>setInterpReach(interpReachInput.value);
 
 function setActiveTool(tool){
   activeTool=tool;
@@ -198,15 +250,158 @@ async function loadFileMapFromHandles(handles){
   for(const [name,handle] of Object.entries(handles))out[name]=await handle.getFile();
   return out;
 }
+
+// ---------- clip review status (not inspected / viewed / inspected) ----------
+const REVIEW_FILE='mmt_review_status.json', REVIEW_LOCAL='mmt2_review_v1', REVIEW_STATES=['none','viewed','inspected'];
+const markInspectedBtn=document.getElementById('markInspected'), exportInspectedBtn=document.getElementById('exportInspected');
+let reviewStatus={}, reviewSaveTimer=0, exportBusy=false;
+function normalizeReviewStatus(raw){
+  const out={}, source=raw&&typeof raw==='object'?(raw.status&&typeof raw.status==='object'?raw.status:raw):null;
+  if(!source)return out;
+  for(const [id,value] of Object.entries(source)){
+    const status=typeof value==='string'?value:value&&typeof value==='object'?value.status:null;
+    if(status==='viewed'||status==='inspected')out[id]=status;
+  }
+  return out;
+}
+function reviewStatusFor(cid){ return reviewStatus[cid]==='inspected'?'inspected':reviewStatus[cid]==='viewed'?'viewed':'none'; }
+function setReviewStatus(cid,status){
+  if(!cid||!REVIEW_STATES.includes(status))return;
+  if(status==='none')delete reviewStatus[cid];
+  else reviewStatus[cid]=status;
+  scheduleReviewSave(); renderList();
+}
+function toggleInspected(cid=clip){
+  if(!cid)return;
+  setReviewStatus(cid,reviewStatusFor(cid)==='inspected'?'viewed':'inspected');
+}
+function updateReviewControls(){
+  const status=clip?reviewStatusFor(clip):'none';
+  markInspectedBtn.disabled=!clip;
+  markInspectedBtn.classList.toggle('on',status==='inspected');
+  markInspectedBtn.textContent=status==='inspected'?'✓ inspected':'✓ mark inspected';
+  const inspected=manifest.filter(r=>reviewStatusFor(r.clip_id)==='inspected').length;
+  exportInspectedBtn.disabled=exportBusy||!inspected;
+  exportInspectedBtn.textContent=exportBusy?'building zip…':`⬇ export inspected (${inspected}) .zip`;
+}
+async function loadReviewStatusFromFiles(sourceFiles=files){
+  let loaded=null;
+  const sidecar=sourceFiles[REVIEW_FILE];
+  if(sidecar)try{ loaded=normalizeReviewStatus(JSON.parse(await sidecar.text())); }catch(err){ console.warn('Ignoring unreadable review status file',err); }
+  if(!loaded)loaded=normalizeReviewStatus(safeLocalJson(REVIEW_LOCAL,null));
+  reviewStatus=loaded||{};
+}
+function scheduleReviewSave(){
+  try{ localStorage.setItem(REVIEW_LOCAL,JSON.stringify({version:1,status:reviewStatus})); }catch(err){}
+  clearTimeout(reviewSaveTimer);
+  reviewSaveTimer=setTimeout(writeReviewStatusNow,400);
+}
+async function writeReviewStatusNow(){
+  if(!writableDir)return;
+  try{
+    const handle=await writableDir.getFileHandle(REVIEW_FILE,{create:true});
+    const writable=await handle.createWritable();
+    await writable.write(JSON.stringify({version:1,updated:new Date().toISOString(),status:reviewStatus},null,2));
+    await writable.close();
+    fileHandles[REVIEW_FILE]=handle; files[REVIEW_FILE]=await handle.getFile();
+  }catch(err){ console.warn('Could not write review status file',err); }
+}
+markInspectedBtn.onclick=()=>toggleInspected(clip);
+
+// ---------- minimal ZIP writer (STORE method, no dependencies) ----------
+let crcTable=null;
+function crc32(bytes){
+  if(!crcTable){
+    crcTable=new Uint32Array(256);
+    for(let n=0;n<256;n++){ let c=n; for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1; crcTable[n]=c>>>0; }
+  }
+  let crc=0xFFFFFFFF;
+  for(let i=0;i<bytes.length;i++)crc=crcTable[(crc^bytes[i])&0xFF]^(crc>>>8);
+  return (crc^0xFFFFFFFF)>>>0;
+}
+function utf8Bytes(str){
+  const out=[];
+  for(const ch of String(str)){
+    const code=ch.codePointAt(0);
+    if(code<0x80)out.push(code);
+    else if(code<0x800)out.push(0xC0|code>>6,0x80|code&63);
+    else if(code<0x10000)out.push(0xE0|code>>12,0x80|(code>>6)&63,0x80|code&63);
+    else out.push(0xF0|code>>18,0x80|(code>>12)&63,0x80|(code>>6)&63,0x80|code&63);
+  }
+  return new Uint8Array(out);
+}
+function zipDosDateTime(date){
+  const d=date instanceof Date?date:new Date();
+  const year=Math.max(1980,d.getFullYear());
+  return {
+    time:(d.getHours()<<11)|(d.getMinutes()<<5)|Math.floor(d.getSeconds()/2),
+    date:((year-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate()
+  };
+}
+function buildZip(entries,now=new Date()){
+  const chunks=[], central=[], stamp=zipDosDateTime(now);
+  let offset=0;
+  const push=b=>{ chunks.push(b); offset+=b.length; };
+  const u16=v=>[v&255,(v>>>8)&255], u32=v=>[v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];
+  for(const entry of entries){
+    const name=utf8Bytes(entry.name), data=entry.data instanceof Uint8Array?entry.data:utf8Bytes(String(entry.data??''));
+    const crc=crc32(data), headerOffset=offset;
+    push(new Uint8Array([...u32(0x04034b50),...u16(20),...u16(0x0800),...u16(0),...u16(stamp.time),...u16(stamp.date),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0)]));
+    push(name); push(data);
+    central.push({name,crc,size:data.length,headerOffset});
+  }
+  const centralStart=offset;
+  for(const c of central){
+    push(new Uint8Array([...u32(0x02014b50),...u16(20),...u16(20),...u16(0x0800),...u16(0),...u16(stamp.time),...u16(stamp.date),...u32(c.crc),...u32(c.size),...u32(c.size),...u16(c.name.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(c.headerOffset)]));
+    push(c.name);
+  }
+  const centralSize=offset-centralStart;
+  push(new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(central.length),...u16(central.length),...u32(centralSize),...u32(centralStart),...u16(0)]));
+  const total=new Uint8Array(offset);
+  let at=0;
+  for(const chunk of chunks){ total.set(chunk,at); at+=chunk.length; }
+  return total;
+}
+function inspectedClipIds(){ return manifest.map(r=>r.clip_id).filter(cid=>reviewStatusFor(cid)==='inspected'); }
+async function exportInspectedZip(){
+  if(exportBusy)return;
+  const ids=inspectedClipIds();
+  if(!ids.length){ alert('No clips are marked ✓ inspected yet. Open a clip and click “mark inspected” (or press I) first.'); return; }
+  exportBusy=true; updateReviewControls();
+  try{
+    try{ saveWork(); await flushJsonSavesNow(); }catch(err){ console.warn('flush before export failed',err); }
+    const entries=[], missing=[];
+    for(const cid of ids){
+      const jf=files[cid+'.json'];
+      if(!jf){ missing.push(cid); continue; }
+      entries.push({name:cid+'.json',data:utf8Bytes(await jf.text())});
+    }
+    entries.push({name:'inspected_manifest.json',data:utf8Bytes(JSON.stringify({exported:new Date().toISOString(),tool:'tracker_standalone_V13',inspected_clips:ids,missing_json:missing},null,2))});
+    const bytes=buildZip(entries);
+    const blob=new Blob([bytes],{type:'application/zip'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='inspected_clips_'+new Date().toISOString().slice(0,10)+'.zip';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(a.href),10000);
+    setSaveState(`Exported ${entries.length-1} inspected clip JSON${entries.length-1===1?'':'s'}${missing.length?` (${missing.length} missing)`:''}.`,true);
+  }catch(err){
+    alert('Could not build the zip: '+err.message);
+  }finally{ exportBusy=false; updateReviewControls(); }
+}
+exportInspectedBtn.onclick=exportInspectedZip;
 async function loadManifestFromFiles(sourceFiles=files,folderSeq=folderLoadSeq){
   const mf=Object.keys(sourceFiles).find(n=>n.endsWith('manifest.json'));
   const done=()=>{ const cs=[...new Set(manifest.map(r=>r.corpus))].sort();
     fCorpus.innerHTML='<option value="">all corpora</option>'+cs.map(c=>`<option>${c}</option>`).join(''); renderList(); if(manifest.length)selectClip(manifest[0].clip_id); };
   let nextManifest;
   if(mf)nextManifest=JSON.parse(await sourceFiles[mf].text());
-  else { const js=Object.keys(sourceFiles).filter(n=>n.endsWith('.json')&&!n.endsWith('.masks.json')); nextManifest=js.map(n=>({clip_id:n.replace('.json',''),corpus:n.split('__')[0],suspicion:0})); }
+  else { const js=Object.keys(sourceFiles).filter(n=>n.endsWith('.json')&&!n.endsWith('.masks.json')&&!n.endsWith('manifest.json')&&n!==REVIEW_FILE); nextManifest=js.map(n=>({clip_id:n.replace('.json',''),corpus:n.split('__')[0],suspicion:0})); }
   if(folderSeq!==folderLoadSeq)return;
-  manifest=nextManifest; done();
+  manifest=nextManifest;
+  await loadReviewStatusFromFiles(sourceFiles);
+  if(folderSeq!==folderLoadSeq)return;
+  done();
 }
 async function ensureWritePermission(handle){
   if(!handle||!handle.queryPermission)return false;
@@ -243,17 +438,22 @@ async function openTrackingFolder(){
   }finally{ folderPickerBusy=false; }
 }
 openWritable.onclick=openTrackingFolder;
+const REVIEW_GLYPH={none:'○',viewed:'👁',inspected:'✓'};
 function renderList(){
-  const q=fSearch.value.trim(),fc=fCorpus.value,sk=fSort.value;
-  let rows=manifest.filter(r=>(!fc||r.corpus===fc)&&(!q||r.clip_id.includes(q)));
+  const q=fSearch.value.trim(),fc=fCorpus.value,sk=fSort.value,fs=fStatus.value;
+  let rows=manifest.filter(r=>(!fc||r.corpus===fc)&&(!q||r.clip_id.includes(q))&&(!fs||reviewStatusFor(r.clip_id)===fs));
   rows.sort((a,b)=> sk==='clip_id'?a.clip_id.localeCompare(b.clip_id):(b.suspicion||0)-(a.suspicion||0));
-  cnt.textContent=`(${rows.length})`;
-  list.innerHTML=rows.map(r=>
-    `<div class="clip ${clip===r.clip_id?'sel':''}" data-id="${r.clip_id}"><span class="cid">${r.clip_id}<br><span class="mut">${r.corpus}${r.mean_per_frame?' · ~'+r.mean_per_frame+' mice':''}</span></span><span class="sus" style="color:${r.suspicion>0.3?'#feb2b2':r.suspicion>0.1?'#f6e05e':'#9ae6b4'}">${r.suspicion??''}</span></div>`).join('');
+  const inspectedTotal=manifest.filter(r=>reviewStatusFor(r.clip_id)==='inspected').length;
+  cnt.textContent=`(${rows.length} · ${inspectedTotal}✓ of ${manifest.length})`;
+  list.innerHTML=rows.map(r=>{
+    const status=reviewStatusFor(r.clip_id);
+    return `<div class="clip ${clip===r.clip_id?'sel':''}" data-id="${r.clip_id}"><span class="rev ${status}" title="${status==='none'?'not inspected':status}">${REVIEW_GLYPH[status]}</span><span class="cid">${r.clip_id}<br><span class="mut">${r.corpus}${r.mean_per_frame?' · ~'+r.mean_per_frame+' mice':''}</span></span><span class="sus" style="color:${r.suspicion>0.3?'#feb2b2':r.suspicion>0.1?'#f6e05e':'#9ae6b4'}">${r.suspicion??''}</span></div>`;
+  }).join('');
   list.querySelectorAll('.clip').forEach(el=>el.onclick=()=>selectClip(el.dataset.id));
+  updateReviewControls();
   if(meta)renderIdPanel();
 }
-[fCorpus,fSort,fSearch].forEach(el=>el.oninput=renderList);
+[fCorpus,fSort,fSearch,fStatus].forEach(el=>el.oninput=renderList);
 
 // ---------- select clip ----------
 function safeLocalJson(key,fallback=null){
@@ -264,10 +464,10 @@ async function selectClip(cid){
   const seq=++clipLoadSeq;
   try{ saveWork(); await flushJsonSavesNow(); }catch(err){ console.warn('save before clip switch failed',err); }
   if(seq!==clipLoadSeq)return;
-  hideTimelineMenu(); pauseForEdit(); boxDrag=null; tlDrag=null; endPanScroll(); stopKeyScrub?.(false);
+  hideTimelineMenu(); closeTagEditor(); pauseForEdit(); endPropagationPreview(); boxDrag=null; tlDrag=null; endPanScroll(); stopKeyScrub?.(false);
   loadedClip=null; loadedSaveSession=0; clipData=null; meta=null; frames=[]; boxKeys={}; boxKeyRevision=0; manualCacheDirty=false; structuralStateDirty=false; saveSerial=0; clipFingerprint='';
   videoSeek={target:null,issued:null,raf:0,active:false,fastOk:false,issuedFast:false,precise:null};
-  clip=cid; sel=null; timelineSel=null; hiddenIds.clear(); undoStack=[]; arenaMode=false; arenaDrag=null; traceJumpMarkers=[]; hoveredTraceJumpKey=null; traceJumpEditHandoff=null; ov.style.cursor='crosshair'; updateSelectionLabel(); renderList();
+  clip=cid; sel=null; timelineSel=null; hiddenIds.clear(); undoStack=[]; animalTags={}; arenaMode=false; arenaDrag=null; traceJumpMarkers=[]; hoveredTraceJumpKey=null; traceJumpEditHandoff=null; boxEditRead.textContent=''; ov.style.cursor='crosshair'; updateSelectionLabel(); renderList();
   setSaveState(`Loading ${cid}...`,true);
   try{
     const cachedValue=safeLocalJson('mmt2_keys_'+cid,{});
@@ -278,12 +478,21 @@ async function selectClip(cid){
     clipData=data;
     meta={W:data.W,H:data.H,fps:data.fps,nframes:data.nframes};
     arenaRect=loadArenaRect(cid,data); updateArenaRead(); setArenaMode(false);
+    animalTags=normalizeAnimalTags(data._mmt_animal_tags);
     const editor=data._mmt_bbox_editor&&typeof data._mmt_bbox_editor==='object'?data._mmt_bbox_editor:null;
-    const savedBases=editor?.bases||{}, savedStructuralLocks=editor?.structural_locks||{};
+    const legacyEditor=isLegacyBboxEditor(editor);
+    const savedBases=legacyEditor?{}:editor?.bases||{}, savedStructuralLocks=legacyEditor?{}:editor?.structural_locks||{};
+    const savedRotations=data._mmt_box_rotations&&typeof data._mmt_box_rotations==='object'?data._mmt_box_rotations:{};
+    const savedBaseAngles=legacyEditor?{}:(editor?.base_angles&&typeof editor.base_angles==='object'?editor.base_angles:{});
     const structuralLockSets=new Map(Object.entries(savedStructuralLocks).map(([id,values])=>[Number(id),new Set(Array.isArray(values)?values.map(Number).filter(Number.isInteger):[])]));
     frames=data.frames.map((fr,f)=>fr.map(raw=>{
-      const id=Number(raw[0]), box=[raw[1],raw[2],raw[3],raw[4]].map(Number), savedBase=savedBases?.[id]?.[f], correctionLocked=structuralLockSets.get(id)?.has(f)||false;
-      return {id,box,baseBox:correctionLocked?[...box]:validBoxArray(savedBase)?savedBase.map(Number):[...box],extra:raw.slice(5),...(correctionLocked?{correctionLocked:true}:{})};
+      // structural_locks written by older versions are treated as "bake this row as
+      // the baseline", never as propagation barriers — barriers were why edits kept
+      // feeling single-frame on previously corrected clips.
+      const id=Number(raw[0]), box=[raw[1],raw[2],raw[3],raw[4]].map(Number), savedBase=savedBases?.[id]?.[f], bakeToRow=structuralLockSets.get(id)?.has(f)||false;
+      const rawAngle=Number(savedRotations?.[id]?.[f]), angle=Number.isFinite(rawAngle)?normalizeAngle(rawAngle):0;
+      const rawBaseAngle=Number(savedBaseAngles?.[id]?.[f]), baseAngle=bakeToRow?angle:Number.isFinite(rawBaseAngle)?normalizeAngle(rawBaseAngle):angle;
+      return {id,box,baseBox:bakeToRow?[...box]:validBoxArray(savedBase)?savedBase.map(Number):[...box],angle,baseAngle,extra:raw.slice(5)};
     }));
     const hasSavedAnchors=editor&&editor.anchors&&typeof editor.anchors==='object';
     const cacheEnvelope=cachedValue&&cachedValue.version===2&&cachedValue.anchors&&typeof cachedValue.anchors==='object'?cachedValue:null;
@@ -292,7 +501,7 @@ async function selectClip(cid){
     const useCacheEnvelope=!!(cacheCompatible&&(!hasSavedAnchors||cacheRevision>jsonRevision));
     const rawKeys=useCacheEnvelope?cacheEnvelope.anchors:hasSavedAnchors?editor.anchors:cacheEnvelope?{}:cachedValue;
     boxKeyRevision=useCacheEnvelope?cacheRevision:jsonRevision;
-    boxKeys=normalizeBoxKeys(rawKeys,{requireBoxMatch:!hasSavedAnchors&&!useCacheEnvelope});
+    boxKeys=normalizeBoxKeys(rawKeys,{requireBoxMatch:!hasSavedAnchors&&!useCacheEnvelope,rebaseToCurrent:legacyEditor&&!useCacheEnvelope});
     rebaseStructuralTargets();
     recomputeAllCorrections();
     loadedClip=cid; loadedSaveSession=seq; manualCacheDirty=false; structuralStateDirty=false; saveSerial=0; clipFingerprint=sourceFingerprint;
@@ -303,9 +512,11 @@ async function selectClip(cid){
     if(mp4){ videoObjectUrl=URL.createObjectURL(mp4); vid.src=videoObjectUrl; vid.load(); }
     else { vid.removeAttribute('src'); vid.load(); }
     ov.width=meta.W; ov.height=meta.H; updateVideoLayout();
-    cur=0; renderIdPanel(); drawAll();
+    resetOnionPipeline();
+    cur=0; renderIdPanel(); drawAll(); scheduleOnionCapture();
+    if(reviewStatusFor(cid)==='none')setReviewStatus(cid,'viewed'); else updateReviewControls();
     if(useCacheEnvelope){ manualCacheDirty=true; saveWork(); setSaveState('Recovered newer manual bbox anchors; saving them to JSON…',true); }
-    else setSaveState('JSON autosave enabled.',true);
+    else setSaveState(legacyEditor&&editor?'Older corrections kept as-is; new edits interpolate smoothly on top.':'JSON autosave enabled.',true);
   }catch(err){
     if(seq===clipLoadSeq)setSaveState('Could not load clip: '+err.message);
     console.error(err);
@@ -405,6 +616,7 @@ function seekFrame(f,opt={}){
   cur=clamp(f,0,meta.nframes-1);
   if(opt.video!==false)requestVideoSeek(cur,!!opt.fastVideo);
   drawAll();
+  scheduleOnionCapture();
 }
 vid.addEventListener('seeked',()=>{
   videoSeek.active=false;
@@ -426,6 +638,7 @@ function vfc(now,md,epoch){
 }
 function stopPlayback(){
   playing=false; cancelPlaybackFrameCallback(); vid.pause(); play.textContent='▶';
+  drawAll(); scheduleOnionCapture();
 }
 play.onclick=()=>{ if(!vid.src||!meta)return;
   if(playing){ stopPlayback(); return; }
@@ -484,6 +697,146 @@ tlwrap.addEventListener('auxclick',e=>{ if(e.button===1)e.preventDefault(); });
 vidwrap.addEventListener('auxclick',e=>{ if(e.button===1)e.preventDefault(); });
 updateZoomLabels(); updateBoxStrokeLabel(); updateTraceStrokeLabel(); updateIdTextSizeControl();
 
+// ---------- onion skin (neighbor frames blended over the current one) ----------
+const tOnionBtn=document.getElementById('tOnion'), onionDepthSel=document.getElementById('onionDepth');
+const ONION_STORE='mmt2_onion_v1', ONION_CACHE_MAX=32, ONION_DEPTHS=[1,2,3,5];
+let onionOn=false, onionDepth=2, onionTimer=0;
+const onion={ghost:null,cache:new Map(),order:[],seq:0,queue:[],busy:false,pendingFrame:null,pendingSeq:0,url:''};
+try{
+  const stored=safeLocalJson(ONION_STORE,null);
+  if(stored&&typeof stored==='object'){
+    onionOn=!!stored.on;
+    const d=Number(stored.depth); if(ONION_DEPTHS.includes(d))onionDepth=d;
+  }
+}catch(err){}
+function persistOnionPrefs(){ try{ localStorage.setItem(ONION_STORE,JSON.stringify({on:onionOn,depth:onionDepth})); }catch(err){} }
+function updateOnionControls(){ tOnionBtn.classList.toggle('on',onionOn); onionDepthSel.value=String(onionDepth); }
+function onionNeighborFrames(f,depth,nframes){
+  const out=[];
+  for(let k=depth;k>=1;k--){ const a=f-k; if(a>=0&&a<nframes)out.push(a); }
+  for(let k=1;k<=depth;k++){ const b=f+k; if(b>=0&&b<nframes)out.push(b); }
+  return out;
+}
+function onionCachePut(f,image){
+  if(!onion.cache.has(f))onion.order.push(f);
+  onion.cache.set(f,image); markOnionUsed(f);
+  while(onion.order.length>ONION_CACHE_MAX){ const evict=onion.order.shift(); if(evict!==undefined)onion.cache.delete(evict); }
+}
+function markOnionUsed(f){ const i=onion.order.indexOf(f); if(i>=0){ onion.order.splice(i,1); onion.order.push(f); } }
+function ensureOnionGhost(){
+  if(onion.ghost)return onion.ghost;
+  if(!document||typeof document.createElement!=='function')return null;
+  let g=null;
+  try{ g=document.createElement('video'); }catch(err){ return null; }
+  if(!g||typeof g.addEventListener!=='function')return null;
+  g.muted=true; g.playsInline=true; g.preload='auto';
+  g.addEventListener('seeked',onOnionSeeked);
+  g.addEventListener('loadeddata',()=>{ onion.busy=false; onion.pendingFrame=null; scheduleOnionCapture(); });
+  g.addEventListener('error',()=>{ onion.busy=false; onion.pendingFrame=null; });
+  onion.ghost=g;
+  return g;
+}
+function clearOnionWatchdog(){ if(onion.watchdog){ clearTimeout(onion.watchdog); onion.watchdog=0; } }
+function armOnionWatchdog(f){
+  clearOnionWatchdog();
+  const seq=onion.seq;
+  onion.watchdog=setTimeout(()=>{
+    onion.watchdog=0;
+    if(onion.pendingFrame===f&&onion.pendingSeq===seq){ onion.pendingFrame=null; onion.busy=false; scheduleOnionCapture(); }
+  },1500);
+}
+function resetOnionPipeline(){
+  onion.seq++; onion.queue.length=0; onion.busy=false; onion.pendingFrame=null;
+  clearOnionWatchdog();
+  onion.cache.clear(); onion.order.length=0;
+  const g=ensureOnionGhost(); if(!g)return;
+  const src=videoObjectUrl||'';
+  if(onion.url!==src){
+    onion.url=src;
+    try{ if(src){ g.src=src; g.load?.(); } else { g.removeAttribute?.('src'); g.load?.(); } }catch(err){}
+  }
+}
+function scheduleOnionCapture(){
+  if(!onionOn||!meta||playing)return;
+  clearTimeout(onionTimer);
+  onionTimer=setTimeout(pumpOnionQueue,120);
+}
+function pumpOnionQueue(){
+  if(!onionOn||!meta||playing||!videoObjectUrl)return;
+  const g=ensureOnionGhost(); if(!g)return;
+  onion.queue=onionNeighborFrames(cur,onionDepth,meta.nframes).filter(f=>!onion.cache.has(f));
+  if(!onion.busy)nextOnionCapture();
+}
+function nextOnionCapture(){
+  const g=onion.ghost;
+  if(!g||!onionOn||!meta||playing){ onion.busy=false; return; }
+  if((g.readyState||0)<1){ onion.busy=false; return; }   // metadata not ready yet; loadeddata re-pumps
+  let f=onion.queue.shift();
+  while(f!=null&&onion.cache.has(f))f=onion.queue.shift();
+  if(f==null){ onion.busy=false; return; }
+  onion.busy=true; onion.pendingFrame=f; onion.pendingSeq=onion.seq;
+  const t=timeOfFrame(f);
+  if((g.readyState||0)>=2&&Math.abs((Number(g.currentTime)||0)-t)<1e-4){ onOnionSeeked(); return; }  // already on that frame: no seeked event would fire
+  armOnionWatchdog(f);
+  try{ g.currentTime=t; }catch(err){ clearOnionWatchdog(); onion.busy=false; onion.pendingFrame=null; }
+}
+function onOnionSeeked(){
+  clearOnionWatchdog();
+  const g=onion.ghost, f=onion.pendingFrame;
+  if(!g||f==null||onion.pendingSeq!==onion.seq){ onion.busy=false; onion.pendingFrame=null; return; }
+  onion.pendingFrame=null;
+  try{
+    if(meta&&g.readyState>=2){
+      const c=document.createElement('canvas');
+      c.width=meta.W; c.height=meta.H;
+      const cctx=c.getContext('2d');
+      if(cctx){ cctx.drawImage(g,0,0,meta.W,meta.H); onionCachePut(f,c); }
+      if(onionOn&&!playing&&activeTool==='correct'&&Math.abs(f-cur)<=onionDepth)drawOverlay();
+    }
+  }catch(err){ console.warn('onion frame capture failed',err); }
+  nextOnionCapture();
+}
+function setOnion(on){
+  onionOn=!!on;
+  updateOnionControls(); persistOnionPrefs();
+  if(activeTool==='correct')drawOverlay();
+  scheduleOnionCapture();
+}
+function setOnionDepth(value){
+  const d=Number(value);
+  onionDepth=ONION_DEPTHS.includes(d)?d:2;
+  updateOnionControls(); persistOnionPrefs();
+  if(activeTool==='correct')drawOverlay();
+  scheduleOnionCapture();
+}
+function drawOnionLayers(){
+  const layers=onionNeighborFrames(cur,onionDepth,meta.nframes);
+  octx.save();
+  for(const f of layers){
+    const img=onion.cache.get(f); if(!img)continue;
+    markOnionUsed(f);
+    octx.globalAlpha=clamp(.35/Math.abs(f-cur),.06,.4);
+    try{ octx.drawImage(img,0,0); }catch(err){}
+  }
+  octx.restore();
+  if(!show.box)return;
+  octx.save(); octx.lineJoin='round';
+  for(const f of layers){
+    const dist=Math.abs(f-cur), future=f>cur;
+    octx.globalAlpha=clamp(.55/dist,.14,.6);
+    octx.lineWidth=Math.max(1.5,boxStroke*.6);
+    const dash=future?[3,5]:[9,5];
+    for(const o of frames[f]||[]){
+      if(!isIdVisible(o.id))continue;
+      withBoxRotation(o.box,boxAngleOf(o),()=>{ octx.setLineDash(dash); octx.strokeStyle=rgb(col(o.id)); octx.strokeRect(...o.box); });
+    }
+  }
+  octx.restore();
+}
+tOnionBtn.onclick=()=>setOnion(!onionOn);
+onionDepthSel.onchange=()=>setOnionDepth(onionDepthSel.value);
+updateOnionControls();
+
 // ---------- overlay ----------
 function drawAll(){
   if(activeTool==='correct'){ drawOverlay(); drawTimeline(); }
@@ -493,15 +846,16 @@ function drawOverlay(){
   if(!meta)return; octx.clearRect(0,0,ov.width,ov.height);
   if(traceJumpEditHandoff&&(traceJumpEditHandoff.frame!==cur||!objectForId(cur,traceJumpEditHandoff.id)||!isSelectedAtFrame(traceJumpEditHandoff.id,cur)))traceJumpEditHandoff=null;
   traceJumpMarkers=[];
+  if(onionOn&&!playing)drawOnionLayers();
   if(show.trace)drawTraces(); else hoveredTraceJumpKey=null;
   const hovered=hoveredTraceJump();
   if(hoveredTraceJumpKey&&(!hovered||hovered.frame===cur)){
     hoveredTraceJumpKey=null;
     if(!boxDrag&&!addMode)ov.style.cursor='crosshair';
   }
-  for(const o of frames[cur]||[]){ if(!isIdVisible(o.id))continue; const c=col(o.id),[x,y,w,h]=o.box,isS=isSelectedAtFrame(o.id,cur);
-    if(show.box){drawBoxOutline(o.box,c,isS); if(isS)drawBoxHandles(o.box,c);}
-    if(show.id)drawIdLabel(o.id,o.box,c,isS,isManualAnchor(o.id,cur));
+  for(const o of frames[cur]||[]){ if(!isIdVisible(o.id))continue; const c=col(o.id),[x,y,w,h]=o.box,isS=isSelectedAtFrame(o.id,cur),deg=boxAngleOf(o);
+    if(show.box)withBoxRotation(o.box,deg,()=>{ drawBoxOutline(o.box,c,isS); if(isS){ drawBoxHandles(o.box,c); drawRotationKnob(o.box,c,deg); } });
+    if(show.id){ const labelInfo=drawIdLabel(o.id,o.box,c,isS,isManualAnchor(o.id,cur)); drawTagLabel(o.id,o.box,labelInfo); }
   }
   if(show.trace)drawTraceJumpMarkers();
   drawExtendPreviewOverlay();
@@ -558,6 +912,82 @@ function setAddMode(on){
   ov.style.cursor=addMode?'crosshair':'crosshair';
 }
 function isIdVisible(id){ return !hiddenIds.has(id); }
+
+// ---------- per-animal research tags (labels for humans; training ids stay untouched) ----------
+const TAG_COLORS=['#e5484d','#e8912d','#eec23a','#48a56a','#2fa8a0','#3f8fd4','#7b6fe0','#d46bb8','#8d6e63','#64748b'];
+let animalTags={};
+const tagMenu=document.getElementById('tagMenu'), tagMenuFor=document.getElementById('tagMenuFor'), tagText=document.getElementById('tagText'), tagColorsEl=document.getElementById('tagColors');
+const tagSaveBtn=document.getElementById('tagSave'), tagRemoveBtn=document.getElementById('tagRemove'), tagCancelBtn=document.getElementById('tagCancel');
+let tagEditorId=null, tagEditorColor=null;
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+function validTagColor(value){ return /^#[0-9a-fA-F]{6}$/.test(String(value||'')); }
+function defaultTagColor(id){ return TAG_COLORS[((id%TAG_COLORS.length)+TAG_COLORS.length)%TAG_COLORS.length]; }
+function normalizeAnimalTags(raw){
+  const out={};
+  if(!raw||typeof raw!=='object')return out;
+  for(const [rawId,value] of Object.entries(raw)){
+    const id=Number(rawId); if(!Number.isInteger(id)||!value||typeof value!=='object')continue;
+    const label=String(value.label??'').trim().slice(0,40); if(!label)continue;
+    out[id]={label,color:validTagColor(value.color)?String(value.color).toLowerCase():defaultTagColor(id)};
+  }
+  return out;
+}
+function tagFor(id){ return animalTags[id]||null; }
+function setAnimalTag(id,label,color){
+  const text=String(label??'').trim().slice(0,40);
+  if(!text)delete animalTags[id];
+  else animalTags[id]={label:text,color:validTagColor(color)?String(color).toLowerCase():defaultTagColor(id)};
+  markStructuralChange(); saveWork(); renderIdPanel(); drawAll();
+}
+function serializableAnimalTags(){
+  const present=new Set(laneIds()), out={};
+  for(const [id,tag] of Object.entries(animalTags))if(present.has(Number(id)))out[id]={label:tag.label,color:tag.color};
+  return out;
+}
+function readableTextColor(hex){
+  const n=parseInt(String(hex).slice(1),16);
+  if(!Number.isFinite(n))return '#ffffff';
+  const r=(n>>16)&255,g=(n>>8)&255,b=n&255;
+  return (r*299+g*587+b*114)/1000>150?'#1c2430':'#ffffff';
+}
+function renderTagColorSwatches(){
+  tagColorsEl.innerHTML=TAG_COLORS.map(c=>`<button type="button" class="tagColorSwatch ${tagEditorColor===c?'sel':''}" data-c="${c}" style="background:${c}" title="${c}"></button>`).join('');
+  tagColorsEl.querySelectorAll('.tagColorSwatch').forEach(b=>b.onclick=()=>{ tagEditorColor=b.dataset.c; renderTagColorSwatches(); });
+}
+function openTagEditor(id,anchorEl){
+  tagEditorId=id;
+  const tag=tagFor(id);
+  tagEditorColor=tag?.color||defaultTagColor(id);
+  tagMenuFor.textContent=`research tag for id${id}`;
+  tagText.value=tag?.label||'';
+  renderTagColorSwatches();
+  tagMenu.style.display='block';
+  const r=anchorEl?.getBoundingClientRect?.()||{left:80,bottom:140}, mr=tagMenu.getBoundingClientRect();
+  tagMenu.style.left=clamp(r.left,4,Math.max(4,window.innerWidth-(mr.width||236)-4))+'px';
+  tagMenu.style.top=clamp(r.bottom+4,4,Math.max(4,window.innerHeight-(mr.height||150)-4))+'px';
+  tagText.focus?.(); tagText.select?.();
+}
+function closeTagEditor(){ tagMenu.style.display='none'; tagEditorId=null; }
+tagSaveBtn.onclick=()=>{ if(tagEditorId!=null)setAnimalTag(tagEditorId,tagText.value,tagEditorColor); closeTagEditor(); };
+tagRemoveBtn.onclick=()=>{ if(tagEditorId!=null)setAnimalTag(tagEditorId,''); closeTagEditor(); };
+tagCancelBtn.onclick=closeTagEditor;
+tagText.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); tagSaveBtn.onclick(); } else if(e.key==='Escape'){ e.preventDefault(); closeTagEditor(); } };
+document.addEventListener('mousedown',e=>{ if(tagMenu.style.display==='block'&&!tagMenu.contains(e.target)&&!e.target?.closest?.('[data-tag]'))closeTagEditor(); });
+function drawTagLabel(id,box,anchor){
+  const tag=tagFor(id); if(!tag)return;
+  const scale=overlayCanvasScale();
+  const fontPx=Math.max(5,(anchor?.fontPx||idTextSize*scale)*.78);
+  octx.save();
+  octx.font=`bold ${fontPx}px system-ui,sans-serif`; octx.textBaseline='middle'; octx.textAlign='left'; if(typeof octx.setLineDash==='function')octx.setLineDash([]);
+  const padX=5*scale, padY=2.5*scale, m=octx.measureText(tag.label);
+  const tw=(Number.isFinite(m.width)?m.width:tag.label.length*fontPx*.6)+padX*2, th=fontPx+padY*2;
+  let left=anchor?anchor.box[0]:box[0], top=anchor?anchor.box[1]+anchor.box[3]+1.5*scale:box[1]+1.5*scale;
+  left=clamp(left,0,Math.max(0,meta.W-tw)); top=clamp(top,0,Math.max(0,meta.H-th));
+  octx.globalAlpha=.92; octx.fillStyle=tag.color; octx.fillRect(left,top,tw,th);
+  octx.globalAlpha=1; octx.fillStyle=readableTextColor(tag.color);
+  octx.fillText(tag.label,left+padX,top+th/2);
+  octx.restore();
+}
 function saveColors(){ localStorage.setItem('mmt2_colors',JSON.stringify(colorMap)); }
 function cycleIdColor(id){
   const curColor=JSON.stringify(col(id));
@@ -573,14 +1003,21 @@ function renderIdPanel(){
   idChips.innerHTML=ids.map(id=>{
     const visible=isIdVisible(id), spans=spansForId(id), first=spans[0]?.start, last=spans[spans.length-1]?.end;
     const fs=first==null?'none':`f${first+1}-${last+1}`;
+    const tag=tagFor(id);
+    const pill=tag
+      ?`<em class="idTagPill" data-tag="${id}" style="--tagc:${tag.color};--tagbg:${tag.color}22;--tagfg:${tag.color}" title="Edit the research tag for id${id}">${escapeHtml(tag.label)}</em>`
+      :`<em class="idTagPill empty" data-tag="${id}" title="Add a research tag for id${id} (does not change training ids)">＋ tag</em>`;
     return `<button class="idChip ${visible?'':'off'}" data-id="${id}" title="Toggle id${id}">
       <i class="idSwatch" data-color="${id}" style="--idc:${rgb(col(id))}" title="Cycle id${id} color"></i>
       <b>id${id}</b><span>${visible?'shown':'hidden'} · ${fs}</span>
+      ${pill}
     </button>`;
   }).join('');
   idChips.querySelectorAll('.idChip').forEach(btn=>btn.onclick=e=>{
-    const colorTarget=e.target.closest('[data-color]');
     const id=Number(btn.dataset.id);
+    const tagTarget=e.target.closest('[data-tag]');
+    if(tagTarget){ e.stopPropagation(); openTagEditor(id,tagTarget); return; }
+    const colorTarget=e.target.closest('[data-color]');
     if(colorTarget){ e.stopPropagation(); cycleIdColor(id); return; }
     if(hiddenIds.has(id))hiddenIds.delete(id); else hiddenIds.add(id);
     renderIdPanel(); drawAll();
@@ -596,6 +1033,7 @@ function updateSelectionLabel(){
     const parts=items.slice(0,3).map(it=>`id${it.id} ${it.start===it.end?`f${it.start+1}`:`f${it.start+1}-${it.end+1}`}`);
     selLbl.textContent=items.length>3?`${parts.join(', ')} +${items.length-3}`:parts.join(', ');
   } else selLbl.textContent=sel==null?'none':'id'+sel;
+  updateSegmentControls();
 }
 function normalizeSelectionItems(items){
   const out=[];
@@ -637,6 +1075,72 @@ function isSelectedAtFrame(id,f){
   if(!timelineSel)return sel===id;
   return selectionItems().some(it=>it.id===id&&f>=it.start&&f<=it.end);
 }
+function selectedItemAt(id,f){ return selectionItems().find(it=>it.id===id&&f>=it.start&&f<=it.end)||null; }
+function singleSelectedSegment(){ const items=selectionItems(); return items.length===1?items[0]:null; }
+function presenceSpanForSelection(item){
+  if(!meta||!item)return null;
+  return spansForId(item.id).find(span=>item.start>=span.start&&item.end<=span.end)||null;
+}
+function updateSegmentControls(){
+  if(!segmentTarget)return;
+  const item=singleSelectedSegment(), span=presenceSpanForSelection(item), ids=meta?laneIds().filter(id=>!item||id!==item.id):[];
+  const signature=`${item?.id??''}|${ids.join(',')}`;
+  if(signature!==segmentUiSignature){
+    const previous=segmentTarget.value, allowed=new Set(['','+new',...ids.map(String)]);
+    segmentTarget.innerHTML='<option value="">target ID…</option><option value="+new">＋ new ID</option>'+ids.map(id=>`<option value="${id}">id${id}</option>`).join('');
+    segmentTarget.value=allowed.has(previous)?previous:'';
+    segmentUiSignature=signature;
+  }
+  const valid=!!span, currentInside=valid&&cur>=span.start&&cur<=span.end;
+  segmentStartBtn.disabled=!(currentInside&&cur<=item.end);
+  segmentEndBtn.disabled=!(currentInside&&cur>=item.start);
+  segmentTarget.disabled=!valid;
+  segmentAssignBtn.disabled=!(valid&&segmentTarget.value);
+  segmentStartBtn.title=segmentStartBtn.disabled?'Move the playhead inside this one continuous selected segment':`Set segment start to frame ${cur+1}`;
+  segmentEndBtn.title=segmentEndBtn.disabled?'Move the playhead inside this one continuous selected segment':`Set segment end to frame ${cur+1}`;
+  segmentAssignBtn.title=valid?'Reassign only this selected range; overlapping target IDs are swapped':'Select one continuous range first';
+  const splitId=splitTargetIdAtFrame(cur);
+  segmentSplitBtn.disabled=splitId==null;
+  segmentSplitBtn.title=splitId==null?'Select an ID (click its box or timeline bar) and put the playhead where you want to cut':`Split id${splitId} at frame ${cur+1}: frames from here on become a new ID you can drag to reassign (S)`;
+}
+function splitTargetIdAtFrame(f=cur){
+  if(!meta)return null;
+  const item=singleSelectedSegment();
+  if(item&&objectForId(f,item.id))return item.id;
+  if(sel!=null&&objectForId(f,sel))return sel;
+  return null;
+}
+function splitTrackAtFrame(id,f=cur){
+  if(!meta||id==null||!objectForId(f,id))return false;
+  pauseForEdit(); hideTimelineMenu();
+  const done=applyTimelineDrop(id,{kind:'+new'},f,meta.nframes-1,false);
+  if(!done)return false;
+  drawAll(); renderList();
+  const nid=singleSelectedSegment()?.id;
+  boxEditRead.textContent=`split id${id} at frame ${f+1}`+(nid!=null&&nid!==id?` → new id${nid} selected; drag its timeline bar onto another lane to reassign`:'');
+  return true;
+}
+function splitAtPlayhead(){
+  const id=splitTargetIdAtFrame(cur);
+  if(id!=null)splitTrackAtFrame(id,cur);
+}
+function setSelectedSegmentBoundary(edge){
+  const item=singleSelectedSegment(), span=presenceSpanForSelection(item); if(!span||cur<span.start||cur>span.end)return;
+  const start=edge==='start'?cur:item.start, end=edge==='end'?cur:item.end; if(start>end)return;
+  pauseForEdit(); setTimelineSelection([item.id],start,end); drawAll();
+}
+function reassignSelectedSegment(){
+  const item=singleSelectedSegment(), span=presenceSpanForSelection(item), value=segmentTarget.value; if(!span||!value)return;
+  const target=value==='+new'?{kind:'+new'}:{kind:'id',id:Number(value)};
+  if(target.kind==='id'&&(!Number.isFinite(target.id)||target.id===item.id||!laneIds().includes(target.id)))return;
+  pauseForEdit(); hideTimelineMenu(); applyTimelineDrop(item.id,target,item.start,item.end,true); drawAll(); renderList();
+}
+segmentStartBtn.onclick=()=>setSelectedSegmentBoundary('start');
+segmentEndBtn.onclick=()=>setSelectedSegmentBoundary('end');
+segmentTarget.onchange=updateSegmentControls;
+segmentAssignBtn.onclick=reassignSelectedSegment;
+segmentSplitBtn.onclick=splitAtPlayhead;
+updateSegmentControls();
 function objectForId(frame,id){ return (frames[frame]||[]).find(o=>o.id===id); }
 function roundBox(b){ return b.map(v=>Math.round(v)); }
 function clampBox(b){
@@ -645,7 +1149,76 @@ function clampBox(b){
   x=clamp(x,0,meta.W-w); y=clamp(y,0,meta.H-h);
   return roundBox([x,y,w,h]);
 }
+function median(values){
+  const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b), n=sorted.length;
+  if(!n)return null;
+  return n%2?sorted[(n-1)/2]:(sorted[n/2-1]+sorted[n/2])/2;
+}
+function quantile(values,q){
+  const sorted=values.filter(Number.isFinite).sort((a,b)=>a-b); if(!sorted.length)return null;
+  const p=clamp(Number(q)||0,0,1)*(sorted.length-1), lo=Math.floor(p), hi=Math.ceil(p), t=p-lo;
+  return sorted[lo]*(1-t)+sorted[hi]*t;
+}
+function robustMouseDimensions(id,f){
+  if(!meta)return {w:32,h:24};
+  const radius=Math.max(12,Math.round(Math.max(1,Number(meta.fps)||30)*2)), start=Math.max(0,f-radius), end=Math.min(meta.nframes-1,f+radius), widths=[], heights=[], areas=[], peerWidths=[], peerHeights=[], peerAreas=[];
+  for(let k=start;k<=end;k++)for(const o of frames[k]||[]){
+    const b=baseBoxFor(o); if(!validBoxArray(b)||b[2]<4||b[3]<4)continue;
+    if(o.id===id){ widths.push(b[2]); heights.push(b[3]); areas.push(b[2]*b[3]); }
+    else { peerWidths.push(b[2]); peerHeights.push(b[3]); peerAreas.push(b[2]*b[3]); }
+  }
+  if(widths.length<8){
+    const span=continuousSpanForFrame(id,f), a=span?.start??0, b=span?.end??Math.max(0,meta.nframes-1), step=Math.max(1,Math.ceil((b-a+1)/240));
+    for(let k=a;k<=b;k+=step){ const o=objectForId(k,id); if(!o)continue; const box=baseBoxFor(o); if(validBoxArray(box)){ widths.push(box[2]); heights.push(box[3]); areas.push(box[2]*box[3]); } }
+  }
+  const ownW=median(widths)||32, ownH=median(heights)||24, ownArea=median(areas)||ownW*ownH, peerW=quantile(peerWidths,.3), peerH=quantile(peerHeights,.3), peerArea=quantile(peerAreas,.3);
+  return {w:peerW==null?ownW:Math.min(ownW,peerW),h:peerH==null?ownH:Math.min(ownH,peerH),area:peerArea==null?ownArea:Math.min(ownArea,peerArea)};
+}
+function mouseBoxLimits(id,f){
+  const typical=robustMouseDimensions(id,f);
+  return {
+    minSize:[clamp(Math.round(typical.w*.2),8,Math.max(8,Math.round(meta.W*.025))),clamp(Math.round(typical.h*.2),8,Math.max(8,Math.round(meta.H*.025)))],
+    minArea:Math.max(64,Math.round(Math.min(typical.area*.15,meta.W*meta.H*.002)))
+  };
+}
+function mouseBoxFloor(id,f){ return mouseBoxLimits(id,f).minSize; }
+function clampBoxWithMinimum(b,minSize=[4,4]){
+  let [x,y,w,h]=b.map(Number), minW=clamp(Number(minSize[0])||4,4,meta.W), minH=clamp(Number(minSize[1])||4,4,meta.H);
+  w=clamp(w,minW,meta.W); h=clamp(h,minH,meta.H);
+  x=clamp(x,0,meta.W-w); y=clamp(y,0,meta.H-h);
+  return roundBox([x,y,w,h]);
+}
 function boxesEqual(a,b){ return a&&b&&a.length===b.length&&a.every((v,i)=>Math.round(v)===Math.round(b[i])); }
+// ---------- rotation helpers (angle in degrees, box rotates around its own center) ----------
+function normalizeAngle(a){ a=Number(a)||0; a%=360; if(a>180)a-=360; if(a<=-180)a+=360; return a; }
+function shortestAngleDiff(target,base){ return normalizeAngle((Number(target)||0)-(Number(base)||0)); }
+function boxAngleOf(o){ return normalizeAngle(o?.angle||0); }
+function baseAngleOf(o){ return normalizeAngle(o?.baseAngle||0); }
+function keyAngleOf(id,f){ return normalizeAngle((boxKeys[id]||{})[f]?.angle||0); }
+function anglesEqual(a,b){ return Math.abs(shortestAngleDiff(a,b))<.25; }
+function rotatePointAround(px,py,cx,cy,deg){
+  const r=deg*Math.PI/180, cos=Math.cos(r), sin=Math.sin(r), dx=px-cx, dy=py-cy;
+  return {x:cx+dx*cos-dy*sin, y:cy+dx*sin+dy*cos};
+}
+function toBoxLocalPoint(px,py,box,deg){
+  const cx=box[0]+box[2]/2, cy=box[1]+box[3]/2;
+  return deg?rotatePointAround(px,py,cx,cy,-deg):{x:px,y:py};
+}
+function rotateVector(dx,dy,deg){
+  const r=deg*Math.PI/180, cos=Math.cos(r), sin=Math.sin(r);
+  return {x:dx*cos+dy*sin, y:-dx*sin+dy*cos};
+}
+function withBoxRotation(box,deg,fn){
+  if(!deg){ fn(); return; }
+  const cx=box[0]+box[2]/2, cy=box[1]+box[3]/2;
+  octx.save(); octx.translate(cx,cy); octx.rotate(deg*Math.PI/180); octx.translate(-cx,-cy);
+  fn();
+  octx.restore();
+}
+function rotationKnob(box){
+  const scale=overlayCanvasScale(), stem=Math.max(16,22*scale), r=Math.max(5,7*scale);
+  return {x:box[0]+box[2]/2,y:box[1]-stem,r,stem};
+}
 function overlayPoint(e){
   const r=ov.getBoundingClientRect();
   return {x:(e.clientX-r.left)*meta.W/Math.max(1,r.width), y:(e.clientY-r.top)*meta.H/Math.max(1,r.height)};
@@ -660,36 +1233,64 @@ function hitMode(px,py,box,hit){
   if(l&&py>=y&&py<=y2)return 'w'; if(r&&py>=y&&py<=y2)return 'e';
   return (px>=x&&px<=x2&&py>=y&&py<=y2)?'move':null;
 }
+function hitModeForObject(px,py,o,hit){
+  const deg=boxAngleOf(o), local=toBoxLocalPoint(px,py,o.box,deg);
+  if(isSelectedAtFrame(o.id,cur)){
+    const knob=rotationKnob(o.box);
+    if(Math.hypot(local.x-knob.x,local.y-knob.y)<=knob.r+hit*.75)return 'rotate';
+  }
+  return hitMode(local.x,local.y,o.box,hit);
+}
 function hitBox(px,py){
   const r=ov.getBoundingClientRect(), hit=Math.max(5,8*meta.W/Math.max(1,r.width));
   let best=null, area=Infinity;
   for(const o of frames[cur]||[]){
     if(!isIdVisible(o.id))continue;
-    const mode=hitMode(px,py,o.box,hit); if(!mode)continue;
-    const a=o.box[2]*o.box[3]-(o.id===sel?1e9:0);
+    const mode=hitModeForObject(px,py,o,hit); if(!mode)continue;
+    const a=(mode==='rotate'?-1e12:o.box[2]*o.box[3])-(o.id===sel?1e9:0);
     if(a<area){ area=a; best={obj:o,mode}; }
   }
   return best;
 }
 function cursorForMode(mode){
-  return ({move:'move',n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize',nw:'nwse-resize',se:'nwse-resize',ne:'nesw-resize',sw:'nesw-resize'}[mode]||'crosshair');
+  return ({move:'move',rotate:'grab',n:'ns-resize',s:'ns-resize',e:'ew-resize',w:'ew-resize',nw:'nwse-resize',se:'nwse-resize',ne:'nesw-resize',sw:'nesw-resize'}[mode]||'crosshair');
 }
-function boxFromDrag(mode,base,dx,dy){
-  let [x,y,w,h]=base, x1=x, y1=y, x2=x+w, y2=y+h, min=4;
+function boxFromDrag(mode,base,dx,dy,limits=[4,4]){
+  let [x,y,w,h]=base, x1=x, y1=y, x2=x+w, y2=y+h;
   if(mode==='move') return clampBox([x+dx,y+dy,w,h]);
+  const minSize=Array.isArray(limits)?limits:limits?.minSize||[4,4], minArea=Array.isArray(limits)?0:Math.max(0,Number(limits?.minArea)||0);
+  const minW=(mode.includes('w')||mode.includes('e'))?Math.max(4,Number(minSize[0])||4):Math.min(w,Math.max(4,Number(minSize[0])||4));
+  const minH=(mode.includes('n')||mode.includes('s'))?Math.max(4,Number(minSize[1])||4):Math.min(h,Math.max(4,Number(minSize[1])||4));
   if(mode.includes('w'))x1+=dx; if(mode.includes('e'))x2+=dx;
   if(mode.includes('n'))y1+=dy; if(mode.includes('s'))y2+=dy;
-  x1=clamp(x1,0,meta.W-min); x2=clamp(x2,min,meta.W);
-  y1=clamp(y1,0,meta.H-min); y2=clamp(y2,min,meta.H);
-  if(x2-x1<min){ if(mode.includes('w'))x1=x2-min; else x2=x1+min; }
-  if(y2-y1<min){ if(mode.includes('n'))y1=y2-min; else y2=y1+min; }
-  return clampBox([x1,y1,x2-x1,y2-y1]);
+  let effectiveMinW=minW, effectiveMinH=minH, previewW=Math.max(1,Math.abs(x2-x1)), previewH=Math.max(1,Math.abs(y2-y1)), horizontal=mode.includes('w')||mode.includes('e'), vertical=mode.includes('n')||mode.includes('s');
+  if(minArea>0&&previewW*previewH<minArea){
+    if(horizontal&&!vertical)effectiveMinW=Math.max(effectiveMinW,Math.ceil(minArea/previewH));
+    else if(vertical&&!horizontal)effectiveMinH=Math.max(effectiveMinH,Math.ceil(minArea/previewW));
+    else { const scale=Math.sqrt(minArea/(previewW*previewH)); effectiveMinW=Math.max(effectiveMinW,Math.ceil(previewW*scale)); effectiveMinH=Math.max(effectiveMinH,Math.ceil(previewH*scale)); }
+  }
+  effectiveMinW=clamp(effectiveMinW,4,meta.W); effectiveMinH=clamp(effectiveMinH,4,meta.H);
+  x1=clamp(x1,0,meta.W-effectiveMinW); x2=clamp(x2,effectiveMinW,meta.W);
+  y1=clamp(y1,0,meta.H-effectiveMinH); y2=clamp(y2,effectiveMinH,meta.H);
+  if(x2-x1<effectiveMinW){ if(mode.includes('w'))x1=x2-effectiveMinW; else x2=x1+effectiveMinW; }
+  if(y2-y1<effectiveMinH){ if(mode.includes('n'))y1=y2-effectiveMinH; else y2=y1+effectiveMinH; }
+  return clampBoxWithMinimum([x1,y1,x2-x1,y2-y1],[effectiveMinW,effectiveMinH]);
 }
 function drawBoxHandles(box,c){
   const [x,y,w,h]=box, x2=x+w, y2=y+h, s=10;
   const pts=[[x,y],[x+w/2,y],[x2,y],[x2,y+h/2],[x2,y2],[x+w/2,y2],[x,y2],[x,y+h/2]];
   octx.save(); octx.lineWidth=2; octx.strokeStyle=rgb(c); octx.fillStyle='#ffffff';
   for(const [px,py] of pts){ octx.fillRect(px-s/2,py-s/2,s,s); octx.strokeRect(px-s/2,py-s/2,s,s); }
+  octx.restore();
+}
+function drawRotationKnob(box,c,deg){
+  const knob=rotationKnob(box), topX=box[0]+box[2]/2, topY=box[1];
+  octx.save(); octx.lineWidth=2; octx.strokeStyle=rgb(c); octx.setLineDash([]);
+  octx.beginPath(); octx.moveTo(topX,topY); octx.lineTo(knob.x,knob.y+knob.r); octx.stroke();
+  octx.beginPath(); octx.arc(knob.x,knob.y,knob.r,0,Math.PI*2);
+  octx.fillStyle='#ffffff'; octx.fill(); octx.stroke();
+  octx.beginPath(); octx.arc(knob.x,knob.y,Math.max(1.5,knob.r*.4),0,Math.PI*2);
+  octx.fillStyle=rgb(c); octx.fill();
   octx.restore();
 }
 function centerOf(o){ const [x,y,w,h]=o.box; return {x:x+w/2,y:y+h/2}; }
@@ -845,7 +1446,7 @@ function persistArenaRect(){
     if(r)clipData.plot_roi=r;
     else delete clipData.plot_roi;
   }
-  updateArenaRead(); saveWork();
+  markStructuralChange(); updateArenaRead(); saveWork();
 }
 function updateArenaRead(){
   if(!arenaRead)return;
@@ -1294,7 +1895,7 @@ vis.space.addEventListener('pointerup',e=>{ vis3d.drag=null; vis.space.releasePo
 vis.space.addEventListener('wheel',e=>{ e.preventDefault(); vis3d.zoom=clamp(vis3d.zoom*(e.deltaY<0?1.08:.92),.55,3.2); drawViewAll(); },{passive:false});
 vis.space.addEventListener('dblclick',()=>{ vis3d={yaw:-0.72,pitch:0.56,zoom:1.05,drag:null}; drawViewAll(); });
 
-const CORRECTION_FADE_SECONDS=1, OVERSIZE_RUN_SECONDS=5, OVERSIZE_EDGE_SECONDS=.25, OVERSIZE_APPLY_RATIO=1.5, MAX_PROPAGATED_SCALE_LOG=Math.log(2);
+function interpReachFrames(){ return Math.max(2,Math.round(Math.max(1,Number(meta?.fps)||30)*interpReachSeconds)); }
 function validBoxArray(v){ return Array.isArray(v)&&v.length===4&&v.every(Number.isFinite); }
 function ensureObjectBase(o){
   if(o&&!validBoxArray(o.baseBox))o.baseBox=clampBox(o.box);
@@ -1310,18 +1911,19 @@ function isManualAnchor(id,f){
   const key=(boxKeys[id]||{})[f];
   return !!key&&(validBoxArray(key)||((key.kind||'manual')==='manual'&&key.hard!==false));
 }
-function makeBoxKey(id,f,box,kind='manual'){
+function makeBoxKey(id,f,box,kind='manual',options={}){
   const o=objectForId(f,id), target=clampBox(box), base=o?baseBoxFor(o):target;
-  const mode=kind==='manual'?inferredPropagationMode(base,target):'isolated', pivot=mode==='oversize-run'?inferredResizePivot(base,target):null;
-  return {box:target,base:base.map(Number),kind,hard:kind==='manual',mode,propagate:kind==='manual'&&mode==='local',...(pivot?{pivot}:{})};
+  const mode=kind==='manual'?(normalizePropagationMode(options?.mode)||'interp'):'isolated';
+  const angle=normalizeAngle(options?.angle!=null?options.angle:boxAngleOf(o)), angleBase=o?baseAngleOf(o):0;
+  return {box:target,base:base.map(Number),angle,angle_base:angleBase,kind,hard:kind==='manual',mode,propagate:kind==='manual'&&mode!=='isolated'};
 }
-function setBoxKey(id,f,box,kind='manual'){
-  ensureBoxKeys(id)[f]=makeBoxKey(id,f,box,kind);
+function setBoxKey(id,f,box,kind='manual',options={}){
+  ensureBoxKeys(id)[f]=makeBoxKey(id,f,box,kind,options);
   const o=objectForId(f,id); if(o&&kind==='manual')delete o.correctionLocked;
 }
 function sortedKeyFrames(id){ return Object.keys(boxKeys[id]||{}).map(Number).filter(Number.isFinite).sort((a,b)=>a-b); }
 function sortedManualAnchorFrames(id){ return sortedKeyFrames(id).filter(f=>isManualAnchor(id,f)&&objectForId(f,id)); }
-function normalizeBoxKeys(raw,{requireBoxMatch=false}={}){
+function normalizeBoxKeys(raw,{requireBoxMatch=false,rebaseToCurrent=false}={}){
   const out={};
   if(!raw||typeof raw!=='object')return out;
   for(const [rawId,rawFrames] of Object.entries(raw)){
@@ -1330,104 +1932,63 @@ function normalizeBoxKeys(raw,{requireBoxMatch=false}={}){
       const f=Number(rawF), o=objectForId(f,id), b=rawKeyBox(rawKey);
       if(!Number.isInteger(f)||f<0||f>=meta.nframes||!o||!b)continue;
       const box=clampBox(b); if(requireBoxMatch&&!boxesEqual(o.box,box))continue;
+      const kind=validBoxArray(rawKey)?'manual':rawKey.kind==='structural'?'structural':'manual';
+      if(rebaseToCurrent){
+        // legacy file: prior corrections are already baked into the rows, so pin the
+        // anchor to the row it sits on — zero delta, and new edits interpolate
+        // smoothly through it instead of being blocked.
+        if(kind==='structural')continue;
+        delete o.correctionLocked;
+        const pin=clampBox(o.box), mode=resolvedPropagationMode(rawKey), pinAngle=boxAngleOf(o);
+        (out[id]||(out[id]={}))[f]={box:pin,base:[...pin],angle:pinAngle,angle_base:pinAngle,kind:'manual',hard:true,mode,propagate:mode!=='isolated'};
+        continue;
+      }
       const rawBase=validBoxArray(rawKey?.base)?rawKey.base:baseBoxFor(o), base=rawBase.map(Number);
       o.baseBox=[...base];
-      const kind=validBoxArray(rawKey)?'manual':rawKey.kind==='structural'?'structural':'manual';
       if(kind==='structural'){ o.structuralBox=[...box]; continue; }
       delete o.correctionLocked;
-      const mode=resolvedPropagationMode(rawKey,base,box), pivot=mode==='oversize-run'?resolvedResizePivot(rawKey,base,box):null;
-      (out[id]||(out[id]={}))[f]={box,base,kind,hard:kind==='manual',mode,propagate:mode==='local',...(pivot?{pivot}:{})};
+      const mode=resolvedPropagationMode(rawKey);
+      (out[id]||(out[id]={}))[f]={box,base,angle:normalizeAngle(rawKey?.angle||0),angle_base:normalizeAngle(rawKey?.angle_base||0),kind,hard:kind==='manual',mode,propagate:mode!=='isolated'};
     }
   }
   return out;
 }
 function boxCenter(box){ return {x:box[0]+box[2]/2,y:box[1]+box[3]/2}; }
-function isExtremeBoxCorrection(base,target){
-  if(!validBoxArray(base)||!validBoxArray(target))return true;
-  const wr=target[2]/Math.max(1,base[2]), hr=target[3]/Math.max(1,base[3]), bc=boxCenter(base), tc=boxCenter(target);
-  const shift=Math.hypot(tc.x-bc.x,tc.y-bc.y), baseDiag=Math.hypot(base[2],base[3]), targetDiag=Math.hypot(target[2],target[3]);
-  return wr<.5||wr>2||hr<.5||hr>2||shift>Math.max(targetDiag,baseDiag*.75);
+function normalizePropagationMode(value){
+  if(value==='interp'||value==='smart'||value==='local'||value==='oversize-run')return 'interp';
+  if(value==='isolated'||value==='frame')return 'isolated';
+  return null;
 }
-function oversizeShrinkAxes(base,target){
-  if(!validBoxArray(base)||!validBoxArray(target))return [false,false];
-  return [base[2]>=Math.max(4,target[2])*2,base[3]>=Math.max(4,target[3])*2];
-}
-function oversizeApplyAxes(base,target){
-  if(!validBoxArray(base)||!validBoxArray(target))return [false,false];
-  return [base[2]>=Math.max(4,target[2])*OVERSIZE_APPLY_RATIO,base[3]>=Math.max(4,target[3])*OVERSIZE_APPLY_RATIO];
-}
-function inferredPropagationMode(base,target){
-  if(!validBoxArray(base)||!validBoxArray(target))return 'isolated';
-  const axes=oversizeShrinkAxes(base,target), noLargeGrowth=target[2]<=base[2]*1.35&&target[3]<=base[3]*1.35;
-  if(noLargeGrowth&&axes.some(Boolean))return 'oversize-run';
-  return isExtremeBoxCorrection(base,target)?'isolated':'local';
-}
-function resolvedPropagationMode(key,base,target){
-  if(['local','oversize-run','isolated'].includes(key?.mode))return key.mode;
-  const inferred=inferredPropagationMode(base,target);
-  if(inferred==='oversize-run')return inferred;
-  if(typeof key?.propagate==='boolean')return key.propagate?'local':'isolated';
-  return inferred;
-}
-function axisResizePivot(baseStart,baseSize,targetStart,targetSize){
-  const removed=baseSize-targetSize; if(!(removed>1))return .5;
-  const baseCenter=baseStart+baseSize/2, targetCenter=targetStart+targetSize/2;
-  return clamp(.5+(targetCenter-baseCenter)/removed,0,1);
-}
-function inferredResizePivot(base,target){
-  return [axisResizePivot(base[0],base[2],target[0],target[2]),axisResizePivot(base[1],base[3],target[1],target[3])];
-}
-function resolvedResizePivot(key,base,target){
-  return Array.isArray(key?.pivot)&&key.pivot.length===2&&key.pivot.every(Number.isFinite)?key.pivot.map(v=>clamp(v,0,1)):inferredResizePivot(base,target);
+function resolvedPropagationMode(key){
+  const mode=normalizePropagationMode(key?.mode); if(mode)return mode;
+  if(typeof key?.propagate==='boolean')return key.propagate?'interp':'isolated';
+  return 'interp';
 }
 function anchorPropagationMode(id,f){
-  const key=(boxKeys[id]||{})[f], o=objectForId(f,id), target=keyBox(id,f); if(!key||!o||!target||!isManualAnchor(id,f))return 'isolated';
-  const base=validBoxArray(key?.base)?key.base:baseBoxFor(o);
-  return resolvedPropagationMode(key,base,target);
+  const key=(boxKeys[id]||{})[f]; if(!key||!objectForId(f,id)||!keyBox(id,f)||!isManualAnchor(id,f))return 'isolated';
+  return resolvedPropagationMode(key);
 }
 function anchorCanPropagate(id,f){
   return anchorPropagationMode(id,f)!=='isolated';
 }
-function safeScaleDelta(anchorBase,target,frameBase){
-  anchorBase=Math.max(1,anchorBase); target=Math.max(1,target); frameBase=Math.max(1,frameBase);
-  const anchorErr=Math.log(anchorBase/target), frameErr=Math.log(frameBase/target);
-  if(!Number.isFinite(anchorErr)||!Number.isFinite(frameErr)||anchorErr===0||anchorErr*frameErr<=0)return 0;
-  return -Math.sign(anchorErr)*Math.min(Math.abs(anchorErr),Math.abs(frameErr),MAX_PROPAGATED_SCALE_LOG);
-}
 function smooth01(t){ t=clamp(t,0,1); return t*t*(3-2*t); }
-function oversizeAxisTaper(anchorBase,target,frameBase){
-  anchorBase=Math.max(1,anchorBase); target=Math.max(1,target); frameBase=Math.max(1,frameBase);
-  const severity=Math.log(anchorBase/target); if(!Number.isFinite(severity)||severity<Math.log(OVERSIZE_APPLY_RATIO)-1e-9)return 0;
-  const score=Math.max(0,Math.log(frameBase/target))/severity;
-  return smooth01((score-.5)/.15);
+function anchorDeltaVector(id,f){
+  const key=(boxKeys[id]||{})[f], o=objectForId(f,id), target=keyBox(id,f);
+  if(!key||!o||!target)return null;
+  const base=validBoxArray(key?.base)?key.base:baseBoxFor(o), bc=boxCenter(base), tc=boxCenter(target);
+  const delta=[tc.x-bc.x,tc.y-bc.y,Math.log(Math.max(1,target[2])/Math.max(1,base[2])),Math.log(Math.max(1,target[3])/Math.max(1,base[3])),shortestAngleDiff(key.angle||0,key.angle_base||0)];
+  return delta.every(Number.isFinite)?delta:null;
 }
-function oversizeAxisScaleDelta(anchorBase,target,frameBase){
-  const taper=oversizeAxisTaper(anchorBase,target,frameBase); if(taper<=0)return 0;
-  const desired=Math.min(frameBase,target), delta=Math.log(desired/Math.max(1,frameBase))*taper;
-  return Number.isFinite(delta)&&delta<0?delta:0;
+function lockedFramesInSpan(id,span){
+  const locks=[];
+  for(let k=span.start;k<=span.end;k++){ const o=objectForId(k,id); if(!o||o.correctionLocked)locks.push(k); }
+  return locks;
 }
-function oversizeFrameEligible(id,anchorFrame,frameBase){
-  const key=(boxKeys[id]||{})[anchorFrame], target=keyBox(id,anchorFrame), anchorObject=objectForId(anchorFrame,id);
-  if(!key||!target||!anchorObject||!validBoxArray(frameBase))return false;
-  const anchorBase=validBoxArray(key?.base)?key.base:baseBoxFor(anchorObject), axes=oversizeShrinkAxes(anchorBase,target);
-  return axes.some((enabled,d)=>enabled&&oversizeAxisTaper(anchorBase[d+2],target[d+2],frameBase[d+2])>0);
-}
-function oversizeCorrectionForAnchor(id,f,frameBase,temporalWeight=1){
-  const key=(boxKeys[id]||{})[f], o=objectForId(f,id), target=keyBox(id,f); if(!key||!o||!target||anchorPropagationMode(id,f)!=='oversize-run')return [0,0,0,0];
-  const anchorBase=validBoxArray(key?.base)?key.base:baseBoxFor(o), sample=validBoxArray(frameBase)?frameBase:anchorBase, axes=oversizeApplyAxes(anchorBase,target), pivot=resolvedResizePivot(key,anchorBase,target), weight=clamp(temporalWeight,0,1);
-  const sw=axes[0]?oversizeAxisScaleDelta(anchorBase[2],target[2],sample[2])*weight:0, sh=axes[1]?oversizeAxisScaleDelta(anchorBase[3],target[3],sample[3])*weight:0;
-  const newW=sample[2]*Math.exp(sw), newH=sample[3]*Math.exp(sh), dx=(pivot[0]-.5)*(sample[2]-newW), dy=(pivot[1]-.5)*(sample[3]-newH);
-  return [dx,dy,sw,sh].every(Number.isFinite)?[dx,dy,sw,sh]:[0,0,0,0];
-}
-function oversizeEdgeFrames(){ return Math.max(3,Math.round(Math.max(1,Number(meta.fps)||30)*OVERSIZE_EDGE_SECONDS)); }
-function oversizePlateauFrames(){ return Math.max(2,Math.round(Math.max(1,Number(meta.fps)||30)*OVERSIZE_RUN_SECONDS)); }
-function oversizeTemporalWeight(distance){
-  const plateau=oversizePlateauFrames(), edge=oversizeEdgeFrames();
-  return distance<=plateau?1:smooth01(1-(distance-plateau)/edge);
-}
-function correctionRadiusForAnchor(id,f){
-  if(anchorPropagationMode(id,f)==='oversize-run')return oversizePlateauFrames()+oversizeEdgeFrames();
-  return Math.max(2,Math.round(Math.max(1,Number(meta.fps)||30)*CORRECTION_FADE_SECONDS));
+function propagationBarrierBetween(id,a,b,knownLocks=null){
+  const lo=Math.min(a,b), hi=Math.max(a,b);
+  if(knownLocks){ const i=lowerBoundFrame(knownLocks,lo+1); return i<knownLocks.length&&knownLocks[i]<hi; }
+  for(let k=lo+1;k<hi;k++){ const o=objectForId(k,id); if(!o||o.correctionLocked)return true; }
+  return false;
 }
 function applyCorrection(base,c){
   const [x,y,w,h]=base, nw=w*Math.exp(c[2]), nh=h*Math.exp(c[3]), cx=x+w/2+c[0], cy=y+h/2+c[1];
@@ -1438,94 +1999,62 @@ function removeCorrection(target,c){
   return [bcx-bw/2,bcy-bh/2,bw,bh];
 }
 function continuousSpanForFrame(id,f){ return spansForId(id).find(s=>f>=s.start&&f<=s.end)||null; }
-function correctionForAnchor(id,f,frameBase=null){
-  const o=objectForId(f,id), target=keyBox(id,f), mode=anchorPropagationMode(id,f); if(!o||!target||mode==='isolated')return [0,0,0,0];
-  if(mode==='oversize-run')return oversizeCorrectionForAnchor(id,f,frameBase,1);
-  const anchorBase=baseBoxFor(o), sample=validBoxArray(frameBase)?frameBase:anchorBase, ac=boxCenter(anchorBase), tc=boxCenter(target);
-  return [
-    clamp(tc.x-ac.x,-Math.max(8,sample[2]*.75),Math.max(8,sample[2]*.75)),
-    clamp(tc.y-ac.y,-Math.max(8,sample[3]*.75),Math.max(8,sample[3]*.75)),
-    safeScaleDelta(anchorBase[2],target[2],sample[2]),
-    safeScaleDelta(anchorBase[3],target[3],sample[3])
-  ];
-}
 function restoreHardAnchors(id,span){
   for(const f of sortedKeyFrames(id)){
     if(f<span.start||f>span.end||!isHardAnchor(id,f))continue;
-    const o=objectForId(f,id), target=keyBox(id,f); if(o&&target)o.box=clampBox(target);
+    const o=objectForId(f,id), target=keyBox(id,f); if(o&&target){ o.box=clampBox(target); o.angle=keyAngleOf(id,f); }
   }
 }
 function lowerBoundFrame(values,target){ let lo=0,hi=values.length; while(lo<hi){ const mid=(lo+hi)>>1; if(values[mid]<target)lo=mid+1; else hi=mid; } return lo; }
-function isolatedAnchorBetween(id,a,b,anchors){
-  const lo=Math.min(a,b), hi=Math.max(a,b); let i=lowerBoundFrame(anchors,lo+1);
-  for(;i<anchors.length&&anchors[i]<hi;i++)if(anchorPropagationMode(id,anchors[i])!=='local')return true;
-  for(let f=lo+1;f<hi;f++)if(objectForId(f,id)?.correctionLocked)return true;
-  return false;
-}
-function oversizeRunBlockedBetween(id,anchorFrame,f){
-  const lo=Math.min(anchorFrame,f), hi=Math.max(anchorFrame,f);
-  for(let k=lo+1;k<hi;k++){
-    const o=objectForId(k,id);
-    if(!o||o.correctionLocked||isManualAnchor(id,k)||!oversizeFrameEligible(id,anchorFrame,baseBoxFor(o)))return true;
+function correctionVectorAtFrame(id,f,knownSpan=null,frameBase=null,knownAnchors=null,knownLocks=null){
+  const span=knownSpan||continuousSpanForFrame(id,f); if(!span)return [0,0,0,0,0];
+  const anchors=knownAnchors||sortedManualAnchorFrames(id).filter(a=>a>=span.start&&a<=span.end); if(!anchors.length)return [0,0,0,0,0];
+  if(isManualAnchor(id,f))return (anchorCanPropagate(id,f)?anchorDeltaVector(id,f):null)||[0,0,0,0,0];
+  const i=lowerBoundFrame(anchors,f), leftFrame=i>0?anchors[i-1]:null, rightFrame=i<anchors.length?anchors[i]:null;
+  const leftOpen=leftFrame!=null&&anchorCanPropagate(id,leftFrame)&&!propagationBarrierBetween(id,leftFrame,f,knownLocks);
+  const rightOpen=rightFrame!=null&&anchorCanPropagate(id,rightFrame)&&!propagationBarrierBetween(id,rightFrame,f,knownLocks);
+  const left=leftOpen?anchorDeltaVector(id,leftFrame):null, right=rightOpen?anchorDeltaVector(id,rightFrame):null;
+  if(left&&right){
+    const t=smooth01((f-leftFrame)/Math.max(1,rightFrame-leftFrame));
+    return left.map((v,d)=>v*(1-t)+right[d]*t);
   }
-  return false;
-}
-function blendOversizeCorrections(base,candidates){
-  if(candidates.length===1)return candidates[0].correction;
-  const bc=boxCenter(base); let sum=0,cx=0,cy=0,logW=0,logH=0;
-  for(const candidate of candidates){
-    const weight=Math.max(1e-9,candidate.weight), c=candidate.correction, w=Math.max(1,base[2]*Math.exp(c[2])), h=Math.max(1,base[3]*Math.exp(c[3]));
-    sum+=weight; cx+=(bc.x+c[0])*weight; cy+=(bc.y+c[1])*weight; logW+=Math.log(w)*weight; logH+=Math.log(h)*weight;
-  }
-  const desiredW=Math.exp(logW/sum), desiredH=Math.exp(logH/sum), desiredCx=cx/sum, desiredCy=cy/sum;
-  return [desiredCx-bc.x,desiredCy-bc.y,Math.log(desiredW/Math.max(1,base[2])),Math.log(desiredH/Math.max(1,base[3]))];
-}
-function correctionVectorAtFrame(id,f,knownSpan=null,frameBase=null,knownAnchors=null){
-  const span=knownSpan||continuousSpanForFrame(id,f); if(!span)return [0,0,0,0];
-  const anchors=knownAnchors||sortedManualAnchorFrames(id).filter(a=>a>=span.start&&a<=span.end); if(!anchors.length)return [0,0,0,0];
-  if(isManualAnchor(id,f))return anchorCanPropagate(id,f)?correctionForAnchor(id,f,frameBase):[0,0,0,0];
-  const frameObject=objectForId(f,id); if(!frameObject)return [0,0,0,0];
-  const base=validBoxArray(frameBase)?frameBase:baseBoxFor(frameObject), maxRadius=Math.max(oversizePlateauFrames()+oversizeEdgeFrames(),Math.max(2,Math.round(Math.max(1,Number(meta.fps)||30)*CORRECTION_FADE_SECONDS)));
-  const total=[0,0,0,0], oversizeCandidates=[]; let weightSum=0, i=lowerBoundFrame(anchors,f-maxRadius);
-  for(;i<anchors.length&&anchors[i]<=f+maxRadius;i++){
-    const anchor=anchors[i], mode=anchorPropagationMode(id,anchor), radius=correctionRadiusForAnchor(id,anchor), distance=Math.abs(anchor-f);
-    if(distance>=radius||mode==='isolated'||isolatedAnchorBetween(id,f,anchor,anchors)||(mode==='oversize-run'&&oversizeRunBlockedBetween(id,anchor,f)))continue;
-    const weight=smooth01(1-distance/radius), correction=mode==='oversize-run'?oversizeCorrectionForAnchor(id,anchor,base,oversizeTemporalWeight(distance)):correctionForAnchor(id,anchor,base);
-    if(!correction.some(v=>Math.abs(v)>1e-12))continue;
-    if(mode==='oversize-run'){
-      oversizeCandidates.push({anchor,distance,weight:1/Math.pow(distance+1,2),correction});
-      continue;
-    }
-    for(let d=0;d<4;d++)total[d]+=correction[d]*weight;
-    weightSum+=weight;
-  }
-  if(oversizeCandidates.length)return blendOversizeCorrections(base,oversizeCandidates);
-  const divisor=Math.max(1,weightSum); return total.map(v=>v/divisor);
+  const single=left?{delta:left,distance:f-leftFrame,gapBound:rightFrame!=null?rightFrame-f:Infinity}
+    :right?{delta:right,distance:rightFrame-f,gapBound:leftFrame!=null?f-leftFrame:Infinity}:null;
+  if(!single)return [0,0,0,0,0];
+  const reach=Math.min(interpReachFrames(),single.distance+single.gapBound);
+  if(single.distance>=reach)return [0,0,0,0,0];
+  const weight=smooth01(1-single.distance/reach);
+  return single.delta.map(v=>v*weight);
 }
 function rebaseStructuralTargets(){
   for(let f=0;f<frames.length;f++)for(const o of frames[f]||[]){
     if(!validBoxArray(o.structuralBox))continue;
     const target=clampBox(o.structuralBox);
-    o.baseBox=[...target]; o.box=[...target]; o.correctionLocked=true; delete o.structuralBox;
+    o.baseBox=[...target]; o.box=[...target]; delete o.correctionLocked; delete o.structuralBox;
   }
 }
 function recomputeCorrectionSpan(id,anchorFrame,knownSpan=null){
   const span=knownSpan||continuousSpanForFrame(id,anchorFrame); if(!span)return;
   for(let f=span.start;f<=span.end;f++){
-    const o=objectForId(f,id); if(o)o.box=baseBoxFor(o);
+    const o=objectForId(f,id); if(o){ o.box=baseBoxFor(o); o.angle=baseAngleOf(o); }
   }
   const anchors=sortedManualAnchorFrames(id).filter(f=>f>=span.start&&f<=span.end);
   if(!anchors.length){ restoreHardAnchors(id,span); return; }
+  const locks=lockedFramesInSpan(id,span);
   for(let f=span.start;f<=span.end;f++){
     const o=objectForId(f,id); if(!o||isHardAnchor(id,f))continue;
     if(o.correctionLocked)continue;
-    const base=baseBoxFor(o), correction=correctionVectorAtFrame(id,f,span,base,anchors);
-    if(correction.some(v=>Math.abs(v)>1e-9))o.box=applyCorrection(base,correction);
+    const base=baseBoxFor(o), correction=correctionVectorAtFrame(id,f,span,base,anchors,locks);
+    if(correction.some(v=>Math.abs(v)>1e-9)){ o.box=applyCorrection(base,correction); o.angle=normalizeAngle(baseAngleOf(o)+(correction[4]||0)); }
   }
   restoreHardAnchors(id,span);
 }
+function isLegacyBboxEditor(editor){
+  if(!editor||typeof editor!=='object')return false;
+  return Number(editor.version)<7||String(editor.method||'').startsWith('safe-local-anchors');
+}
 function recomputeAllCorrections(){
-  for(const row of frames)for(const o of row||[]){ ensureObjectBase(o); o.box=baseBoxFor(o); }
+  for(const row of frames)for(const o of row||[]){ ensureObjectBase(o); o.box=baseBoxFor(o); o.angle=baseAngleOf(o); }
   for(const rawId of Object.keys(boxKeys)){
     const id=Number(rawId), anchors=sortedManualAnchorFrames(id); if(!anchors.length)continue;
     for(const span of spansForId(id)){
@@ -1537,27 +2066,70 @@ function recomputeAllCorrections(){
     const id=Number(rawId);
     for(const f of sortedKeyFrames(id)){
       if(!isHardAnchor(id,f))continue;
-      const o=objectForId(f,id), target=keyBox(id,f); if(o&&target)o.box=clampBox(target);
+      const o=objectForId(f,id), target=keyBox(id,f); if(o&&target){ o.box=clampBox(target); o.angle=keyAngleOf(id,f); }
     }
   }
 }
-function commitBoxCorrection(id,f,oldBox,newBox){
-  if(boxesEqual(oldBox,newBox))return;
+function commitBoxCorrection(id,f,oldBox,newBox,oldAngle=null,newAngle=null){
+  const angleChanged=oldAngle!=null&&newAngle!=null&&!anglesEqual(oldAngle,newAngle);
+  if(boxesEqual(oldBox,newBox)&&!angleChanged)return;
+  const span=continuousSpanForFrame(id,f), before=new Map();
+  if(span)for(let k=span.start;k<=span.end;k++){ const o=objectForId(k,id); if(o)before.set(k,k===f?[...oldBox]:[...o.box]); }
   boxKeyRevision=Math.max(Date.now(),boxKeyRevision+1); manualCacheDirty=true;
-  setBoxKey(id,f,newBox,'manual');
+  const mode=bboxPropagation.value==='frame'?'isolated':'interp';
+  setBoxKey(id,f,newBox,'manual',{mode,angle:newAngle!=null?newAngle:boxAngleOf(objectForId(f,id))});
   recomputeCorrectionSpan(id,f);
+  let changed=0;
+  for(const [k,box] of before){ if(k===f)continue; const o=objectForId(k,id); if(o&&!boxesEqual(box,o.box))changed++; }
+  boxEditRead.textContent=mode==='isolated'?'changed this frame only':changed?`keyframe set · adjusted ${changed} nearby frame${changed===1?'':'s'}`:'keyframe set · no other frame needed adjustment';
 }
 function markStructuralChange(){
   structuralStateDirty=true; manualCacheDirty=false;
   if(loadedClip)try{ localStorage.removeItem('mmt2_keys_'+loadedClip); }catch(err){ console.warn('Could not clear stale bbox cache',err); }
 }
-let boxDrag=null;
+let boxDrag=null, boxDragPreview=null, boxDragPreviewRaf=0;
+function schedulePropagationPreview(){
+  if(!boxDrag||boxDrag.kind!=='edit'||!boxDrag.mutated||bboxPropagation.value==='frame')return;
+  if(!boxDragPreviewRaf)boxDragPreviewRaf=requestAnimationFrame(runPropagationPreview);
+}
+function beginPropagationPreview(id,f){
+  const span=continuousSpanForFrame(id,f); if(!span)return null;
+  const boxes=[];
+  for(let k=span.start;k<=span.end;k++){ const o=objectForId(k,id); if(o)boxes.push([k,[...o.box],o.angle]); }   // raw angle (may be undefined) so cleanup is lossless
+  const store=boxKeys[id], hadKey=!!(store&&Object.prototype.hasOwnProperty.call(store,f));
+  return {id,f,span,boxes,hadKey,oldKey:hadKey?store[f]:undefined,locked:!!objectForId(f,id)?.correctionLocked};
+}
+function runPropagationPreview(){
+  boxDragPreviewRaf=0;
+  if(!boxDrag||boxDrag.kind!=='edit'||!boxDrag.mutated||bboxPropagation.value==='frame')return;
+  const id=boxDrag.id, f=boxDrag.frame, o=objectForId(f,id); if(!o)return;
+  if(!boxDragPreview)boxDragPreview=beginPropagationPreview(id,f);
+  if(!boxDragPreview)return;
+  const dragBox=[...o.box], dragAngle=boxAngleOf(o);
+  delete o.correctionLocked;
+  ensureBoxKeys(id)[f]=makeBoxKey(id,f,dragBox,'manual',{mode:'interp',angle:dragAngle});
+  recomputeCorrectionSpan(id,f,boxDragPreview.span);
+  o.box=[...dragBox]; o.angle=dragAngle;
+  drawOverlay();
+}
+function endPropagationPreview(){
+  if(boxDragPreviewRaf){ cancelAnimationFrame(boxDragPreviewRaf); boxDragPreviewRaf=0; }
+  const s=boxDragPreview; if(!s)return;
+  boxDragPreview=null;
+  for(const [k,box,angle] of s.boxes){ const o=objectForId(k,s.id); if(!o)continue; o.box=[...box]; if(angle===undefined)delete o.angle; else o.angle=angle; }
+  const store=boxKeys[s.id];
+  if(store){
+    if(s.hadKey)store[s.f]=s.oldKey;
+    else { delete store[s.f]; if(!Object.keys(store).length)delete boxKeys[s.id]; }
+  }
+  if(s.locked){ const o=objectForId(s.f,s.id); if(o)o.correctionLocked=true; }
+}
 ov.addEventListener('pointerdown',e=>{
   if(!meta||e.button!==0)return; const p=overlayPoint(e);
   e.preventDefault();
   if(addMode){
     pauseForEdit(); hoveredTraceJumpKey=null;
-    boxDrag={kind:'add',start:p,startClient:{x:e.clientX,y:e.clientY},box:null,mutated:false};
+    boxDrag={kind:'add',start:p,startClient:{x:e.clientX,y:e.clientY},box:null,limits:mouseBoxLimits(nextTrackId(),cur),mutated:false};
     ov.setPointerCapture?.(e.pointerId); drawAll(); return;
   }
   const hit=hitBox(p.x,p.y), jumpHit=hitTraceJumpMarker(p.x,p.y);
@@ -1570,8 +2142,20 @@ ov.addEventListener('pointerdown',e=>{
   if(!hit){ traceJumpEditHandoff=null; clearSelection(); drawAll(); return; }
   if(!traceJumpHandoffOwnsBox(hit))traceJumpEditHandoff=null;
   setTimelineBlockAtFrame(hit.obj.id,cur,e.shiftKey);
-  boxDrag={kind:'edit',id:hit.obj.id,frame:cur,mode:hit.mode,start:p,startClient:{x:e.clientX,y:e.clientY},base:[...hit.obj.box],mutated:false};
+  boxDrag={kind:'edit',id:hit.obj.id,frame:cur,mode:hit.mode,start:p,startClient:{x:e.clientX,y:e.clientY},base:[...hit.obj.box],angleBase:boxAngleOf(hit.obj),limits:mouseBoxLimits(hit.obj.id,cur),mutated:false};
+  if(hit.mode==='rotate')ov.style.cursor='grabbing';
   ov.setPointerCapture?.(e.pointerId); drawAll();
+});
+ov.addEventListener('dblclick',e=>{
+  if(!meta||addMode)return;
+  const p=overlayPoint(e), hit=hitBox(p.x,p.y);
+  if(!hit||hit.mode!=='rotate'||!boxAngleOf(hit.obj))return;
+  e.preventDefault(); pauseForEdit(); pushUndo('bbox');
+  const o=hit.obj, oldAngle=boxAngleOf(o);
+  o.angle=0;
+  commitBoxCorrection(o.id,cur,[...o.box],[...o.box],oldAngle,0);
+  saveWork(); drawAll();
+  boxEditRead.textContent=`id${o.id} rotation reset to 0°`;
 });
 ov.addEventListener('pointermove',e=>{
   if(!meta)return;
@@ -1584,26 +2168,44 @@ ov.addEventListener('pointermove',e=>{
   }
   const p=overlayPoint(e), dist=Math.hypot(e.clientX-boxDrag.startClient.x,e.clientY-boxDrag.startClient.y);
   if(boxDrag.kind==='add'){
-    boxDrag.mutated=dist>2; boxDrag.box=boxFromCorners(boxDrag.start,p);
+    boxDrag.mutated=dist>2; boxDrag.box=boxFromCorners(boxDrag.start,p,boxDrag.limits);
     drawOverlay(); if(boxDrag.mutated)drawAddPreview(boxDrag.box);
     return;
   }
   if(!boxDrag.mutated&&dist>2){ pushUndo('bbox'); boxDrag.mutated=true; }
   if(!boxDrag.mutated)return;
   const o=objectForId(boxDrag.frame,boxDrag.id); if(!o)return;
-  o.box=boxFromDrag(boxDrag.mode,boxDrag.base,p.x-boxDrag.start.x,p.y-boxDrag.start.y);
+  if(boxDrag.mode==='rotate'){
+    const cx=boxDrag.base[0]+boxDrag.base[2]/2, cy=boxDrag.base[1]+boxDrag.base[3]/2;
+    let deg=Math.atan2(p.y-cy,p.x-cx)*180/Math.PI+90;   // knob rests at the top (-90°)
+    if(e.shiftKey)deg=Math.round(deg/15)*15;
+    o.angle=normalizeAngle(deg);
+    boxEditRead.textContent=`rotating id${o.id} · ${Math.round(o.angle)}°${e.shiftKey?' (snapped)':' · hold Shift to snap 15°'}`;
+  } else if(boxDrag.mode==='move'){
+    o.box=boxFromDrag('move',boxDrag.base,p.x-boxDrag.start.x,p.y-boxDrag.start.y,boxDrag.limits);
+  } else {
+    const local=rotateVector(p.x-boxDrag.start.x,p.y-boxDrag.start.y,boxDrag.angleBase||0);
+    o.box=boxFromDrag(boxDrag.mode,boxDrag.base,local.x,local.y,boxDrag.limits);
+  }
   drawOverlay();
+  schedulePropagationPreview();
 });
 ov.addEventListener('pointerup',e=>{
   if(!boxDrag)return; ov.releasePointerCapture?.(e.pointerId);
   if(boxDrag.kind==='add'){
-    if(boxDrag.mutated&&boxDrag.box&&boxDrag.box[2]>=6&&boxDrag.box[3]>=6){
+    if(boxDrag.mutated&&boxDrag.box){
       pushUndo(); const nid=addTrackFromBox(boxDrag.box); setTimelineSelection([nid],cur,meta.nframes-1); saveWork();
     }
     boxDrag=null; setAddMode(false); drawAll(); renderList(); return;
   }
   const o=objectForId(boxDrag.frame,boxDrag.id);
-  if(boxDrag.mutated&&o){ commitBoxCorrection(boxDrag.id,boxDrag.frame,boxDrag.base,o.box); saveWork(); }
+  if(boxDrag.mutated&&o){
+    const finalBox=[...o.box], finalAngle=boxAngleOf(o);
+    endPropagationPreview();
+    o.box=[...finalBox]; o.angle=finalAngle;
+    commitBoxCorrection(boxDrag.id,boxDrag.frame,boxDrag.base,finalBox,boxDrag.angleBase,finalAngle); saveWork();
+  } else endPropagationPreview();
+  if(boxDrag.mode==='rotate')ov.style.cursor='grab';
   boxDrag=null; drawAll();
 });
 ov.addEventListener('pointerleave',()=>{
@@ -1612,17 +2214,26 @@ ov.addEventListener('pointerleave',()=>{
   ov.style.cursor='crosshair';
 });
 function cancelBoxDrag(){
+  endPropagationPreview();
   if(boxDrag?.kind==='add')setAddMode(false);
   else if(boxDrag?.kind==='edit'&&boxDrag.mutated){
-    const o=objectForId(boxDrag.frame,boxDrag.id); if(o)o.box=[...boxDrag.base];
+    const o=objectForId(boxDrag.frame,boxDrag.id);
+    if(o){ o.box=[...boxDrag.base]; o.angle=normalizeAngle(boxDrag.angleBase||0); }
     undoStack.pop();
   }
   boxDrag=null; hoveredTraceJumpKey=null; ov.style.cursor='crosshair'; drawAll();
 }
 ov.addEventListener('pointercancel',cancelBoxDrag);
-function boxFromCorners(a,b){
+function constrainBoxToLimits(box,limits){
+  if(!limits)return clampBox(box);
+  let [x,y,w,h]=box.map(Number), minW=Math.max(4,Number(limits.minSize?.[0])||4), minH=Math.max(4,Number(limits.minSize?.[1])||4), minArea=Math.max(0,Number(limits.minArea)||0);
+  w=Math.max(w,minW); h=Math.max(h,minH);
+  if(minArea&&w*h<minArea){ const scale=Math.sqrt(minArea/Math.max(1,w*h)); w*=scale; h*=scale; }
+  return clampBoxWithMinimum([x,y,w,h],[minW,minH]);
+}
+function boxFromCorners(a,b,limits=null){
   const x=Math.min(a.x,b.x), y=Math.min(a.y,b.y), w=Math.abs(b.x-a.x), h=Math.abs(b.y-a.y);
-  return clampBox([x,y,w,h]);
+  return constrainBoxToLimits([x,y,w,h],limits);
 }
 function drawAddPreview(box){
   octx.save(); octx.setLineDash([10,6]); octx.lineWidth=4; octx.strokeStyle='#f6e05e'; octx.strokeRect(...box);
@@ -1630,7 +2241,7 @@ function drawAddPreview(box){
 }
 function addTrackFromBox(box){
   markStructuralChange();
-  const nid=nextTrackId(), b=clampBox(box);
+  const nid=nextTrackId(), b=constrainBoxToLimits(box,mouseBoxLimits(nid,cur));
   for(let f=cur;f<meta.nframes;f++){
     frames[f]=frames[f]||[];
     if(!frames[f].some(o=>o.id===nid))frames[f].push({id:nid,box:[...b],baseBox:[...b],extra:[]});
@@ -1661,6 +2272,7 @@ function spansForId(id){
 }
 function spanXs(span){ const x0=frameToX(span.start), x1=frameEndX(span.end); return {x0,x1,w:Math.max(1,x1-x0)}; }
 function drawTimeline(){
+  updateSegmentControls();
   if(!meta)return; const ids=laneIds(); const rows=ids.length+specialLanes().length;
   const oldScroll=tlwrap.scrollLeft, oldTop=tlwrap.scrollTop, baseW=Math.max(240,tlwrap.clientWidth-4);
   tl.width=Math.round(baseW*timelineZoom); tl.height=HEAD+rows*LANE+6;
@@ -1676,7 +2288,10 @@ function drawTimeline(){
     tctx.fillStyle=li%2?'#fbfcfe':'#f7f9fc'; tctx.fillRect(0,y,tl.width,LANE-4);
     tctx.fillStyle=visible?rgba(c,.86):'rgba(154,164,178,.22)';
     for(const span of spansForId(id)){ const {x0,w}=spanXs(span); tctx.fillRect(x0, y, w, LANE-4); }
-    tctx.fillStyle=isS?'#111827':visible?'#334155':'#9aa6b5'; tctx.font=(isS?'bold ':'')+'12px sans-serif'; tctx.fillText('id'+id+(visible?'':' off'), 3, y+LANE-8);
+    tctx.fillStyle=isS?'#111827':visible?'#334155':'#9aa6b5'; tctx.font=(isS?'bold ':'')+'12px sans-serif';
+    const laneTxt='id'+id+(visible?'':' off'); tctx.fillText(laneTxt, 3, y+LANE-8);
+    const laneTag=tagFor(id);
+    if(laneTag){ const m=tctx.measureText(laneTxt), tw=Number.isFinite(m?.width)?m.width:laneTxt.length*7; tctx.fillStyle=laneTag.color; tctx.fillText('● '+laneTag.label, 3+tw+7, y+LANE-8); }
     tctx.fillStyle='#f6e05e'; tctx.strokeStyle='#5f5200'; tctx.lineWidth=1;
     for(const f of sortedManualAnchorFrames(id)){
       const x=frameToX(f), cy=y+(LANE-4)/2, r=4;
@@ -1689,7 +2304,7 @@ function drawTimeline(){
   specialLanes().forEach((s,si)=>{ const y=HEAD+(ids.length+si)*LANE+2;
     tctx.fillStyle=s==='trash'?'#fff1f2':'#effaf3'; tctx.fillRect(0,y,tl.width,LANE-4);
     tctx.fillStyle=s==='trash'?'#b4232f':'#2f7a4f'; tctx.font='12px sans-serif';
-    tctx.fillText(s==='trash'?'🗑 delete (drop here)':'＋ new id (drop here -> split)', 6, y+LANE-8); });
+    tctx.fillText(s==='trash'?'🗑 delete (drop here)':'＋ new id (drop here -> split range)', 6, y+LANE-8); });
   if(tlDrag?.mode==='select'){
     const x=Math.min(tlDrag.x0,tlDrag.xNow), y=Math.min(tlDrag.y0,tlDrag.yNow), w=Math.abs(tlDrag.xNow-tlDrag.x0), h=Math.abs(tlDrag.yNow-tlDrag.y0);
     tctx.fillStyle='rgba(75,143,200,.16)'; tctx.fillRect(x,y,w,h); tctx.strokeStyle='#4b8fc8'; tctx.strokeRect(x,y,w,h);
@@ -1738,11 +2353,14 @@ function spanAtPoint(x,y){
   return null;
 }
 function selectionFromRect(d){
-  const ids=laneIds(), y0=Math.min(d.y0,d.yNow), y1=Math.max(d.y0,d.yNow), items=[];
+  const ids=laneIds(), y0=Math.min(d.y0,d.yNow), y1=Math.max(d.y0,d.yNow), f0=xToFrame(Math.min(d.x0,d.xNow)), f1=xToFrame(Math.max(d.x0,d.xNow)), items=[];
   ids.forEach((id,i)=>{
     const top=HEAD+i*LANE, bot=top+LANE;
     if(bot<y0||top>y1)return;
-    for(const span of spansForId(id))items.push({id,start:span.start,end:span.end});
+    for(const span of spansForId(id)){
+      const start=Math.max(span.start,f0), end=Math.min(span.end,f1);
+      if(start<=end)items.push({id,start,end});
+    }
   });
   return items;
 }
@@ -1811,6 +2429,7 @@ function hideTimelineMenu(){ tlMenu.style.display='none'; }
 function showTimelineMenu(x,y){
   const canMerge=selectedIds().length>=2;
   mergeSel.disabled=!canMerge;
+  splitSel.disabled=splitTargetIdAtFrame(cur)==null;
   tlMenu.style.display='block';
   const r=tlMenu.getBoundingClientRect();
   tlMenu.style.left=clamp(x,4,window.innerWidth-r.width-4)+'px';
@@ -1821,7 +2440,7 @@ function eventInsideTimeline(e){
   return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
 }
 function isRightSelectGesture(e){
-  return e.button===2 || (e.button===0&&e.ctrlKey) || ((e.buttons||0)&2);
+  return e.button===2 || (e.button===0&&(e.ctrlKey||e.metaKey)) || ((e.buttons||0)&2);
 }
 function beginTimelineGroupSelect(e,mode='context'){
   if(!meta)return false;
@@ -1878,7 +2497,7 @@ tl.addEventListener('mousedown',e=>{
   if(!meta)return; hideTimelineMenu(); e.preventDefault(); const p=timelinePoint(e), ln=laneAt(p.y), f=xToFrame(p.x);
   const edgeHit=hitTimelineEdge(p.x,p.y);
   const nearPlayhead=Math.abs(p.x-frameToX(cur))<=14 || p.y<HEAD;
-  if(e.button===2||(e.button===0&&e.ctrlKey)){ beginTimelineGroupSelect(e,'context'); return; }
+  if(e.button===2||(e.button===0&&(e.ctrlKey||e.metaKey))){ beginTimelineGroupSelect(e,'context'); return; }
   if(e.button!==0)return;
   if(edgeHit){
     pauseForEdit(); tlDrag={mode:'extend',id:edgeHit.id,edge:edgeHit.edge,start:edgeHit.start,end:edgeHit.end,fNow:f,x0:p.x,y0:p.y,xNow:p.x,yNow:p.y};
@@ -1886,9 +2505,12 @@ tl.addEventListener('mousedown',e=>{
   }
   seekFrame(f);
   const block=spanAtPoint(p.x,p.y);
-  if(nearPlayhead||!block||!ln||ln.kind!=='id'){ startTimelineScrub(p); return; }
-  pauseForEdit(); addTimelineBlockSelection(block,e.shiftKey);
-  tlDrag={mode:'pending',srcId:block.id,f0:f,fNow:f,x0:p.x,y0:p.y,xNow:p.x,yNow:p.y,blockStart:block.start,blockEnd:block.end};
+  const exact=block?selectedItemAt(block.id,f):null;
+  if((nearPlayhead&&!exact)||!block||!ln||ln.kind!=='id'){ startTimelineScrub(p); return; }
+  pauseForEdit();
+  const dragItem=exact||block;
+  if(!exact)addTimelineBlockSelection(block,e.shiftKey);
+  tlDrag={mode:'pending',srcId:block.id,f0:f,fNow:f,x0:p.x,y0:p.y,xNow:p.x,yNow:p.y,blockStart:dragItem.start,blockEnd:dragItem.end};
   drawAll();
 });
 tl.addEventListener('mousemove',e=>{
@@ -1978,6 +2600,7 @@ function mergeTimelineSelection(){
   const target=items[0].id;
   pushUndo(); markStructuralChange();
   for(const it of items)if(it.id!==target)mergeIdsInRange(it.id,target,it.start,it.end);
+  rebaseIdsToCurrentBoxes([target]);
   setTimelineSelectionItems(items.map(it=>({id:target,start:it.start,end:it.end})));
   saveWork(); drawAll(); renderList();
 }
@@ -1985,14 +2608,42 @@ function swapIdsInRange(src,dst,f0,f1){
   for(let f=f0;f<=f1;f++)for(const o of frames[f]||[]){ if(o.id===src)o.id=dst; else if(o.id===dst)o.id=src; }
   swapKeysInRange(src,dst,f0,f1);
 }
-function applyTimelineDrop(src,tgt,f0,f1,swapMode){
-  if(!tgt){ setTimelineSelection([src],f0,f1); return; }
-  if(tgt.kind==='id'&&tgt.id===src){ setTimelineSelection([src],f0,f1); return; }
+function rebaseIdsToCurrentBoxes(ids){
+  // After identity edits, bake the current (already corrected) boxes in as the new
+  // baseline and pin every keyframe exactly. Rows stay identical, and nothing is
+  // locked — future edits interpolate smoothly right through this region.
+  const idSet=new Set(ids);
+  for(const row of frames)for(const o of row||[]){
+    if(!idSet.has(o.id))continue;
+    if(validBoxArray(o.structuralBox)){ o.box=clampBox(o.structuralBox); delete o.structuralBox; }
+    o.baseBox=[...o.box]; o.baseAngle=boxAngleOf(o); delete o.correctionLocked;
+  }
+  for(const id of idSet){
+    const store=boxKeys[id]; if(!store)continue;
+    for(const f of Object.keys(store)){
+      const key=store[f], box=rawKeyBox(key); if(!box)continue;
+      const mode=resolvedPropagationMode(key), pinAngle=boxAngleOf(objectForId(Number(f),id))||normalizeAngle(key.angle||0);
+      store[f]={box:[...box],base:[...box],angle:pinAngle,angle_base:pinAngle,kind:'manual',hard:true,mode,propagate:mode!=='isolated'};
+    }
+  }
+}
+function applyTimelineDrop(src,tgt,f0,f1,_swapMode=false){
+  if(!tgt){ setTimelineSelection([src],f0,f1); return false; }
+  if(tgt.kind==='id'&&tgt.id===src){ setTimelineSelection([src],f0,f1); return false; }
   pushUndo(); markStructuralChange();
   if(tgt.kind==='trash'){ deleteIdsInRange([src],f0,f1); clearSelection(); }
-  else if(tgt.kind==='+new'){ const nid=nextTrackId(); for(let f=f0;f<=f1;f++)for(const o of frames[f]||[])if(o.id===src)o.id=nid; moveKeysInRange(src,nid,f0,f1); setTimelineSelection([nid],f0,f1); }
-  else { if(swapMode)swapIdsInRange(src,tgt.id,f0,f1); else mergeIdsInRange(src,tgt.id,f0,f1); setTimelineSelection([tgt.id],f0,f1); }
+  else if(tgt.kind==='+new'){
+    const nid=nextTrackId();
+    for(let f=f0;f<=f1;f++)for(const o of frames[f]||[])if(o.id===src)o.id=nid;
+    moveKeysInRange(src,nid,f0,f1); hiddenIds.delete(nid); rebaseIdsToCurrentBoxes([src,nid]);
+    if(animalTags[src]&&!animalTags[nid])animalTags[nid]={...animalTags[src]};   // same animal, keep its research tag
+    setTimelineSelection([nid],f0,f1);
+  }
+  else {
+    swapIdsInRange(src,tgt.id,f0,f1); rebaseIdsToCurrentBoxes([src,tgt.id]); setTimelineSelection([tgt.id],f0,f1);
+  }
   saveWork();
+  return true;
 }
 function deleteTimelineSelection(){
   if(!timelineSel)return; pushUndo(); markStructuralChange(); for(const it of selectionItems())deleteIdsInRange([it.id],it.start,it.end);
@@ -2000,6 +2651,7 @@ function deleteTimelineSelection(){
 }
 delSel.onclick=deleteTimelineSelection;
 mergeSel.onclick=()=>{ mergeTimelineSelection(); hideTimelineMenu(); };
+splitSel.onclick=()=>{ splitAtPlayhead(); hideTimelineMenu(); };
 document.addEventListener('mousedown',e=>{ if(!tlMenu.contains(e.target))hideTimelineMenu(); });
 tlwrap.addEventListener('scroll',hideTimelineMenu);
 
@@ -2029,8 +2681,9 @@ function serializableBoxKeys(){
     for(const f of sortedKeyFrames(id)){
       const key=boxKeys[id][f], box=keyBox(id,f), o=objectForId(f,id); if(!box||!o)continue;
       const base=validBoxArray(key?.base)?key.base:baseBoxFor(o), kind=validBoxArray(key)?'manual':key.kind==='structural'?'structural':'manual';
-      const mode=kind==='manual'?resolvedPropagationMode(key,base,box):'isolated', pivot=mode==='oversize-run'?resolvedResizePivot(key,base,box):null;
-      (out[id]||(out[id]={}))[f]={box:roundBox(box),base:base.map(Number),kind,hard:kind==='manual',mode,propagate:kind==='manual'&&mode==='local',...(pivot?{pivot}:{})};
+      const mode=kind==='manual'?resolvedPropagationMode(key):'isolated';
+      const angle=Math.round(normalizeAngle(key?.angle||0)*10)/10, angleBase=Math.round(normalizeAngle(key?.angle_base||0)*10)/10;
+      (out[id]||(out[id]={}))[f]={box:roundBox(box),base:base.map(Number),kind,hard:kind==='manual',mode,propagate:kind==='manual'&&mode!=='isolated',...(angle||angleBase?{angle,angle_base:angleBase}:{})};
     }
   }
   return out;
@@ -2044,25 +2697,30 @@ function serializableManualBoxKeys(){
   return out;
 }
 function serializableCorrectionBases(frameRows){
-  const out={}, regions={};
+  const out={}, baseAngles={}, regions={};
+  const rotatingIds=new Set();
+  for(const rawId of Object.keys(boxKeys)){
+    const id=Number(rawId);
+    for(const f of sortedKeyFrames(id)){ const k=boxKeys[id][f]; if(normalizeAngle(k?.angle||0)||normalizeAngle(k?.angle_base||0)){ rotatingIds.add(id); break; } }
+  }
+  frameRows.forEach(row=>{ for(const o of row||[])if(baseAngleOf(o)||boxAngleOf(o))rotatingIds.add(o.id); });
   for(const rawId of Object.keys(boxKeys)){
     const id=Number(rawId), anchors=sortedManualAnchorFrames(id); if(!anchors.length)continue;
     for(const span of spansForId(id)){
       const within=anchors.filter(f=>f>=span.start&&f<=span.end); if(!within.length)continue;
-      const idRegions=regions[id]||(regions[id]=[]);
-      for(const anchor of within){
-        const radius=anchorCanPropagate(id,anchor)?correctionRadiusForAnchor(id,anchor):0, next={start:Math.max(span.start,anchor-radius),end:Math.min(span.end,anchor+radius)}, prev=idRegions[idRegions.length-1];
-        if(prev&&next.start<=prev.end+1)prev.end=Math.max(prev.end,next.end); else idRegions.push(next);
-      }
+      const idRegions=regions[id]||(regions[id]=[]), reach=interpReachFrames(), propagating=within.filter(f=>anchorCanPropagate(id,f));
+      if(propagating.length)idRegions.push({start:Math.max(span.start,propagating[0]-reach),end:Math.min(span.end,propagating[propagating.length-1]+reach)});
+      for(const anchor of within)if(!propagating.includes(anchor))idRegions.push({start:anchor,end:anchor});
     }
   }
   frameRows.forEach((row,f)=>{
     for(const o of row||[]){
       if(!validBoxArray(o.baseBox)||!(regions[o.id]||[]).some(r=>f>=r.start&&f<=r.end))continue;
       ((out[o.id]||(out[o.id]={})))[f]=o.baseBox.map(Number);
+      if(rotatingIds.has(o.id))((baseAngles[o.id]||(baseAngles[o.id]={})))[f]=Math.round(baseAngleOf(o)*10)/10;
     }
   });
-  return out;
+  return {bases:out,base_angles:baseAngles};
 }
 function serializableStructuralLocks(frameRows){
   const out={};
@@ -2076,10 +2734,23 @@ function serializeClipJson(data,metaObj,frameRows){
   const roi=serialArenaRect();
   if(roi)out.plot_roi=roi;
   else delete out.plot_roi;
+  const tags=serializableAnimalTags();
+  if(Object.keys(tags).length)out._mmt_animal_tags=tags;
+  else delete out._mmt_animal_tags;
   out.frames=frameRows.map(fr=>(fr||[]).map(o=>[Number(o.id),...o.box.map(v=>Math.round(v)),...(Array.isArray(o.extra)?o.extra:[])]));
+  const rotations={};
+  frameRows.forEach((row,f)=>{
+    for(const o of row||[]){
+      const a=normalizeAngle(o.angle||0);
+      if(Math.abs(a)>=.05)((rotations[o.id]||(rotations[o.id]={})))[f]=Math.round(a*10)/10;
+    }
+  });
+  if(Object.keys(rotations).length)out._mmt_box_rotations=rotations;
+  else delete out._mmt_box_rotations;
   const anchors=serializableBoxKeys(), structuralLocks=serializableStructuralLocks(frameRows);
   if(Object.keys(anchors).length||Object.keys(structuralLocks).length){
-    out._mmt_bbox_editor={version:5,method:'selective-oversize-runs-v7',revision:boxKeyRevision,anchors,bases:serializableCorrectionBases(frameRows),structural_locks:structuralLocks};
+    const correctionState=serializableCorrectionBases(frameRows);
+    out._mmt_bbox_editor={version:7,method:'keyframe-interp-mouse-boxes-v9',revision:boxKeyRevision,anchors,bases:correctionState.bases,structural_locks:structuralLocks,...(Object.keys(correctionState.base_angles).length?{base_angles:correctionState.base_angles}:{})};
   } else delete out._mmt_bbox_editor;
   return JSON.stringify(out,null,2);
 }
@@ -2133,6 +2804,7 @@ function scheduleJsonSave(){
 }
 function saveWork(){
   if(!loadedClip||!meta)return;
+  if(!manualCacheDirty&&!structuralStateDirty)return;
   rebaseStructuralTargets();
   recomputeAllCorrections();
   let hasBBoxFallback=false;
@@ -2198,6 +2870,8 @@ window.addEventListener('keydown',e=>{ if(isTypingTarget(e.target))return;
   else if(e.key==='Escape'&&(boxDrag||addMode||tlMenu.style.display==='block')){e.preventDefault();hideTimelineMenu();if(boxDrag)cancelBoxDrag();else{setAddMode(false);drawAll();}}
   else if(e.key.toLowerCase()==='j'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();if(!e.repeat)activateTraceJumpInDirection(e.shiftKey?-1:1);}
   else if(e.key.toLowerCase()==='a'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();setAddMode(!addMode);}
+  else if(e.key.toLowerCase()==='s'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();if(!e.repeat)splitAtPlayhead();}
+  else if(e.key.toLowerCase()==='i'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){e.preventDefault();if(!e.repeat)toggleInspected(clip);}
   else if(e.key.toLowerCase()==='t'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();tTrace.click();}
   else if(e.key==='z'&&(e.ctrlKey||e.metaKey))undo.click(); });
 window.addEventListener('keyup',e=>{
