@@ -361,16 +361,19 @@
     .summary-support {
       display: inline-flex;
       align-items: center;
-      gap: 0.4rem;
-      font-size: 0.72rem;
+      gap: 0.25rem;
+      font-size: 0.6rem;
       font-weight: 600;
-      color: var(--accent);
-      background: rgba(201, 162, 39, 0.1);
-      border: 1px solid rgba(201, 162, 39, 0.25);
-      border-radius: 999px;
-      padding: 0.3rem 0.7rem;
-      margin-bottom: 1rem;
+      letter-spacing: 0.02em;
+      color: #9a7d1e;
+      background: rgba(201, 162, 39, 0.08);
+      border-radius: 4px;
+      padding: 0.12rem 0.4rem;
+      margin-bottom: 0.7rem;
+      align-self: flex-start;
     }
+
+    .summary-support i { font-size: 0.55rem; }
 
     .summary-soon {
       display: inline-flex;
@@ -525,7 +528,7 @@
         </div>
         <div class="summary-body">
           <p class="summary-desc">
-            A browser-based pipeline for mapping labeled cells in brain sections onto the Allen atlas — from raw images to region-by-region cell counts.
+            Map labeled cells in brain sections onto the Allen atlas — from raw images to region-by-region counts.
           </p>
           <div class="summary-author">
             <img src="images/Aarushi Rao.jpg" alt="Aarushi Rao">
@@ -547,7 +550,7 @@
         </div>
         <div class="summary-body">
           <p class="summary-desc">
-            An interactive 3D planner for Neuropixels probe trajectories on the Allen atlas — get bregma-relative coordinates, arm angles, and the regions the track crosses.
+            Plan Neuropixels probe trajectories in 3D on the Allen atlas — coordinates, arm angles, and the regions crossed.
           </p>
           <div class="summary-author">
             <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
@@ -569,9 +572,9 @@
         </div>
         <div class="summary-body">
           <p class="summary-desc">
-            A machine-learning system for tracking multiple mice at once, built on a foundational vision model. The front-end tool visualizes and corrects tracking results — now with rotatable bounding boxes and per-animal ID tags.
+            Visualize and correct multi-mouse tracking results — now with rotatable boxes and per-animal ID tags.
           </p>
-          <span class="summary-support"><i class="fas fa-flask-vial"></i> Supported by the Claude Science Hackathon Competition</span>
+          <span class="summary-support"><i class="fas fa-flask-vial"></i> Claude Science Hackathon</span>
           <div class="summary-author">
             <div class="summary-avatars">
               <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
