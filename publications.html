@@ -426,6 +426,23 @@
       <div class="year-label">2026</div>
       <div class="pub-item">
         <div class="pub-thumbnail">
+          <a href="publications/Rao et al NeuroFlow_biorxiv 2026.pdf" target="_blank"><img src="publications/thumbnails/rao-neuroflow-2026.jpg" alt="Rao et al 2026 NeuroFlow bioRxiv"></a>
+        </div>
+        <div class="pub-content">
+          <div class="pub-top">
+            <span class="pub-keyword">Methods & Software</span>
+            <span class="pub-title">NeuroFlow: An Integrated, Cross-Platform Workflow for Mouse Brain Atlas Registration and Quantification</span>
+          </div>
+          <p class="pub-authors"><strong>Rao A</strong>, <strong>Oo H</strong>, <strong>Tao C</strong>, <strong>Zhang GW</strong>*</p>
+          <p class="pub-journal"><strong>bioRxiv</strong>, 2026</p>
+          <div class="pub-links">
+            <a href="publications/Rao et al NeuroFlow_biorxiv 2026.pdf" target="_blank" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+            <a href="tool-neuroflow.html" class="pub-link"><i class="fas fa-toolbox"></i> Try the tool</a>
+          </div>
+        </div>
+      </div>
+      <div class="pub-item">
+        <div class="pub-thumbnail">
           <a href="publications/Shi Zhang 2026 Trace biorxiv.pdf" target="_blank"><img src="publications/thumbnails/shi zhang 2026.png" alt="Shi Zhang 2026 TRACE bioRxiv"></a>
         </div>
         <div class="pub-content">
@@ -886,6 +903,21 @@ window.addEventListener('scroll', () => {
 backToTop.addEventListener('click', (e) => {
   e.preventDefault();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// Make each publication card clickable: open its PDF if available, else the web link.
+document.querySelectorAll('.pub-item').forEach(item => {
+  const links = [...item.querySelectorAll('.pub-link')];
+  const pdf = links.find(a => a.getAttribute('href').toLowerCase().endsWith('.pdf'));
+  const web = links.find(a => /^https?:/i.test(a.getAttribute('href')));
+  const target = pdf || web || links[0];
+  if (!target) return;
+  item.style.cursor = 'pointer';
+  item.addEventListener('click', e => {
+    if (e.target.closest('a')) return;          // let the real links work
+    if (window.getSelection().toString()) return; // don't hijack text selection
+    window.open(target.href, '_blank');
+  });
 });
 </script>
 
