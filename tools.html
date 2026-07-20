@@ -400,6 +400,20 @@
 
     .summary-support i { font-size: 0.55rem; }
 
+    .summary-paper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--primary-light);
+      text-decoration: none;
+      margin-bottom: 0.75rem;
+    }
+
+    .summary-paper:hover { color: var(--primary-dark); text-decoration: underline; }
+    .summary-paper i { font-size: 0.68rem; }
+
     .summary-soon {
       display: inline-flex;
       align-items: center;
@@ -557,6 +571,7 @@
             <img src="images/Aarushi Rao.jpg" alt="Aarushi Rao">
             <span>By <strong>Aarushi Rao</strong></span>
           </div>
+          <a href="https://www.biorxiv.org/content/10.64898/2026.07.15.737186v1" target="_blank" class="summary-paper"><i class="fas fa-file-lines"></i> Read the paper (bioRxiv, 2026)</a>
           <div class="summary-actions">
             <a href="tool-neuroflow.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
             <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
