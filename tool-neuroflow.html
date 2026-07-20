@@ -53,6 +53,8 @@
     .btn-launch { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.6rem; background: var(--accent); color: #3a2e0a; text-decoration: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; transition: var(--transition); }
     .btn-launch:hover { background: #e0b736; transform: translateY(-2px); }
     .tool-badge-note { font-size: 0.8rem; color: rgba(255,255,255,0.7); display: inline-flex; align-items: center; gap: 0.4rem; }
+    .btn-paper { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.5rem; background: rgba(255,255,255,0.1); color: var(--white); text-decoration: none; border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; font-size: 0.95rem; font-weight: 600; transition: var(--transition); }
+    .btn-paper:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.6); }
     .tool-author { display: flex; align-items: center; gap: 0.9rem; padding: 1.25rem 2.5rem; background: var(--bg-light); border-bottom: 1px solid var(--border-light); }
     .tool-author img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: center 30%; border: 2px solid var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
     .tool-author-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; }
@@ -142,6 +144,7 @@
         </p>
         <div class="tool-actions">
           <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch NeuroFlow</a>
+          <a href="https://www.biorxiv.org/content/10.64898/2026.07.15.737186v1" target="_blank" class="btn-paper"><i class="fas fa-file-lines"></i> Read the paper</a>
           <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally — no upload, no server</span>
         </div>
       </div>
