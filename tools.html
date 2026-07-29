@@ -377,6 +377,27 @@
       transition: var(--transition);
     }
 
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.95rem;
+      background: var(--white);
+      color: var(--primary);
+      text-decoration: none;
+      border: 1px solid var(--border-medium);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-download:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
+    }
+
     .btn-details:hover {
       background: var(--primary);
       border-color: var(--primary);
@@ -575,6 +596,7 @@
           <div class="summary-actions">
             <a href="tool-neuroflow.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
             <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+            <a href="Tools/neuroflow/index.html" class="btn-download" download="neuroflow.html" title="Download NeuroFlow to run offline (saves as neuroflow.html)"><i class="fas fa-download"></i> Download</a>
           </div>
         </div>
       </div>
