@@ -244,6 +244,30 @@
       flex-shrink: 0;
     }
 
+    .pub-featured {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #7a5e18;
+      background: rgba(201, 162, 39, 0.18);
+      border: 1px solid rgba(201, 162, 39, 0.4);
+      padding: 1px 7px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .pub-featured i { font-size: 0.6rem; }
+
+    .pub-item.is-featured {
+      border-color: rgba(201, 162, 39, 0.45);
+      background: linear-gradient(180deg, #fffdf6 0%, var(--white) 60%);
+    }
+
     .pub-title {
       font-size: 0.95rem;
       font-weight: 600;
@@ -464,12 +488,13 @@
     <!-- 2025 -->
     <div class="year-group">
       <div class="year-label">2025</div>
-      <div class="pub-item">
+      <div class="pub-item is-featured">
         <div class="pub-thumbnail">
           <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank"><img src="publications/thumbnails/Sun zhang 2025 Science .webp" alt="Sun Zhang 2025 Science"></a>
         </div>
         <div class="pub-content">
           <div class="pub-top">
+            <span class="pub-featured"><i class="fas fa-star"></i> Featured</span>
             <span class="pub-keyword">Natural Social Behaviors</span>
             <span class="pub-title">Reviving-like Prosocial Behavior in Response to Unconscious or Dead Conspecifics in Rodents</span>
           </div>
@@ -657,10 +682,11 @@
     <!-- 2021 -->
     <div class="year-group">
       <div class="year-label">2021</div>
-      <div class="pub-item">
+      <div class="pub-item is-featured">
         
         <div class="pub-content">
           <div class="pub-top">
+            <span class="pub-featured"><i class="fas fa-star"></i> Featured</span>
             <span class="pub-keyword">Social Behavior & Stress</span>
             <span class="pub-title">Medial Preoptic Area Antagonistically Mediates Stress-Induced Anxiety and Parental Behavior</span>
           </div>

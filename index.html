@@ -210,15 +210,34 @@
       flex: 1;
     }
 
-    .hero-video-container {
+    .hero-video-wrap {
       flex: 0 0 45%;
       max-width: 500px;
-      position: relative;
       z-index: 1;
+    }
+
+    .hero-video-container {
+      position: relative;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 25px 60px rgba(26, 54, 93, 0.15);
     }
+
+    .hero-video-caption {
+      margin-top: 0.75rem;
+      font-size: 0.78rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+      text-align: left;
+    }
+
+    .hero-video-caption a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .hero-video-caption a:hover { text-decoration: underline; }
 
     .hero-video {
       width: 100%;
@@ -245,12 +264,14 @@
         max-width: 100%;
       }
 
-      .hero-video-container {
+      .hero-video-wrap {
         flex: none;
         max-width: 100%;
         width: 100%;
         margin-top: 2rem;
       }
+
+      .hero-video-caption { text-align: center; }
 
       .hero-eyebrow::before {
         display: none;
@@ -1422,11 +1443,16 @@
       </div>
     </div>
     <!-- Video Demo -->
-    <div class="hero-video-container">
-      <video class="hero-video" autoplay muted loop playsinline>
-        <source src="videos/demo science - Trim.mp4" type="video/mp4">
-      </video>
-      <div class="hero-video-overlay"></div>
+    <div class="hero-video-wrap">
+      <div class="hero-video-container">
+        <video class="hero-video" autoplay muted loop playsinline>
+          <source src="videos/demo science - Trim.mp4" type="video/mp4">
+        </video>
+        <div class="hero-video-overlay"></div>
+      </div>
+      <p class="hero-video-caption">
+        One animal displays intensive oral-facial grooming and tongue-pulling behaviors toward its familiar peer while the peer is unresponsive. For details, see our recent <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank">Science paper</a>.
+      </p>
     </div>
   </div>
 </header>
