@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resources | Zhang Lab</title>
+  <meta name="description" content="Curated research resource directories compiled by the Zhang Laboratory at Virginia Commonwealth University">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2c5282;
+      --primary-dark: #0f2744;
+      --accent: #c9a227;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --bg-light: #f7fafc;
+      --bg-warm: #fffbf5;
+      --white: #ffffff;
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e0;
+      --font-serif: 'Crimson Text', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: all 0.3s ease;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .navbar .container {
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 24px;
+    }
+
+    .nav-brand a {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-medium);
+    }
+
+    .nav-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      gap: 1.75rem;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .nav-menu a:hover { color: var(--primary); }
+    .nav-menu a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      cursor: pointer;
+      gap: 5px;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    /* Intro line */
+    .resources-intro {
+      margin-top: 70px;
+      padding: 1.1rem 0 0;
+    }
+
+    .resources-intro .container {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* Section */
+    .resources-section {
+      padding: 24px 0 70px;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .group-head {
+      margin: 2.75rem 0 1.5rem;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .group-head h2 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.2rem;
+    }
+
+    .group-head p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* Category card */
+    .res-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border-light);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 8px 30px rgba(26, 54, 93, 0.05);
+      transition: var(--transition);
+    }
+
+    .res-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(26, 54, 93, 0.12);
+      border-color: var(--primary-light);
+    }
+
+    .res-media {
+      height: 118px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0f2744 0%, #1a365d 60%, #2c5282 100%);
+    }
+
+    .res-media i {
+      font-size: 2.1rem;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    .res-body {
+      padding: 1rem 1.2rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .res-eyebrow {
+      font-size: 0.63rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .res-name {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .res-desc {
+      font-size: 0.83rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      flex-grow: 1;
+      margin-bottom: 0.8rem;
+    }
+
+    .res-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .res-topic {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      background: var(--bg-light);
+      border: 1px solid var(--border-light);
+      border-radius: 4px;
+      padding: 0.15rem 0.45rem;
+    }
+
+    .res-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+    .btn-browse {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 0.95rem;
+      background: var(--accent);
+      color: #3a2e0a;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .btn-browse:hover { background: #e0b736; }
+
+    /* Placeholder */
+    .res-placeholder {
+      border: 2px dashed var(--border-medium);
+      border-radius: 16px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      color: var(--text-muted);
+      background: var(--bg-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .res-placeholder i {
+      font-size: 2rem;
+      color: var(--border-medium);
+      margin-bottom: 0.75rem;
+    }
+
+    .res-placeholder h3 {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+
+    .res-placeholder p {
+      font-size: 0.85rem;
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    .res-placeholder a { color: var(--primary); font-weight: 500; text-decoration: none; }
+    .res-placeholder a:hover { text-decoration: underline; }
+
+    /* Footer */
+    .footer {
+      background: var(--primary-dark);
+      color: rgba(255, 255, 255, 0.8);
+      padding: 3rem 0;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-brand {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .footer-text { font-size: 0.875rem; }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    @media (max-width: 768px) {
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: var(--white);
+        width: 100%;
+        text-align: center;
+        padding: 2rem 0;
+        gap: 1.5rem;
+        transition: var(--transition);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      }
+      .nav-menu.active { left: 0; }
+      .nav-toggle { display: flex; }
+      .nav-subtitle, .nav-divider { display: none; }
+      .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <a href="index.html">
+        <span class="nav-logo">Zhang Lab</span>
+        <span class="nav-divider"></span>
+        <span class="nav-subtitle">Neuroscience at VCU</span>
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="teaching.html">Teaching</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="contact.html">Join Us</a></li>
+    </ul>
+    <div class="nav-toggle">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<div class="resources-intro">
+  <div class="container">Curated research resource directories compiled by the Zhang Lab.</div>
+</div>
+
+<section class="resources-section">
+  <div class="container">
+    <div class="resource-grid">
+
+      <!-- AD & Aging Research -->
+      <div class="res-card">
+        <div class="res-media"><i class="fas fa-book-medical"></i></div>
+        <div class="res-body">
+          <div class="res-eyebrow">NIA &amp; NIH · 40 Resources</div>
+          <div class="res-name">Aging &amp; Alzheimer's Research</div>
+          <p class="res-desc">
+            A searchable directory of NIA and NIH datasets, cohort studies, animal models, biospecimen banks, shared facilities, and investigator-support programs for aging and AD/ADRD research.
+          </p>
+          <div class="res-topics">
+            <span class="res-topic">Human cohorts</span>
+            <span class="res-topic">AD &amp; brain aging</span>
+            <span class="res-topic">Animal models</span>
+            <span class="res-topic">Core facilities</span>
+            <span class="res-topic">Grants &amp; career</span>
+          </div>
+          <div class="res-actions">
+            <a href="Resources/ad-aging-research/" class="btn-browse" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Browse directory</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Placeholder for future categories -->
+      <div class="res-placeholder">
+        <i class="fas fa-folder-plus"></i>
+        <h3>More categories coming soon</h3>
+        <p>Additional resource collections, including student training and grant opportunities. <a href="contact.html">Get in touch</a>.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container" style="max-width: 1200px;">
+    <div class="footer-content">
+      <div class="footer-brand">Zhang Lab</div>
+      <p class="footer-text">&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
+      <div class="footer-links">
+        <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
+        <a href="https://www.vcu.edu/" target="_blank">VCU</a>
+        <a href="contact.html">Join Us</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+navToggle.addEventListener('click', () => {
+  navMenu.classList.toggle('active');
+});
+</script>
+
+</body>
+</html>

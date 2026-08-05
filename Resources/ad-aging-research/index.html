@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A curated directory of NIA and NIH datasets, animal models, biospecimens, shared research infrastructure, and investigator support resources.">
+  <title>NIA &amp; NIH Aging Research Resources</title>
+  <style>
+    :root {
+      --navy: #17365d;
+      --blue: #245a92;
+      --sky: #eaf3fb;
+      --ink: #18212b;
+      --muted: #5d6976;
+      --line: #d7e0e8;
+      --paper: #ffffff;
+      --wash: #f5f8fb;
+      --green: #176b4d;
+      --green-bg: #e8f6ef;
+      --amber: #8a5700;
+      --amber-bg: #fff3d7;
+      --purple: #68458a;
+      --purple-bg: #f1eafb;
+      --red: #9b3c32;
+      --red-bg: #fbecea;
+      --radius: 16px;
+      --shadow: 0 12px 34px rgba(23, 54, 93, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: var(--blue); }
+    a:hover { color: var(--navy); }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 3px solid #70b7ef;
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 1rem;
+      top: -5rem;
+      z-index: 100;
+      padding: .75rem 1rem;
+      color: white;
+      background: var(--navy);
+      border-radius: 8px;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(107, 185, 230, .28), transparent 26rem),
+        linear-gradient(135deg, #102a49, #1b4c7e 70%, #1e6686);
+      padding: 4.8rem 1.25rem 4rem;
+    }
+
+    .hero-inner, main, .footer-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 .7rem;
+      color: #b9def7;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6vw, 4.7rem);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+    }
+
+    .hero-copy {
+      max-width: 790px;
+      margin: 1.35rem 0 0;
+      color: #e2edf6;
+      font-size: clamp(1rem, 2vw, 1.22rem);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem 1.5rem;
+      margin-top: 1.7rem;
+      color: #c9dceb;
+      font-size: .9rem;
+    }
+
+    main { padding: 0 1.25rem 4rem; }
+
+    .toolbar {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+      margin-top: -1.75rem;
+      padding: 1rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap { position: relative; }
+    .search-wrap span {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+    #resource-search {
+      width: 100%;
+      min-height: 48px;
+      padding: .7rem 1rem .7rem 2.75rem;
+      color: var(--ink);
+      background: var(--wash);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      font: inherit;
+    }
+
+    .result-count {
+      margin: 0;
+      padding: 0 .4rem;
+      color: var(--muted);
+      font-size: .9rem;
+      white-space: nowrap;
+    }
+
+    .category-nav {
+      display: flex;
+      gap: .65rem;
+      overflow-x: auto;
+      margin: 1.1rem 0 0;
+      padding: .2rem 0 .5rem;
+      scrollbar-width: thin;
+    }
+    .category-nav a {
+      flex: 0 0 auto;
+      padding: .55rem .8rem;
+      color: var(--navy);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: .86rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .category-nav a:hover { background: var(--sky); }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin: 1.25rem 0 2.8rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: .24rem .55rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .015em;
+      white-space: nowrap;
+    }
+    .open { color: var(--green); background: var(--green-bg); }
+    .registration { color: var(--purple); background: var(--purple-bg); }
+    .controlled { color: var(--amber); background: var(--amber-bg); }
+    .request { color: var(--red); background: var(--red-bg); }
+    .mixed { color: var(--blue); background: var(--sky); }
+
+    .resource-section {
+      scroll-margin-top: 1rem;
+      margin: 0 0 3.4rem;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .9rem;
+      align-items: start;
+      margin-bottom: 1.25rem;
+    }
+    .section-number {
+      display: grid;
+      place-items: center;
+      width: 2.4rem;
+      height: 2.4rem;
+      color: white;
+      background: var(--navy);
+      border-radius: 50%;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.65rem, 3vw, 2.25rem);
+      line-height: 1.15;
+    }
+    .section-intro {
+      max-width: 780px;
+      margin: .35rem 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .resource-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 225px;
+      padding: 1.2rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(23, 54, 93, .045);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .resource-card:hover {
+      transform: translateY(-2px);
+      border-color: #b7c9d9;
+      box-shadow: var(--shadow);
+    }
+    .resource-card[hidden] { display: none; }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+    .resource-card p {
+      margin: .75rem 0 1.1rem;
+      color: #44515d;
+      font-size: .91rem;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: auto;
+    }
+    .tag {
+      padding: .2rem .45rem;
+      color: var(--muted);
+      background: var(--wash);
+      border: 1px solid #e4eaf0;
+      border-radius: 6px;
+      font-size: .7rem;
+    }
+    .visit-link {
+      display: inline-flex;
+      gap: .35rem;
+      align-items: center;
+      margin-top: 1rem;
+      font-size: .86rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .visit-link::after { content: "↗"; }
+
+    .no-results {
+      display: none;
+      margin: 1rem 0 3rem;
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      background: var(--paper);
+      border: 1px dashed #afbdc9;
+      border-radius: var(--radius);
+    }
+
+    .publishing-note {
+      margin-top: .5rem;
+      padding: 1.4rem;
+      color: #314352;
+      background: #edf5fa;
+      border-left: 5px solid var(--blue);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .publishing-note strong { color: var(--navy); }
+
+    footer {
+      color: #dce8f1;
+      background: #102a49;
+      padding: 2.2rem 1.25rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    footer p { max-width: 760px; margin: 0; font-size: .84rem; }
+    .top-link { color: white; font-weight: 800; white-space: nowrap; }
+
+    @media (max-width: 760px) {
+      .hero { padding-top: 3.7rem; }
+      .toolbar { grid-template-columns: 1fr; }
+      .result-count { padding-left: .15rem; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .resource-card { min-height: 0; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media print {
+      body { background: white; }
+      .hero { padding: 1.5rem; color: black; background: white; border-bottom: 2px solid #333; }
+      .hero-copy, .hero-meta, .eyebrow { color: #333; }
+      .toolbar, .category-nav, .legend, .top-link { display: none; }
+      main { padding-top: 1.5rem; }
+      .resource-card { break-inside: avoid; box-shadow: none; }
+      .visit-link::after { content: ""; }
+    }
+  </style>
+</head>
+<body id="top">
+  <a class="skip-link" href="#resources">Skip to resources</a>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Research directory</p>
+      <h1>NIA &amp; NIH Aging Research Resources</h1>
+      <p class="hero-copy">A curated collection of datasets, longitudinal studies, animal models, biospecimens, shared facilities, and investigator-support programs for aging and Alzheimer’s disease research.</p>
+      <div class="hero-meta">
+        <span>Prepared from the 2026 Butler-Williams Scholars Program materials</span>
+        <span>Last reviewed: August 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="resources">
+    <div class="toolbar" role="search">
+      <label class="search-wrap">
+        <span aria-hidden="true">⌕</span>
+        <span class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Search resources</span>
+        <input id="resource-search" type="search" placeholder="Search datasets, animals, biomarkers, training…" autocomplete="off">
+      </label>
+      <p class="result-count" id="result-count" aria-live="polite">40 resources</p>
+    </div>
+
+    <nav class="category-nav" aria-label="Resource categories">
+      <a href="#human-data">Human data</a>
+      <a href="#alzheimers-data">AD &amp; brain aging</a>
+      <a href="#animal-resources">Animals &amp; biospecimens</a>
+      <a href="#infrastructure">Research infrastructure</a>
+      <a href="#investigator-support">Investigator support</a>
+    </nav>
+
+    <div class="legend" aria-label="Access status legend">
+      <span class="status open">Open access</span>
+      <span class="status registration">Registration required</span>
+      <span class="status controlled">Controlled access</span>
+      <span class="status request">Materials by request</span>
+      <span class="status mixed">Mixed access</span>
+    </div>
+
+    <section class="resource-section" id="human-data">
+      <div class="section-heading">
+        <span class="section-number">1</span>
+        <div><h2>Human datasets and cohort studies</h2><p class="section-intro">Longitudinal, population-representative, clinical, imaging, biomarker, and administrative-linkage resources.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>Health and Retirement Study (HRS)</h3><span class="status registration">Registration</span></div><p>Nationally representative longitudinal study of U.S. adults over age 50, covering health, cognition, employment, retirement, family, finances, biomarkers, and genetics.</p><div class="tags"><span class="tag">Longitudinal</span><span class="tag">Biomarkers</span><span class="tag">Genomics</span></div><a class="visit-link" href="https://hrs.isr.umich.edu/" target="_blank" rel="noopener">Visit HRS</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Gateway to Global Aging Data</h3><span class="status mixed">Mixed access</span></div><p>Research Planner, harmonized variables, cross-national HRS-family datasets, questionnaires, publications, and specialized HCAP, Exposome, and End-of-Life portals.</p><div class="tags"><span class="tag">International</span><span class="tag">Harmonized data</span></div><a class="visit-link" href="https://g2aging.org/home" target="_blank" rel="noopener">Visit Gateway</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Harmonized Cognitive Assessment Protocol</h3><span class="status mixed">Mixed access</span></div><p>Comparable cognitive and dementia assessment data linked to HRS-family studies across countries.</p><div class="tags"><span class="tag">Cognition</span><span class="tag">Dementia</span><span class="tag">Cross-national</span></div><a class="visit-link" href="https://hcap.g2aging.org/" target="_blank" rel="noopener">Visit HCAP</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIA LINKAGE Program</h3><span class="status controlled">Controlled access</span></div><p>Supports approved linkages between eligible NIA-funded research studies and Medicare or Medicaid claims for health-services and outcomes research.</p><div class="tags"><span class="tag">CMS claims</span><span class="tag">Administrative data</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dbsr/nia-linkage-program" target="_blank" rel="noopener">Program information</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Gateway Exposome</h3><span class="status mixed">Mixed access</span></div><p>Harmonized environmental-exposure measures and tools connected to population studies of aging.</p><div class="tags"><span class="tag">Exposome</span><span class="tag">Environment</span></div><a class="visit-link" href="https://gatewayexposome.org/" target="_blank" rel="noopener">Visit portal</a></article>
+        <article class="resource-card"><div class="card-top"><h3>AgingResearchBiobank</h3><span class="status request">By request</span></div><p>Controlled platform for datasets, biospecimens, MRI and X-ray images from NIA-supported studies such as CALERIE, SWAN, LIFE, SOF, MOST, ASPREE, and STARRRS.</p><div class="tags"><span class="tag">Clinical studies</span><span class="tag">Biospecimens</span><span class="tag">Imaging</span></div><a class="visit-link" href="https://agingresearchbiobank.nia.nih.gov/" target="_blank" rel="noopener">Search collections</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Baltimore Longitudinal Study of Aging</h3><span class="status controlled">Controlled access</span></div><p>Long-running NIA study with repeated physiological, functional, imaging, biomarker, and clinical measurements across adulthood.</p><div class="tags"><span class="tag">Longitudinal</span><span class="tag">Human aging</span></div><a class="visit-link" href="https://www.blsa.nih.gov/" target="_blank" rel="noopener">Visit BLSA</a></article>
+        <article class="resource-card"><div class="card-top"><h3>HANDLS</h3><span class="status controlled">Controlled access</span></div><p>Healthy Aging in Neighborhoods of Diversity across the Life Span: longitudinal data emphasizing health disparities, socioeconomic conditions, biology, and environment.</p><div class="tags"><span class="tag">Health disparities</span><span class="tag">Life course</span></div><a class="visit-link" href="https://handls.nih.gov/" target="_blank" rel="noopener">Visit HANDLS</a></article>
+      </div>
+    </section>
+
+    <section class="resource-section" id="alzheimers-data">
+      <div class="section-heading">
+        <span class="section-number">2</span>
+        <div><h2>Alzheimer’s disease and brain-aging data</h2><p class="section-intro">Genetics, multi-omics, imaging, neuropathology, model development, target validation, and reproducibility resources.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>AD Knowledge Portal</h3><span class="status mixed">Mixed access</span></div><p>Discovery and data-sharing environment for NIA-supported AD/ADRD consortia, including molecular, omics, imaging, model, and therapeutic-target resources.</p><div class="tags"><span class="tag">Multi-omics</span><span class="tag">Consortia</span></div><a class="visit-link" href="https://adknowledgeportal.synapse.org/" target="_blank" rel="noopener">Visit portal</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIAGADS</h3><span class="status mixed">Mixed access</span></div><p>NIA repository for Alzheimer’s disease and related dementias genetics, genomics, sequencing, and harmonized phenotype data, with open and qualified-access collections.</p><div class="tags"><span class="tag">Genetics</span><span class="tag">Genomics</span><span class="tag">ADSP</span></div><a class="visit-link" href="https://www.niagads.org/" target="_blank" rel="noopener">Visit NIAGADS</a></article>
+        <article class="resource-card"><div class="card-top"><h3>AlzPED</h3><span class="status open">Open access</span></div><p>Searchable summaries of AD preclinical efficacy studies, with information about models, interventions, outcomes, rigor, and reproducibility.</p><div class="tags"><span class="tag">Preclinical</span><span class="tag">Reproducibility</span></div><a class="visit-link" href="https://alzped.nia.nih.gov/" target="_blank" rel="noopener">Visit AlzPED</a></article>
+        <article class="resource-card"><div class="card-top"><h3>MODEL-AD</h3><span class="status mixed">Mixed access</span></div><p>Develops and characterizes next-generation animal models of late-onset Alzheimer’s disease and shares model information and associated data.</p><div class="tags"><span class="tag">Animal models</span><span class="tag">Late-onset AD</span></div><a class="visit-link" href="https://model-ad.org/" target="_blank" rel="noopener">Visit MODEL-AD</a></article>
+        <article class="resource-card"><div class="card-top"><h3>TREAT-AD</h3><span class="status open">Open access</span></div><p>Target-validation evidence, assays, reagents, structural biology, medicinal chemistry, and drug-discovery tools for Alzheimer’s disease.</p><div class="tags"><span class="tag">Therapeutic targets</span><span class="tag">Assays</span></div><a class="visit-link" href="https://treatad.org/" target="_blank" rel="noopener">Visit TREAT-AD</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Seattle Alzheimer’s Disease Brain Cell Atlas</h3><span class="status open">Open access</span></div><p>Single-cell and spatial resources describing cellular and molecular changes across Alzheimer’s disease progression.</p><div class="tags"><span class="tag">Single cell</span><span class="tag">Spatial omics</span><span class="tag">Brain atlas</span></div><a class="visit-link" href="https://brain-map.org/consortia/sea-ad" target="_blank" rel="noopener">Explore SEA-AD</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Human Connectome Project – Aging</h3><span class="status open">Open access</span></div><p>Neuroimaging, behavioral, and cognitive data designed to characterize structural and functional brain changes across healthy aging.</p><div class="tags"><span class="tag">Neuroimaging</span><span class="tag">Connectomics</span></div><a class="visit-link" href="https://www.humanconnectome.org/study/hcp-lifespan-aging/data-releases" target="_blank" rel="noopener">View data releases</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NACC and Alzheimer’s Disease Research Centers</h3><span class="status controlled">Controlled access</span></div><p>Standardized clinical, neuropathology, imaging, biomarker, and genetic data contributed by the national network of NIA Alzheimer’s Disease Research Centers.</p><div class="tags"><span class="tag">Clinical</span><span class="tag">Neuropathology</span><span class="tag">ADRC network</span></div><a class="visit-link" href="https://www.alz.washington.edu/" target="_blank" rel="noopener">Visit NACC</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Precision Aging Network</h3><span class="status mixed">Mixed access</span></div><p>Research and analytical resources for understanding individual differences in cognitive aging, reserve, resilience, and vulnerability.</p><div class="tags"><span class="tag">Cognitive aging</span><span class="tag">Precision health</span></div><a class="visit-link" href="https://precisionagingnetwork.org/about-us/" target="_blank" rel="noopener">Visit network</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Reserve and Resilience Collaboratory</h3><span class="status open">Open access</span></div><p>Collaborative network and measurement resources focused on cognitive reserve and resilience in aging and AD/ADRD.</p><div class="tags"><span class="tag">Reserve</span><span class="tag">Resilience</span></div><a class="visit-link" href="https://reserveandresilience.com/" target="_blank" rel="noopener">Visit collaboratory</a></article>
+      </div>
+    </section>
+
+    <section class="resource-section" id="animal-resources">
+      <div class="section-heading">
+        <span class="section-number">3</span>
+        <div><h2>Animals, tissues, cells, and comparative aging</h2><p class="section-intro">Model organisms, aged colonies, tissue and cell banks, intervention-testing programs, and comparative datasets.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>NIA Aged Rodent Colonies</h3><span class="status request">By request</span></div><p>Subsidized aged mice and rats for aging research, with multiple strains, age ranges, and sex options.</p><div class="tags"><span class="tag">Mice</span><span class="tag">Rats</span><span class="tag">Aging</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dab/aged-rodent-colonies-handbook" target="_blank" rel="noopener">View colony handbook</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Aged Rodent Tissue Bank</h3><span class="status request">By request</span></div><p>Archived tissues from aged rodents for approved aging-research projects.</p><div class="tags"><span class="tag">Tissue</span><span class="tag">Rodents</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dab/aged-rodent-tissue-bank" target="_blank" rel="noopener">View tissue bank</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIA Aging Cell Repository</h3><span class="status request">Order/request</span></div><p>Human and animal cell lines related to aging, longevity, progeroid syndromes, age-associated disease, and comparative biology, maintained by Coriell.</p><div class="tags"><span class="tag">Cell lines</span><span class="tag">Human</span><span class="tag">Animal</span></div><a class="visit-link" href="https://www.coriell.org/1/NIA" target="_blank" rel="noopener">Browse repository</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Primate Aging Database</h3><span class="status registration">Registration</span></div><p>Longitudinal information on nonhuman primate aging, including health, physiology, body composition, and survival.</p><div class="tags"><span class="tag">Nonhuman primates</span><span class="tag">Longitudinal</span></div><a class="visit-link" href="https://primatedatabase.org/" target="_blank" rel="noopener">Visit database</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Nonhuman Primate Tissue Bank</h3><span class="status request">By request</span></div><p>Tissues and related materials from aged nonhuman primates for approved comparative and translational studies.</p><div class="tags"><span class="tag">Tissue</span><span class="tag">Nonhuman primates</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dab/nonhuman-primate-tissue-bank" target="_blank" rel="noopener">View tissue bank</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Interventions Testing Program</h3><span class="status mixed">Data + nomination</span></div><p>Multi-site testing of compounds for effects on lifespan and healthspan in genetically heterogeneous mice. Investigators may nominate interventions.</p><div class="tags"><span class="tag">Mouse lifespan</span><span class="tag">Interventions</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dab/interventions-testing-program-itp" target="_blank" rel="noopener">Visit ITP</a></article>
+        <article class="resource-card"><div class="card-top"><h3>ITP Mouse Phenome Database</h3><span class="status open">Open access</span></div><p>Public survival, phenotype, intervention, and protocol data produced by the NIA Interventions Testing Program.</p><div class="tags"><span class="tag">Phenotypes</span><span class="tag">Survival</span><span class="tag">Protocols</span></div><a class="visit-link" href="https://phenome.jax.org/projects/ITP1" target="_blank" rel="noopener">Explore ITP data</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Intervention Biospecimen Repository</h3><span class="status request">By request</span></div><p>Tissues from selected ITP intervention studies for ancillary mechanistic analyses of lifespan and healthspan.</p><div class="tags"><span class="tag">ITP tissues</span><span class="tag">Mechanisms</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dab/intervention-biospecimen-repository" target="_blank" rel="noopener">View repository</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Caenorhabditis Intervention Testing Program</h3><span class="status mixed">Data + nomination</span></div><p>Multi-site intervention testing across genetically diverse <em>Caenorhabditis</em> species, with public data, methods, and opportunities to propose compounds.</p><div class="tags"><span class="tag">C. elegans</span><span class="tag">Comparative aging</span></div><a class="visit-link" href="https://citpaging.org/portal" target="_blank" rel="noopener">Visit CITP portal</a></article>
+        <article class="resource-card"><div class="card-top"><h3>STARRRS Rat Resource</h3><span class="status request">By request</span></div><p>Longitudinal phenotypes, neuroimaging, tissues, and biological samples from a Long Evans rat model of reserve, resilience, and neurocognitive aging.</p><div class="tags"><span class="tag">Rats</span><span class="tag">Neuroimaging</span><span class="tag">Biospecimens</span></div><a class="visit-link" href="https://agingresearchbiobank.nia.nih.gov/" target="_blank" rel="noopener">Find STARRRS collection</a></article>
+      </div>
+    </section>
+
+    <section class="resource-section" id="infrastructure">
+      <div class="section-heading">
+        <span class="section-number">4</span>
+        <div><h2>Shared research infrastructure</h2><p class="section-intro">Centers, consultation networks, pilot programs, specialized cores, and translational support.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>Nathan Shock Centers of Excellence</h3><span class="status mixed">Center-specific</span></div><p>Shared aging-biology cores, specialized technologies, consultation, training, pilot awards, and collaborative opportunities.</p><div class="tags"><span class="tag">Core facilities</span><span class="tag">Pilot funding</span></div><a class="visit-link" href="https://nathanshockcenters.org/" target="_blank" rel="noopener">Find a center</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Resource Centers for Minority Aging Research</h3><span class="status mixed">Center-specific</span></div><p>Mentoring, methods support, pilot funding, and professional development for investigators studying aging and health disparities.</p><div class="tags"><span class="tag">Mentoring</span><span class="tag">Health disparities</span></div><a class="visit-link" href="https://www.rcmar.org/" target="_blank" rel="noopener">Visit RCMAR</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Edward R. Roybal Centers</h3><span class="status mixed">Center-specific</span></div><p>Support for translating behavioral and social science discoveries into practical interventions that improve the lives of older adults.</p><div class="tags"><span class="tag">Behavioral interventions</span><span class="tag">Translation</span></div><a class="visit-link" href="https://www.roybalcenters.org/" target="_blank" rel="noopener">Visit Roybal Centers</a></article>
+        <article class="resource-card"><div class="card-top"><h3>AI and Technology Collaboratories</h3><span class="status mixed">Program-specific</span></div><p>Pilot funding, engineering and commercialization support, testbeds, datasets, and stakeholder engagement for aging-related technologies.</p><div class="tags"><span class="tag">AI</span><span class="tag">Technology</span><span class="tag">Pilot support</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dbsr/artificial-intelligence-and-technology-collaboratories-aging-research-program" target="_blank" rel="noopener">Explore AITC</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIH Center for Alzheimer’s and Related Dementias</h3><span class="status mixed">Collaborative hub</span></div><p>NIH intramural hub for AD/ADRD genetics, biomarkers, disease modeling, target validation, open science, and precision therapeutics.</p><div class="tags"><span class="tag">AD/ADRD</span><span class="tag">Open science</span></div><a class="visit-link" href="https://card.nih.gov/" target="_blank" rel="noopener">Visit CARD</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIH Stage Model</h3><span class="status open">Open access</span></div><p>Conceptual framework, guidance, examples, and training for developing, refining, and testing behavioral interventions.</p><div class="tags"><span class="tag">Intervention development</span><span class="tag">Training</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/dbsr/nih-stage-model-behavioral-intervention-development" target="_blank" rel="noopener">View Stage Model</a></article>
+      </div>
+    </section>
+
+    <section class="resource-section" id="investigator-support">
+      <div class="section-heading">
+        <span class="section-number">5</span>
+        <div><h2>Grant, career, and research-planning tools</h2><p class="section-intro">Tools for identifying collaborators and funders, preparing applications, building review experience, and developing a research career.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>NIH RePORTER</h3><span class="status open">Open access</span></div><p>Search funded NIH projects, investigators, institutions, abstracts, publications, patents, and award spending.</p><div class="tags"><span class="tag">Funded grants</span><span class="tag">Collaborators</span></div><a class="visit-link" href="https://reporter.nih.gov/" target="_blank" rel="noopener">Search RePORTER</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIH Matchmaker</h3><span class="status open">Open access</span></div><p>Paste a project abstract to find scientifically similar funded projects and potentially relevant NIH institutes and study sections.</p><div class="tags"><span class="tag">Funding fit</span><span class="tag">Study sections</span></div><a class="visit-link" href="https://reporter.nih.gov/matchmaker" target="_blank" rel="noopener">Use Matchmaker</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIH Sample Applications and Documents</h3><span class="status open">Open access</span></div><p>Successful sample applications and examples of biosketches, data-management plans, and other application materials.</p><div class="tags"><span class="tag">Grant writing</span><span class="tag">Examples</span></div><a class="visit-link" href="https://grants.nih.gov/grants-process/write-application/samples-applications-and-documents" target="_blank" rel="noopener">View samples</a></article>
+        <article class="resource-card"><div class="card-top"><h3>Early Career Reviewer Program</h3><span class="status controlled">Eligibility-based</span></div><p>Offers eligible early-career investigators an opportunity to gain practical NIH peer-review experience.</p><div class="tags"><span class="tag">Peer review</span><span class="tag">Early career</span></div><a class="visit-link" href="https://public.csr.nih.gov/ForReviewers/BecomeAReviewer/ECR" target="_blank" rel="noopener">Review eligibility</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIA Training and Career Development</h3><span class="status open">Open information</span></div><p>Fellowships, career-development awards, institutional training programs, and resources for new and early-stage aging researchers.</p><div class="tags"><span class="tag">Fellowships</span><span class="tag">Career awards</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/training" target="_blank" rel="noopener">Explore training</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIA Small-Business Resources</h3><span class="status open">Open information</span></div><p>SBIR/STTR funding information, commercialization assistance, entrepreneurial training, webinars, and accelerator opportunities.</p><div class="tags"><span class="tag">SBIR/STTR</span><span class="tag">Commercialization</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/sbir/resources-small-business-awardees" target="_blank" rel="noopener">Explore resources</a></article>
+      </div>
+    </section>
+
+    <div class="no-results" id="no-results"><strong>No matching resources found.</strong><br>Try a broader term such as “data,” “animal,” “imaging,” or “training.”</div>
+
+    <aside class="publishing-note">
+      <strong>Access information can change.</strong> Before requesting data or materials, confirm current eligibility, fees, required agreements, institutional approvals, and acknowledgment or citation requirements on the resource’s official website.
+    </aside>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>This independent research directory summarizes resources discussed during the 2026 Butler-Williams Scholars Program. It is provided for educational purposes and is not an official NIH or NIA webpage. NIH and NIA program names remain the property of their respective organizations.</p>
+      <a class="top-link" href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('resource-search');
+    const cards = Array.from(document.querySelectorAll('.resource-card'));
+    const sections = Array.from(document.querySelectorAll('.resource-section'));
+    const count = document.getElementById('result-count');
+    const noResults = document.getElementById('no-results');
+
+    function updateResults() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const match = !query || card.textContent.toLowerCase().includes(query);
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+
+      sections.forEach((section) => {
+        const hasVisibleCard = Array.from(section.querySelectorAll('.resource-card')).some((card) => !card.hidden);
+        section.hidden = !hasVisibleCard;
+      });
+
+      count.textContent = `${visible} resource${visible === 1 ? '' : 's'}`;
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', updateResults);
+    updateResults();
+  </script>
+</body>
+</html>
