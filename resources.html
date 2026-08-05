@@ -177,6 +177,7 @@
 
     /* Category card */
     .res-card {
+      position: relative;
       display: flex;
       flex-direction: column;
       border: 1px solid var(--border-light);
@@ -186,6 +187,19 @@
       box-shadow: 0 8px 30px rgba(26, 54, 93, 0.05);
       transition: var(--transition);
     }
+
+    /* Makes the whole card clickable; the Browse button sits above it */
+    .res-card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      text-indent: -9999px;
+      overflow: hidden;
+    }
+
+    .res-card:has(.res-card-link) { cursor: pointer; }
+    .res-card:has(.res-card-link:hover) .res-name { color: var(--primary-light); }
+    .res-actions { position: relative; z-index: 2; }
 
     .res-card:hover {
       transform: translateY(-4px);
@@ -401,6 +415,7 @@
 
       <!-- AD & Aging Research -->
       <div class="res-card">
+        <a class="res-card-link" href="Resources/ad-aging-research/" target="_blank">Browse the Aging &amp; Alzheimer's Research directory</a>
         <div class="res-media"><i class="fas fa-book-medical"></i></div>
         <div class="res-body">
           <div class="res-eyebrow">NIA &amp; NIH · 40 Resources</div>
