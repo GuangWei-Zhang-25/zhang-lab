@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Fellowships, training grants, and conference travel awards that graduate and undergraduate students can apply for.">
+  <title>Student Funding &amp; Travel Awards</title>
+  <style>
+    :root {
+      --navy: #17365d;
+      --blue: #245a92;
+      --sky: #eaf3fb;
+      --ink: #18212b;
+      --muted: #5d6976;
+      --line: #d7e0e8;
+      --paper: #ffffff;
+      --wash: #f5f8fb;
+      --green: #176b4d;
+      --green-bg: #e8f6ef;
+      --amber: #8a5700;
+      --amber-bg: #fff3d7;
+      --purple: #68458a;
+      --purple-bg: #f1eafb;
+      --red: #9b3c32;
+      --red-bg: #fbecea;
+      --radius: 16px;
+      --shadow: 0 12px 34px rgba(23, 54, 93, 0.09);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--wash);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    a { color: var(--blue); }
+    a:hover { color: var(--navy); }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 3px solid #70b7ef;
+      outline-offset: 3px;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 1rem;
+      top: -5rem;
+      z-index: 100;
+      padding: .75rem 1rem;
+      color: white;
+      background: var(--navy);
+      border-radius: 8px;
+    }
+    .skip-link:focus { top: 1rem; }
+
+    .hero {
+      color: white;
+      background:
+        radial-gradient(circle at 88% 18%, rgba(107, 185, 230, .28), transparent 26rem),
+        linear-gradient(135deg, #102a49, #1b4c7e 70%, #1e6686);
+      padding: 4.8rem 1.25rem 4rem;
+    }
+
+    .hero-inner, main, .footer-inner {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 .7rem;
+      color: #b9def7;
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.4rem, 6vw, 4.7rem);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+    }
+
+    .hero-copy {
+      max-width: 790px;
+      margin: 1.35rem 0 0;
+      color: #e2edf6;
+      font-size: clamp(1rem, 2vw, 1.22rem);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem 1.5rem;
+      margin-top: 1.7rem;
+      color: #c9dceb;
+      font-size: .9rem;
+    }
+
+    main { padding: 0 1.25rem 4rem; }
+
+    .toolbar {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+      margin-top: -1.75rem;
+      padding: 1rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap { position: relative; }
+    .search-wrap span {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+    #resource-search {
+      width: 100%;
+      min-height: 48px;
+      padding: .7rem 1rem .7rem 2.75rem;
+      color: var(--ink);
+      background: var(--wash);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      font: inherit;
+    }
+
+    .result-count {
+      margin: 0;
+      padding: 0 .4rem;
+      color: var(--muted);
+      font-size: .9rem;
+      white-space: nowrap;
+    }
+
+    .category-nav {
+      display: flex;
+      gap: .65rem;
+      overflow-x: auto;
+      margin: 1.1rem 0 0;
+      padding: .2rem 0 .5rem;
+      scrollbar-width: thin;
+    }
+    .category-nav a {
+      flex: 0 0 auto;
+      padding: .55rem .8rem;
+      color: var(--navy);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: .86rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .category-nav a:hover { background: var(--sky); }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin: 1.25rem 0 2.8rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: .24rem .55rem;
+      border-radius: 999px;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .015em;
+      white-space: nowrap;
+    }
+    .open { color: var(--green); background: var(--green-bg); }
+    .registration { color: var(--purple); background: var(--purple-bg); }
+    .controlled { color: var(--amber); background: var(--amber-bg); }
+    .request { color: var(--red); background: var(--red-bg); }
+    .mixed { color: var(--blue); background: var(--sky); }
+
+    .resource-section {
+      scroll-margin-top: 82px;
+      margin: 0 0 3.4rem;
+    }
+
+    .section-heading {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: .9rem;
+      align-items: start;
+      margin-bottom: 1.25rem;
+    }
+    .section-number {
+      display: grid;
+      place-items: center;
+      width: 2.4rem;
+      height: 2.4rem;
+      color: white;
+      background: var(--navy);
+      border-radius: 50%;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      color: var(--navy);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.65rem, 3vw, 2.25rem);
+      line-height: 1.15;
+    }
+    .section-intro {
+      max-width: 780px;
+      margin: .35rem 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .resource-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 225px;
+      padding: 1.2rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 4px 18px rgba(23, 54, 93, .045);
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .resource-card:hover {
+      transform: translateY(-2px);
+      border-color: #b7c9d9;
+      box-shadow: var(--shadow);
+    }
+    .resource-card[hidden] { display: none; }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: .75rem;
+      align-items: flex-start;
+    }
+    h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.08rem;
+      line-height: 1.3;
+    }
+    .resource-card p {
+      margin: .75rem 0 1.1rem;
+      color: #44515d;
+      font-size: .91rem;
+    }
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-top: auto;
+    }
+    .tag {
+      padding: .2rem .45rem;
+      color: var(--muted);
+      background: var(--wash);
+      border: 1px solid #e4eaf0;
+      border-radius: 6px;
+      font-size: .7rem;
+    }
+    .visit-link {
+      display: inline-flex;
+      gap: .35rem;
+      align-items: center;
+      margin-top: 1rem;
+      font-size: .86rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .visit-link::after { content: "↗"; }
+
+    .no-results {
+      display: none;
+      margin: 1rem 0 3rem;
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      background: var(--paper);
+      border: 1px dashed #afbdc9;
+      border-radius: var(--radius);
+    }
+
+    .publishing-note {
+      margin-top: .5rem;
+      padding: 1.4rem;
+      color: #314352;
+      background: #edf5fa;
+      border-left: 5px solid var(--blue);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .publishing-note strong { color: var(--navy); }
+
+    footer {
+      color: #dce8f1;
+      background: #102a49;
+      padding: 2.2rem 1.25rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+    footer p { max-width: 760px; margin: 0; font-size: .84rem; }
+    .top-link { color: white; font-weight: 800; white-space: nowrap; }
+
+    @media (max-width: 760px) {
+      .hero { padding-top: 3.7rem; }
+      .toolbar { grid-template-columns: 1fr; }
+      .result-count { padding-left: .15rem; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .resource-card { min-height: 0; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media print {
+      body { background: white; }
+      .hero { padding: 1.5rem; color: black; background: white; border-bottom: 2px solid #333; }
+      .hero-copy, .hero-meta, .eyebrow { color: #333; }
+      .toolbar, .category-nav, .legend, .top-link { display: none; }
+      main { padding-top: 1.5rem; }
+      .resource-card { break-inside: avoid; box-shadow: none; }
+      .visit-link::after { content: ""; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---- Zhang Lab site header (prefixed to avoid collisions) ---- */
+    body { padding-top: 66px; }
+    .zl-nav {
+      position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
+      background: rgba(255,255,255,0.98); backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e2e8f0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    .zl-nav-inner {
+      width: min(1200px, 100%); margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.9rem 24px;
+    }
+    .zl-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .zl-logo {
+      font-family: 'Crimson Text', Georgia, serif; font-size: 1.4rem; font-weight: 700;
+      color: #1a365d; letter-spacing: -0.02em;
+    }
+    .zl-divider { width: 1px; height: 22px; background: #cbd5e0; }
+    .zl-subtitle { font-size: 0.82rem; color: #718096; }
+    .zl-menu { display: flex; list-style: none; gap: 1.6rem; margin: 0; padding: 0; }
+    .zl-menu a {
+      position: relative; text-decoration: none; color: #4a5568;
+      font-size: 0.88rem; font-weight: 500; transition: color .3s ease;
+    }
+    .zl-menu a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #1a365d; transition: width .3s ease;
+    }
+    .zl-menu a:hover { color: #1a365d; }
+    .zl-menu a:hover::after { width: 100%; }
+    .zl-menu a.is-current { color: #1a365d; font-weight: 600; }
+    .zl-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: 0; padding: 4px; }
+    .zl-toggle span { width: 22px; height: 2px; background: #1a365d; display: block; }
+    @media (max-width: 900px) {
+      .zl-menu {
+        position: fixed; left: -100%; top: 66px; flex-direction: column;
+        background: #fff; width: 100%; text-align: center; padding: 1.6rem 0; gap: 1.1rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,.1); transition: left .3s ease;
+      }
+      .zl-menu.is-open { left: 0; }
+      .zl-toggle { display: flex; }
+      .zl-subtitle, .zl-divider { display: none; }
+    }
+    @media print { .zl-nav { display: none; } body { padding-top: 0; } }
+  </style>
+</head>
+<body id="top">
+  <a class="skip-link" href="#resources">Skip to resources</a>
+
+  <nav class="zl-nav">
+    <div class="zl-nav-inner">
+      <a class="zl-brand" href="../../index.html">
+        <span class="zl-logo">Zhang Lab</span>
+        <span class="zl-divider"></span>
+        <span class="zl-subtitle">Neuroscience at VCU</span>
+      </a>
+      <ul class="zl-menu" id="zl-menu">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../publications.html">Publications</a></li>
+        <li><a href="../../team.html">Team</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../resources.html" class="is-current">Resources</a></li>
+        <li><a href="../../teaching.html">Teaching</a></li>
+        <li><a href="../../news.html">News</a></li>
+        <li><a href="../../contact.html">Join Us</a></li>
+      </ul>
+      <button class="zl-toggle" id="zl-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Student directory</p>
+      <h1>Student Funding &amp; Travel Awards</h1>
+      <p class="hero-copy">Fellowships, training grants, and conference travel support that students can apply for &mdash; from NIH individual fellowships to SfN and VCU travel awards.</p>
+      <div class="hero-meta">
+        <span>Curated by the Zhang Lab</span>
+        <span>Last reviewed: August 2026</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="resources">
+    <div class="toolbar" role="search">
+      <label class="search-wrap">
+        <span aria-hidden="true">&#8981;</span>
+        <span class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Search resources</span>
+        <input id="resource-search" type="search" placeholder="Search F31, travel, fellowship, VCU&hellip;" autocomplete="off">
+      </label>
+      <p class="result-count" id="result-count" aria-live="polite">6 resources</p>
+    </div>
+
+    <nav class="category-nav" aria-label="Resource categories">
+      <a href="#fellowships">Fellowships &amp; training grants</a>
+      <a href="#travel">Conference travel awards</a>
+    </nav>
+
+    <div class="legend" aria-label="Access status legend">
+      <span class="status open">Open information</span>
+      <span class="status registration">Application required</span>
+    </div>
+
+    <section class="resource-section" id="fellowships">
+      <div class="section-heading">
+        <span class="section-number">1</span>
+        <div><h2>Fellowships and training grants</h2><p class="section-intro">Individual awards students can apply for directly, with a faculty sponsor, to fund their own training and research.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>NIH Individual Fellowships (F30 / F31 / F32 / F99&ndash;K00)</h3><span class="status open">Open information</span></div><p>The Ruth L. Kirschstein NRSA family of individual fellowships. <strong>F31</strong> supports predoctoral PhD students in the dissertation-research stage; <strong>F30</strong> supports MD/PhD and other dual-degree students; <strong>F32</strong> supports postdoctoral fellows; <strong>F99/K00</strong> bridges the predoc-to-postdoc transition. Awards may cover stipend, institutional allowance, tuition and fees, and childcare costs.</p><div class="tags"><span class="tag">F30</span><span class="tag">F31</span><span class="tag">F32</span><span class="tag">F99/K00</span><span class="tag">NRSA</span></div><a class="visit-link" href="https://grants.nih.gov/funding/funding-categories/research-training-and-career-development/individual-fellowships" target="_blank" rel="noopener">View fellowship programs</a></article>
+        <article class="resource-card"><div class="card-top"><h3>NIA Training and Career Development</h3><span class="status open">Open information</span></div><p>Aging-focused fellowships, career-development awards, and institutional training programs, with NIA-specific guidance on which mechanism fits your stage.</p><div class="tags"><span class="tag">Fellowships</span><span class="tag">Aging research</span><span class="tag">NIA</span></div><a class="visit-link" href="https://www.nia.nih.gov/research/training" target="_blank" rel="noopener">Explore NIA training</a></article>
+      </div>
+    </section>
+
+    <section class="resource-section" id="travel">
+      <div class="section-heading">
+        <span class="section-number">2</span>
+        <div><h2>Conference travel awards</h2><p class="section-intro">Support for presenting your work at meetings &mdash; both from the Society for Neuroscience and from VCU.</p></div>
+      </div>
+      <div class="resource-grid">
+        <article class="resource-card"><div class="card-top"><h3>SfN Trainee Professional Development Award</h3><span class="status registration">Application</span></div><p>Travel award for undergraduates, graduate students, post-baccalaureate scholars, and postdocs presenting at the SfN annual meeting: <strong>$1,000</strong> for trainees in the U.S., Canada, or Mexico (<strong>$2,500</strong> internationally) plus complimentary registration. Requires an approved abstract, current SfN membership, and a short essay; recipients present in a special TPDA poster session and attend two professional-development workshops.</p><div class="tags"><span class="tag">SfN</span><span class="tag">Travel stipend</span><span class="tag">Abstract required</span></div><a class="visit-link" href="https://www.sfn.org/meetings/meeting-awards/trainee-professional-development-award" target="_blank" rel="noopener">View TPDA details</a></article>
+        <article class="resource-card"><div class="card-top"><h3>SfN Meeting Travel Awards</h3><span class="status registration">Application</span></div><p>The full slate of SfN travel and meeting awards for trainees and early-career neuroscientists, with eligibility and deadlines for each annual meeting.</p><div class="tags"><span class="tag">SfN</span><span class="tag">Meeting awards</span></div><a class="visit-link" href="https://www.sfn.org/meetings/meeting-awards" target="_blank" rel="noopener">Browse meeting awards</a></article>
+        <article class="resource-card"><div class="card-top"><h3>VCU Graduate School Travel Grants</h3><span class="status registration">VCU students</span></div><p>Up to <strong>$500</strong> toward conference registration, travel, and lodging for degree-seeking master's and doctoral students who are <strong>presenting</strong> their work. Maximum of two trips per academic year; issued as a departmental reimbursement. First-professional students (D.D.S., M.D., Pharm.D.) are not eligible.</p><div class="tags"><span class="tag">VCU</span><span class="tag">Up to $500</span><span class="tag">Presenter required</span></div><a class="visit-link" href="https://graduate.vcu.edu/current-students/professional-development/travel-grants/" target="_blank" rel="noopener">Apply through VCU</a></article>
+        <article class="resource-card"><div class="card-top"><h3>VCU Graduate School Funding</h3><span class="status open">Open information</span></div><p>Central listing of VCU graduate funding: assistantships, fellowships, scholarships, and awards, including school-specific travel programs beyond the Graduate School grant.</p><div class="tags"><span class="tag">VCU</span><span class="tag">Assistantships</span><span class="tag">Fellowships</span></div><a class="visit-link" href="https://graduate.vcu.edu/funding/" target="_blank" rel="noopener">See funding options</a></article>
+      </div>
+    </section>
+
+    <div class="no-results" id="no-results"><strong>No matching resources found.</strong><br>Try a broader term such as &ldquo;fellowship,&rdquo; &ldquo;travel,&rdquo; or &ldquo;VCU.&rdquo;</div>
+
+    <aside class="publishing-note">
+      <strong>Deadlines and amounts change every cycle.</strong> Confirm current eligibility, stipend levels, submission dates, and internal routing requirements on the official program page &mdash; and start institutional paperwork early, since most awards need sponsor and department sign-off.
+    </aside>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <p>This independent directory collects publicly available funding and travel-award opportunities for students. It is provided for educational purposes and is not affiliated with, or endorsed by, the listed organizations. Award amounts, deadlines, and eligibility change each cycle &mdash; always confirm on the official program page.</p>
+      <a class="top-link" href="#top">Back to top ↑</a>
+    </div>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('resource-search');
+    const cards = Array.from(document.querySelectorAll('.resource-card'));
+    const sections = Array.from(document.querySelectorAll('.resource-section'));
+    const count = document.getElementById('result-count');
+    const noResults = document.getElementById('no-results');
+
+    function updateResults() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+
+      cards.forEach((card) => {
+        const match = !query || card.textContent.toLowerCase().includes(query);
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+
+      sections.forEach((section) => {
+        const hasVisibleCard = Array.from(section.querySelectorAll('.resource-card')).some((card) => !card.hidden);
+        section.hidden = !hasVisibleCard;
+      });
+
+      count.textContent = `${visible} resource${visible === 1 ? '' : 's'}`;
+      noResults.style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    searchInput.addEventListener('input', updateResults);
+    updateResults();
+  </script>
+
+  <script>
+    (function () {
+      var t = document.getElementById('zl-toggle'), m = document.getElementById('zl-menu');
+      if (!t || !m) return;
+      t.addEventListener('click', function () {
+        var open = m.classList.toggle('is-open');
+        t.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
+  </script>
+</body>
+</html>
