@@ -198,7 +198,7 @@
     .mixed { color: var(--blue); background: var(--sky); }
 
     .resource-section {
-      scroll-margin-top: 1rem;
+      scroll-margin-top: 82px;
       margin: 0 0 3.4rem;
     }
 
@@ -352,8 +352,81 @@
       .visit-link::after { content: ""; }
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:wght@600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---- Zhang Lab site header (prefixed to avoid collisions) ---- */
+    body { padding-top: 66px; }
+    .zl-nav {
+      position: fixed; width: 100%; top: 0; left: 0; z-index: 1000;
+      background: rgba(255,255,255,0.98); backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e2e8f0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+    }
+    .zl-nav-inner {
+      width: min(1200px, 100%); margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.9rem 24px;
+    }
+    .zl-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+    .zl-logo {
+      font-family: 'Crimson Text', Georgia, serif; font-size: 1.4rem; font-weight: 700;
+      color: #1a365d; letter-spacing: -0.02em;
+    }
+    .zl-divider { width: 1px; height: 22px; background: #cbd5e0; }
+    .zl-subtitle { font-size: 0.82rem; color: #718096; }
+    .zl-menu { display: flex; list-style: none; gap: 1.6rem; margin: 0; padding: 0; }
+    .zl-menu a {
+      position: relative; text-decoration: none; color: #4a5568;
+      font-size: 0.88rem; font-weight: 500; transition: color .3s ease;
+    }
+    .zl-menu a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: #1a365d; transition: width .3s ease;
+    }
+    .zl-menu a:hover { color: #1a365d; }
+    .zl-menu a:hover::after { width: 100%; }
+    .zl-menu a.is-current { color: #1a365d; font-weight: 600; }
+    .zl-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: 0; padding: 4px; }
+    .zl-toggle span { width: 22px; height: 2px; background: #1a365d; display: block; }
+    @media (max-width: 900px) {
+      .zl-menu {
+        position: fixed; left: -100%; top: 66px; flex-direction: column;
+        background: #fff; width: 100%; text-align: center; padding: 1.6rem 0; gap: 1.1rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,.1); transition: left .3s ease;
+      }
+      .zl-menu.is-open { left: 0; }
+      .zl-toggle { display: flex; }
+      .zl-subtitle, .zl-divider { display: none; }
+    }
+    @media print { .zl-nav { display: none; } body { padding-top: 0; } }
+  </style>
 </head>
 <body id="top">
+
+  <nav class="zl-nav">
+    <div class="zl-nav-inner">
+      <a class="zl-brand" href="../../index.html">
+        <span class="zl-logo">Zhang Lab</span>
+        <span class="zl-divider"></span>
+        <span class="zl-subtitle">Neuroscience at VCU</span>
+      </a>
+      <ul class="zl-menu" id="zl-menu">
+        <li><a href="../../index.html">Home</a></li>
+        <li><a href="../../publications.html">Publications</a></li>
+        <li><a href="../../team.html">Team</a></li>
+        <li><a href="../../tools.html">Tools</a></li>
+        <li><a href="../../resources.html" class="is-current">Resources</a></li>
+        <li><a href="../../teaching.html">Teaching</a></li>
+        <li><a href="../../news.html">News</a></li>
+        <li><a href="../../contact.html">Join Us</a></li>
+      </ul>
+      <button class="zl-toggle" id="zl-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
   <a class="skip-link" href="#resources">Skip to resources</a>
 
   <header class="hero">
@@ -522,6 +595,17 @@
 
     searchInput.addEventListener('input', updateResults);
     updateResults();
+  </script>
+
+  <script>
+    (function () {
+      var t = document.getElementById('zl-toggle'), m = document.getElementById('zl-menu');
+      if (!t || !m) return;
+      t.addEventListener('click', function () {
+        var open = m.classList.toggle('is-open');
+        t.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+    })();
   </script>
 </body>
 </html>
