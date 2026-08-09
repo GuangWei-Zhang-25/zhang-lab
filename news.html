@@ -221,6 +221,16 @@
       grid-template-columns: 1fr;
     }
 
+    /* Posters and figures: show the whole image rather than a cropped band */
+    .news-images.poster {
+      max-width: 560px;
+    }
+
+    .news-images.poster .news-image-wrapper img {
+      max-height: none;
+      object-fit: contain;
+    }
+
     .news-image-wrapper {
       border-radius: 6px;
       overflow: hidden;
@@ -406,6 +416,28 @@
         <p class="news-text">
           We are excited to welcome <strong>Zhelia Arif</strong>, who joins the lab in August 2026 as a Neuroscience master's student in VCU's MS program. Welcome, Zhelia!
         </p>
+      </div>
+    </article>
+
+    <article class="news-article">
+      <div class="news-body">
+        <div class="news-date"><i class="fas fa-award"></i> July 24, 2026</div>
+        <h2 class="news-title">Aarushi Rao Presents at the Summer Student Research Symposium</h2>
+        <p class="news-text">
+          <strong>Aarushi Rao</strong> presented her poster at the <strong>Summer Student Research Symposium</strong>, held <strong>Friday, July 24, 2–4 PM in the Larrick Center</strong>. Her poster, <em>NeuroFlow: An Integrated, Cross-Platform Workflow for Mouse Brain Atlas Registration and Quantification</em>, showcased the browser-based pipeline she developed in the lab. This is fantastic work — congratulations, Aarushi!
+        </p>
+
+        <div class="news-images single poster">
+          <div class="news-image-wrapper">
+            <img src="news/aarushi-rao-summer-symposium-2026.jpg" alt="Aarushi Rao presenting the NeuroFlow poster at the 2026 Summer Student Research Symposium">
+            <div class="news-image-caption">Aarushi Rao with her NeuroFlow poster at the Summer Student Research Symposium, Larrick Center.</div>
+          </div>
+        </div>
+
+        <div class="news-tags">
+          <span class="news-tag">NeuroFlow</span>
+          <span class="news-tag">Poster</span>
+        </div>
       </div>
     </article>
 
