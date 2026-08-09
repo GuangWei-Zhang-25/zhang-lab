@@ -86,6 +86,13 @@
     .quick-start { background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-light) 100%); border-left: 4px solid var(--accent); border-radius: 8px; padding: 1.25rem 1.5rem; margin-top: 1.75rem; }
     .quick-start h4 { font-family: var(--font-serif); color: var(--primary-dark); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
     .quick-start p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+    .quick-start a { color: var(--primary); font-weight: 500; }
+
+    .notice { display: flex; gap: 1rem; align-items: flex-start; background: var(--bg-light); border: 1px solid var(--border-light); border-left: 4px solid var(--primary-light); border-radius: 8px; padding: 1.1rem 1.4rem; margin-top: 1rem; }
+    .notice i.notice-icon { color: var(--primary-light); font-size: 1.1rem; margin-top: 0.2rem; }
+    .notice h4 { font-family: var(--font-serif); font-size: 1.05rem; color: var(--primary-dark); margin-bottom: 0.25rem; }
+    .notice p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+    .notice a { color: var(--primary); font-weight: 500; }
 
     .reference { margin-top: 1.75rem; padding: 1rem 1.25rem; border: 1px solid var(--border-light); border-radius: 8px; background: var(--bg-light); font-size: 0.85rem; color: var(--text-secondary); }
     .reference strong { color: var(--primary-dark); }
@@ -235,7 +242,15 @@
 
         <div class="quick-start">
           <h4><i class="fas fa-bolt"></i> Quick start</h4>
-          <p>Click <strong>Launch NeuroFlow</strong>, load your section images, and follow the stages left to right — Cropper → Arranger → Scaler → Quantifier → Analyzer → Visualizer. Everything runs in your browser and your images never leave your computer. Questions? Reach out at <a href="mailto:guangwei.zhang@vcuhealth.org?subject=NeuroFlow" style="color: var(--primary); font-weight: 500;">guangwei.zhang@vcuhealth.org</a>.</p>
+          <p>Click <strong>Launch NeuroFlow</strong>, load your section images, and follow the stages left to right — Cropper → Arranger → Scaler → Quantifier → Analyzer → Visualizer. Everything runs in your browser and your images never leave your computer.</p>
+        </div>
+
+        <div class="notice">
+          <i class="fas fa-video notice-icon"></i>
+          <div>
+            <h4>Video tutorial coming next week</h4>
+            <p>A step-by-step video walkthrough of the full pipeline will be released here next week. In the meantime, feel free to reach out to <a href="mailto:guangwei.zhang@vcuhealth.org?subject=NeuroFlow">guangwei.zhang@vcuhealth.org</a> if you have any questions.</p>
+          </div>
         </div>
 
         <div class="reference">
