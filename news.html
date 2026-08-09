@@ -231,6 +231,16 @@
       object-fit: contain;
     }
 
+    /* Panoramic group photos: full column width, uncropped */
+    .news-images.wide {
+      max-width: 100%;
+    }
+
+    .news-images.wide .news-image-wrapper img {
+      max-height: none;
+      object-fit: contain;
+    }
+
     .news-image-wrapper {
       border-radius: 6px;
       overflow: hidden;
@@ -421,6 +431,35 @@
 
     <article class="news-article">
       <div class="news-body">
+        <div class="news-date"><i class="fas fa-trophy"></i> August 3–6, 2026</div>
+        <h2 class="news-title">Dr. Zhang Named a 2026 NIA Butler-Williams Scholar</h2>
+        <p class="news-text">
+          <strong>Dr. Guang-Wei Zhang</strong> was named a <a href="https://www.nia.nih.gov/research/dea/butler-williams-scholars-program" target="_blank"><strong>2026 Butler-Williams Scholar</strong></a> by the <strong>National Institute on Aging (NIA)</strong> at the National Institutes of Health (NIH), and attended the program at the NIH campus on <strong>August 3–6, 2026</strong>. The program is named in honor of <strong>Robert N. Butler, MD</strong>, the founding director of the NIA, and <strong>T. Franklin Williams, MD</strong>, its second director. Now in its fourth decade, it brings early-career investigators new to aging research together with NIA leadership and program staff for an intensive week on the science, gaps, and opportunities in the field. Congratulations!
+        </p>
+
+        <div class="news-images single poster">
+          <div class="news-image-wrapper">
+            <img src="news/butler-williams-2026-certificate.jpg" alt="Dr. Guang-Wei Zhang receiving the 2026 NIA Butler-Williams Scholars Program certificate">
+            <div class="news-image-caption">Dr. Guang-Wei Zhang receiving the 2026 Butler-Williams Scholars Program certificate at the NIH.</div>
+          </div>
+        </div>
+
+        <div class="news-images single wide">
+          <div class="news-image-wrapper">
+            <img src="news/butler-williams-2026-scholars.jpg" alt="The 2026 Butler-Williams Scholars class at the NIH campus">
+            <div class="news-image-caption">The 2026 Butler-Williams Scholars class, NIH campus, Bethesda, MD.</div>
+          </div>
+        </div>
+
+        <div class="news-tags">
+          <span class="news-tag">NIA</span>
+          <span class="news-tag">Aging Research</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="news-article">
+      <div class="news-body">
         <div class="news-date"><i class="fas fa-award"></i> July 24, 2026</div>
         <h2 class="news-title">Aarushi Rao Presents at the Summer Student Research Symposium</h2>
         <p class="news-text">
@@ -488,16 +527,6 @@
         <h2 class="news-title">Zhang Lab Receives VCU Convergence Seed Award</h2>
         <p class="news-text">
           The Zhang Lab has been awarded a <strong>VCU Convergence Seed Award</strong>, supporting a collaborative project with <strong>Dr. Dean Krusienski</strong> (VCU School of Engineering) and <strong>Dr. Priyodarshan Goswamee</strong> (Department of Neuroscience and Anatomy). This award will fuel a cross-disciplinary effort bridging neuroscience, engineering, and neural circuit research.
-        </p>
-      </div>
-    </article>
-
-    <article class="news-article">
-      <div class="news-body">
-        <div class="news-date"><i class="fas fa-trophy"></i> May 2026</div>
-        <h2 class="news-title">Dr. Zhang Selected for the 2026 NIA Butler-Williams Scholars Program</h2>
-        <p class="news-text">
-          Dr. Guang-Wei Zhang has been awarded a place in the <strong>2026 Butler-Williams Scholars (BWS) Program</strong>, sponsored by the <strong>National Institute on Aging (NIA)</strong> at the National Institutes of Health (NIH). The program will be held <strong>August 3–6, 2026</strong>, bringing together a distinguished group of scientists for information sharing and network building — a career advancement tradition that has continued for over 30 years. Congratulations!
         </p>
       </div>
     </article>
