@@ -237,7 +237,7 @@
     }
 
     .hero {
-      min-height: 85vh;
+      min-height: 60vh;
       display: flex;
       align-items: center;
       background: linear-gradient(165deg, var(--bg-light) 0%, var(--white) 50%, var(--bg-warm) 100%);
@@ -266,7 +266,7 @@
     .hero-content {
       position: relative;
       z-index: 1;
-      max-width: 580px;
+      max-width: 820px;
       flex: 1;
     }
 
@@ -372,7 +372,7 @@
     }
 
     .hero-subtitle {
-      font-size: 1.12rem;
+      font-size: 1.15rem;
       color: var(--text-secondary);
       line-height: 1.75;
       max-width: 680px;
@@ -467,26 +467,51 @@
       background: var(--bg-light);
     }
 
-    /* Narrative bridge from the human level to the animal level */
-    .level-bridge {
+    .tech-showcase-animal {
       background: var(--bg-light);
-      padding: 0;
     }
 
-    .level-bridge .container {
-      max-width: 820px;
+    .tech-showcase-animal .tech-title span {
+      background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
     }
 
-    .level-bridge p {
-      font-size: 1rem;
-      line-height: 1.75;
-      color: var(--text-secondary);
-      border-left: 3px solid var(--accent);
-      padding: 0.15rem 0 0.15rem 1.15rem;
-      margin: 0;
+    .animal-figure {
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 12px 34px rgba(26, 54, 93, 0.12);
     }
 
-    .level-bridge strong { color: var(--primary-dark); }
+    .animal-figure video {
+      width: 100%;
+      display: block;
+      background: #000;
+    }
+
+    .animal-figure figcaption {
+      padding: 0.7rem 1rem;
+      font-size: 0.8rem;
+      line-height: 1.55;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-light);
+    }
+
+    .animal-figure figcaption a {
+      color: var(--primary);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .animal-figure figcaption a:hover { text-decoration: underline; }
+
+    .approach-header {
+      background: linear-gradient(180deg, var(--bg-light) 0%, var(--bg-light) 100%);
+      padding: 56px 0 8px;
+    }
 
     .tech-showcase-ai {
       background: linear-gradient(180deg, var(--bg-light) 0%, var(--white) 100%);
@@ -1598,18 +1623,6 @@
         </a>
       </div>
     </div>
-    <!-- Video Demo -->
-    <div class="hero-video-wrap">
-      <div class="hero-video-container">
-        <video class="hero-video" autoplay muted loop playsinline>
-          <source src="videos/demo science - Trim.mp4" type="video/mp4">
-        </video>
-        <div class="hero-video-overlay"></div>
-      </div>
-      <p class="hero-video-caption">
-        When someone we care about is in distress, we often feel an instinctive urge to help. In this video, a bystander mouse pulls the tongue of an unconscious familiar mouse, drawing it out of the mouth and widening the airway. These actions often helped the unresponsive mouse recover. Our research explores how this behavior unfolds and how it is controlled by the brain. <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank">Read our recent Science paper</a>.
-      </p>
-    </div>
   </div>
 </header>
 
@@ -1648,12 +1661,47 @@
   </div>
 </section>
 
-<!-- Bridge: human level to animal level -->
-<section class="level-bridge">
+<!-- Animal Models Section -->
+<section class="tech-showcase tech-showcase-animal" id="animal-models">
   <div class="container">
-    <p>
-      <strong>Animal models let us ask the other half of the question.</strong> In mice we can record and manipulate specific neurons while a real social interaction is unfolding, moment to moment — so we can test which circuits <em>cause</em> a social behavior rather than merely accompany it. The two levels are complementary: human data tell us what matters for health, and animal experiments reveal the brain mechanisms behind it.
-    </p>
+    <div class="tech-content-grid tech-content-reverse">
+      <div class="tech-info">
+        <div class="tech-badge">
+          <i class="fas fa-microscope"></i>
+          Animal Models
+        </div>
+        <h2 class="tech-title">Mice Show <span>Complex Social Behavior</span></h2>
+        <p class="tech-description">
+          Animals such as mice have a rich social life of their own, which is what lets us turn these questions into mechanistic ones we can test directly in the brain. In this video, a bystander mouse works to help a companion in distress, pulling its tongue clear to open the airway &mdash; and these efforts often helped the unresponsive mouse recover. Strikingly, mice do this for individuals they already know, but not for strangers. Because the behavior is this specific, we can record and manipulate the circuits that produce it while the interaction is unfolding.
+        </p>
+        <div class="tech-related-pubs">
+          <span class="label">Related Publication</span>
+          <a class="tech-pub-link" href="https://doi.org/10.1126/science.adq2677" target="_blank">
+            <strong>Reviving-like prosocial behavior in response to unconscious or dead conspecifics</strong> &mdash; <span class="pub-venue">Science</span>, 2025
+          </a>
+        </div>
+      </div>
+
+      <div class="tech-visual">
+        <figure class="animal-figure">
+          <video class="animal-video" autoplay muted loop playsinline>
+            <source src="videos/demo science - Trim.mp4" type="video/mp4">
+          </video>
+          <figcaption>A bystander mouse pulls the tongue of an unconscious familiar mouse, widening the airway. <a href="publications/Sun Zhang 2025 Science.pdf" target="_blank">Read our <em>Science</em> paper</a>.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How We Do It -->
+<section class="section approach-header">
+  <div class="container">
+    <div class="section-header" style="margin-bottom: 0;">
+      <span class="section-eyebrow">How We Do It</span>
+      <h2 class="section-title">Our Approach</h2>
+      <p class="section-subtitle">The techniques and projects we build to get from social behavior to the circuits behind it.</p>
+    </div>
   </div>
 </section>
 
