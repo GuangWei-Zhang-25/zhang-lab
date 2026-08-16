@@ -99,6 +99,7 @@
     .video-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.1rem; }
     .video-meta a { color: var(--primary); font-weight: 500; text-decoration: none; }
     .video-meta a:hover { text-decoration: underline; }
+    .video-meta + h3 { border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 0.5rem; }
 
     .reference { margin-top: 1.75rem; padding: 1rem 1.25rem; border: 1px solid var(--border-light); border-radius: 8px; background: var(--bg-light); font-size: 0.85rem; color: var(--text-secondary); }
     .reference strong { color: var(--primary-dark); }
@@ -171,14 +172,6 @@
       </div>
 
       <div class="tool-body">
-        <h3>What it does</h3>
-        <p>
-          Mapping histological sections onto a common reference atlas is an essential — but usually fiddly — step in neuroscience: existing workflows are powerful, yet an analysis often spans several programs, operating-system-specific components, or specialized software dependencies. <strong>NeuroFlow</strong> brings the whole pipeline into a single web page that runs locally in your browser — your images are never uploaded and there is no backend server.
-        </p>
-        <p>
-          It integrates section cropping, anterior–posterior ordering and coarse atlas-plane assignment, real-time 3D oblique atlas reslicing, affine and nonlinear registration, selected-color signal detection, atlas-based regional quantification, series-level aggregation, and interactive 3D inspection — as one coherent, seven-stage pipeline. Major controls and intermediate results stay inspectable throughout, a project file preserves your section, registration, mask, and result state, and every stage can be exported to a spreadsheet.
-        </p>
-
         <h3 id="tutorial" style="scroll-margin-top: 90px;">Video tutorial</h3>
         <p>
           A complete walkthrough of the pipeline, from loading raw section images through registration, signal detection, and regional quantification. Follow along in a second tab with your own data.
@@ -195,6 +188,15 @@
           <a href="videos/neuroflow-tutorial.mp4" download="neuroflow-tutorial.mp4"><i class="fas fa-download"></i> Download the video</a>
           <a href="mailto:guangwei.zhang@vcuhealth.org?subject=NeuroFlow"><i class="fas fa-envelope"></i> Questions? guangwei.zhang@vcuhealth.org</a>
         </div>
+
+        <h3>What it does</h3>
+        <p>
+          Mapping histological sections onto a common reference atlas is an essential — but usually fiddly — step in neuroscience: existing workflows are powerful, yet an analysis often spans several programs, operating-system-specific components, or specialized software dependencies. <strong>NeuroFlow</strong> brings the whole pipeline into a single web page that runs locally in your browser — your images are never uploaded and there is no backend server.
+        </p>
+        <p>
+          It integrates section cropping, anterior–posterior ordering and coarse atlas-plane assignment, real-time 3D oblique atlas reslicing, affine and nonlinear registration, selected-color signal detection, atlas-based regional quantification, series-level aggregation, and interactive 3D inspection — as one coherent, seven-stage pipeline. Major controls and intermediate results stay inspectable throughout, a project file preserves your section, registration, mask, and result state, and every stage can be exported to a spreadsheet.
+        </p>
+
 
         <figure class="paper-fig hero">
           <img src="images/neuroflow_paper/fig1-overview.png" alt="Overview of the NeuroFlow six-stage pipeline">
