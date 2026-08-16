@@ -435,6 +435,59 @@
       overflow: hidden;
     }
 
+    .tech-showcase-human {
+      background: linear-gradient(180deg, var(--white) 0%, var(--bg-light) 100%);
+    }
+
+    .tech-showcase-human .tech-title span {
+      background: linear-gradient(135deg, #2c5282 0%, #4a7fb5 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .human-figure {
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 8px 28px rgba(26, 54, 93, 0.07);
+    }
+
+    .human-figure img {
+      width: 100%;
+      display: block;
+    }
+
+    .human-figure figcaption {
+      padding: 0.7rem 1rem;
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-light);
+      background: var(--bg-light);
+    }
+
+    /* Narrative bridge from the human level to the animal level */
+    .level-bridge {
+      background: var(--bg-light);
+      padding: 0;
+    }
+
+    .level-bridge .container {
+      max-width: 820px;
+    }
+
+    .level-bridge p {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+      border-left: 3px solid var(--accent);
+      padding: 0.15rem 0 0.15rem 1.15rem;
+      margin: 0;
+    }
+
+    .level-bridge strong { color: var(--primary-dark); }
+
     .tech-showcase-ai {
       background: linear-gradient(180deg, var(--bg-light) 0%, var(--white) 100%);
     }
@@ -1567,6 +1620,40 @@
       <span class="section-eyebrow">What We Study</span>
       <h2 class="section-title">Research Focus</h2>
     </div>
+  </div>
+</section>
+
+<!-- Human Data Section -->
+<section class="tech-showcase tech-showcase-human" id="human-data" style="padding-top: 40px;">
+  <div class="container">
+    <div class="tech-content-grid">
+      <div class="tech-info">
+        <div class="tech-badge">
+          <i class="fas fa-users"></i>
+          Human Data
+        </div>
+        <h2 class="tech-title">Why We Study <span>Human Datasets</span></h2>
+        <p class="tech-description">
+          Large population datasets let us ask, in real people, how the social environment and everyday social behavior relate to physical and mental health — who becomes isolated, and what that isolation costs. The relationship runs in both directions: poor health narrows social life, and a narrowed social life worsens health. These datasets show us that the link is real and how much it matters, but they cannot show us what the brain is doing.
+        </p>
+      </div>
+
+      <div class="tech-visual">
+        <figure class="human-figure">
+          <img src="images/social-health-illustration.jpg" alt="Social environment and social behavior linked by two-way arrows to physical and mental health">
+          <figcaption>Social environment and social behavior are reciprocally linked to physical and mental health across populations.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bridge: human level to animal level -->
+<section class="level-bridge">
+  <div class="container">
+    <p>
+      <strong>Animal models let us ask the other half of the question.</strong> In mice we can record and manipulate specific neurons while a real social interaction is unfolding, moment to moment — so we can test which circuits <em>cause</em> a social behavior rather than merely accompany it. The two levels are complementary: human data tell us what matters for health, and animal experiments reveal the brain mechanisms behind it.
+    </p>
   </div>
 </section>
 
