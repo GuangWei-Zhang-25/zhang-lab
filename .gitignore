@@ -3,5 +3,9 @@ Tools/neuropixels-planner/assets/meshes/
 Tools/neuropixels-planner/pack_meshes.py
 Tools/neuropixels-planner/summary_structs.json
 
+# Raw camera/screen-capture masters. Too large for GitHub (100 MB hard limit) —
+# the web-ready transcode is committed instead (e.g. videos/neuroflow-tutorial.mp4).
+videos/Neuroflow Manual Demo *.mp4
+
 # macOS
 .DS_Store

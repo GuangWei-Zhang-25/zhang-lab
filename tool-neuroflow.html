@@ -94,6 +94,12 @@
     .notice p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
     .notice a { color: var(--primary); font-weight: 500; }
 
+    .video-wrap { margin: 1rem 0 0.6rem; border: 1px solid var(--border-light); border-radius: 12px; overflow: hidden; background: #000; box-shadow: 0 10px 30px rgba(26,54,93,0.12); }
+    .video-wrap video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+    .video-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1.1rem; }
+    .video-meta a { color: var(--primary); font-weight: 500; text-decoration: none; }
+    .video-meta a:hover { text-decoration: underline; }
+
     .reference { margin-top: 1.75rem; padding: 1rem 1.25rem; border: 1px solid var(--border-light); border-radius: 8px; background: var(--bg-light); font-size: 0.85rem; color: var(--text-secondary); }
     .reference strong { color: var(--primary-dark); }
 
@@ -170,15 +176,15 @@
           Mapping histological sections onto a common reference atlas is an essential — but usually fiddly — step in neuroscience: existing workflows are powerful, yet an analysis often spans several programs, operating-system-specific components, or specialized software dependencies. <strong>NeuroFlow</strong> brings the whole pipeline into a single web page that runs locally in your browser — your images are never uploaded and there is no backend server.
         </p>
         <p>
-          It integrates section cropping, anterior–posterior ordering and coarse atlas-plane assignment, affine and nonlinear registration, real-time 3D oblique atlas reslicing, selected-color signal detection, atlas-based regional quantification, series-level aggregation, and interactive 3D inspection — as one coherent, six-stage pipeline. Major controls and intermediate results stay inspectable throughout, and a project file preserves your section, registration, mask, and result state.
+          It integrates section cropping, anterior–posterior ordering and coarse atlas-plane assignment, real-time 3D oblique atlas reslicing, affine and nonlinear registration, selected-color signal detection, atlas-based regional quantification, series-level aggregation, and interactive 3D inspection — as one coherent, seven-stage pipeline. Major controls and intermediate results stay inspectable throughout, a project file preserves your section, registration, mask, and result state, and every stage can be exported to a spreadsheet.
         </p>
 
         <figure class="paper-fig hero">
           <img src="images/neuroflow_paper/fig1-overview.png" alt="Overview of the NeuroFlow six-stage pipeline">
-          <figcaption><strong>The pipeline at a glance.</strong> Six interface stages — Cropper, Arranger, Scaler, Quantifier, Analyzer, and Visualizer — carry a section series from preparation through registration, signal detection, regional aggregation, and 3D inspection.</figcaption>
+          <figcaption><strong>The pipeline at a glance.</strong> Interface stages — Cropper, Arranger, Scaler, Quantifier, Analyzer, and Visualizer — carry a section series from preparation through registration, signal detection, regional aggregation, and 3D inspection. <em>Figure from the preprint; the current build adds a dedicated 3D Orienter stage between Arranger and Scaler.</em></figcaption>
         </figure>
 
-        <h3>The six-stage pipeline</h3>
+        <h3>The seven-stage pipeline</h3>
 
         <div class="stage">
           <div class="stage-head"><span class="stage-num">1</span><h4>Cropper <span class="stage-tag">· optional</span></h4></div>
@@ -195,8 +201,13 @@
         </div>
 
         <div class="stage">
-          <div class="stage-head"><span class="stage-num">3</span><h4>Scaler <span class="stage-tag">· registration</span></h4></div>
-          <p>Register each section to the <strong>Allen Mouse Brain CCFv3</strong>. Start from a coarse plane, then dial in anterior–posterior position, pitch, and yaw in a real-time <strong>3D oblique reslice</strong> shown side-by-side with the matched atlas plane. Refine with <strong>affine</strong> transforms (translate, rotate, scale) and then a <strong>nonlinear</strong> control-point warp for local alignment. Each section's transform is saved.</p>
+          <div class="stage-head"><span class="stage-num">3</span><h4>3D Orienter <span class="stage-tag">· oblique planes</span></h4></div>
+          <p>Set each section's true 3D cutting plane before any scaling. Sections matched to an atlas plate are sent here, where you tilt the plane directly — drag to tilt, shift-drag to resize — adjusting <strong>anterior–posterior depth, pitch, and yaw</strong> against a real-time oblique reslice of the atlas. Sections cut off-axis get an atlas plane that actually matches them, rather than being forced onto the nearest coronal plate.</p>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">4</span><h4>Scaler <span class="stage-tag">· registration</span></h4></div>
+          <p>Register each section to the <strong>Allen Mouse Brain CCFv3</strong>, working against the oriented plane from the previous stage. Refine with <strong>affine</strong> transforms (translate, rotate, scale) and then a <strong>nonlinear</strong> control-point warp for local alignment. Each section's transform is saved.</p>
           <figure class="paper-fig">
             <img src="images/neuroflow_paper/fig3-scaler.png" alt="Scaler registration stage">
             <figcaption><strong>Scaler.</strong> From an intentionally mismatched coarse plate (A) to a matched oblique atlas reslice (B), then affine (C) and nonlinear control-point (D) refinement, ending in a final overlay aligned to the tissue boundary with the transform saved (E).</figcaption>
@@ -204,7 +215,7 @@
         </div>
 
         <div class="stage">
-          <div class="stage-head"><span class="stage-num">4</span><h4>Quantifier <span class="stage-tag">· signal detection</span></h4></div>
+          <div class="stage-head"><span class="stage-num">5</span><h4>Quantifier <span class="stage-tag">· signal detection</span></h4></div>
           <p>Detect labeled signal by color. Pick a representative signal color by typing it or sampling with the eyedropper, restrict analysis to valid tissue with brush/lasso/erase mask tools, then set a contrast threshold (for green, the score is <em>G − max(R, B)</em>) and a connected-component size cutoff. A cyan preview shows every threshold-positive pixel. NeuroFlow works from <strong>source-image pixels only</strong> — it does not invent cells or synthetic centroids.</p>
           <figure class="paper-fig">
             <img src="images/neuroflow_paper/fig4-quantifier.png" alt="Quantifier signal-pixel detection stage">
@@ -213,7 +224,7 @@
         </div>
 
         <div class="stage">
-          <div class="stage-head"><span class="stage-num">5</span><h4>Analyzer <span class="stage-tag">· regional quantification</span></h4></div>
+          <div class="stage-head"><span class="stage-num">6</span><h4>Analyzer <span class="stage-tag">· regional quantification</span></h4></div>
           <p>Turn detected pixels into region-resolved numbers. Each qualifying pixel inherits the CCFv3 region label at its registered coordinate, producing a ranked table of regions (acronym, pixel count, density), a two-level <strong>sunburst</strong> of major divisions and their constituent regions, and an Allen region-<strong>hierarchy tree</strong>. Results aggregate across the whole section series.</p>
           <figure class="paper-fig">
             <img src="images/neuroflow_paper/fig5-analyzer.png" alt="Analyzer regional quantification stage">
@@ -222,7 +233,7 @@
         </div>
 
         <div class="stage">
-          <div class="stage-head"><span class="stage-num">6</span><h4>Visualizer <span class="stage-tag">· 3D inspection</span></h4></div>
+          <div class="stage-head"><span class="stage-num">7</span><h4>Visualizer <span class="stage-tag">· 3D inspection</span></h4></div>
           <p>Inspect the result in 3D. The registered section appears as a clipped plane sitting at its true intersection with the actual Allen CCFv3 whole-brain surface, with the measured signal pixels shown in place and a linked 2D view for full context. Rotate, pan, zoom, and hover to explore.</p>
           <figure class="paper-fig">
             <img src="images/neuroflow_paper/fig6-visualizer.png" alt="Visualizer 3D inspection stage">
@@ -242,15 +253,24 @@
 
         <div class="quick-start">
           <h4><i class="fas fa-bolt"></i> Quick start</h4>
-          <p>Click <strong>Launch NeuroFlow</strong>, load your section images, and follow the stages left to right — Cropper → Arranger → Scaler → Quantifier → Analyzer → Visualizer. Everything runs in your browser and your images never leave your computer.</p>
+          <p>Click <strong>Launch NeuroFlow</strong>, load your section images, and follow the stages left to right — Cropper → Arranger → 3D Orienter → Scaler → Quantifier → Analyzer → Visualizer. Everything runs in your browser and your images never leave your computer.</p>
         </div>
 
-        <div class="notice">
-          <i class="fas fa-video notice-icon"></i>
-          <div>
-            <h4>Video tutorial coming next week</h4>
-            <p>A step-by-step video walkthrough of the full pipeline will be released here next week. In the meantime, feel free to reach out to <a href="mailto:guangwei.zhang@vcuhealth.org?subject=NeuroFlow">guangwei.zhang@vcuhealth.org</a> if you have any questions.</p>
-          </div>
+        <h3 id="tutorial" style="border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 1.75rem; scroll-margin-top: 90px;">Video tutorial</h3>
+        <p>
+          A complete walkthrough of the pipeline, from loading raw section images through registration, signal detection, and regional quantification. Follow along in a second tab with your own data.
+        </p>
+
+        <div class="video-wrap">
+          <video controls preload="none" playsinline poster="images/neuroflow_tutorial_poster.jpg">
+            <source src="videos/neuroflow-tutorial.mp4" type="video/mp4">
+            Your browser cannot play embedded video &mdash; <a href="videos/neuroflow-tutorial.mp4">download the tutorial (MP4)</a> instead.
+          </video>
+        </div>
+        <div class="video-meta">
+          <span><i class="fas fa-clock"></i> 14 min 49 s</span>
+          <a href="videos/neuroflow-tutorial.mp4" download="neuroflow-tutorial.mp4"><i class="fas fa-download"></i> Download the video</a>
+          <a href="mailto:guangwei.zhang@vcuhealth.org?subject=NeuroFlow"><i class="fas fa-envelope"></i> Questions? guangwei.zhang@vcuhealth.org</a>
         </div>
 
         <div class="reference">
