@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Multiple Mouse Tracking — User Guide | Zhang Lab Tools</title>
+  <title>Multiple Mouse Tracking User Guide | Zhang Lab Tools</title>
   <meta name="description" content="Illustrated user guide for the Multiple Mouse Tracking review & correction tool from the Zhang Laboratory at VCU">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -168,11 +168,11 @@
         <div class="tool-eyebrow"><i class="fas fa-object-group"></i> Behavior · Multi-Animal Tracking</div>
         <h1 class="tool-name">Multiple Mouse Tracking</h1>
         <p class="tool-tagline">
-          A local, browser-based workbench for reviewing automatic multi-mouse tracking against video — correcting bounding boxes, repairing identity spans, and checking continuity with synchronized diagnostic views.
+          A local, browser-based workbench for reviewing automatic multi-mouse tracking against video: correcting bounding boxes, repairing identity spans, and checking continuity with synchronized diagnostic views.
         </p>
         <div class="tool-actions">
           <a href="Tools/mouse-tracking/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
-          <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally — your videos stay on your device</span>
+          <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally: your videos stay on your device</span>
         </div>
       </div>
       <div class="tool-author">
@@ -190,11 +190,11 @@
 
         <div class="callout"><strong>New in this version:</strong> boxes can now be <strong>rotated</strong> (select a box and drag its ⟳ knob; angles interpolate between keyframes), each animal can be given a <strong>colored ID tag</strong> for research labels, and clips carry a <strong>review status</strong> with an <strong>onion-skin</strong> overlay that blends neighboring frames while paused.</div>
 
-        <div class="callout"><strong>Core rule:</strong> a manually corrected box is always an exact, non-interpolatable <strong>anchor (◆)</strong>. The tool only helps neighboring frames when the correction can be propagated safely — it never averages or alters a box you set by hand.</div>
+        <div class="callout"><strong>Core rule:</strong> a manually corrected box is always an exact, non-interpolatable <strong>anchor (◆)</strong>. The tool only helps neighboring frames when the correction can be propagated safely. It never averages or alters a box you set by hand.</div>
 
         <figure class="guide-fig hero">
           <img src="images/mmt_guide/fig-workspace.jpg" alt="The Multiple Mouse Tracking workspace with numbered callouts">
-          <figcaption>The workspace at a glance — <strong>(1)</strong> clip browser, <strong>(2)</strong> main video with box / ID / trace overlays, <strong>(3)</strong> display controls, <strong>(4)</strong> the per-mouse timeline with hard-anchor diamonds, <strong>(5)</strong> the View tab, and <strong>(6)</strong> the optional arena ROI.</figcaption>
+          <figcaption>The workspace at a glance: <strong>(1)</strong> clip browser, <strong>(2)</strong> main video with box / ID / trace overlays, <strong>(3)</strong> display controls, <strong>(4)</strong> the per-mouse timeline with hard-anchor diamonds, <strong>(5)</strong> the View tab, and <strong>(6)</strong> the optional arena ROI.</figcaption>
         </figure>
 
         <div class="toc">
@@ -220,7 +220,7 @@
         <!-- 1 -->
         <div class="guide-section">
           <h3 id="glance">1 · At a glance</h3>
-          <p class="lead">A local environment for reviewing and correcting the output of our in-house tracking model — not an automatic tracker.</p>
+          <p class="lead">A local environment for reviewing and correcting the output of our in-house tracking model, not an automatic tracker.</p>
           <p>
             This tool lets you review the results of our <strong>in-house developed mouse detection and tracking model</strong> against the source video, correct bounding-box geometry, repair identity spans, and check continuity with synchronized diagnostic plots. Everything runs in your browser and nothing is uploaded.
           </p>
@@ -243,7 +243,7 @@
           <h3 id="begin">2 · Before you begin</h3>
           <p class="lead">Protect the original tracking output before granting write access.</p>
           <p>
-            Open the tool in a current Chromium browser that supports writable folder access — <strong>Chrome or Edge</strong>. Click <strong>open folder</strong> and approve read/write access. The browser reads files directly in the chosen folder; it does not scan nested subfolders.
+            Open the tool in a current Chromium browser that supports writable folder access: <strong>Chrome or Edge</strong>. Click <strong>open folder</strong> and approve read/write access. The browser reads files directly in the chosen folder; it does not scan nested subfolders.
           </p>
           <ul class="action-list">
             <li>Keep each clip's JSON and MP4 in the same top-level folder with exactly the same basename.</li>
@@ -251,7 +251,7 @@
             <li>Playback is muted by design.</li>
             <li>A <strong>manifest.json</strong> is optional but recommended for corpus, suspicion, and clip metadata.</li>
           </ul>
-          <div class="callout warn"><strong>Back up first.</strong> The tool has no Save As or export-copy command — it writes the selected JSON <em>in place</em>. Always practice on a duplicate folder.</div>
+          <div class="callout warn"><strong>Back up first.</strong> The tool has no Save As or export-copy command. It writes the selected JSON <em>in place</em>. Always practice on a duplicate folder.</div>
           <h4>Recommended layout &amp; JSON format</h4>
           <div class="code-block">tracking_folder/
   manifest.json        # optional but recommended
@@ -268,7 +268,7 @@
      [2, 495, 1033, 309, 85, 1.0]]
   ]
 }</div>
-          <p class="lead">Without a manifest, the tool treats most top-level <code>.json</code> files as clips — keep unrelated files (e.g. <code>*.stats.json</code>) out of the working folder, or provide a curated manifest.</p>
+          <p class="lead">Without a manifest, the tool treats most top-level <code>.json</code> files as clips, so keep unrelated files (e.g. <code>*.stats.json</code>) out of the working folder, or provide a curated manifest.</p>
         </div>
 
         <!-- 3 -->
@@ -279,7 +279,7 @@
             <table class="guide-table">
               <tr><th>Area</th><th>What it controls</th></tr>
               <tr><td>Clip browser</td><td>Folder status, corpus filter, sorting, text filter, and clip selection.</td></tr>
-              <tr><td>IDs shown</td><td>Visibility only — click a row to hide/show, click its swatch to cycle color, or reset colors.</td></tr>
+              <tr><td>IDs shown</td><td>Visibility only. Click a row to hide/show, click its swatch to cycle color, or reset colors.</td></tr>
               <tr><td>Video overlay</td><td>Current boxes, ID labels, traces, selection handles, red jump rings, and the HUD.</td></tr>
               <tr><td>Control strip</td><td>Playback, overlays, Add bbox, ID text size, box/trace widths, selection readout, Undo, deletion.</td></tr>
               <tr><td>Timeline</td><td>Presence blocks, current frame, hard-anchor diamonds, group selection, and identity edits.</td></tr>
@@ -290,7 +290,7 @@
           <ol class="steps">
             <li>Make a disposable copy of one paired JSON/MP4 clip and open its folder.</li>
             <li>Confirm JSON autosave is enabled, select the clip, and use <kbd>Space</kbd> plus the arrow keys to navigate.</li>
-            <li>Click a box and make a small move — confirm a yellow diamond appears in the timeline.</li>
+            <li>Click a box and make a small move, then confirm a yellow diamond appears in the timeline.</li>
             <li>Press <kbd>Cmd</kbd>/<kbd>Ctrl</kbd>+<kbd>Z</kbd> and confirm the edit is removed and autosaved.</li>
             <li>Wait for the saved message, reopen the folder, and verify the correction is reconstructed.</li>
           </ol>
@@ -327,10 +327,10 @@
         <!-- 5 -->
         <div class="guide-section">
           <h3 id="bbox">5 · Correct bounding boxes</h3>
-          <p class="lead">A box drag edits the current frame — even though clicking selects the full contiguous timeline block.</p>
+          <p class="lead">A box drag edits the current frame, even though clicking selects the full contiguous timeline block.</p>
           <figure class="guide-fig">
             <img src="images/mmt_guide/fig-bbox.jpg" alt="Select, move or resize, then release to create a hard anchor">
-            <figcaption>Select the box, drag inside / edge / corner to move or resize, then release — the corrected frame becomes an exact hard anchor (yellow diamond in the timeline).</figcaption>
+            <figcaption>Select the box, drag inside / edge / corner to move or resize, then release. The corrected frame becomes an exact hard anchor (yellow diamond in the timeline).</figcaption>
           </figure>
           <div class="table-wrap">
             <table class="guide-table">
@@ -342,7 +342,7 @@
             </table>
           </div>
           <p>A drag must move a few screen pixels before it commits. Boxes are clamped to the video with a minimum source size of 4×4 px. When boxes overlap, the selected one is favored; otherwise the smallest hit box wins.</p>
-          <div class="callout"><strong>Every manual frame is an exact anchor.</strong> The box you enter is restored exactly after every recompute and reload — never averaged. The tool picks one of three propagation modes automatically: a <strong>modest</strong> move/resize fades into nearby frames over ~1 s; a <strong>severe</strong> large-to-small resize may trigger oversized-run correction (below); an <strong>extreme</strong> move or unsafe geometry stays isolated to the anchor.</div>
+          <div class="callout"><strong>Every manual frame is an exact anchor.</strong> The box you enter is restored exactly after every recompute and reload, never averaged. The tool picks one of three propagation modes automatically: a <strong>modest</strong> move/resize fades into nearby frames over ~1 s; a <strong>severe</strong> large-to-small resize may trigger oversized-run correction (below); an <strong>extreme</strong> move or unsafe geometry stays isolated to the anchor.</div>
         </div>
 
         <!-- 6 -->
@@ -365,7 +365,7 @@
             <li>Resize tightly around the animal using the edge or corner that should stay fixed.</li>
             <li>Scrub backward and forward through every affected frame.</li>
             <li>Confirm normal boxes at the run boundary are unchanged.</li>
-            <li>Add another anchor when the true size, orientation, or motion changes — don't force one anchor across a different situation.</li>
+            <li>Add another anchor when the true size, orientation, or motion changes. Don't force one anchor across a different situation.</li>
           </ol>
           <p class="lead">If a neighbor should <em>not</em> change: undo immediately, correct that neighbor manually, and use its anchor as a hard barrier for the run.</p>
         </div>
@@ -373,7 +373,7 @@
         <!-- 7 -->
         <div class="guide-section">
           <h3 id="rings">7 · Reach suspicious frames with red jump rings</h3>
-          <p class="lead">A jump ring is a navigation cue — not proof that the tracking is wrong.</p>
+          <p class="lead">A jump ring is a navigation cue, not proof that the tracking is wrong.</p>
           <figure class="guide-fig">
             <img src="images/mmt_guide/fig-rings.jpg" alt="Hover a red ring for context, then click or press J to reach the destination frame">
             <figcaption>A red ring marks a large center jump in a visible trace. Hover for context (ID and source → destination frames), then click it or press <kbd>J</kbd> to jump with the ID selected.</figcaption>
@@ -391,7 +391,7 @@
         <!-- 8 -->
         <div class="guide-section">
           <h3 id="addbox">8 · Recover a missing detection with Add bbox</h3>
-          <p class="lead">Add bbox creates a new track to the clip end — trim it immediately when recovering only a short gap.</p>
+          <p class="lead">Add bbox creates a new track to the clip end, so trim it immediately when recovering only a short gap.</p>
           <figure class="guide-fig">
             <img src="images/mmt_guide/fig-addbox.jpg" alt="Draw a new ID, trim its generated tail, and add anchors through the recovered interval">
             <figcaption>Draw a box at the first missing frame; the new ID extends to the clip end. Trim the timeline block's right edge to the true last frame, then add anchors across the recovered span.</figcaption>
@@ -404,7 +404,7 @@
             <li>Add geometry anchors across the recovered span and inspect every entry, exit, and close contact.</li>
             <li>Relabel or merge the recovered block only after its time span is correct.</li>
           </ol>
-          <p class="lead">No motion prediction: Add bbox and outward extension copy a fixed boundary box — they do not track the animal automatically.</p>
+          <p class="lead">No motion prediction: Add bbox and outward extension copy a fixed boundary box, so they do not track the animal automatically.</p>
         </div>
 
         <!-- 9 -->
@@ -415,7 +415,7 @@
             <img src="images/mmt_guide/fig-timeline.png" alt="Presence blocks, hard anchors, selection, and structural drop targets">
             <figcaption>Each row is one ID; solid segments are presence blocks and yellow diamonds are manual anchors. Drag a block onto another ID to merge, Shift-drop to swap, or drop on <strong>＋ new id</strong> / <strong>delete</strong> to split or remove.</figcaption>
           </figure>
-          <p>Each colored row is one ID; a solid segment is a contiguous presence block. Yellow diamonds mark manual anchors and the blue line is the current frame. <strong>Clicking a box or block selects that ID's complete contiguous block</strong> — so Delete may remove many frames even though a box drag edits only one.</p>
+          <p>Each colored row is one ID; a solid segment is a contiguous presence block. Yellow diamonds mark manual anchors and the blue line is the current frame. <strong>Clicking a box or block selects that ID's complete contiguous block</strong>, so Delete may remove many frames even though a box drag edits only one.</p>
           <ul class="action-list">
             <li>Click a block to select its span; <strong>Shift-click</strong> to append more.</li>
             <li><strong>Right/Ctrl-click</strong> a block to select and open the context menu; <strong>Right/Ctrl-drag</strong> across rows for a rectangular group selection.</li>
@@ -426,10 +426,10 @@
               <tr><th>Gesture</th><th>Result</th><th>Mandatory follow-up</th></tr>
               <tr><td>Delete / trash drop</td><td>Remove detections &amp; anchors over the selection.</td><td>Confirm the range before committing.</td></tr>
               <tr><td>Drop on ＋ new ID</td><td>Assign the range to the next unused ID.</td><td>Verify both old and new lanes.</td></tr>
-              <tr><td>Drop on another ID</td><td>Reassign/merge into the target ID.</td><td>Inspect overlaps — two boxes may become their union.</td></tr>
+              <tr><td>Drop on another ID</td><td>Reassign/merge into the target ID.</td><td>Inspect overlaps. Two boxes may become their union.</td></tr>
               <tr><td>Shift-drop on another ID</td><td>Swap the two IDs over the dragged span.</td><td>Inspect both tracks at both boundaries.</td></tr>
               <tr><td>Drag block edge inward</td><td>Trim false presence.</td><td>Check deleted anchors and the boundary.</td></tr>
-              <tr><td>Drag block edge outward</td><td>Extend using the boundary box.</td><td>Add anchors — copied boxes aren't motion prediction.</td></tr>
+              <tr><td>Drag block edge outward</td><td>Extend using the boundary box.</td><td>Add anchors. Copied boxes aren't motion prediction.</td></tr>
               <tr><td>Select + context merge</td><td>Merge into the first selected ID.</td><td>Confirm the first selection is the intended target.</td></tr>
             </table>
           </div>
@@ -441,7 +441,7 @@
           <p class="lead">View summarizes the same corrected annotations without creating a second copy.</p>
           <figure class="guide-fig">
             <img src="images/mmt_guide/fig-view.jpg" alt="The View dashboard: annotated video, time-space, trajectory, density, velocity, distance, pair distance">
-            <figcaption>The View dashboard: annotated video and overlap timebar, plus Time-Space, trajectory, spatial density, velocity, distance, and pair-distance plots. These are QC aids from box centers — not calibrated measurements.</figcaption>
+            <figcaption>The View dashboard: annotated video and overlap timebar, plus Time-Space, trajectory, spatial density, velocity, distance, and pair-distance plots. These are QC aids from box centers, not calibrated measurements.</figcaption>
           </figure>
           <div class="table-wrap">
             <table class="guide-table">
@@ -463,7 +463,7 @@
         <!-- 11 -->
         <div class="guide-section">
           <h3 id="autosave">11 · Autosave, undo &amp; recovery</h3>
-          <p class="lead">The durable record is the successfully written JSON — not the browser cache.</p>
+          <p class="lead">The durable record is the successfully written JSON, not the browser cache.</p>
           <p>There is no separate Save, Export, Save As, or Import. Edits are queued for JSON writeback automatically; switching clips or folders flushes pending saves. <strong>Before closing the page, wait for a saved status message.</strong> Corrected frames are written to <code>frames</code>, the arena to <code>plot_roi</code>, and <code>_mmt_bbox_editor</code> stores hard anchors, immutable source bases, propagation mode, and structural locks so the result can be reconstructed.</p>
           <ul class="action-list">
             <li>Undo stores up to 50 box or structural operations and is itself autosaved. There is <strong>no Redo</strong>, and history clears when another clip is opened.</li>
@@ -474,7 +474,7 @@
             <li>Stop editing and read the exact save-status message.</li>
             <li>Keep the page open while restoring folder permission or removing a file lock.</li>
             <li>Manual box anchors may have a browser-cache fallback; structural edits do not.</li>
-            <li>Compare with your external backup — browser cache is an emergency aid, not a backup.</li>
+            <li>Compare with your external backup. Browser cache is an emergency aid, not a backup.</li>
             <li>After recovery, reopen the folder and verify the saved clip before continuing.</li>
           </ol>
         </div>
@@ -538,14 +538,14 @@
               <tr><td>Folder will not open</td><td>Use current Chrome/Edge, grant read/write access, choose the top-level folder.</td></tr>
               <tr><td>Clip has no video</td><td>Confirm a same-basename, browser-playable MP4 sits beside the JSON.</td></tr>
               <tr><td>Arrow keys feel stuck</td><td>Release both arrows, click outside any input, press again; editing always pauses playback.</td></tr>
-              <tr><td>Delete changed too many frames</td><td>Undo immediately — a click selects the whole contiguous presence block.</td></tr>
+              <tr><td>Delete changed too many frames</td><td>Undo immediately. A click selects the whole contiguous presence block.</td></tr>
               <tr><td>Extended boxes don't follow motion</td><td>Expected: extension copies the boundary box. Add anchors or shorten the extension.</td></tr>
               <tr><td>A large correction touched the wrong neighbor</td><td>Undo; anchor the frame that must stay exact, then review the barriers.</td></tr>
               <tr><td>Save reports failure</td><td>Stop, keep the page open, restore write permission/remove locks, verify against backup.</td></tr>
               <tr><td>Unexpected clips appear</td><td>Add a manifest or remove unrelated top-level JSON (e.g. stats files).</td></tr>
             </table>
           </div>
-          <p><strong>Known limits:</strong> no Redo, Save As, export copy, arbitrary interior lasso, or automatic backup. Only the selected JSON is rewritten (masks, MOT files, and model outputs are not synchronized). Plots use box centers and pixels — not calibrated distance or pose landmarks — and long clips are sampled for View, so the plots supplement but never replace frame-by-frame validation.</p>
+          <p><strong>Known limits:</strong> no Redo, Save As, export copy, arbitrary interior lasso, or automatic backup. Only the selected JSON is rewritten (masks, MOT files, and model outputs are not synchronized). Plots use box centers and pixels, not calibrated distance or pose landmarks, and long clips are sampled for View, so the plots supplement but never replace frame-by-frame validation.</p>
           <div class="callout"><strong>Finish safely:</strong> wait for the saved message, close the clip only after pending writes finish, then reopen and spot-check anchors, identity boundaries, and one smart-propagated run.</div>
         </div>
 
