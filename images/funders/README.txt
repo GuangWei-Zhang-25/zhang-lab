@@ -1,18 +1,23 @@
 Funder logo files for funding.html.
 
-Present:
-  nih-nia.svg                 official, from nia.nih.gov
-  alzheimers-association.svg  official, from alz.org
-  bbrf.png                    official, from bbrfoundation.org (143x64, shown at native size)
-  vcu-provost.svg             VCU academic logo, from branding.vcu.edu
-                              (no Office of the Provost lockup is published)
+Present (each downloaded from the organization's own site):
+  nih-nia.svg                 nia.nih.gov
+  alzheimers-association.svg  alz.org
+  bbrf.png                    bbrfoundation.org (143x64; shown at native size,
+                              never upscaled, so it stays sharp)
+  vcu-provost.svg             branding.vcu.edu (VCU academic logo; no Office of
+                              the Provost lockup is published)
 
-Missing:
-  whitehall-foundation.png    the Foundation publishes no logo image file; its own
-                              site sets the name as CSS text, so the card falls back
-                              to a typographic wordmark. Drop a PNG/SVG here with
-                              this name to replace it.
+Not a file:
+  The Whitehall Foundation publishes no logo image. Its mark is rendered in CSS
+  on its own site, so funding.html rebuilds it the same way, using the values
+  from whitehall.org/css/style.css:
+      .logo-title  background #d9d9f0, text #5f7ca0, 700 weight, uppercase
+      .logo-since  background #5f7ca0, text #ffffff, 300 weight, 0.15em tracking
+      typeface     Roboto Condensed
+  See .wh-mark / .wh-title / .wh-since in funding.html. If the Foundation ever
+  releases an image, drop it here and swap the markup back to an <img>.
 
-Each card shows a typographic wordmark until its file exists, then swaps to the
-image automatically. To use a different extension, update the src in funding.html.
-The logo band is 120 px tall and uses object-fit: contain, so images never upscale.
+Cards with an <img> fall back to a typographic wordmark if the file is missing,
+then swap to the image automatically once it exists. The logo band is 120 px
+tall and uses object-fit: contain.

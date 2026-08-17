@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Funding Sources | Zhang Lab</title>
   <meta name="description" content="Foundations, federal institutes, and university programs whose support makes research in the Zhang Laboratory at Virginia Commonwealth University possible">
-  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Roboto+Condensed:wght@300;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -197,6 +197,43 @@
        name below would otherwise be printed twice. */
     .funder-card.no-logo .funder-name { display: none; }
 
+    /* Whitehall publishes no logo image: its mark is rendered in CSS on its
+       own site. Rebuilt here from their published colors and type. */
+    .funder-logo.whitehall-logo { padding: 0; display: block; }
+
+    .wh-mark {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-family: 'Roboto Condensed', 'Arial Narrow', Arial, sans-serif;
+    }
+
+    .wh-title {
+      background: #d9d9f0;
+      color: #5f7ca0;
+      font-size: clamp(1rem, 2.1vw, 1.5rem);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      line-height: 1.15;
+      padding: 0.7rem 0.6rem;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .wh-since {
+      background: #5f7ca0;
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 0.35rem;
+      text-align: center;
+    }
+
     .funder-body {
       padding: 1.15rem 1.4rem 1.35rem;
       display: flex;
@@ -346,9 +383,11 @@
 
       <!-- Whitehall Foundation -->
       <article class="funder-card">
-        <div class="funder-logo">
-          <img src="images/funders/whitehall-foundation.png" alt="Whitehall Foundation" onerror="this.closest(&#39;.funder-card&#39;).classList.add(&#39;no-logo&#39;); this.remove()">
-          <span class="funder-wordmark">Whitehall Foundation</span>
+        <div class="funder-logo whitehall-logo">
+          <div class="wh-mark" role="img" aria-label="Whitehall Foundation, since 1937">
+            <div class="wh-title">Whitehall Foundation</div>
+            <div class="wh-since">Since 1937</div>
+          </div>
         </div>
         <div class="funder-body">
           <div class="funder-program">Research Grant</div>
