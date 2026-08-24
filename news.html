@@ -247,6 +247,25 @@
       border: 1px solid var(--border-light);
     }
 
+    /* Funder logos: centered in the box, never cropped, scale down on narrow screens */
+    .news-images.logo { max-width: 100%; }
+
+    .news-images.logo .news-image-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      background: var(--white);
+    }
+
+    .news-images.logo .news-image-wrapper img {
+      width: auto;
+      max-width: 100%;
+      max-height: none;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
     .news-image-wrapper img {
       width: 100%;
       max-height: 220px;
@@ -407,6 +426,12 @@
         <p class="news-text">
           The Zhang Lab has been awarded an <strong>NIH NIA R24 Pilot & Feasibility Grant</strong> from the <strong>Animal Models for the Social Dimensions of Health and Aging Research Network</strong> to study <strong>naturalistic group social behavior in aging and social loss</strong>. This award will enable us to explore how social dynamics change across the lifespan and in response to social loss, using rodent models. We are grateful for this support to advance our understanding of the social dimensions of aging.
         </p>
+
+        <div class="news-images single logo">
+          <div class="news-image-wrapper">
+            <img src="images/funders/nih-nia.svg" alt="National Institute on Aging, National Institutes of Health" style="height: 56px;">
+          </div>
+        </div>
       </div>
     </article>
 
@@ -418,9 +443,9 @@
           <strong>Dr. Guang-Wei Zhang</strong> has been awarded a <a href="https://www.whitehall.org/" target="_blank"><strong>Whitehall Foundation</strong> Research Grant</a> to study the <strong>circuit architecture underlying the control of naturalistic parenting behaviors</strong> using rodent models. The Whitehall Foundation supports basic research in vertebrate and invertebrate neurobiology, with a focus on neural mechanisms that underlie behavior. We are grateful for the generous support from the Whitehall Foundation to the Zhang Lab.
         </p>
 
-        <div class="news-images single">
+        <div class="news-images single logo">
           <div class="news-image-wrapper">
-            <img src="images/funders/whitehall-foundation.png" alt="Whitehall Foundation logo" style="width: 260px; max-width: 100%; height: auto;">
+            <img src="images/funders/whitehall-foundation.png" alt="Whitehall Foundation logo" style="height: 52px;">
           </div>
         </div>
 
@@ -449,9 +474,9 @@
           <strong>Dr. Can Tao (Catherine)</strong> has been awarded a <a href="https://bbrfoundation.org/grants-prizes/bbrf-young-investigator-grants" target="_blank"><strong>Brain &amp; Behavior Research Foundation (BBRF) Young Investigator Grant</strong></a>, running from January 2027 through January 2029, to study <strong>estrogen-related female neuropsychiatric disorders</strong>. The BBRF Young Investigator program supports outstanding early-career scientists in neuroscience and psychiatry. Congratulations, Catherine, on this prestigious award!
         </p>
 
-        <div class="news-images single">
+        <div class="news-images single logo">
           <div class="news-image-wrapper">
-            <img src="images/funders/bbrf.png" alt="Brain &amp; Behavior Research Foundation" style="width: 180px; max-width: 100%; height: auto;">
+            <img src="images/funders/bbrf.png" alt="Brain &amp; Behavior Research Foundation" style="height: 60px;">
           </div>
         </div>
       </div>
@@ -559,9 +584,9 @@
           The Zhang Lab has been awarded a <strong>VCU Convergence Seed Award</strong>, supporting a collaborative project with <strong>Dr. Dean Krusienski</strong> (VCU School of Engineering) and <strong>Dr. Priyodarshan Goswamee</strong> (Department of Neuroscience and Anatomy). This award will fuel a cross-disciplinary effort bridging neuroscience, engineering, and neural circuit research.
         </p>
 
-        <div class="news-images single">
+        <div class="news-images single logo">
           <div class="news-image-wrapper">
-            <img src="images/funders/vcu-provost.svg" alt="VCU Office of the Provost logo" style="width: 150px; max-width: 100%; height: auto;">
+            <img src="images/funders/vcu-provost.png" alt="VCU Office of the Provost logo" style="height: 46px;">
           </div>
         </div>
       </div>
