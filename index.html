@@ -125,7 +125,7 @@
     .nav-menu {
       display: flex;
       list-style: none;
-      gap: 1.75rem;
+      gap: 1.5rem;
     }
 
     .nav-menu a {
@@ -240,44 +240,9 @@
       min-height: 60vh;
       display: flex;
       align-items: center;
+      background: linear-gradient(165deg, var(--bg-light) 0%, var(--white) 50%, var(--bg-warm) 100%);
       position: relative;
       overflow: hidden;
-      background-color: var(--primary-dark);
-      background-image:
-        linear-gradient(100deg, rgba(10,26,46,0.88) 0%, rgba(10,26,46,0.72) 42%, rgba(10,26,46,0.42) 70%, rgba(10,26,46,0.30) 100%),
-        url('images/lab-group-banner.jpg');
-      background-size: cover;
-      background-position: center 42%;
-      background-repeat: no-repeat;
-      padding: 3.5rem 0;
-    }
-
-    /* Lighter file for phones: the 2400px banner is wasted bandwidth there */
-    @media (max-width: 700px) {
-      .hero {
-        background-image:
-          linear-gradient(180deg, rgba(10,26,46,0.55) 0%, rgba(10,26,46,0.76) 50%, rgba(10,26,46,0.86) 100%),
-          url('images/lab-group-banner-sm.jpg');
-        background-position: center 35%;
-      }
-    }
-
-    /* Hero text sits on the photo, so it inverts to light-on-dark */
-    .hero .hero-eyebrow { color: var(--accent); }
-    .hero .hero-eyebrow::before { background: var(--accent); }
-    .hero .hero-subtitle {
-      color: rgba(255,255,255,0.92);
-      text-shadow: 0 1px 12px rgba(0,0,0,0.45);
-    }
-    .hero .btn-secondary {
-      color: #ffffff;
-      border-color: rgba(255,255,255,0.55);
-      background: rgba(255,255,255,0.06);
-    }
-    .hero .btn-secondary:hover {
-      background: rgba(255,255,255,0.16);
-      border-color: #ffffff;
-      color: #ffffff;
     }
 
     .hero::before {
@@ -401,8 +366,7 @@
       font-size: clamp(2.5rem, 5vw, 4rem);
       font-weight: 700;
       line-height: 1.15;
-      color: #ffffff;
-      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+      color: var(--primary-dark);
       margin-bottom: 1.5rem;
       letter-spacing: -0.02em;
     }
@@ -1623,6 +1587,7 @@
       <li><a href="funding.html">Funding</a></li>
       <li><a href="teaching.html">Teaching</a></li>
       <li><a href="news.html">News</a></li>
+      <li><a href="activities.html">Activities</a></li>
       <li><a href="contact.html">Join Us</a></li>
     </ul>
     <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">

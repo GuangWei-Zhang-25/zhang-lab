@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab Activities | Zhang Lab</title>
+  <meta name="description" content="Lunches, outings, and gatherings of the Zhang Laboratory at Virginia Commonwealth University">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2c5282;
+      --primary-dark: #0f2744;
+      --accent: #c9a227;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --bg-light: #f7fafc;
+      --bg-warm: #fffbf5;
+      --white: #ffffff;
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e0;
+      --font-serif: 'Crimson Text', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: all 0.3s ease;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+
+    /* Navigation */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-light);
+      transition: var(--transition);
+    }
+
+    .navbar .container {
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 24px;
+    }
+
+    .nav-brand a {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-logo {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-divider { width: 1px; height: 24px; background: var(--border-medium); }
+    .nav-subtitle { font-size: 0.85rem; color: var(--text-muted); }
+
+    .nav-menu { display: flex; list-style: none; gap: 1.5rem; }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: var(--transition);
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: var(--transition);
+    }
+
+    .nav-menu a:hover { color: var(--primary); }
+    .nav-menu a:hover::after { width: 100%; }
+    .nav-menu a.active { color: var(--primary); }
+    .nav-menu a.active::after { width: 100%; }
+
+    .nav-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+    .nav-toggle span { width: 24px; height: 2px; background: var(--primary); }
+
+    /* Page header */
+    .page-header {
+      padding: 120px 0 44px;
+      background: linear-gradient(165deg, var(--bg-light) 0%, var(--white) 50%, var(--bg-warm) 100%);
+      margin-top: 70px;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 3vw, 2.75rem);
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 0.75rem;
+    }
+
+    .page-header-subtitle {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Activity entries */
+    .activities-section { padding: 48px 0 72px; }
+
+    .activity {
+      border: 1px solid var(--border-light);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--white);
+      box-shadow: 0 8px 30px rgba(26, 54, 93, 0.05);
+      margin-bottom: 2rem;
+      transition: var(--transition);
+    }
+
+    .activity:last-child { margin-bottom: 0; }
+
+    .activity:hover {
+      box-shadow: 0 16px 40px rgba(26, 54, 93, 0.1);
+      border-color: var(--border-medium);
+    }
+
+    /* Wide group shots: show the whole frame, never crop faces out */
+    .activity-photo { display: block; width: 100%; }
+
+    .activity-photo img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .activity-body { padding: 1.35rem 1.6rem 1.5rem; }
+
+    .activity-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 1.25rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .activity-meta span { display: inline-flex; align-items: center; gap: 0.4rem; }
+    .activity-meta i { font-size: 0.75rem; }
+
+    .activity-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      line-height: 1.25;
+      margin-bottom: 0.35rem;
+    }
+
+    .activity-venue { font-size: 0.95rem; color: var(--text-secondary); }
+    .activity-venue a { color: var(--primary); font-weight: 500; text-decoration: none; }
+    .activity-venue a:hover { text-decoration: underline; }
+
+    /* Footer */
+    .footer { background: var(--primary-dark); color: rgba(255, 255, 255, 0.8); padding: 3rem 0; }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; }
+    .footer-brand { font-family: var(--font-serif); font-size: 1.25rem; color: var(--white); font-weight: 600; }
+    .footer-text { font-size: 0.875rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: rgba(255, 255, 255, 0.7); text-decoration: none; font-size: 0.875rem; }
+    .footer-links a:hover { color: var(--white); }
+
+    @media (max-width: 968px) {
+      .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        background: var(--white);
+        width: 100%;
+        text-align: center;
+        transition: var(--transition);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 2rem 0;
+        gap: 1.5rem;
+      }
+      .nav-menu.active { left: 0; }
+      .nav-toggle { display: flex; }
+      .nav-subtitle, .nav-divider { display: none; }
+      .page-header { padding: 90px 0 32px; }
+      .activity-body { padding: 1.1rem 1.2rem 1.25rem; }
+      .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <a href="index.html">
+        <span class="nav-logo">Zhang Lab</span>
+        <span class="nav-divider"></span>
+        <span class="nav-subtitle">Neuroscience at VCU</span>
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="funding.html">Funding</a></li>
+      <li><a href="teaching.html">Teaching</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="activities.html" class="active">Activities</a></li>
+      <li><a href="contact.html">Join Us</a></li>
+    </ul>
+    <div class="nav-toggle" aria-label="Toggle navigation" role="button" tabindex="0">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>
+
+<header class="page-header">
+  <div class="container">
+    <h1>Lab Activities</h1>
+    <p class="page-header-subtitle">
+      Lunches, outings, and the time we spend together outside the lab.
+    </p>
+  </div>
+</header>
+
+<section class="activities-section">
+  <div class="container">
+
+    <article class="activity">
+      <div class="activity-photo">
+        <img src="images/activities/2026-08-26-lab-lunch.jpg" alt="The Zhang Lab together at a lab lunch at Fall Line Kitchen &amp; Bar, August 26, 2026">
+      </div>
+      <div class="activity-body">
+        <div class="activity-meta">
+          <span><i class="fas fa-calendar-day"></i> August 26, 2026</span>
+        </div>
+        <h2 class="activity-title">Lab Lunch</h2>
+        <p class="activity-venue"><i class="fas fa-location-dot"></i> Fall Line Kitchen &amp; Bar</p>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container" style="max-width: 1200px;">
+    <div class="footer-content">
+      <div class="footer-brand">Zhang Lab</div>
+      <p class="footer-text">&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
+      <div class="footer-links">
+        <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
+        <a href="https://www.vcu.edu/" target="_blank">VCU</a>
+        <a href="contact.html">Join Us</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+navToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+</script>
+
+</body>
+</html>
