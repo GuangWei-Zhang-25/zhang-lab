@@ -448,6 +448,23 @@
     a.summary-note { text-decoration: none; }
     a.summary-note:hover { color: var(--primary); text-decoration: underline; }
 
+    /* Access notice for VCU-network-only resources */
+    .summary-access {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      font-size: 0.7rem;
+      line-height: 1.5;
+      color: #7a5e18;
+      background: rgba(201, 162, 39, 0.12);
+      border: 1px solid rgba(201, 162, 39, 0.32);
+      border-radius: 6px;
+      padding: 0.5rem 0.6rem;
+      margin: -0.2rem 0 0.8rem;
+    }
+
+    .summary-access i { font-size: 0.7rem; margin-top: 0.15rem; }
+
     .summary-soon {
       display: inline-flex;
       align-items: center;
@@ -731,6 +748,36 @@
           <div class="summary-actions">
             <a href="tool-parenting-annotator.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
             <a href="Tools/parenting-annotator/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Datasets group -->
+    <div class="tool-group-head">
+      <h2>Datasets</h2>
+      <p>Shared data the lab is building together, with annotation open to contributors.</p>
+    </div>
+
+    <div class="tool-grid">
+
+      <!-- MouseWorld -->
+      <div class="tool-summary">
+        <div class="summary-media"><i class="fas fa-database media-icon"></i></div>
+        <div class="summary-body">
+          <div class="summary-eyebrow">Dataset · Community Effort</div>
+          <div class="summary-name">MouseWorld</div>
+          <p class="summary-desc">
+            A growing dataset of mouse behaviors across many contexts, annotated as a community effort. Contributions are welcome: pick a session and annotate bounding boxes or body keypoints.
+          </p>
+          <div class="summary-access">
+            <i class="fas fa-lock"></i>
+            <span>On the <strong>VCU network only</strong>. Ask the PI for the default password.</span>
+          </div>
+          <div class="summary-actions">
+            <a href="http://172.31.149.142:8010/" class="btn-launch" target="_blank" rel="noopener" title="Annotate bounding boxes (VCU network only)"><i class="fas fa-vector-square"></i> Bounding boxes</a>
+            <a href="http://172.31.149.142:8000" class="btn-launch" target="_blank" rel="noopener" title="Annotate 7 body keypoints (VCU network only)"><i class="fas fa-braille"></i> 7 keypoints</a>
           </div>
         </div>
       </div>
