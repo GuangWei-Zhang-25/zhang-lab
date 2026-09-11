@@ -4,375 +4,88 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Resources | Zhang Lab</title>
-  <meta name="description" content="Curated research resource directories compiled by the Zhang Laboratory at Virginia Commonwealth University">
+  <meta name="description" content="Curated links for aging and Alzheimer's research, student funding, early-career investigators, and VCU internal systems.">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary: #1a365d;
-      --primary-light: #2c5282;
-      --primary-dark: #0f2744;
-      --accent: #c9a227;
-      --text-primary: #1a202c;
-      --text-secondary: #4a5568;
-      --text-muted: #718096;
-      --bg-light: #f7fafc;
-      --bg-warm: #fffbf5;
-      --white: #ffffff;
-      --border-light: #e2e8f0;
-      --border-medium: #cbd5e0;
-      --font-serif: 'Crimson Text', Georgia, serif;
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --transition: all 0.3s ease;
+      --primary:#1a365d; --primary-light:#2c5282; --primary-dark:#0f2744; --accent:#c9a227;
+      --text-primary:#1a202c; --text-secondary:#4a5568; --text-muted:#718096;
+      --bg-light:#f7fafc; --bg-warm:#fffbf5; --white:#fff; --border-light:#e2e8f0; --border-medium:#cbd5e0;
+      --font-serif:'Crimson Text',Georgia,serif; --font-sans:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      --transition:all .3s ease;
     }
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{font-family:var(--font-sans);font-size:16px;line-height:1.7;color:var(--text-primary);background:var(--white);-webkit-font-smoothing:antialiased}
+    .container{max-width:980px;margin:0 auto;padding:0 24px}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    .navbar{position:fixed;width:100%;top:0;z-index:1000;background:rgba(255,255,255,.98);backdrop-filter:blur(10px);border-bottom:1px solid var(--border-light);transition:var(--transition)}
+    .navbar .container{max-width:1200px;display:flex;justify-content:space-between;align-items:center;padding:1.25rem 24px}
+    .nav-brand a{text-decoration:none;color:inherit;display:flex;align-items:center;gap:.75rem}
+    .nav-logo{font-family:var(--font-serif);font-size:1.5rem;font-weight:700;color:var(--primary);letter-spacing:-.02em}
+    .nav-divider{width:1px;height:24px;background:var(--border-medium)}
+    .nav-subtitle{font-size:.85rem;color:var(--text-muted)}
+    .nav-menu{display:flex;list-style:none;gap:1.5rem}
+    .nav-menu a{text-decoration:none;color:var(--text-secondary);font-size:.9rem;font-weight:500;transition:var(--transition);position:relative}
+    .nav-menu a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--primary);transition:var(--transition)}
+    .nav-menu a:hover{color:var(--primary)} .nav-menu a:hover::after{width:100%}
+    .nav-menu a.active{color:var(--primary)} .nav-menu a.active::after{width:100%}
+    .nav-toggle{display:none;flex-direction:column;cursor:pointer;gap:5px}
+    .nav-toggle span{width:24px;height:2px;background:var(--primary)}
 
-    body {
-      font-family: var(--font-sans);
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-primary);
-      background: var(--white);
-      -webkit-font-smoothing: antialiased;
-    }
+    .page-header{padding:116px 0 34px;background:linear-gradient(165deg,var(--bg-light) 0%,var(--white) 50%,var(--bg-warm) 100%);margin-top:70px;text-align:center}
+    .page-header h1{font-family:var(--font-serif);font-size:clamp(2rem,3vw,2.6rem);font-weight:700;color:var(--primary-dark);margin-bottom:.6rem}
+    .page-header-subtitle{font-size:1.02rem;color:var(--text-secondary);max-width:640px;margin:0 auto}
 
-    .container {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+    .toolbar{display:flex;gap:.7rem;align-items:center;margin:26px 0 6px}
+    .toolbar input{flex:1;min-width:0;font:inherit;font-size:.92rem;padding:.6rem .85rem;border:1px solid var(--border-medium);border-radius:9px;background:var(--white);color:var(--text-primary)}
+    .toolbar input:focus{outline:2px solid #a8c3e6;outline-offset:1px;border-color:var(--primary-light)}
+    .toolbar .count{font-size:.8rem;color:var(--text-muted);white-space:nowrap}
 
-    /* Navigation */
-    .navbar {
-      position: fixed;
-      width: 100%;
-      top: 0;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border-light);
-      transition: var(--transition);
-    }
+    .toc{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 8px}
+    .toc a{display:inline-flex;align-items:center;gap:.45rem;font-size:.8rem;font-weight:500;color:var(--primary);
+      text-decoration:none;border:1px solid var(--border-light);background:var(--bg-light);border-radius:999px;padding:.35rem .75rem;transition:var(--transition)}
+    .toc a:hover{border-color:var(--primary-light);background:var(--white)}
+    .toc a i{font-size:.72rem;color:var(--accent)}
+    .toc a span{font-size:.72rem;color:var(--text-muted);font-variant-numeric:tabular-nums}
 
-    .navbar .container {
-      max-width: 1200px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 24px;
-    }
+    .cat{margin:34px 0 0;scroll-margin-top:92px}
+    .cat h2{display:flex;align-items:center;gap:.6rem;font-family:var(--font-serif);font-size:1.35rem;font-weight:700;
+      color:var(--primary-dark);padding-bottom:.45rem;border-bottom:2px solid var(--border-light)}
+    .cat h2 i{font-size:.95rem;color:var(--accent)}
+    .cat h2 .cnt{margin-left:auto;font:500 .72rem var(--font-sans);color:var(--text-muted);font-variant-numeric:tabular-nums}
+    .cat-note{font-size:.82rem;color:#7a5e18;background:rgba(201,162,39,.1);border-left:3px solid rgba(201,162,39,.5);
+      border-radius:0 6px 6px 0;padding:.5rem .7rem;margin:.7rem 0 0}
+    .cat h3{font-size:.73rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-muted);margin:1.25rem 0 .4rem}
 
-    .nav-brand a {
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
+    .rlist{display:grid;gap:1px;background:var(--border-light);border:1px solid var(--border-light);border-radius:9px;overflow:hidden}
+    a.r{display:block;background:var(--white);padding:.6rem .85rem;text-decoration:none;transition:background .18s ease}
+    a.r:hover{background:var(--bg-light)}
+    .rt{display:block;font-size:.93rem;font-weight:600;color:var(--primary-dark);line-height:1.35}
+    .rt i{font-size:.62rem;margin-left:.4rem;color:var(--text-muted);vertical-align:middle}
+    a.r:hover .rt{color:var(--primary-light)}
+    .rd{display:block;font-size:.82rem;color:var(--text-secondary);line-height:1.5;margin-top:.1rem}
 
-    .nav-logo {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: -0.02em;
-    }
+    .empty{display:none;font-size:.9rem;color:var(--text-muted);padding:1.6rem 0;text-align:center}
+    .closing{margin:44px 0 0;font-size:.8rem;color:var(--text-muted);border-top:1px solid var(--border-light);padding-top:1rem}
 
-    .nav-divider {
-      width: 1px;
-      height: 24px;
-      background: var(--border-medium);
-    }
+    .footer{background:var(--primary-dark);color:rgba(255,255,255,.8);padding:3rem 0;margin-top:52px}
+    .footer-content{display:flex;justify-content:space-between;align-items:center}
+    .footer-brand{font-family:var(--font-serif);font-size:1.25rem;color:var(--white);font-weight:600}
+    .footer-text{font-size:.875rem}
+    .footer-links{display:flex;gap:1.5rem}
+    .footer-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.875rem}
+    .footer-links a:hover{color:var(--white)}
 
-    .nav-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .nav-menu {
-      display: flex;
-      list-style: none;
-      gap: 1.5rem;
-    }
-
-    .nav-menu a {
-      text-decoration: none;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: var(--transition);
-      position: relative;
-    }
-
-    .nav-menu a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary);
-      transition: var(--transition);
-    }
-
-    .nav-menu a:hover { color: var(--primary); }
-    .nav-menu a:hover::after { width: 100%; }
-
-    .nav-toggle {
-      display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 5px;
-    }
-
-    .nav-toggle span {
-      width: 24px;
-      height: 2px;
-      background: var(--primary);
-    }
-
-    /* Intro line */
-    .resources-intro {
-      margin-top: 70px;
-      padding: 1.1rem 0 0;
-    }
-
-    .resources-intro .container {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    /* Section */
-    .resources-section {
-      padding: 24px 0 70px;
-    }
-
-    .resource-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .group-head {
-      margin: 2.75rem 0 1.5rem;
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--border-light);
-    }
-
-    .group-head h2 {
-      font-family: var(--font-serif);
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: var(--primary-dark);
-      margin-bottom: 0.2rem;
-    }
-
-    .group-head p {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin: 0;
-    }
-
-    /* Category card */
-    .res-card {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid var(--border-light);
-      border-radius: 16px;
-      overflow: hidden;
-      background: var(--white);
-      box-shadow: 0 8px 30px rgba(26, 54, 93, 0.05);
-      transition: var(--transition);
-    }
-
-    /* Makes the whole card clickable; the Browse button sits above it */
-    .res-card-link {
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      text-indent: -9999px;
-      overflow: hidden;
-    }
-
-    .res-card:has(.res-card-link) { cursor: pointer; }
-    .res-card:has(.res-card-link:hover) .res-name { color: var(--primary-light); }
-    .res-actions { position: relative; z-index: 2; }
-
-    .res-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(26, 54, 93, 0.12);
-      border-color: var(--primary-light);
-    }
-
-    .res-media {
-      height: 118px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg, #0f2744 0%, #1a365d 60%, #2c5282 100%);
-    }
-
-    .res-media i {
-      font-size: 2.1rem;
-      color: rgba(255, 255, 255, 0.85);
-    }
-
-    .res-body {
-      padding: 1rem 1.2rem 1.1rem;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .res-eyebrow {
-      font-size: 0.63rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.3rem;
-    }
-
-    .res-name {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      font-weight: 700;
-      line-height: 1.2;
-      color: var(--primary-dark);
-      margin-bottom: 0.5rem;
-    }
-
-    .res-desc {
-      font-size: 0.83rem;
-      color: var(--text-secondary);
-      line-height: 1.55;
-      flex-grow: 1;
-      margin-bottom: 0.8rem;
-    }
-
-    .res-topics {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.35rem;
-      margin-bottom: 0.9rem;
-    }
-
-    .res-topic {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      background: var(--bg-light);
-      border: 1px solid var(--border-light);
-      border-radius: 4px;
-      padding: 0.15rem 0.45rem;
-    }
-
-    .res-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-
-    .btn-browse {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.5rem 0.95rem;
-      background: var(--accent);
-      color: #3a2e0a;
-      text-decoration: none;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      transition: var(--transition);
-    }
-
-    .btn-browse:hover { background: #e0b736; }
-
-    /* Placeholder */
-    .res-placeholder {
-      border: 2px dashed var(--border-medium);
-      border-radius: 16px;
-      padding: 2.5rem 1.5rem;
-      text-align: center;
-      color: var(--text-muted);
-      background: var(--bg-light);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .res-placeholder i {
-      font-size: 2rem;
-      color: var(--border-medium);
-      margin-bottom: 0.75rem;
-    }
-
-    .res-placeholder h3 {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      color: var(--text-secondary);
-      margin-bottom: 0.4rem;
-    }
-
-    .res-placeholder p {
-      font-size: 0.85rem;
-      max-width: 280px;
-      margin: 0 auto;
-    }
-
-    .res-placeholder a { color: var(--primary); font-weight: 500; text-decoration: none; }
-    .res-placeholder a:hover { text-decoration: underline; }
-
-    /* Footer */
-    .footer {
-      background: var(--primary-dark);
-      color: rgba(255, 255, 255, 0.8);
-      padding: 3rem 0;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .footer-brand {
-      font-family: var(--font-serif);
-      font-size: 1.25rem;
-      color: var(--white);
-      font-weight: 600;
-    }
-
-    .footer-text { font-size: 0.875rem; }
-
-    .footer-links { display: flex; gap: 1.5rem; }
-
-    .footer-links a {
-      color: rgba(255, 255, 255, 0.7);
-      text-decoration: none;
-      font-size: 0.875rem;
-    }
-
-    .footer-links a:hover { color: var(--white); }
-
-    @media (max-width: 768px) {
-      .nav-menu {
-        position: fixed;
-        left: -100%;
-        top: 70px;
-        flex-direction: column;
-        background: var(--white);
-        width: 100%;
-        text-align: center;
-        padding: 2rem 0;
-        gap: 1.5rem;
-        transition: var(--transition);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-      }
-      .nav-menu.active { left: 0; }
-      .nav-toggle { display: flex; }
-      .nav-subtitle, .nav-divider { display: none; }
-      .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
+    @media (max-width:968px){
+      .nav-menu{position:fixed;left:-100%;top:70px;flex-direction:column;background:var(--white);width:100%;
+        text-align:center;transition:var(--transition);box-shadow:0 10px 40px rgba(0,0,0,.1);padding:2rem 0;gap:1.5rem}
+      .nav-menu.active{left:0} .nav-toggle{display:flex}
+      .nav-subtitle,.nav-divider{display:none}
+      .page-header{padding:90px 0 26px}
+      .footer-content{flex-direction:column;gap:1rem;text-align:center}
+      .footer-links{flex-wrap:wrap;justify-content:center}
     }
   </style>
 </head>
@@ -392,7 +105,7 @@
       <li><a href="publications.html">Publications</a></li>
       <li><a href="team.html">Team</a></li>
       <li><a href="tools.html">Tools</a></li>
-      <li><a href="resources.html">Resources</a></li>
+      <li><a href="resources.html" class="active">Resources</a></li>
       <li><a href="funding.html">Funding</a></li>
       <li><a href="teaching.html">Teaching</a></li>
       <li><a href="news.html">News</a></li>
@@ -407,111 +120,23 @@
   </div>
 </nav>
 
-<div class="resources-intro">
-  <div class="container">Curated research resource directories compiled by the Zhang Lab.</div>
-</div>
-
-<section class="resources-section">
+<header class="page-header">
   <div class="container">
-    <div class="resource-grid">
+    <h1>Resources</h1>
+    <p class="page-header-subtitle">Links the lab keeps coming back to, for aging and Alzheimer&rsquo;s research, student funding, running a lab, and VCU systems.</p>
+  </div>
+</header>
 
-      <!-- AD & Aging Research -->
-      <div class="res-card">
-        <a class="res-card-link" href="Resources/ad-aging-research/" target="_blank">Browse the Aging &amp; Alzheimer's Research directory</a>
-        <div class="res-media"><i class="fas fa-book-medical"></i></div>
-        <div class="res-body">
-          <div class="res-eyebrow">NIA &amp; NIH · 42 Resources</div>
-          <div class="res-name">Aging &amp; Alzheimer's Research</div>
-          <p class="res-desc">
-            A searchable directory of NIA and NIH datasets, cohort studies, animal models, biospecimen banks, shared facilities, and investigator-support programs for aging and AD/ADRD research.
-          </p>
-          <div class="res-topics">
-            <span class="res-topic">Human cohorts</span>
-            <span class="res-topic">AD &amp; brain aging</span>
-            <span class="res-topic">Animal models</span>
-            <span class="res-topic">Core facilities</span>
-            <span class="res-topic">Grants &amp; career</span>
-          </div>
-          <div class="res-actions">
-            <a href="Resources/ad-aging-research/" class="btn-browse" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Browse directory</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- PI & Early-Career Investigator -->
-      <div class="res-card">
-        <a class="res-card-link" href="Resources/pi-career-development/" target="_blank">Browse the PI &amp; Early-Career Investigator resources</a>
-        <div class="res-media"><i class="fas fa-chalkboard-user"></i></div>
-        <div class="res-body">
-          <div class="res-eyebrow">Career · 5 Resources</div>
-          <div class="res-name">PI &amp; Early-Career Investigator</div>
-          <p class="res-desc">
-            Training, leadership, and funding resources for scientists preparing to run their own lab, including the Columbia SHARP PI Crash Course and the free HHMI/BWF lab-management guide.
-          </p>
-          <div class="res-topics">
-            <span class="res-topic">Lab leadership</span>
-            <span class="res-topic">Mentoring</span>
-            <span class="res-topic">Project management</span>
-            <span class="res-topic">ESI status</span>
-          </div>
-          <div class="res-actions">
-            <a href="Resources/pi-career-development/" class="btn-browse" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Browse directory</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- VCU Internal Resources -->
-      <div class="res-card">
-        <a class="res-card-link" href="Resources/vcu-internal/" target="_blank">Browse the VCU Internal Resources directory</a>
-        <div class="res-media"><i class="fas fa-building-columns"></i></div>
-        <div class="res-body">
-          <div class="res-eyebrow">VCU · 4 Systems</div>
-          <div class="res-name">VCU Internal Resources</div>
-          <p class="res-desc">
-            The VCU systems the lab uses day to day: RAMS for grants and protocols, RealSource for purchasing, Bank of America Works for card reconciliation, and BioRAFT for lab safety and training.
-          </p>
-          <div class="res-topics">
-            <span class="res-topic">Grants &amp; protocols</span>
-            <span class="res-topic">Purchasing</span>
-            <span class="res-topic">Card reconciliation</span>
-            <span class="res-topic">Lab safety</span>
-          </div>
-          <div class="res-actions">
-            <a href="Resources/vcu-internal/" class="btn-browse" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Browse directory</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Student Funding & Travel Awards -->
-      <div class="res-card">
-        <a class="res-card-link" href="Resources/student-funding/" target="_blank">Browse Student Funding &amp; Travel Awards</a>
-        <div class="res-media"><i class="fas fa-graduation-cap"></i></div>
-        <div class="res-body">
-          <div class="res-eyebrow">Students · 7 Resources</div>
-          <div class="res-name">Student Funding &amp; Travel Awards</div>
-          <p class="res-desc">
-            Fellowships and training grants students can apply for: F30, F31, F32, and F99/K00, plus conference travel support from SfN, the VCU School of Medicine, and the VCU Graduate School.
-          </p>
-          <div class="res-topics">
-            <span class="res-topic">F31 &amp; F32</span>
-            <span class="res-topic">NRSA</span>
-            <span class="res-topic">SfN travel</span>
-            <span class="res-topic">VCU travel</span>
-          </div>
-          <div class="res-actions">
-            <a href="Resources/student-funding/" class="btn-browse" target="_blank"><i class="fas fa-arrow-up-right-from-square"></i> Browse directory</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Placeholder for future categories -->
-      <div class="res-placeholder">
-        <i class="fas fa-folder-plus"></i>
-        <h3>More categories coming soon</h3>
-        <p>Additional resource collections, including student training and grant opportunities. <a href="contact.html">Get in touch</a>.</p>
-      </div>
-
+<section>
+  <div class="container">
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="Filter 58 resources by name or keyword&hellip;" autocomplete="off" aria-label="Filter resources">
+      <span class="count" id="count" aria-live="polite">58 resources</span>
     </div>
+    <nav class="toc" aria-label="Resource categories"><a href="#aging-and-alzheimer-s-research"><i class="fas fa-book-medical"></i> Aging &amp; Alzheimer’s research <span>42</span></a><a href="#student-funding-and-travel-awards"><i class="fas fa-graduation-cap"></i> Student funding &amp; travel awards <span>7</span></a><a href="#pi-and-early-career-investigator"><i class="fas fa-chalkboard-user"></i> PI &amp; early-career investigator <span>5</span></a><a href="#vcu-internal-systems"><i class="fas fa-building-columns"></i> VCU internal systems <span>4</span></a></nav>
+    <section class="cat" id="aging-and-alzheimer-s-research"><h2><i class="fas fa-book-medical"></i> Aging &amp; Alzheimer’s research <span class="cnt">42</span></h2><h3>Human datasets and cohort studies</h3><div class="rlist"><a class="r" href="https://hrs.isr.umich.edu/" target="_blank" rel="noopener"><span class="rt">Health and Retirement Study (HRS)<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Nationally representative longitudinal study of U.S. adults over age 50, covering health, cognition, employment…</span></a><a class="r" href="https://g2aging.org/home" target="_blank" rel="noopener"><span class="rt">Gateway to Global Aging Data<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Research Planner, harmonized variables, cross-national HRS-family datasets, questionnaires, publications, and…</span></a><a class="r" href="https://hcap.g2aging.org/" target="_blank" rel="noopener"><span class="rt">Harmonized Cognitive Assessment Protocol<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Comparable cognitive and dementia assessment data linked to HRS-family studies across countries.</span></a><a class="r" href="https://www.researchallofus.org/" target="_blank" rel="noopener"><span class="rt">All of Us Research Program<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">NIH precision-medicine cohort of more than one million U.S. participants across the lifespan, with electronic health…</span></a><a class="r" href="https://www.nia.nih.gov/research/dbsr/nia-linkage-program" target="_blank" rel="noopener"><span class="rt">NIA LINKAGE Program<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Supports approved linkages between eligible NIA-funded research studies and Medicare or Medicaid claims for…</span></a><a class="r" href="https://gatewayexposome.org/" target="_blank" rel="noopener"><span class="rt">Gateway Exposome<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Harmonized environmental-exposure measures and tools connected to population studies of aging.</span></a><a class="r" href="https://agingresearchbiobank.nia.nih.gov/" target="_blank" rel="noopener"><span class="rt">AgingResearchBiobank<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Controlled platform for datasets, biospecimens, MRI and X-ray images from NIA-supported studies such as CALERIE…</span></a><a class="r" href="https://www.blsa.nih.gov/" target="_blank" rel="noopener"><span class="rt">Baltimore Longitudinal Study of Aging<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Long-running NIA study with repeated physiological, functional, imaging, biomarker, and clinical measurements across…</span></a><a class="r" href="https://handls.nih.gov/" target="_blank" rel="noopener"><span class="rt">HANDLS<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Healthy Aging in Neighborhoods of Diversity across the Life Span: longitudinal data emphasizing health disparities…</span></a></div><h3>Alzheimer’s disease and brain-aging data</h3><div class="rlist"><a class="r" href="https://adknowledgeportal.synapse.org/" target="_blank" rel="noopener"><span class="rt">AD Knowledge Portal<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Discovery and data-sharing environment for NIA-supported AD/ADRD consortia, including molecular, omics, imaging…</span></a><a class="r" href="https://www.niagads.org/" target="_blank" rel="noopener"><span class="rt">NIAGADS<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">NIA repository for Alzheimer’s disease and related dementias genetics, genomics, sequencing, and harmonized phenotype…</span></a><a class="r" href="https://alzped.nia.nih.gov/" target="_blank" rel="noopener"><span class="rt">AlzPED<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Searchable summaries of AD preclinical efficacy studies, with information about models, interventions, outcomes…</span></a><a class="r" href="https://model-ad.org/" target="_blank" rel="noopener"><span class="rt">MODEL-AD<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Develops and characterizes next-generation animal models of late-onset Alzheimer’s disease and shares model…</span></a><a class="r" href="https://treatad.org/" target="_blank" rel="noopener"><span class="rt">TREAT-AD<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Target-validation evidence, assays, reagents, structural biology, medicinal chemistry, and drug-discovery tools for…</span></a><a class="r" href="https://brain-map.org/consortia/sea-ad" target="_blank" rel="noopener"><span class="rt">Seattle Alzheimer’s Disease Brain Cell Atlas<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Single-cell and spatial resources describing cellular and molecular changes across Alzheimer’s disease progression.</span></a><a class="r" href="https://www.humanconnectome.org/study/hcp-lifespan-aging/data-releases" target="_blank" rel="noopener"><span class="rt">Human Connectome Project – Aging<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Neuroimaging, behavioral, and cognitive data designed to characterize structural and functional brain changes across…</span></a><a class="r" href="https://www.alz.washington.edu/" target="_blank" rel="noopener"><span class="rt">NACC and Alzheimer’s Disease Research Centers<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Standardized clinical, neuropathology, imaging, biomarker, and genetic data contributed by the national network of…</span></a><a class="r" href="https://precisionagingnetwork.org/about-us/" target="_blank" rel="noopener"><span class="rt">Precision Aging Network<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Research and analytical resources for understanding individual differences in cognitive aging, reserve, resilience…</span></a><a class="r" href="https://reserveandresilience.com/" target="_blank" rel="noopener"><span class="rt">Reserve and Resilience Collaboratory<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Collaborative network and measurement resources focused on cognitive reserve and resilience in aging and AD/ADRD.</span></a></div><h3>Animals, tissues, cells, and comparative aging</h3><div class="rlist"><a class="r" href="https://www.nia.nih.gov/research/dab/aged-rodent-colonies-handbook" target="_blank" rel="noopener"><span class="rt">NIA Aged Rodent Colonies<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Subsidized aged mice and rats for aging research, with multiple strains, age ranges, and sex options.</span></a><a class="r" href="https://www.nia.nih.gov/research/dab/aged-rodent-tissue-bank" target="_blank" rel="noopener"><span class="rt">Aged Rodent Tissue Bank<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Archived tissues from aged rodents for approved aging-research projects.</span></a><a class="r" href="https://www.coriell.org/1/NIA" target="_blank" rel="noopener"><span class="rt">NIA Aging Cell Repository<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Human and animal cell lines related to aging, longevity, progeroid syndromes, age-associated disease, and comparative…</span></a><a class="r" href="https://primatedatabase.org/" target="_blank" rel="noopener"><span class="rt">Primate Aging Database<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Longitudinal information on nonhuman primate aging, including health, physiology, body composition, and survival.</span></a><a class="r" href="https://www.nia.nih.gov/research/dab/nonhuman-primate-tissue-bank" target="_blank" rel="noopener"><span class="rt">Nonhuman Primate Tissue Bank<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Tissues and related materials from aged nonhuman primates for approved comparative and translational studies.</span></a><a class="r" href="https://www.nia.nih.gov/research/dab/interventions-testing-program-itp" target="_blank" rel="noopener"><span class="rt">Interventions Testing Program<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Multi-site testing of compounds for effects on lifespan and healthspan in genetically heterogeneous mice</span></a><a class="r" href="https://phenome.jax.org/projects/ITP1" target="_blank" rel="noopener"><span class="rt">ITP Mouse Phenome Database<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Public survival, phenotype, intervention, and protocol data produced by the NIA Interventions Testing Program.</span></a><a class="r" href="https://www.nia.nih.gov/research/dab/intervention-biospecimen-repository" target="_blank" rel="noopener"><span class="rt">Intervention Biospecimen Repository<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Tissues from selected ITP intervention studies for ancillary mechanistic analyses of lifespan and healthspan.</span></a><a class="r" href="https://citpaging.org/portal" target="_blank" rel="noopener"><span class="rt">Caenorhabditis Intervention Testing Program<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Multi-site intervention testing across genetically diverse Caenorhabditis species, with public data, methods, and…</span></a><a class="r" href="https://agingresearchbiobank.nia.nih.gov/" target="_blank" rel="noopener"><span class="rt">STARRRS Rat Resource<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Longitudinal phenotypes, neuroimaging, tissues, and biological samples from a Long Evans rat model of reserve…</span></a></div><h3>Shared research infrastructure</h3><div class="rlist"><a class="r" href="https://nathanshockcenters.org/" target="_blank" rel="noopener"><span class="rt">Nathan Shock Centers of Excellence<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Shared aging-biology cores, specialized technologies, consultation, training, pilot awards, and collaborative…</span></a><a class="r" href="https://www.rcmar.org/" target="_blank" rel="noopener"><span class="rt">Resource Centers for Minority Aging Research<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Mentoring, methods support, pilot funding, and professional development for investigators studying aging and health…</span></a><a class="r" href="https://www.roybalcenters.org/" target="_blank" rel="noopener"><span class="rt">Edward R. Roybal Centers<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Support for translating behavioral and social science discoveries into practical interventions that improve the lives…</span></a><a class="r" href="https://www.nia.nih.gov/research/dbsr/artificial-intelligence-and-technology-collaboratories-aging-research-program" target="_blank" rel="noopener"><span class="rt">AI and Technology Collaboratories<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Pilot funding, engineering and commercialization support, testbeds, datasets, and stakeholder engagement for…</span></a><a class="r" href="https://card.nih.gov/" target="_blank" rel="noopener"><span class="rt">NIH Center for Alzheimer’s and Related Dementias<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">NIH intramural hub for AD/ADRD genetics, biomarkers, disease modeling, target validation, open science, and precision…</span></a><a class="r" href="https://www.nia.nih.gov/research/dbsr/nih-stage-model-behavioral-intervention-development" target="_blank" rel="noopener"><span class="rt">NIH Stage Model<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Conceptual framework, guidance, examples, and training for developing, refining, and testing behavioral interventions.</span></a></div><h3>Grant, career, and research-planning tools</h3><div class="rlist"><a class="r" href="https://reporter.nih.gov/" target="_blank" rel="noopener"><span class="rt">NIH RePORTER<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Search funded NIH projects, investigators, institutions, abstracts, publications, patents, and award spending.</span></a><a class="r" href="https://reporter.nih.gov/matchmaker" target="_blank" rel="noopener"><span class="rt">NIH Matchmaker<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Paste a project abstract to find scientifically similar funded projects and potentially relevant NIH institutes and…</span></a><a class="r" href="https://iadrp.nia.nih.gov/" target="_blank" rel="noopener"><span class="rt">IADRP: Intl. AD &amp; Related Dementias Research Portfolio<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Public database of AD/ADRD projects funded by more than 40 agencies across ten countries, built by NIA with the…</span></a><a class="r" href="https://grants.nih.gov/grants-process/write-application/samples-applications-and-documents" target="_blank" rel="noopener"><span class="rt">NIH Sample Applications and Documents<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Successful sample applications and examples of biosketches, data-management plans, and other application materials.</span></a><a class="r" href="https://public.csr.nih.gov/ForReviewers/BecomeAReviewer/ECR" target="_blank" rel="noopener"><span class="rt">Early Career Reviewer Program<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Offers eligible early-career investigators an opportunity to gain practical NIH peer-review experience.</span></a><a class="r" href="https://www.nia.nih.gov/research/training" target="_blank" rel="noopener"><span class="rt">NIA Training and Career Development<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Fellowships, career-development awards, institutional training programs, and resources for new and early-stage aging…</span></a><a class="r" href="https://www.nia.nih.gov/research/sbir/resources-small-business-awardees" target="_blank" rel="noopener"><span class="rt">NIA Small-Business Resources<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">SBIR/STTR funding information, commercialization assistance, entrepreneurial training, webinars, and accelerator…</span></a></div></section><section class="cat" id="student-funding-and-travel-awards"><h2><i class="fas fa-graduation-cap"></i> Student funding &amp; travel awards <span class="cnt">7</span></h2><p class="cat-note">If you are presenting, apply as early as possible: both VCU travel programs have limited funds and close once they are exhausted.</p><h3>Fellowships and training grants</h3><div class="rlist"><a class="r" href="https://grants.nih.gov/funding/funding-categories/research-training-and-career-development/individual-fellowships" target="_blank" rel="noopener"><span class="rt">NIH Individual Fellowships (F30 / F31 / F32 / F99–K00)<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">The Ruth L. Kirschstein NRSA family of individual fellowships</span></a><a class="r" href="https://www.nia.nih.gov/research/training" target="_blank" rel="noopener"><span class="rt">NIA Training and Career Development<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Aging-focused fellowships, career-development awards, and institutional training programs, with NIA-specific guidance…</span></a></div><h3>Conference travel awards</h3><div class="rlist"><a class="r" href="https://www.sfn.org/meetings/meeting-awards/trainee-professional-development-award" target="_blank" rel="noopener"><span class="rt">SfN Trainee Professional Development Award<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Travel award for undergraduates, graduate students, post-baccalaureate scholars, and postdocs presenting at the SfN…</span></a><a class="r" href="https://www.sfn.org/meetings/meeting-awards" target="_blank" rel="noopener"><span class="rt">SfN Meeting Travel Awards<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">The full slate of SfN travel and meeting awards for trainees and early-career neuroscientists, with eligibility and…</span></a><a class="r" href="https://docs.google.com/forms/d/e/1FAIpQLSeR7o62etW-bHHYwRHe_b809mZUlwX3L74HwaxNNFDMGQ1QgA/viewform?usp=sf_link" target="_blank" rel="noopener"><span class="rt">VCU School of Medicine Graduate Student Travel Award<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">School of Medicine graduate students may request up to $1,000 for an oral presentation or $750 for a poster…</span></a><a class="r" href="https://graduate.vcu.edu/current-students/professional-development/travel-grants/" target="_blank" rel="noopener"><span class="rt">VCU Graduate School Travel Grants<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Up to $500 toward conference registration, travel, and lodging for degree-seeking master&#x27;s and doctoral students who…</span></a><a class="r" href="https://graduate.vcu.edu/funding/" target="_blank" rel="noopener"><span class="rt">VCU Graduate School Funding<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Central listing of VCU graduate funding: assistantships, fellowships, scholarships, and awards, including…</span></a></div></section><section class="cat" id="pi-and-early-career-investigator"><h2><i class="fas fa-chalkboard-user"></i> PI &amp; early-career investigator <span class="cnt">5</span></h2><h3>Leadership and lab management</h3><div class="rlist"><a class="r" href="https://www.publichealth.columbia.edu/academics/non-degree-special-programs/professional-non-degree-programs/skills-health-research-professionals-sharp-training/trainings/pi-crash-course" target="_blank" rel="noopener"><span class="rt">PI Crash Course (Columbia SHARP)<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Two-day intensive from Columbia&#x27;s SHARP program at the Mailman School of Public Health, covering negotiation…</span></a><a class="r" href="https://www.hhmi.org/science-education/programs/resources/making-right-moves" target="_blank" rel="noopener"><span class="rt">Making the Right Moves (HHMI &amp; BWF)<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Free practical guide to scientific management for postdocs and new faculty, with chapters on laboratory leadership…</span></a><a class="r" href="https://www.bwfund.org/career-tool/making-the-right-moves/" target="_blank" rel="noopener"><span class="rt">Burroughs Wellcome Fund Career Tools<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Career-development tools and materials from BWF for scientists moving into independent positions, including the…</span></a></div><h3>Funding and early-career status</h3><div class="rlist"><a class="r" href="https://grants.nih.gov/policy-and-compliance/policy-topics/early-stage-investigators" target="_blank" rel="noopener"><span class="rt">NIH Early Stage Investigator (ESI) Policies<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Defines ESI eligibility (within 10 years of the terminal degree or clinical training, without a substantial…</span></a><a class="r" href="https://www.nia.nih.gov/research/training/nia-new-and-early-stage-investigators" target="_blank" rel="noopener"><span class="rt">NIA New and Early Stage Investigators<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">NIA-specific guidance, funding policies, and support for new and early-stage investigators building independent…</span></a></div></section><section class="cat" id="vcu-internal-systems"><h2><i class="fas fa-building-columns"></i> VCU internal systems <span class="cnt">4</span></h2><p class="cat-note">Most require a VCU eID, and some are reachable only on the VCU network or VPN. Ask the PI for credentials where a shared login is needed.</p><h3>Research administration</h3><div class="rlist"><a class="r" href="https://research.vcu.edu/rams-systems/" target="_blank" rel="noopener"><span class="rt">RAMS (Research Administration Management System)<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">VCU&#x27;s central research administration portal</span></a></div><h3>Purchasing and payment</h3><div class="rlist"><a class="r" href="https://procurement.vcu.edu/i-want-to/realsource/" target="_blank" rel="noopener"><span class="rt">RealSource<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">VCU&#x27;s eProcurement system for ordering lab supplies, equipment, and services from contracted suppliers, and for…</span></a><a class="r" href="https://payment2.works.com/works/" target="_blank" rel="noopener"><span class="rt">Bank of America Works (purchasing card)<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">Where small-dollar purchasing card transactions are reviewed, coded to the right index, and signed off each cycle</span></a></div><h3>Safety and training</h3><div class="rlist"><a class="r" href="https://vcu.bioraft.com/" target="_blank" rel="noopener"><span class="rt">BioRAFT<i class="fas fa-arrow-up-right-from-square"></i></span><span class="rd">VCU&#x27;s lab safety platform</span></a></div></section>
+    <p class="empty" id="empty">No resources match that search.</p>
+    <p class="closing">Programs, deadlines, and eligibility change. Confirm details on the official page before relying on them.</p>
   </div>
 </section>
 
@@ -530,11 +155,28 @@
 </footer>
 
 <script>
-const navToggle = document.querySelector('.nav-toggle');
-const navMenu = document.querySelector('.nav-menu');
-navToggle.addEventListener('click', () => {
-  navMenu.classList.toggle('active');
-});
+  const t=document.querySelector('.nav-toggle'), m=document.querySelector('.nav-menu');
+  if(t&&m) t.addEventListener('click',()=>m.classList.toggle('active'));
+
+  const q=document.getElementById('q'), rowsEl=[...document.querySelectorAll('a.r')],
+        cats=[...document.querySelectorAll('.cat')], count=document.getElementById('count'),
+        empty=document.getElementById('empty');
+  function filter(){
+    const s=q.value.trim().toLowerCase();
+    let n=0;
+    rowsEl.forEach(r=>{const hit=!s||r.textContent.toLowerCase().includes(s);r.hidden=!hit;if(hit)n++;});
+    cats.forEach(c=>{
+      c.querySelectorAll('h3').forEach(h=>{
+        const list=h.nextElementSibling;
+        h.hidden=list?![...list.querySelectorAll('a.r')].some(r=>!r.hidden):true;
+        if(list) list.hidden=h.hidden;
+      });
+      c.hidden=![...c.querySelectorAll('a.r')].some(r=>!r.hidden);
+    });
+    count.textContent=n+(n===1?' resource':' resources');
+    empty.style.display=n?'none':'block';
+  }
+  q.addEventListener('input',filter);
 </script>
 
 </body>
