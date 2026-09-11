@@ -1,92 +1,92 @@
-voxel_value,atlas_id,acronym,name,hex_color,r,g,b,kind
-0,0,outside,Outside source envelope,#FFFFFF,255,255,255,
-1,3000,sc,spinal cord,#C96B6B,201,107,107,aggregate
-2,3001,11N,accessory nerve nucleus,#5D80D7,93,128,215,named_structure
-3,3002,11n,spinal accessory nerve,#A5E64C,165,230,76,named_structure
-4,3003,1Sp,lamina 1 of the spinal gray,#23B9D1,35,185,209,named_structure
-5,3004,2Sp,lamina 2 of the spinal gray,#5DD7C3,93,215,195,aggregate
-6,3005,2SpI,"lamina 2 of the spinal gray, inner part",#F18472,241,132,114,named_structure
-7,3006,2SpO,"lamina 2 of the spinal gray, outer part",#865CC2,134,92,194,named_structure
-8,3007,3Sp,lamina 3 of the spinal gray,#4AB39B,74,179,155,named_structure
-9,3008,4Sp,lamina 4 of the spinal gray,#E6B955,230,185,85,named_structure
-10,3009,5Sp,lamina 5 of the spinal gray,#BA8A32,186,138,50,named_structure
-11,3010,5SpL,"lamina 5 of the spinal gray, lateral part",#467AC0,70,122,192,named_structure
-12,3011,5SpM,"lamina 5 of the spinal gray, medial part",#D16E9D,209,110,157,named_structure
-13,3012,6Sp,lamina 6 of the spinal gray,#E68B42,230,139,66,named_structure
-14,3013,6SpL,"lamina 6 of the spinal gray, lateral part",#AA76CF,170,118,207,named_structure
-15,3014,6SpM,"lamina 6 of the spinal gray, medial part",#87AD43,135,173,67,named_structure
-16,3015,7Sp,lamina 7 of the spinal gray,#20A69E,32,166,158,named_structure
-17,3016,8Sp,lamina 8 of the spinal gray,#B391D9,179,145,217,named_structure
-18,3017,9Sp,lamina 9 of the spinal gray,#4CDFE6,76,223,230,aggregate
-19,3018,10Sp,lamina 10 of the spinal gray,#EA967B,234,150,123,named_structure
-20,3019,Ad9,adductor motoneurons of lamina 9,#E0CCAE,224,204,174,named_structure
-21,3020,asp,anterior spinal artery,#E76763,231,103,99,named_structure
-22,3021,Ax9,axial muscle motoneurons of lamina 9,#D64B29,214,75,41,named_structure
-23,3022,Bi9,biceps motoneurons of lamina 9,#B94646,185,70,70,named_structure
-24,3023,CC,central canal,#385C73,56,92,115,named_structure
-25,3024,CE,cauda equina,#C96BC9,201,107,201,named_structure
-26,3025,CeCv,central cervical nucleus,#A1EDDE,161,237,222,named_structure
-27,3026,CEx9,crural extensor motoneurons of lamina 9,#B95D46,185,93,70,named_structure
-28,3027,CFl9,crural flexor motoneurons of lamina 9,#EDEDA1,237,237,161,named_structure
-29,3028,CoVert,coccygeal vertebra,#72D75D,114,215,93,named_structure
-30,3029,Cr9,cremaster motoneurons of lamina 9,#29D6D6,41,214,214,named_structure
-31,3030,cu,cuneate fasciculus,#A9C998,169,201,152,named_structure
-32,3031,D,dorsal nucleus (Clarke),#294BD6,41,75,214,named_structure
-33,3032,dcs,dorsal corticospinal tract,#729AD4,114,154,212,named_structure
-34,3033,De9,deltoid motoneurons of lamina 9,#DC4756,220,71,86,named_structure
-35,3034,df,dorsal funiculus,#D7665D,215,102,93,aggregate
-36,3035,dl,dorsolateral fasciculus (Lissauer),#4C6CE6,76,108,230,named_structure
-37,3036,dr,dorsal root,#DDA078,221,160,120,named_structure
-38,3037,DRG,dorsal root ganglion,#D75DBE,215,93,190,named_structure
-39,3038,ExA9,external anal sphincter motoneurons of lamina 9,#4CE6D8,76,230,216,named_structure
-40,3039,ExU9,external urethral sphincter motoneurons of lamina 9,#E0AEB3,224,174,179,named_structure
-41,3040,FEx9,forearm extensor motoneurons of lamina 9,#B9468B,185,70,139,named_structure
-42,3041,FFl9,forearm flexor motoneurons of lamina 9,#E0BDAE,224,189,174,named_structure
-43,3042,Gl9,gluteal motoneurons of lamina 9,#C36060,195,96,96,named_structure
-44,3043,gr,gracile fasciculus,#8CBCDB,140,188,219,named_structure
-45,3044,Hm9,hamstring motoneurons of lamina 9,#B97446,185,116,70,named_structure
-46,3045,IB,internal basilar nucleus,#A1DEED,161,222,237,named_structure
-47,3046,ICl,intercalated nucleus,#D629C5,214,41,197,named_structure
-48,3047,IClPe,"intercalated nucleus, paraependymal part",#E6784C,230,120,76,named_structure
-49,3048,ICo9,intercostal muscle motoneurons of lamina 9,#D16B52,209,107,82,named_structure
-50,3049,IH9,infrahyoid muscle motoneurons of lamina 9,#B4D629,180,214,41,named_structure
-51,3050,IML,intermediolateral column,#29D680,41,214,128,named_structure
-52,3051,IMM,intermediomedial column,#AEB8E0,174,184,224,named_structure
-53,3052,IPs9,iliopsoas motoneurons of lamina 9,#D7C25D,215,194,93,named_structure
-54,3053,LatC,lateral cervical nucleus,#EDA1E5,237,161,229,named_structure
-55,3054,LD9,latissimus dorsi motoneurons of lamina 9,#E265E2,226,101,226,named_structure
-56,3055,LDCom,lumbar dorsal commissural nucleus,#4669B9,70,105,185,named_structure
-57,3056,lf,lateral funiculus,#4C80E6,76,128,230,named_structure
-58,3057,LPrCb,lumbar precerebellar nucleus,#A1A1ED,161,161,237,named_structure
-59,3058,LS9,levator scapulae motoneurons of lamina 9,#D6294B,214,41,75,named_structure
-60,3059,LSp,lateral spinal nucleus,#555AB5,85,90,181,named_structure
-61,3060,Man9,manus motoneurons of lamina 9,#AC36C9,172,54,201,named_structure
-62,3061,Pec9,pectoral muscle motoneurons of lamina 9,#80D629,128,214,41,named_structure
-63,3062,Pes9,pes motoneurons of lamina 9,#C36074,195,96,116,named_structure
-64,3063,Ph9,phrenic motoneurons of lamina 9,#D6D629,214,214,41,named_structure
-65,3064,Ps9,psoas motoneurons of lamina 9,#B9AD46,185,173,70,named_structure
-66,3065,psdc,postsynaptic dorsal column pathway,#B8C46A,184,196,106,named_structure
-67,3066,Q9,quadriceps motoneurons of lamina 9,#C93662,201,54,98,named_structure
-68,3067,QL9,quadratus lumborum motoneurons of lamina 9,#D69129,214,145,41,named_structure
-69,3068,Rh9,rhomboid muscle motoneurons of lamina 9,#B96946,185,105,70,named_structure
-70,3069,rs,rubrospinal tract,#7A87C2,122,135,194,named_structure
-71,3070,Sc9,scalene muscle motoneurons of lamina 9,#91D75D,145,215,93,named_structure
-72,3071,SDCom,sacral dorsal commissural nucleus,#2929D6,41,41,214,named_structure
-73,3072,SI9,supraspinatus and infraspinatus motoneurons of lamina 9,#E08A9B,224,138,155,named_structure
-74,3073,SM9,sternomastoid motoneurons of lamina 9,#D7B25D,215,178,93,named_structure
-75,3074,SpPr,spinous process of vertebra,#8A4CE6,138,76,230,named_structure
-76,3075,SPrCb,sacral precerebellar nucleus,#7F29D6,127,41,214,named_structure
-77,3076,SPSy,sacral parasympathetic nucleus,#29A2D6,41,162,214,named_structure
-78,3077,Sr9,serratus anterior motoneurons in lamina 9,#C98036,201,128,54,named_structure
-79,3078,Tail9,tail muscle motoneurons of lamina 9,#D17852,209,120,82,named_structure
-80,3079,ThAb9,thoracoabdominal wall muscle motoneurons of lamina 9,#D66E29,214,110,41,named_structure
-81,3080,Tr9,triceps motoneurons of lamina 9,#D65D29,214,93,41,named_structure
-82,3081,Tz9,trapezius motoneurons of lamina 9,#DC5647,220,86,71,named_structure
-83,3082,TzSM9,trapezius and sternomastoid motoneurons of lamina 9,#D62929,214,41,41,named_structure
-84,3083,VAr,vertebral arch,#6DE64C,109,230,76,named_structure
-85,3084,VB,vertebral body,#C96B9B,201,107,155,named_structure
-86,3085,vf,ventral funiculus,#5DBFD7,93,191,215,named_structure
-87,3086,vmf,ventral median fissure,#E6D74C,230,215,76,landmark
-88,3087,vr,ventral root,#D6AA59,214,170,89,named_structure
-89,3088,vwc,ventral white commissure,#5DD784,93,215,132,named_structure
-255,65535,unresolved,Occupied tissue with unresolved identity,#D4D9DD,212,217,221,
+voxel_value,allen_id,acronym,name,anatomy_group,kind,hex_color,r,g,b,present_in_volume,voxel_count
+0,0,outside,Outside source envelope,background,,#FFFFFF,255,255,255,yes,82462185
+1,3000,sc,spinal cord,whole_cord_aggregate,aggregate,#C96B6B,201,107,107,no,0
+2,3001,11N,accessory nerve nucleus,gray_matter,named_structure,#5D80D7,93,128,215,no,0
+3,3002,11n,spinal accessory nerve,roots_and_peripheral_ganglia,named_structure,#A5E64C,165,230,76,no,0
+4,3003,1Sp,lamina 1 of the spinal gray,gray_matter,named_structure,#23B9D1,35,185,209,yes,686150
+5,3004,2Sp,lamina 2 of the spinal gray,gray_matter,aggregate,#5DD7C3,93,215,195,no,0
+6,3005,2SpI,"lamina 2 of the spinal gray, inner part",gray_matter,named_structure,#F18472,241,132,114,yes,996064
+7,3006,2SpO,"lamina 2 of the spinal gray, outer part",gray_matter,named_structure,#865CC2,134,92,194,yes,893304
+8,3007,3Sp,lamina 3 of the spinal gray,gray_matter,named_structure,#4AB39B,74,179,155,yes,2191592
+9,3008,4Sp,lamina 4 of the spinal gray,gray_matter,named_structure,#E6B955,230,185,85,yes,2882977
+10,3009,5Sp,lamina 5 of the spinal gray,gray_matter,named_structure,#BA8A32,186,138,50,yes,405532
+11,3010,5SpL,"lamina 5 of the spinal gray, lateral part",gray_matter,named_structure,#467AC0,70,122,192,yes,2530836
+12,3011,5SpM,"lamina 5 of the spinal gray, medial part",gray_matter,named_structure,#D16E9D,209,110,157,yes,1002008
+13,3012,6Sp,lamina 6 of the spinal gray,gray_matter,named_structure,#E68B42,230,139,66,yes,355142
+14,3013,6SpL,"lamina 6 of the spinal gray, lateral part",gray_matter,named_structure,#AA76CF,170,118,207,yes,116380
+15,3014,6SpM,"lamina 6 of the spinal gray, medial part",gray_matter,named_structure,#87AD43,135,173,67,yes,154952
+16,3015,7Sp,lamina 7 of the spinal gray,gray_matter,named_structure,#20A69E,32,166,158,yes,7265154
+17,3016,8Sp,lamina 8 of the spinal gray,gray_matter,named_structure,#B391D9,179,145,217,yes,4255826
+18,3017,9Sp,lamina 9 of the spinal gray,gray_matter,aggregate,#4CDFE6,76,223,230,no,0
+19,3018,10Sp,lamina 10 of the spinal gray,gray_matter,named_structure,#EA967B,234,150,123,yes,972600
+20,3019,Ad9,adductor motoneurons of lamina 9,gray_matter,named_structure,#E0CCAE,224,204,174,yes,133108
+21,3020,asp,anterior spinal artery,vascular,named_structure,#E76763,231,103,99,no,0
+22,3021,Ax9,axial muscle motoneurons of lamina 9,gray_matter,named_structure,#D64B29,214,75,41,yes,476664
+23,3022,Bi9,biceps motoneurons of lamina 9,gray_matter,named_structure,#B94646,185,70,70,yes,110016
+24,3023,CC,central canal,canal,named_structure,#385C73,56,92,115,yes,29533
+25,3024,CE,cauda equina,roots_and_peripheral_ganglia,named_structure,#C96BC9,201,107,201,no,0
+26,3025,CeCv,central cervical nucleus,gray_matter,named_structure,#A1EDDE,161,237,222,yes,166136
+27,3026,CEx9,crural extensor motoneurons of lamina 9,gray_matter,named_structure,#B95D46,185,93,70,yes,39296
+28,3027,CFl9,crural flexor motoneurons of lamina 9,gray_matter,named_structure,#EDEDA1,237,237,161,yes,43118
+29,3028,CoVert,coccygeal vertebra,skeletal,named_structure,#72D75D,114,215,93,no,0
+30,3029,Cr9,cremaster motoneurons of lamina 9,gray_matter,named_structure,#29D6D6,41,214,214,yes,39028
+31,3030,cu,cuneate fasciculus,white_matter,named_structure,#A9C998,169,201,152,yes,943534
+32,3031,D,dorsal nucleus (Clarke),gray_matter,named_structure,#294BD6,41,75,214,yes,151632
+33,3032,dcs,dorsal corticospinal tract,white_matter,named_structure,#729AD4,114,154,212,yes,952389
+34,3033,De9,deltoid motoneurons of lamina 9,gray_matter,named_structure,#DC4756,220,71,86,yes,160296
+35,3034,df,dorsal funiculus,white_matter,aggregate,#D7665D,215,102,93,no,0
+36,3035,dl,dorsolateral fasciculus (Lissauer),white_matter,named_structure,#4C6CE6,76,108,230,yes,892256
+37,3036,dr,dorsal root,roots_and_peripheral_ganglia,named_structure,#DDA078,221,160,120,yes,64352
+38,3037,DRG,dorsal root ganglion,roots_and_peripheral_ganglia,named_structure,#D75DBE,215,93,190,no,0
+39,3038,ExA9,external anal sphincter motoneurons of lamina 9,gray_matter,named_structure,#4CE6D8,76,230,216,yes,18924
+40,3039,ExU9,external urethral sphincter motoneurons of lamina 9,gray_matter,named_structure,#E0AEB3,224,174,179,yes,19584
+41,3040,FEx9,forearm extensor motoneurons of lamina 9,gray_matter,named_structure,#B9468B,185,70,139,yes,62966
+42,3041,FFl9,forearm flexor motoneurons of lamina 9,gray_matter,named_structure,#E0BDAE,224,189,174,yes,53290
+43,3042,Gl9,gluteal motoneurons of lamina 9,gray_matter,named_structure,#C36060,195,96,96,yes,73636
+44,3043,gr,gracile fasciculus,white_matter,named_structure,#8CBCDB,140,188,219,yes,1417474
+45,3044,Hm9,hamstring motoneurons of lamina 9,gray_matter,named_structure,#B97446,185,116,70,yes,104296
+46,3045,IB,internal basilar nucleus,gray_matter,named_structure,#A1DEED,161,222,237,yes,77938
+47,3046,ICl,intercalated nucleus,gray_matter,named_structure,#D629C5,214,41,197,yes,362266
+48,3047,IClPe,"intercalated nucleus, paraependymal part",gray_matter,named_structure,#E6784C,230,120,76,no,0
+49,3048,ICo9,intercostal muscle motoneurons of lamina 9,gray_matter,named_structure,#D16B52,209,107,82,yes,156682
+50,3049,IH9,infrahyoid muscle motoneurons of lamina 9,gray_matter,named_structure,#B4D629,180,214,41,yes,101878
+51,3050,IML,intermediolateral column,gray_matter,named_structure,#29D680,41,214,128,yes,183236
+52,3051,IMM,intermediomedial column,gray_matter,named_structure,#AEB8E0,174,184,224,yes,145740
+53,3052,IPs9,iliopsoas motoneurons of lamina 9,gray_matter,named_structure,#D7C25D,215,194,93,no,0
+54,3053,LatC,lateral cervical nucleus,gray_matter,named_structure,#EDA1E5,237,161,229,yes,127558
+55,3054,LD9,latissimus dorsi motoneurons of lamina 9,gray_matter,named_structure,#E265E2,226,101,226,yes,32354
+56,3055,LDCom,lumbar dorsal commissural nucleus,gray_matter,named_structure,#4669B9,70,105,185,yes,41166
+57,3056,lf,lateral funiculus,white_matter,named_structure,#4C80E6,76,128,230,yes,13922000
+58,3057,LPrCb,lumbar precerebellar nucleus,gray_matter,named_structure,#A1A1ED,161,161,237,yes,70208
+59,3058,LS9,levator scapulae motoneurons of lamina 9,gray_matter,named_structure,#D6294B,214,41,75,yes,6370
+60,3059,LSp,lateral spinal nucleus,gray_matter,named_structure,#555AB5,85,90,181,yes,2284644
+61,3060,Man9,manus motoneurons of lamina 9,gray_matter,named_structure,#AC36C9,172,54,201,yes,47444
+62,3061,Pec9,pectoral muscle motoneurons of lamina 9,gray_matter,named_structure,#80D629,128,214,41,yes,102642
+63,3062,Pes9,pes motoneurons of lamina 9,gray_matter,named_structure,#C36074,195,96,116,yes,87888
+64,3063,Ph9,phrenic motoneurons of lamina 9,gray_matter,named_structure,#D6D629,214,214,41,yes,50616
+65,3064,Ps9,psoas motoneurons of lamina 9,gray_matter,named_structure,#B9AD46,185,173,70,yes,90296
+66,3065,psdc,postsynaptic dorsal column pathway,white_matter,named_structure,#B8C46A,184,196,106,yes,634926
+67,3066,Q9,quadriceps motoneurons of lamina 9,gray_matter,named_structure,#C93662,201,54,98,yes,195478
+68,3067,QL9,quadratus lumborum motoneurons of lamina 9,gray_matter,named_structure,#D69129,214,145,41,yes,52446
+69,3068,Rh9,rhomboid muscle motoneurons of lamina 9,gray_matter,named_structure,#B96946,185,105,70,yes,33778
+70,3069,rs,rubrospinal tract,white_matter,named_structure,#7A87C2,122,135,194,yes,1076718
+71,3070,Sc9,scalene muscle motoneurons of lamina 9,gray_matter,named_structure,#91D75D,145,215,93,no,0
+72,3071,SDCom,sacral dorsal commissural nucleus,gray_matter,named_structure,#2929D6,41,41,214,yes,246787
+73,3072,SI9,supraspinatus and infraspinatus motoneurons of lamina 9,gray_matter,named_structure,#E08A9B,224,138,155,yes,57846
+74,3073,SM9,sternomastoid motoneurons of lamina 9,gray_matter,named_structure,#D7B25D,215,178,93,yes,15984
+75,3074,SpPr,spinous process of vertebra,skeletal,named_structure,#8A4CE6,138,76,230,no,0
+76,3075,SPrCb,sacral precerebellar nucleus,gray_matter,named_structure,#7F29D6,127,41,214,yes,48552
+77,3076,SPSy,sacral parasympathetic nucleus,gray_matter,named_structure,#29A2D6,41,162,214,yes,29608
+78,3077,Sr9,serratus anterior motoneurons in lamina 9,gray_matter,named_structure,#C98036,201,128,54,yes,36858
+79,3078,Tail9,tail muscle motoneurons of lamina 9,gray_matter,named_structure,#D17852,209,120,82,yes,176958
+80,3079,ThAb9,thoracoabdominal wall muscle motoneurons of lamina 9,gray_matter,named_structure,#D66E29,214,110,41,yes,198512
+81,3080,Tr9,triceps motoneurons of lamina 9,gray_matter,named_structure,#D65D29,214,93,41,yes,73334
+82,3081,Tz9,trapezius motoneurons of lamina 9,gray_matter,named_structure,#DC5647,220,86,71,yes,37212
+83,3082,TzSM9,trapezius and sternomastoid motoneurons of lamina 9,gray_matter,named_structure,#D62929,214,41,41,yes,18324
+84,3083,VAr,vertebral arch,skeletal,named_structure,#6DE64C,109,230,76,no,0
+85,3084,VB,vertebral body,skeletal,named_structure,#C96B9B,201,107,155,no,0
+86,3085,vf,ventral funiculus,white_matter,named_structure,#5DBFD7,93,191,215,yes,11484824
+87,3086,vmf,ventral median fissure,fissure_landmark,landmark,#E6D74C,230,215,76,no,0
+88,3087,vr,ventral root,roots_and_peripheral_ganglia,named_structure,#D6AA59,214,170,89,no,0
+89,3088,vwc,ventral white commissure,white_matter,named_structure,#5DD784,93,215,132,yes,410918
+255,65535,unresolved,Occupied tissue with unresolved identity,unresolved,,#D4D9DD,212,217,221,yes,349536

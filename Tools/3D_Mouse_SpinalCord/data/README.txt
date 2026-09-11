@@ -10,7 +10,12 @@ Source label checksum (SHA-256):
 FILES
   allen-p56-spinal-cord-labels.nii.gz   NIfTI-1, uint8, gzip   (3D volumetric data)
   allen-p56-spinal-cord-labels.tif      multi-page TIFF, uint8, deflate (stacked)
-  allen-p56-spinal-cord-labels.csv      label table: voxel value -> acronym, name, colour
+  allen-p56-spinal-cord-labels.csv      colour code table, 91 regions:
+                                          voxel_value, allen_id, acronym, name,
+                                          anatomy_group, kind, hex_color, r, g, b,
+                                          present_in_volume, voxel_count
+  allen-p56-spinal-cord-colour-table.html same table, rendered with colour swatches
+                                          and grouped by anatomical class (printable)
 
 GEOMETRY
   Shape (Z, Y, X)      (795, 373, 493)   = 795 slices of 373 x 493
