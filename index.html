@@ -467,6 +467,12 @@
       background: var(--bg-light);
     }
 
+    .digital-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
     .tech-showcase-digital {
       background: var(--bg-light);
     }
@@ -1685,16 +1691,22 @@
       <div class="tech-info">
         <h2 class="tech-title">We study <span>digital social behaviors</span> because:</h2>
         <p class="tech-description">
-          Even the best recording reaches only a fraction of the neurons in a brain, and it cannot tell us how all of them are wired. Reconstructed nervous systems close that gap. Starting from a fully reconstructed fly brain and body, with every neuron and connection mapped, we can simulate activity across the whole nervous system and watch how it drives movement and social behavior. Nothing is hidden in a model like this: we can follow a signal from one identified neuron all the way to the behavior it produces, and test circuit hypotheses that would be out of reach in a living animal before taking the promising ones back to the bench.
+          Even the best recording reaches only a fraction of the neurons in a brain, and it cannot tell us how all of them are wired. Reconstructed nervous systems close that gap. Two animals are now mapped completely, body and nervous system together: the <strong>fly</strong> and <strong>C.&nbsp;elegans</strong>. With every neuron and connection known, we can simulate activity across the entire nervous system and watch how it drives movement and social behavior. Nothing is hidden in a model like this: we can follow a signal from one identified neuron all the way to the behavior it produces, and test circuit hypotheses that would be out of reach in a living animal before taking the promising ones back to the bench.
         </p>
       </div>
 
-      <div class="tech-visual">
+      <div class="tech-visual digital-stack">
         <figure class="digital-figure">
           <video class="animal-video" autoplay muted loop playsinline preload="metadata" poster="images/fly-brain-body-poster.jpg">
             <source src="videos/fly-brain-body.mp4" type="video/mp4">
           </video>
           <figcaption>A fully reconstructed <em>Drosophila</em> central nervous system and body. Cell bodies carry simulated neuronal activity, with a single identified descending neuron shown in anatomical context alongside the whole-body movement it drives.</figcaption>
+        </figure>
+        <figure class="digital-figure">
+          <video class="animal-video" autoplay muted loop playsinline preload="metadata" poster="images/celegans-poster.jpg">
+            <source src="videos/celegans-body-nervous-system.mp4" type="video/mp4">
+          </video>
+          <figcaption>A completely reconstructed <em>C. elegans</em>, body and nervous system together. Every one of its neurons and their connections are known, so the whole animal can be modelled at once: the nerve ring, ventral cord, and commissures are visible through the body as it moves.</figcaption>
         </figure>
       </div>
     </div>
