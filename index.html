@@ -770,47 +770,13 @@
       color: var(--primary-dark);
     }
 
-    .tech-image-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
 
-    .tech-image-card {
-      background: var(--white);
-      border: 1px solid var(--border-light);
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 8px 24px rgba(26, 54, 93, 0.08);
-      transition: var(--transition);
-    }
 
-    .tech-image-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(26, 54, 93, 0.12);
-    }
 
-    .tech-image-card img {
-      width: 100%;
-      height: auto;
-      display: block;
-      background: var(--bg-light);
-    }
 
-    .tech-image-card figcaption {
-      padding: 0.6rem 0.75rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--primary-dark);
-      text-align: center;
-      border-top: 1px solid var(--border-light);
-    }
 
     @media (max-width: 768px) {
       .tech-demo-row {
-        grid-template-columns: 1fr;
-      }
-      .tech-image-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -1865,7 +1831,7 @@
 <!-- Tech Showcase: Neural Activity Recording -->
 <section class="tech-showcase tech-showcase-neural" id="neural-recording">
   <div class="container">
-    <div class="tech-content-grid tech-content-reverse">
+    <div class="tech-content-grid tech-content-reverse tech-content-single">
       <div class="tech-info">
         <div class="tech-badge tech-badge-blue">
           <i class="fas fa-brain"></i>
@@ -1901,19 +1867,6 @@
           </a>
         </div>
       </div>
-
-      <div class="tech-visual">
-        <div class="tech-image-grid">
-          <figure class="tech-image-card">
-            <img src="tech/neuropixelv2.png" alt="Neuropixels 2.0 recording rig">
-            <figcaption>Neuropixels 2.0</figcaption>
-          </figure>
-          <figure class="tech-image-card">
-            <img src="tech/fiber photometry.png" alt="Fiber photometry system">
-            <figcaption>Fiber Photometry</figcaption>
-          </figure>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -1921,7 +1874,7 @@
 <!-- Tech Showcase: Circuit Architecture -->
 <section class="tech-showcase tech-showcase-circuit" id="circuit-analysis">
   <div class="container">
-    <div class="tech-content-grid">
+    <div class="tech-content-grid tech-content-single">
       <div class="tech-info">
         <div class="tech-badge tech-badge-purple">
           <i class="fas fa-project-diagram"></i>
@@ -1956,13 +1909,6 @@
             <strong>Glutamatergic and GABAergic neurons in pontine central gray mediate opposing valence-specific behaviors</strong>. <span class="pub-venue">Neuron</span>, 2023
           </a>
         </div>
-      </div>
-
-      <div class="tech-visual">
-        <figure class="tech-image-card">
-          <img src="images/brain section.png" alt="Brain section showing circuit architecture">
-          <figcaption>Brain section</figcaption>
-        </figure>
       </div>
     </div>
   </div>
