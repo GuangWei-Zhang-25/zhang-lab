@@ -635,6 +635,12 @@
       align-items: start;
     }
 
+    /* Sections whose visual has been removed: let the text use the full width */
+    .tech-content-grid.tech-content-single {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: 860px;
+    }
+
     .tech-content-reverse {
       grid-template-columns: 1.3fr 1fr;
     }
@@ -935,55 +941,11 @@
       position: relative;
     }
 
-    .tech-visual-placeholder {
-      background: linear-gradient(135deg, var(--white) 0%, var(--bg-light) 100%);
-      border: 2px dashed var(--border-medium);
-      border-radius: 12px;
-      padding: 60px 30px;
-      text-align: center;
-      min-height: 280px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-    }
 
-    .tech-visual-placeholder:hover {
-      border-color: var(--primary-light);
-      background: linear-gradient(135deg, var(--white) 0%, rgba(26, 54, 93, 0.03) 100%);
-    }
 
-    .visual-icon {
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-light);
-      border-radius: 50%;
-      margin-bottom: 16px;
-      font-size: 2rem;
-      color: var(--primary);
-    }
 
-    .tech-showcase-neural .visual-icon { color: #4299e1; }
-    .tech-showcase-circuit .visual-icon { color: #805ad5; }
-    .tech-showcase-causal .visual-icon { color: #ed8936; }
-    .tech-showcase-molecular .visual-icon { color: #38b2ac; }
 
-    .tech-visual-placeholder p {
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 8px;
-    }
 
-    .visual-hint {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
 
     /* Responsive */
     @media (max-width: 1024px) {
@@ -1050,10 +1012,6 @@
         gap: 10px;
       }
 
-      .tech-visual-placeholder {
-        min-height: 200px;
-        padding: 40px 20px;
-      }
     }
 
     /* ============================================
@@ -1736,7 +1694,7 @@
           <video class="animal-video" autoplay muted loop playsinline preload="metadata" poster="images/fly-brain-body-poster.jpg">
             <source src="videos/fly-brain-body.mp4" type="video/mp4">
           </video>
-          <figcaption>A fully reconstructed <em>Drosophila</em> central nervous system and body. Cell bodies carry simulated calcium-like activity, with a single identified descending neuron shown in anatomical context alongside the whole-body movement it drives.</figcaption>
+          <figcaption>A fully reconstructed <em>Drosophila</em> central nervous system and body. Cell bodies carry simulated neuronal activity, with a single identified descending neuron shown in anatomical context alongside the whole-body movement it drives.</figcaption>
         </figure>
       </div>
     </div>
@@ -1898,7 +1856,7 @@
         <h2 class="tech-title">Linking Behavior to <span>Neural Activity</span></h2>
           <p class="tech-why">Measuring behavior precisely still only tells us what the animal did. To learn how the brain produces it, we record neural activity while the behavior is happening.</p>
         <p class="tech-description">
-          We link behavior to neural activity using cutting-edge calcium imaging and large-scale electrophysiology to understand how social behaviors are encoded in the brain.
+          We record in vivo from <strong>freely moving mice</strong> using <strong>Neuropixels 2.0 multishank</strong> probes, capturing large-scale neuronal activity across multiple brain regions at once and <strong>chronically</strong>, across days, while the animals interact freely. This lets us follow the same populations through repeated social encounters rather than sampling one region in a single session.
         </p>
         <div class="tech-features">
           <div class="tech-feature">
@@ -1995,7 +1953,7 @@
 <!-- Tech Showcase: Causal Manipulation -->
 <section class="tech-showcase tech-showcase-causal" id="causal-manipulation">
   <div class="container">
-    <div class="tech-content-grid tech-content-reverse">
+    <div class="tech-content-grid tech-content-reverse tech-content-single">
       <div class="tech-info">
         <div class="tech-badge tech-badge-orange">
           <i class="fas fa-lightbulb"></i>
@@ -2031,14 +1989,6 @@
           </a>
         </div>
       </div>
-
-      <div class="tech-visual">
-        <div class="tech-visual-placeholder" id="causal-visual">
-          <div class="visual-icon"><i class="fas fa-lightbulb"></i></div>
-          <p>Optogenetic Manipulation</p>
-          <span class="visual-hint">Manipulation example coming soon</span>
-        </div>
-      </div>
     </div>
   </div>
 </section>
@@ -2046,7 +1996,7 @@
 <!-- Tech Showcase: Molecular Profiling -->
 <section class="tech-showcase tech-showcase-molecular" id="molecular-profiling">
   <div class="container">
-    <div class="tech-content-grid tech-content-reverse">
+    <div class="tech-content-grid tech-content-reverse tech-content-single">
       <div class="tech-info">
         <div class="tech-badge tech-badge-teal">
           <i class="fas fa-dna"></i>
@@ -2080,14 +2030,6 @@
           <a class="tech-pub-link" href="https://doi.org/10.3389/fnagi.2024.1487875" target="_blank">
             <strong>The neural basis of neuropsychiatric symptoms in Alzheimer's disease</strong>. <span class="pub-venue">Frontiers in Aging Neuroscience</span>, 2024
           </a>
-        </div>
-      </div>
-
-      <div class="tech-visual">
-        <div class="tech-visual-placeholder" id="molecular-visual">
-          <div class="visual-icon"><i class="fas fa-dna"></i></div>
-          <p>Molecular Profiling Visualization</p>
-          <span class="visual-hint">Sequencing data coming soon</span>
         </div>
       </div>
     </div>
