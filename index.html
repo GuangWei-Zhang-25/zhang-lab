@@ -1691,7 +1691,7 @@
       <div class="tech-info">
         <h2 class="tech-title">We study social behaviors of <span>embodied digital twins</span> of the biological nervous system because:</h2>
         <p class="tech-description">
-          Even the best recording reaches only a fraction of the neurons in a brain, and it cannot tell us how all of them are wired. Reconstructed nervous systems close that gap. Two animals are now mapped completely, body and nervous system together: the <strong>fly</strong> and <strong>C.&nbsp;elegans</strong>. With every neuron and connection known, we can simulate activity across the entire nervous system and watch how it drives movement and social behavior. Nothing is hidden in a model like this: we can follow a signal from one identified neuron all the way to the behavior it produces, and test circuit hypotheses that would be out of reach in a living animal before taking the promising ones back to the bench.
+          Even the best recording reaches only a fraction of the neurons in a brain, and it cannot tell us how all of them are wired. Reconstructed nervous systems close that gap. Two animals are now mapped completely, body and nervous system together: the <strong>fly</strong> and <strong>C.&nbsp;elegans</strong>. With every neuron and connection known, we can simulate activity across the entire nervous system and watch how it drives movement and social behavior. Nothing is hidden in a model like this: we can follow a signal from one identified neuron all the way to the behavior it produces, and we can watch activity in <strong>both partners at once</strong> through an entire social interaction, which no experiment can currently do. Circuit hypotheses that are out of reach in a living animal can be tested here first, and the promising ones taken back to the bench.
         </p>
       </div>
 
@@ -1701,6 +1701,12 @@
             <source src="videos/fly-brain-body.mp4" type="video/mp4">
           </video>
           <figcaption>A fully reconstructed <em>Drosophila</em> central nervous system and body. Cell bodies carry simulated neuronal activity, with a single identified descending neuron shown in anatomical context alongside the whole-body movement it drives.</figcaption>
+        </figure>
+        <figure class="digital-figure">
+          <video class="animal-video" autoplay muted loop playsinline preload="metadata" poster="images/two-flies-poster.jpg">
+            <source src="videos/two-flies-interaction.mp4" type="video/mp4">
+          </video>
+          <figcaption>Two digital twins interacting. Each fly's reconstructed cells carry their own simulated activity, shown above as independent signals, while their movements and gestures play out below. This is the point of an embodied twin: we can watch neuronal activity in both partners at the same time, throughout a social interaction.</figcaption>
         </figure>
         <figure class="digital-figure">
           <video class="animal-video" autoplay muted loop playsinline preload="metadata" poster="images/celegans-poster.jpg">
@@ -3106,6 +3112,24 @@ window.addEventListener('scroll', () => {
   animateNetwork();
 })();
 </script>
+
+<script>
+  /* Four autoplay loops on one page is a lot of decode work. Play only what is
+     on screen; the rest stay paused on their poster frame. */
+  (function () {
+    const vids = [...document.querySelectorAll('video[autoplay]')];
+    if (!vids.length || !('IntersectionObserver' in window)) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const v = e.target;
+        if (e.isIntersecting) { v.play().catch(() => {}); }
+        else if (!v.paused) { v.pause(); }
+      });
+    }, { rootMargin: '200px 0px', threshold: 0.01 });
+    vids.forEach((v) => { v.pause(); io.observe(v); });
+  })();
+</script>
+<!-- video-in-view -->
 
 </body>
 </html>
