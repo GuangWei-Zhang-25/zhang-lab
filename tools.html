@@ -465,6 +465,23 @@
 
     .summary-access i { font-size: 0.7rem; margin-top: 0.15rem; }
 
+    /* Where a tool is between phases: what is finished, and what to do now */
+    .summary-phase {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      font-size: 0.72rem;
+      line-height: 1.5;
+      color: #21506e;
+      background: rgba(44, 82, 130, 0.08);
+      border: 1px solid rgba(44, 82, 130, 0.22);
+      border-radius: 6px;
+      padding: 0.5rem 0.6rem;
+      margin: -0.2rem 0 0.55rem;
+    }
+
+    .summary-phase i { font-size: 0.7rem; margin-top: 0.15rem; }
+
     .summary-soon {
       display: inline-flex;
       align-items: center;
@@ -793,8 +810,12 @@
           <div class="summary-eyebrow">Dataset · Community Effort</div>
           <div class="summary-name">MouseWorld</div>
           <p class="summary-desc">
-            A growing dataset of mouse behaviors across many contexts, annotated as a community effort. Annotate the seven body keypoints, then review the keypoints a model has predicted after training on everyone's annotations so far.
+            A growing dataset of mouse behaviors across many contexts, annotated as a community effort. A model has now been trained on everyone's annotations, and its predicted keypoints are ready to be checked.
           </p>
+          <div class="summary-phase">
+            <i class="fas fa-circle-check"></i>
+            <span><strong>Phase 1 annotation is complete.</strong> Please log in to the review step and click only the clips with problematic labeling.</span>
+          </div>
           <div class="summary-author">
             <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo">
             <span>Project lead: <strong>Henry Oo</strong></span>
@@ -807,7 +828,9 @@
             <!-- Bounding-box annotation paused; keypoints only for now. Restore by uncommenting:
             <a href="http://172.31.149.142:8010/" class="btn-launch" target="_blank" rel="noopener" title="Annotate bounding boxes (VCU network only)"><i class="fas fa-vector-square"></i> Bounding boxes</a>
             -->
+            <!-- Phase 1 keypoint annotation closed. Restore by uncommenting:
             <a href="http://172.31.149.142:8000" class="btn-launch" target="_blank" rel="noopener" title="Annotate the 7 body keypoints (VCU network only)"><i class="fas fa-braille"></i> Annotate keypoints</a>
+            -->
             <a href="http://172.31.149.142:8020" class="btn-launch" target="_blank" rel="noopener" title="Review model-predicted keypoints trained on the community's annotations (VCU network only)"><i class="fas fa-clipboard-check"></i> Review trained keypoints</a>
           </div>
         </div>
