@@ -308,103 +308,7 @@
       object-position: center 30%;
     }
 
-    /* Network picker. A page served over HTTPS cannot probe these http hosts
-       to detect the network, so the choice is remembered instead of guessed. */
-    .mw-netpick {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.3rem;
-      margin: 0 0 0.6rem;
-    }
 
-    .mw-netpick .lbl {
-      font-size: 0.62rem;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-right: 0.15rem;
-    }
-
-    .mw-netpick button {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      font: inherit;
-      font-size: 0.66rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      background: var(--white);
-      border: 1px solid var(--border-medium);
-      border-radius: 999px;
-      padding: 0.16rem 0.55rem;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .mw-netpick button:hover { border-color: var(--primary-light); color: var(--primary); }
-
-    .mw-netpick button[aria-pressed="true"] {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: var(--white);
-    }
-
-    .mw-netpick button i { font-size: 0.6rem; }
-
-    /* "Show both" is an escape hatch, not a third choice: keep it quiet and
-       never give it the selected-pill treatment. */
-    .mw-netpick button.both,
-    .mw-netpick button.both[aria-pressed="true"] {
-      border: 0;
-      background: none;
-      color: var(--text-muted);
-      font-weight: 500;
-      padding: 0.16rem 0.2rem;
-      text-decoration: underline;
-    }
-
-    .mw-netpick button.both:hover { color: var(--primary); }
-
-    /* Task list: each step with its wireless and wired entry points */
-    .mw-tasks { margin: 0 0 0.85rem; }
-
-    .mw-task { padding: 0.5rem 0 0.55rem; border-top: 1px solid var(--border-light); }
-    .mw-task:first-child { border-top: 0; padding-top: 0; }
-
-    .mw-task b {
-      display: block;
-      font-size: 0.74rem;
-      color: var(--primary-dark);
-      letter-spacing: 0.01em;
-    }
-
-    .mw-task p {
-      margin: 0.12rem 0 0.3rem;
-      font-size: 0.7rem;
-      line-height: 1.45;
-      color: var(--text-secondary);
-    }
-
-    .mw-net { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-
-    .mw-net a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      font-size: 0.66rem;
-      font-weight: 600;
-      color: var(--primary);
-      text-decoration: none;
-      border: 1px solid var(--border-medium);
-      border-radius: 999px;
-      padding: 0.16rem 0.5rem;
-      transition: var(--transition);
-    }
-
-    .mw-net a:hover { border-color: var(--primary-light); background: var(--bg-light); }
-    .mw-net a i { font-size: 0.6rem; color: var(--text-muted); }
 
     /* Contributor strip: a wrapping grid of small faces with names under them */
     .summary-contributors { margin: -0.3rem 0 0.85rem; }
@@ -948,15 +852,11 @@
       <div class="tool-summary">
         <div class="summary-media"><i class="fas fa-database media-icon"></i></div>
         <div class="summary-body">
-          <div class="summary-eyebrow">Dataset · Community Effort</div>
+          <div class="summary-eyebrow">Dataset &middot; Community Effort</div>
           <div class="summary-name">MouseWorld</div>
           <p class="summary-desc">
-            A growing dataset of mouse behaviors across many contexts, annotated as a community effort. A model has now been trained on everyone's annotations, and its predicted keypoints are ready to be checked.
+            A growing dataset of mouse behaviors, annotated as a community effort. Phase 1 annotation is complete and two review tasks are now open.
           </p>
-          <div class="summary-phase">
-            <i class="fas fa-circle-check"></i>
-            <span><strong>Phase 1 annotation is complete.</strong> Two review tasks are now open. Sign in once, then work through either.</span>
-          </div>
           <div class="summary-author">
             <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo">
             <span>Project lead: <strong>Henry Oo</strong></span>
@@ -964,57 +864,27 @@
           <div class="summary-contributors">
             <span class="label">Annotated by</span>
             <div class="contrib-grid">
-            <div class="contrib"><img src="images/Jaden Headshot.png" alt="Jaden Harris" title="Jaden Harris"><span>Jaden</span></div>
-            <div class="contrib"><img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" title="Wissem Gmach"><span>Wissem</span></div>
-            <div class="contrib"><img src="images/Alisha Pillai.jpg" alt="Alisha Pillai" title="Alisha Pillai"><span>Alisha</span></div>
-            <div class="contrib"><img src="images/Aarushi Rao.jpg" alt="Aarushi Rao" title="Aarushi Rao"><span>Aarushi</span></div>
-            <div class="contrib"><img src="images/Ava Gardner.jpeg" alt="Ava Gardner" title="Ava Gardner"><span>Ava</span></div>
-            <div class="contrib"><img src="images/Sabrina Lee.jpg" alt="Sabrina Lee" title="Sabrina Lee"><span>Sabrina</span></div>
-            <div class="contrib"><img src="images/Katie Lieu.jpg" alt="Katie Lieu" title="Katie Lieu"><span>Katie</span></div>
-            <div class="contrib"><img src="images/Ibrahim Khalid.jpg" alt="Ibrahim Khalid" title="Ibrahim Khalid"><span>Ibrahim</span></div>
-            <div class="contrib"><img src="images/Asher Stang.jpg" alt="Asher Stang" title="Asher Stang"><span>Asher</span></div>
-            <div class="contrib"><img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova" title="Elizabeth Ivanova"><span>Elizabeth</span></div>
-            <div class="contrib"><img src="images/zhang new headshot.png" alt="Guang-Wei Zhang" title="Guang-Wei Zhang"><span>Guang-Wei</span></div>
-            <div class="contrib"><img src="images/Catherine Tao headshort.png" alt="Can Tao" title="Can Tao"><span>Can Tao</span></div>
-            </div>
-          </div>
-          <div class="mw-netpick" id="mwNetPick" hidden>
-            <span class="lbl">Your network</span>
-            <button type="button" data-pick="wifi"><i class="fas fa-wifi"></i> Wireless</button>
-            <button type="button" data-pick="wired"><i class="fas fa-ethernet"></i> Wired</button>
-            <button type="button" data-pick="both" class="both">Show both</button>
-          </div>
-          <div class="mw-tasks" id="mwTasks">
-            <div class="mw-task">
-              <b>Sign in first</b>
-              <p>Use your own name and the lab password. Both tasks below then work in the same browser.</p>
-              <div class="mw-net"><a data-net="wifi" href="http://10.243.36.217:8000/" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a data-net="wired" href="http://172.31.149.142:8000/" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
-            </div>
-            <div class="mw-task">
-              <b>Task 1 &middot; Review tracked annotations</b>
-              <p>Clips play with the tracked keypoints and boxes drawn on top. Mark whether the tracking follows the animal, and flag anything wrong so it can be re-tracked. You are checking the machine's work, not placing points yourself.</p>
-              <div class="mw-net"><a data-net="wifi" href="http://10.243.36.217:8000/validate" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a data-net="wired" href="http://172.31.149.142:8000/validate" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
-            </div>
-            <div class="mw-task">
-              <b>Task 2 &middot; Realism rating</b>
-              <p>One clip at a time, on a loop. Drag the slider to rate how much it looks like real animal footage, then submit. The slider is deliberately unnumbered: judge each clip on its own, and there is no correct answer. Arrows adjust, Enter submits, S skips; progress saves after every clip.</p>
-              <div class="mw-net"><a data-net="wifi" href="http://10.243.36.217:8000/realism" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a data-net="wired" href="http://172.31.149.142:8000/realism" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+              <div class="contrib"><img src="images/Jaden Headshot.png" alt="Jaden Harris" title="Jaden Harris"><span>Jaden</span></div>
+              <div class="contrib"><img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" title="Wissem Gmach"><span>Wissem</span></div>
+              <div class="contrib"><img src="images/Alisha Pillai.jpg" alt="Alisha Pillai" title="Alisha Pillai"><span>Alisha</span></div>
+              <div class="contrib"><img src="images/Aarushi Rao.jpg" alt="Aarushi Rao" title="Aarushi Rao"><span>Aarushi</span></div>
+              <div class="contrib"><img src="images/Ava Gardner.jpeg" alt="Ava Gardner" title="Ava Gardner"><span>Ava</span></div>
+              <div class="contrib"><img src="images/Sabrina Lee.jpg" alt="Sabrina Lee" title="Sabrina Lee"><span>Sabrina</span></div>
+              <div class="contrib"><img src="images/Katie Lieu.jpg" alt="Katie Lieu" title="Katie Lieu"><span>Katie</span></div>
+              <div class="contrib"><img src="images/Ibrahim Khalid.jpg" alt="Ibrahim Khalid" title="Ibrahim Khalid"><span>Ibrahim</span></div>
+              <div class="contrib"><img src="images/Asher Stang.jpg" alt="Asher Stang" title="Asher Stang"><span>Asher</span></div>
+              <div class="contrib"><img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova" title="Elizabeth Ivanova"><span>Elizabeth</span></div>
+              <div class="contrib"><img src="images/zhang new headshot.png" alt="Guang-Wei Zhang" title="Guang-Wei Zhang"><span>Guang-Wei</span></div>
+              <div class="contrib"><img src="images/Catherine Tao headshort.png" alt="Can Tao" title="Can Tao"><span>Can Tao</span></div>
             </div>
           </div>
           <div class="summary-access">
             <i class="fas fa-lock"></i>
-            <span>On the <strong>VCU network only</strong>: use the wireless link on VCU Guest Wireless, the wired link on the wired network. Ask the PI for the password.</span>
+            <span>On the <strong>VCU wired network</strong>. Sign in once with your own name; ask the PI for the password.</span>
           </div>
           <div class="summary-actions">
-            <!-- Bounding-box annotation paused; keypoints only for now. Restore by uncommenting:
-            <a href="http://172.31.149.142:8010/" class="btn-launch" target="_blank" rel="noopener" title="Annotate bounding boxes (VCU network only)"><i class="fas fa-vector-square"></i> Bounding boxes</a>
-            -->
-            <!-- Phase 1 keypoint annotation closed. Restore by uncommenting:
-            <a href="http://172.31.149.142:8000" class="btn-launch" target="_blank" rel="noopener" title="Annotate the 7 body keypoints (VCU network only)"><i class="fas fa-braille"></i> Annotate keypoints</a>
-            -->
-            <!-- Superseded by Task 1 at :8000/validate. Restore by uncommenting:
-            <a href="http://172.31.149.142:8020" class="btn-launch" target="_blank" rel="noopener" title="Review model-predicted keypoints trained on the community's annotations (VCU network only)"><i class="fas fa-clipboard-check"></i> Review trained keypoints</a>
-            -->
+            <a href="http://172.31.149.142:8000/validate" class="btn-launch" target="_blank" rel="noopener" title="Check whether tracking follows the animal, and flag clips that are wrong"><i class="fas fa-clipboard-check"></i> Review annotations</a>
+            <a href="http://172.31.149.142:8000/realism" class="btn-launch" target="_blank" rel="noopener" title="Rate how much each clip looks like real animal footage"><i class="fas fa-sliders"></i> Realism rating</a>
           </div>
         </div>
       </div>
@@ -1102,55 +972,6 @@ navToggle.addEventListener('click', () => {
 });
 </script>
 
-<script>
-  /* MouseWorld network preference.
-     The site is HTTPS, so the page cannot reach the http:// Jetson hosts to
-     work out which VCU network someone is on: mixed content blocks the probe.
-     So the choice is remembered rather than detected, and it is set implicitly
-     the first time someone simply clicks a task link. */
-  (function () {
-    var pick = document.getElementById('mwNetPick'),
-        tasks = document.getElementById('mwTasks');
-    if (!pick || !tasks) return;
-
-    var KEY = 'mw-net',
-        links = [].slice.call(tasks.querySelectorAll('a[data-net]')),
-        buttons = [].slice.call(pick.querySelectorAll('button[data-pick]'));
-
-    function read() {
-      try { return localStorage.getItem(KEY); } catch (e) { return null; }
-    }
-    function write(v) {
-      try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) {}
-    }
-    function apply(net) {
-      links.forEach(function (a) {
-        a.hidden = !!net && net !== 'both' && a.dataset.net !== net;
-      });
-      buttons.forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.dataset.pick === (net || 'both')));
-      });
-    }
-
-    pick.hidden = false;                    // only shown where the script runs
-    apply(read());
-
-    buttons.forEach(function (b) {
-      b.addEventListener('click', function () {
-        var v = b.dataset.pick;
-        write(v === 'both' ? null : v);
-        apply(v);
-      });
-    });
-
-    // Using a link is itself a statement about which network you are on.
-    links.forEach(function (a) {
-      a.addEventListener('click', function () {
-        if (!read()) { write(a.dataset.net); apply(a.dataset.net); }
-      });
-    });
-  })();
-</script>
 
 </body>
 </html>
