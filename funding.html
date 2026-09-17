@@ -270,6 +270,8 @@
       margin-top: auto;
     }
 
+    /* A second link under the first must not also claim margin-top: auto */
+    .funder-link-sub { margin-top: 0.3rem; font-weight: 500; color: var(--primary-light); }
     .funder-link:hover { color: var(--primary-light); text-decoration: underline; }
     .funder-link i { font-size: 0.72rem; }
 
@@ -407,6 +409,7 @@
           <div class="funder-program">R24 Pilot Grant</div>
           <div class="funder-name">National Institute on Aging, NIH</div>
           <a class="funder-link" href="https://www.nia.nih.gov/" target="_blank" rel="noopener">nia.nih.gov <i class="fas fa-external-link-alt"></i></a>
+          <a class="funder-link funder-link-sub" href="https://www.animalsocialaging-network.org/funding/pilot-program/award-recipients/" target="_blank" rel="noopener">Award recipients, Research Network <i class="fas fa-external-link-alt"></i></a>
         </div>
       </article>
 
