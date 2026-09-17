@@ -308,6 +308,65 @@
       object-position: center 30%;
     }
 
+    /* Network picker. A page served over HTTPS cannot probe these http hosts
+       to detect the network, so the choice is remembered instead of guessed. */
+    .mw-netpick {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.3rem;
+      margin: 0 0 0.6rem;
+    }
+
+    .mw-netpick .lbl {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-right: 0.15rem;
+    }
+
+    .mw-netpick button {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font: inherit;
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--white);
+      border: 1px solid var(--border-medium);
+      border-radius: 999px;
+      padding: 0.16rem 0.55rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .mw-netpick button:hover { border-color: var(--primary-light); color: var(--primary); }
+
+    .mw-netpick button[aria-pressed="true"] {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: var(--white);
+    }
+
+    .mw-netpick button i { font-size: 0.6rem; }
+
+    /* "Show both" is an escape hatch, not a third choice: keep it quiet and
+       never give it the selected-pill treatment. */
+    .mw-netpick button.both,
+    .mw-netpick button.both[aria-pressed="true"] {
+      border: 0;
+      background: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 0.16rem 0.2rem;
+      text-decoration: underline;
+    }
+
+    .mw-netpick button.both:hover { color: var(--primary); }
+
     /* Task list: each step with its wireless and wired entry points */
     .mw-tasks { margin: 0 0 0.85rem; }
 
@@ -919,21 +978,27 @@
             <div class="contrib"><img src="images/Catherine Tao headshort.png" alt="Can Tao" title="Can Tao"><span>Can Tao</span></div>
             </div>
           </div>
-          <div class="mw-tasks">
+          <div class="mw-netpick" id="mwNetPick" hidden>
+            <span class="lbl">Your network</span>
+            <button type="button" data-pick="wifi"><i class="fas fa-wifi"></i> Wireless</button>
+            <button type="button" data-pick="wired"><i class="fas fa-ethernet"></i> Wired</button>
+            <button type="button" data-pick="both" class="both">Show both</button>
+          </div>
+          <div class="mw-tasks" id="mwTasks">
             <div class="mw-task">
               <b>Sign in first</b>
               <p>Use your own name and the lab password. Both tasks below then work in the same browser.</p>
-              <div class="mw-net"><a href="http://10.243.36.217:8000/" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a href="http://172.31.149.142:8000/" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+              <div class="mw-net"><a data-net="wifi" href="http://10.243.36.217:8000/" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a data-net="wired" href="http://172.31.149.142:8000/" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
             </div>
             <div class="mw-task">
               <b>Task 1 &middot; Review tracked annotations</b>
               <p>Clips play with the tracked keypoints and boxes drawn on top. Mark whether the tracking follows the animal, and flag anything wrong so it can be re-tracked. You are checking the machine's work, not placing points yourself.</p>
-              <div class="mw-net"><a href="http://10.243.36.217:8000/validate" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a href="http://172.31.149.142:8000/validate" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+              <div class="mw-net"><a data-net="wifi" href="http://10.243.36.217:8000/validate" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a data-net="wired" href="http://172.31.149.142:8000/validate" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
             </div>
             <div class="mw-task">
               <b>Task 2 &middot; Realism rating</b>
               <p>One clip at a time, on a loop. Drag the slider to rate how much it looks like real animal footage, then submit. The slider is deliberately unnumbered: judge each clip on its own, and there is no correct answer. Arrows adjust, Enter submits, S skips; progress saves after every clip.</p>
-              <div class="mw-net"><a href="http://10.243.36.217:8000/realism" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a href="http://172.31.149.142:8000/realism" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+              <div class="mw-net"><a data-net="wifi" href="http://10.243.36.217:8000/realism" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a data-net="wired" href="http://172.31.149.142:8000/realism" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
             </div>
           </div>
           <div class="summary-access">
@@ -1035,6 +1100,56 @@ const navMenu = document.querySelector('.nav-menu');
 navToggle.addEventListener('click', () => {
   navMenu.classList.toggle('active');
 });
+</script>
+
+<script>
+  /* MouseWorld network preference.
+     The site is HTTPS, so the page cannot reach the http:// Jetson hosts to
+     work out which VCU network someone is on: mixed content blocks the probe.
+     So the choice is remembered rather than detected, and it is set implicitly
+     the first time someone simply clicks a task link. */
+  (function () {
+    var pick = document.getElementById('mwNetPick'),
+        tasks = document.getElementById('mwTasks');
+    if (!pick || !tasks) return;
+
+    var KEY = 'mw-net',
+        links = [].slice.call(tasks.querySelectorAll('a[data-net]')),
+        buttons = [].slice.call(pick.querySelectorAll('button[data-pick]'));
+
+    function read() {
+      try { return localStorage.getItem(KEY); } catch (e) { return null; }
+    }
+    function write(v) {
+      try { v ? localStorage.setItem(KEY, v) : localStorage.removeItem(KEY); } catch (e) {}
+    }
+    function apply(net) {
+      links.forEach(function (a) {
+        a.hidden = !!net && net !== 'both' && a.dataset.net !== net;
+      });
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.pick === (net || 'both')));
+      });
+    }
+
+    pick.hidden = false;                    // only shown where the script runs
+    apply(read());
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var v = b.dataset.pick;
+        write(v === 'both' ? null : v);
+        apply(v);
+      });
+    });
+
+    // Using a link is itself a statement about which network you are on.
+    links.forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (!read()) { write(a.dataset.net); apply(a.dataset.net); }
+      });
+    });
+  })();
 </script>
 
 </body>
