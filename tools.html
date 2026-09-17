@@ -308,6 +308,45 @@
       object-position: center 30%;
     }
 
+    /* Task list: each step with its wireless and wired entry points */
+    .mw-tasks { margin: 0 0 0.85rem; }
+
+    .mw-task { padding: 0.5rem 0 0.55rem; border-top: 1px solid var(--border-light); }
+    .mw-task:first-child { border-top: 0; padding-top: 0; }
+
+    .mw-task b {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--primary-dark);
+      letter-spacing: 0.01em;
+    }
+
+    .mw-task p {
+      margin: 0.12rem 0 0.3rem;
+      font-size: 0.7rem;
+      line-height: 1.45;
+      color: var(--text-secondary);
+    }
+
+    .mw-net { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+
+    .mw-net a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.66rem;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      border: 1px solid var(--border-medium);
+      border-radius: 999px;
+      padding: 0.16rem 0.5rem;
+      transition: var(--transition);
+    }
+
+    .mw-net a:hover { border-color: var(--primary-light); background: var(--bg-light); }
+    .mw-net a i { font-size: 0.6rem; color: var(--text-muted); }
+
     /* Contributor strip: a wrapping grid of small faces with names under them */
     .summary-contributors { margin: -0.3rem 0 0.85rem; }
 
@@ -857,7 +896,7 @@
           </p>
           <div class="summary-phase">
             <i class="fas fa-circle-check"></i>
-            <span><strong>Phase 1 annotation is complete.</strong> Please log in to the review step and click only the clips with problematic labeling.</span>
+            <span><strong>Phase 1 annotation is complete.</strong> Two review tasks are now open. Sign in once, then work through either.</span>
           </div>
           <div class="summary-author">
             <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo">
@@ -880,9 +919,26 @@
             <div class="contrib"><img src="images/Catherine Tao headshort.png" alt="Can Tao" title="Can Tao"><span>Can Tao</span></div>
             </div>
           </div>
+          <div class="mw-tasks">
+            <div class="mw-task">
+              <b>Sign in first</b>
+              <p>Use your own name and the lab password. Both tasks below then work in the same browser.</p>
+              <div class="mw-net"><a href="http://10.243.36.217:8000/" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a href="http://172.31.149.142:8000/" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+            </div>
+            <div class="mw-task">
+              <b>Task 1 &middot; Review tracked annotations</b>
+              <p>Clips play with the tracked keypoints and boxes drawn on top. Mark whether the tracking follows the animal, and flag anything wrong so it can be re-tracked. You are checking the machine's work, not placing points yourself.</p>
+              <div class="mw-net"><a href="http://10.243.36.217:8000/validate" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a href="http://172.31.149.142:8000/validate" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+            </div>
+            <div class="mw-task">
+              <b>Task 2 &middot; Realism rating</b>
+              <p>One clip at a time, on a loop. Drag the slider to rate how much it looks like real animal footage, then submit. The slider is deliberately unnumbered: judge each clip on its own, and there is no correct answer. Arrows adjust, Enter submits, S skips; progress saves after every clip.</p>
+              <div class="mw-net"><a href="http://10.243.36.217:8000/realism" target="_blank" rel="noopener"><i class="fas fa-wifi"></i> Wireless</a><a href="http://172.31.149.142:8000/realism" target="_blank" rel="noopener"><i class="fas fa-ethernet"></i> Wired</a></div>
+            </div>
+          </div>
           <div class="summary-access">
             <i class="fas fa-lock"></i>
-            <span>On the <strong>VCU network only</strong>. Ask the PI for the default password.</span>
+            <span>On the <strong>VCU network only</strong>: use the wireless link on VCU Guest Wireless, the wired link on the wired network. Ask the PI for the password.</span>
           </div>
           <div class="summary-actions">
             <!-- Bounding-box annotation paused; keypoints only for now. Restore by uncommenting:
@@ -891,7 +947,9 @@
             <!-- Phase 1 keypoint annotation closed. Restore by uncommenting:
             <a href="http://172.31.149.142:8000" class="btn-launch" target="_blank" rel="noopener" title="Annotate the 7 body keypoints (VCU network only)"><i class="fas fa-braille"></i> Annotate keypoints</a>
             -->
+            <!-- Superseded by Task 1 at :8000/validate. Restore by uncommenting:
             <a href="http://172.31.149.142:8020" class="btn-launch" target="_blank" rel="noopener" title="Review model-predicted keypoints trained on the community's annotations (VCU network only)"><i class="fas fa-clipboard-check"></i> Review trained keypoints</a>
+            -->
           </div>
         </div>
       </div>
