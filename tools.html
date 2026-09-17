@@ -308,6 +308,49 @@
       object-position: center 30%;
     }
 
+    /* Contributor strip: a wrapping grid of small faces with names under them */
+    .summary-contributors { margin: -0.3rem 0 0.85rem; }
+
+    .summary-contributors .label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.45rem;
+    }
+
+    .contrib-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+      gap: 0.5rem 0.35rem;
+    }
+
+    .contrib {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      text-align: center;
+    }
+
+    .contrib img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 30%;
+      box-shadow: 0 0 0 1px var(--border-light);
+    }
+
+    .contrib span {
+      font-size: 0.58rem;
+      line-height: 1.25;
+      color: var(--text-muted);
+      overflow-wrap: anywhere;
+    }
+
     .summary-author.no-photo i {
       width: 26px;
       height: 26px;
@@ -819,6 +862,23 @@
           <div class="summary-author">
             <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo">
             <span>Project lead: <strong>Henry Oo</strong></span>
+          </div>
+          <div class="summary-contributors">
+            <span class="label">Annotated by</span>
+            <div class="contrib-grid">
+            <div class="contrib"><img src="images/Jaden Headshot.png" alt="Jaden Harris" title="Jaden Harris"><span>Jaden</span></div>
+            <div class="contrib"><img src="images/Wissem Gmach headshot.jpeg" alt="Wissem Gmach" title="Wissem Gmach"><span>Wissem</span></div>
+            <div class="contrib"><img src="images/Alisha Pillai.jpg" alt="Alisha Pillai" title="Alisha Pillai"><span>Alisha</span></div>
+            <div class="contrib"><img src="images/Aarushi Rao.jpg" alt="Aarushi Rao" title="Aarushi Rao"><span>Aarushi</span></div>
+            <div class="contrib"><img src="images/Ava Gardner.jpeg" alt="Ava Gardner" title="Ava Gardner"><span>Ava</span></div>
+            <div class="contrib"><img src="images/Sabrina Lee.jpg" alt="Sabrina Lee" title="Sabrina Lee"><span>Sabrina</span></div>
+            <div class="contrib"><img src="images/Katie Lieu.jpg" alt="Katie Lieu" title="Katie Lieu"><span>Katie</span></div>
+            <div class="contrib"><img src="images/Ibrahim Khalid.jpg" alt="Ibrahim Khalid" title="Ibrahim Khalid"><span>Ibrahim</span></div>
+            <div class="contrib"><img src="images/Asher Stang.jpg" alt="Asher Stang" title="Asher Stang"><span>Asher</span></div>
+            <div class="contrib"><img src="images/Elizabeth Ivanova Headshot.jpg" alt="Elizabeth Ivanova" title="Elizabeth Ivanova"><span>Elizabeth</span></div>
+            <div class="contrib"><img src="images/zhang new headshot.png" alt="Guang-Wei Zhang" title="Guang-Wei Zhang"><span>Guang-Wei</span></div>
+            <div class="contrib"><img src="images/Catherine Tao headshort.png" alt="Can Tao" title="Can Tao"><span>Can Tao</span></div>
+            </div>
           </div>
           <div class="summary-access">
             <i class="fas fa-lock"></i>
