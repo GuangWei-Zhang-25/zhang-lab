@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROI Clipper v2</title>
+<style>
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px; background: #1e1e2e; color: #cdd6f4;
+}
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: #181825; }
+::-webkit-scrollbar-thumb { background: #45475a; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #585b70; }
+
+button {
+    background: #313244; color: #cdd6f4; border: 1px solid #45475a; border-radius: 5px;
+    padding: 4px 10px; font-size: 12px; cursor: pointer; font-family: inherit;
+    transition: background .15s, border-color .15s;
+}
+button:hover:not(:disabled) { background: #45475a; }
+button:disabled { opacity: .4; cursor: not-allowed; }
+button.primary { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; font-weight: 600; }
+button.primary:hover:not(:disabled) { background: #b4befe; }
+input, select {
+    background: #313244; border: 1px solid #45475a; border-radius: 5px; color: #cdd6f4;
+    padding: 4px 7px; font-size: 12px; font-family: inherit; outline: none;
+}
+input:focus, select:focus { border-color: #cba6f7; }
+input[type=checkbox] { accent-color: #cba6f7; vertical-align: -2px; }
+code { font-family: ui-monospace, Consolas, monospace; font-size: .92em; color: #a6e3a1; }
+
+/* ── Welcome ── */
+.welcome {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    height: 100%; gap: 18px; text-align: center; padding: 24px;
+}
+.welcome.hidden { display: none; }
+.welcome h1 { font-size: 28px; color: #cba6f7; font-weight: 600; }
+.welcome .subtitle { font-size: 13px; color: #a6adc8; letter-spacing: 1px; margin-top: -10px; }
+.welcome p { color: #a6adc8; max-width: 620px; line-height: 1.6; }
+.welcome .note { color: #585b70; font-size: 11px; max-width: 520px; line-height: 1.5; }
+.open-folder-btn {
+    background: #cba6f7; color: #1e1e2e; border: none; border-radius: 8px;
+    padding: 14px 32px; font-size: 16px; font-weight: 600; cursor: pointer;
+}
+.open-folder-btn:hover { background: #b4befe; }
+.drop-zone {
+    width: 380px; height: 116px; border: 2px dashed #45475a; border-radius: 12px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; cursor: pointer; transition: border-color .2s, background .2s;
+}
+.drop-zone:hover, .drop-zone.dragover { border-color: #cba6f7; background: rgba(203,166,247,.05); }
+.drop-zone .icon { font-size: 30px; color: #585b70; }
+.drop-zone .text { color: #a6adc8; font-size: 14px; }
+.drop-zone .sub { color: #585b70; font-size: 11px; }
+.hidden-input { display: none; }
+
+/* ── App shell ── */
+.app { display: none; height: 100%; grid-template-rows: 42px 1fr; grid-template-columns: 252px 1fr 340px; }
+.app.active { display: grid; }
+
+.toolbar {
+    grid-column: 1 / -1; background: #181825; border-bottom: 1px solid #313244;
+    display: flex; align-items: center; padding: 0 12px; gap: 8px;
+}
+.toolbar .title { font-weight: 600; font-size: 14px; color: #cba6f7; }
+.tag { font-size: 10px; color: #a6adc8; background: #313244; padding: 2px 8px; border-radius: 10px; letter-spacing: .5px; }
+.toolbar .spacer { flex: 1; }
+.fps-group { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #a6adc8; }
+.fps-input { width: 56px; text-align: center; }
+.save-ind {
+    display: flex; align-items: center; gap: 6px; font-size: 11px; padding: 2px 10px;
+    border-radius: 4px; border: 1px solid #45475a; background: #313244; cursor: pointer; max-width: 300px;
+}
+.save-ind.on  { border-color: #a6e3a1; background: rgba(166,227,161,.10); color: #a6e3a1; }
+.save-ind.off { border-color: #f38ba8; background: rgba(243,139,168,.10); color: #f38ba8; }
+.save-ind .dot { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 8px; background: currentColor; }
+.save-ind .folder-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 190px; color: #cdd6f4; }
+.save-status { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+.save-status.saving { background: #f9e2af; color: #1e1e2e; }
+.save-status.saved  { background: #a6e3a1; color: #1e1e2e; }
+
+/* ── Sidebar ── */
+.sidebar { background: #181825; border-right: 1px solid #313244; display: flex; flex-direction: column; min-height: 0; }
+.side-head { padding: 9px 10px 7px; border-bottom: 1px solid #313244; display: flex; flex-direction: column; gap: 7px; }
+.side-head h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #a6adc8; font-weight: 600; }
+.side-head input { width: 100%; }
+.video-list { flex: 1; overflow-y: auto; min-height: 0; }
+.vitem { padding: 6px 10px; cursor: pointer; border-left: 3px solid transparent; display: flex; gap: 7px; align-items: center; }
+.vitem:hover { background: #252535; }
+.vitem.active { background: #313244; border-left-color: #cba6f7; }
+.vitem .dot { width: 7px; height: 7px; border-radius: 50%; background: #45475a; flex: 0 0 7px; }
+.vitem.has-rois .dot { background: #a6e3a1; }
+.vitem .nm { flex: 1; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vitem .sz { font-size: 10px; color: #585b70; }
+
+/* ── Player ── */
+.main { display: grid; grid-template-rows: 1fr auto auto; min-height: 0; min-width: 0; }
+.stage { display: flex; align-items: center; justify-content: center; background: #11111b; min-height: 0; overflow: hidden; padding: 8px; }
+.vwrap { position: relative; line-height: 0; }
+.vwrap video { display: block; background: #000; }
+.vwrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+.stage .empty { color: #585b70; font-size: 14px; }
+
+/* ── Timeline ── */
+.tlbox { background: #181825; border-top: 1px solid #313244; padding: 8px 14px 10px; user-select: none; }
+.tl-head { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #a6adc8; margin-bottom: 6px; flex-wrap: wrap; }
+.tl-head b { color: #cdd6f4; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tl-head .seg { color: #89b4fa; font-variant-numeric: tabular-nums; }
+.tl-ruler { position: relative; height: 13px; }
+.tl-ruler span { position: absolute; font-size: 9px; color: #585b70; transform: translateX(-50%); white-space: nowrap; }
+.tl-ruler i { position: absolute; top: 9px; width: 1px; height: 4px; background: #45475a; }
+.tl-track { position: relative; height: 42px; background: #252535; border: 1px solid #313244;
+            border-radius: 5px; cursor: pointer; overflow: hidden; touch-action: none; }
+.tl-dim { position: absolute; top: 0; bottom: 0; background: rgba(17,17,27,.62); pointer-events: none; }
+.tl-sel { position: absolute; top: 0; bottom: 0; background: rgba(137,180,250,.20);
+          border-left: 2px solid #89b4fa; border-right: 2px solid #89b4fa; cursor: grab; }
+.tl-sel:active { cursor: grabbing; }
+.tl-h { position: absolute; top: 0; bottom: 0; width: 11px; cursor: ew-resize; background: rgba(137,180,250,.55); }
+.tl-h::after { content: ''; position: absolute; left: 4px; top: 50%; width: 3px; height: 15px;
+               margin-top: -7px; background: #1e1e2e; border-radius: 2px; }
+.tl-h.l { left: -2px; border-radius: 4px 0 0 4px; }
+.tl-h.r { right: -2px; border-radius: 0 4px 4px 0; }
+.tl-play { position: absolute; top: 0; bottom: 0; width: 2px; background: #f38ba8; pointer-events: none; }
+.tl-play::before { content: ''; position: absolute; top: 0; left: -4px; border-left: 5px solid transparent;
+                   border-right: 5px solid transparent; border-top: 7px solid #f38ba8; }
+
+/* ── Transport ── */
+.controls { background: #181825; border-top: 1px solid #313244; padding: 7px 14px;
+            display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.transport { display: flex; gap: 3px; }
+.transport button { min-width: 32px; padding: 4px 7px; }
+.frame-info { font-size: 11px; color: #a6adc8; font-variant-numeric: tabular-nums; }
+.speed-group { display: flex; align-items: center; gap: 3px; font-size: 11px; color: #a6adc8; }
+.speed-btn { padding: 3px 7px; font-size: 11px; }
+.speed-btn.active { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; }
+
+/* ── Right panel ── */
+.panel { background: #181825; border-left: 1px solid #313244; overflow-y: auto; min-height: 0; }
+.sec { border-bottom: 1px solid #313244; padding: 10px 12px; }
+.sec h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #a6adc8;
+          font-weight: 600; display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.sec h3 .spacer { flex: 1; }
+.hint { font-size: 10px; color: #585b70; line-height: 1.45; }
+
+.roi-list { display: flex; flex-direction: column; gap: 5px; }
+.roi-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 5px;
+            background: #252535; border: 1px solid transparent; cursor: pointer; }
+.roi-item:hover { background: #2c2c3f; }
+.roi-item.sel { border-color: #cba6f7; background: #313244; }
+.roi-item .chip { width: 12px; height: 12px; border-radius: 3px; flex: 0 0 12px; }
+.roi-item .info { flex: 1; min-width: 0; }
+.roi-item .t1 { font-size: 12px; font-weight: 600; }
+.roi-item .t2 { font-size: 10px; color: #585b70; font-variant-numeric: tabular-nums; }
+.roi-item .x { color: #585b70; padding: 0 3px; font-size: 14px; line-height: 1; }
+.roi-item .x:hover { color: #f38ba8; }
+
+.field { margin-bottom: 9px; }
+.field > label { display: block; font-size: 10px; color: #a6adc8; text-transform: uppercase;
+                 letter-spacing: .6px; margin-bottom: 4px; }
+.seg-row { display: flex; flex-wrap: wrap; gap: 3px; }
+.seg-row button { flex: 1; min-width: 26px; padding: 4px 2px; font-size: 11px; }
+.seg-row button.on { background: #cba6f7; color: #1e1e2e; border-color: #cba6f7; font-weight: 600; }
+.seg-row.two button { min-width: 60px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.grid4 input { width: 100%; text-align: center; font-size: 11px; padding: 3px 2px; }
+.grid4 label { font-size: 9px; color: #585b70; text-align: center; display: block; }
+.full { width: 100%; }
+.row { display: flex; gap: 6px; align-items: center; }
+.row > * { min-width: 0; }
+.preview-name {
+    font-family: ui-monospace, Consolas, monospace; font-size: 10.5px; color: #a6e3a1;
+    background: #11111b; border: 1px solid #313244; border-radius: 4px; padding: 5px 7px;
+    word-break: break-all; line-height: 1.45;
+}
+.qitem { background: #252535; border-radius: 5px; padding: 6px 8px; margin-bottom: 5px; display: flex; gap: 7px; align-items: flex-start; }
+.qitem .qn { flex: 1; font-size: 10.5px; font-family: ui-monospace, Consolas, monospace; word-break: break-all; }
+.qitem .qs { font-size: 10px; color: #585b70; }
+.qitem .x { color: #585b70; cursor: pointer; font-size: 14px; line-height: 1; }
+.qitem .x:hover { color: #f38ba8; }
+.qitem .bar { height: 4px; background: #313244; border-radius: 2px; overflow: hidden; margin-top: 4px; }
+.qitem .bar i { display: block; height: 100%; width: 0; background: #89b4fa; transition: width .2s; }
+.qitem.done .bar i { background: #a6e3a1; }
+.qitem.error .bar i { background: #f38ba8; width: 100% !important; }
+.qitem .msg { color: #f38ba8; }
+
+/* Label-field editor */
+.fe-row { border: 1px solid #313244; border-radius: 6px; padding: 8px 9px; margin-bottom: 7px; background: #181825; }
+.fe-head { display: flex; gap: 6px; align-items: center; }
+.fe-head .fe-name { flex: 1; min-width: 80px; }
+.fe-token { color: #a6e3a1; font-family: ui-monospace, Consolas, monospace; font-size: 11px; white-space: nowrap; }
+.fe-del { color: #f38ba8; padding: 2px 8px; }
+.fe-opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; align-items: center; }
+.fe-opt { display: inline-flex; align-items: center; gap: 2px; background: #252535; border-radius: 5px; padding: 2px 3px; }
+.fe-opt input { width: 112px; }
+.fe-opt button { padding: 0 5px; border: none; background: none; color: #585b70; font-size: 13px; }
+.fe-opt button:hover { color: #f38ba8; background: none; }
+.hint a.tok { color: #89b4fa; text-decoration: none; font-family: ui-monospace, Consolas, monospace; }
+.hint a.tok:hover { text-decoration: underline; }
+
+/* ── Toast / modals ── */
+#toast { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+         background: #313244; border: 1px solid #45475a; border-radius: 6px; padding: 8px 16px;
+         font-size: 12px; opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 100; }
+#toast.show { opacity: 1; }
+#toast.err { border-color: #f38ba8; color: #f38ba8; }
+.overlay { position: fixed; inset: 0; background: rgba(17,17,27,.8); display: flex;
+           align-items: center; justify-content: center; z-index: 90; padding: 20px; }
+.overlay.hidden { display: none; }
+.box { background: #1e1e2e; border: 1px solid #45475a; border-radius: 10px; padding: 20px 24px;
+       max-width: 780px; max-height: 88vh; overflow: auto; }
+.box h3 { color: #cba6f7; margin-bottom: 12px; }
+.box table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.box td { padding: 3px 8px 3px 0; }
+.box td:first-child { color: #f9e2af; font-family: ui-monospace, Consolas, monospace; white-space: nowrap; width: 140px; }
+.box td.section { color: #cba6f7; font-weight: 600; padding-top: 10px; }
+.box pre {
+    background: #11111b; border: 1px solid #313244; border-radius: 6px; padding: 10px;
+    font-family: ui-monospace, Consolas, monospace; font-size: 11px; color: #cdd6f4;
+    white-space: pre; overflow: auto; max-height: 46vh; margin: 10px 0;
+}
+.box .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<!-- ═════════════ Welcome ═════════════ -->
+<div class="welcome" id="welcome">
+    <h1>ROI Clipper</h1>
+    <div class="subtitle">Draw up to 4 ROIs · label them with your own categories · pick a time range · one button crops and saves</div>
+    <p>Open the folder that holds your <code>.mp4</code> files. Boxes and labels save next to each
+       video as <code>&lt;video&gt;.rois.json</code>, and <b>Crop &amp; trim</b> encodes the clips right here
+       in the browser and writes the <code>.mp4</code> files into the folder you choose. Nothing is
+       uploaded and nothing needs to be installed.</p>
+    <button class="open-folder-btn" onclick="openFolder()">Open Video Folder</button>
+    <button class="open-folder-btn" id="reopenBtn" onclick="reopenLast()" style="display:none;background:#94e2d5">Reopen last folder</button>
+    <p class="note" id="reopenNote" style="display:none;color:#a6e3a1;">Last folder remembered — one click to continue.</p>
+    <div style="display:flex;align-items:center;gap:12px;color:#585b70;font-size:12px;">
+        <span style="flex:0 0 40px;border-top:1px solid #45475a;"></span> or <span style="flex:0 0 40px;border-top:1px solid #45475a;"></span>
+    </div>
+    <div class="drop-zone" id="dropZone">
+        <div class="icon">&#127916;</div>
+        <div class="text">Drop video files here</div>
+        <div class="sub">or click to browse (clips are downloaded instead of written in place)</div>
+    </div>
+    <input type="file" id="fileInput" class="hidden-input" accept="video/*" multiple>
+    <p class="note">Folder access and in-browser encoding need Chrome or Edge. The page never
+       uploads anything — every frame stays on this machine.</p>
+    <p class="note" id="capNote"></p>
+</div>
+
+<!-- ═════════════ App ═════════════ -->
+<div class="app" id="app">
+    <div class="toolbar">
+        <span class="title">ROI Clipper <span style="opacity:.6">v2</span></span>
+        <span class="tag">standalone</span>
+        <button onclick="openFolder()">Open Folder</button>
+        <button onclick="addMoreVideos()">+ Add Videos</button>
+        <div class="fps-group">
+            <label>FPS:</label>
+            <input type="number" class="fps-input" id="fpsInput" value="30" min="1" max="240" step="0.001" onchange="onFpsChange()">
+        </div>
+        <button onclick="showHelp()">Shortcuts (?)</button>
+        <div class="save-ind off" id="saveInd" onclick="setSaveFolder()" title="Folder that ROI JSONs and the export script are written to">
+            <span class="dot"></span><span id="saveIndText">Auto-save OFF — click to set folder</span>
+        </div>
+        <span class="spacer"></span>
+        <span class="save-status" id="saveStatus"></span>
+        <span class="frame-info" id="dimInfo"></span>
+    </div>
+
+    <div class="sidebar">
+        <div class="side-head">
+            <h3>Videos <span id="vcount" style="color:#585b70"></span></h3>
+            <input type="text" id="search" placeholder="Filter…" autocomplete="off">
+        </div>
+        <div class="video-list" id="videoList"></div>
+    </div>
+
+    <div class="main">
+        <div class="stage" id="stage">
+            <span class="empty" id="emptyMsg">Select a video from the sidebar</span>
+            <div class="vwrap" id="vwrap" style="display:none">
+                <video id="vid" preload="metadata"></video>
+                <canvas id="ovl"></canvas>
+            </div>
+        </div>
+
+        <div class="tlbox">
+            <div class="tl-head">
+                <span>Export range</span>
+                <b id="tIn">0:00.000</b><span>→</span><b id="tOut">0:00.000</b>
+                <span class="seg" id="tDur">(0:00.000)</span>
+                <button onclick="setIn()" title="Mark In at playhead (I)">I — Mark In</button>
+                <button onclick="setOut()" title="Mark Out at playhead (O)">O — Mark Out</button>
+                <button onclick="fullRange()" title="Whole clip (F)">Full clip</button>
+                <button id="loopBtn" onclick="toggleLoop()" title="Loop the selection (L)">Loop: off</button>
+                <span class="spacer" style="flex:1"></span>
+                <span style="color:#585b70">drag the blue band or its edges</span>
+            </div>
+            <div class="tl-ruler" id="tlRuler"></div>
+            <div class="tl-track" id="tlTrack">
+                <div class="tl-dim" id="dimL"></div>
+                <div class="tl-dim" id="dimR"></div>
+                <div class="tl-sel" id="tlSel">
+                    <div class="tl-h l" data-h="l"></div>
+                    <div class="tl-h r" data-h="r"></div>
+                </div>
+                <div class="tl-play" id="tlPlay"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="transport">
+                <button onclick="seekFirst()" title="First frame (Home)">|&lt;</button>
+                <button onclick="step(-1)" title="Prev frame (←)">&lt;</button>
+                <button id="playBtn" onclick="togglePlay()" title="Play / Pause (Space)">&#9654;</button>
+                <button onclick="step(1)" title="Next frame (→)">&gt;</button>
+                <button onclick="seekLast()" title="Last frame (End)">&gt;|</button>
+            </div>
+            <span class="frame-info" id="frameInfo">— / —</span>
+            <div class="speed-group">
+                <span>Speed:</span>
+                <button class="speed-btn" onclick="setSpeed(0.25)">0.25x</button>
+                <button class="speed-btn" onclick="setSpeed(0.5)">0.5x</button>
+                <button class="speed-btn active" onclick="setSpeed(1)">1x</button>
+                <button class="speed-btn" onclick="setSpeed(2)">2x</button>
+                <button class="speed-btn" onclick="setSpeed(4)">4x</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel">
+        <div class="sec">
+            <h3>ROIs <span id="roiCount" style="color:#585b70">0 / 4</span><span class="spacer"></span>
+                <button onclick="addRoi()" id="addRoiBtn">+ Add</button></h3>
+            <div class="roi-list" id="roiList"></div>
+            <p class="hint" style="margin-top:7px">Drag on the video to draw · drag inside to move · drag a corner to resize · 1–4 select · Del removes.</p>
+            <div class="row" style="margin-top:8px">
+                <button onclick="copyLayout()" class="full" title="Remember these boxes + labels">Copy layout</button>
+                <button onclick="pasteLayout()" class="full" title="Apply the remembered boxes here">Paste layout</button>
+            </div>
+        </div>
+
+        <div class="sec">
+            <h3>ROI label <span id="metaWhich" style="color:#585b70"></span><span class="spacer"></span>
+                <button onclick="showFieldEditor()" title="Rename, add or remove label categories">Edit categories</button></h3>
+            <div id="metaBody">
+                <div id="labelFields"></div>
+                <div class="field">
+                    <label>Box in source pixels</label>
+                    <div class="grid4">
+                        <div><input type="number" id="bx"><label>x</label></div>
+                        <div><input type="number" id="by"><label>y</label></div>
+                        <div><input type="number" id="bw"><label>w</label></div>
+                        <div><input type="number" id="bh"><label>h</label></div>
+                    </div>
+                </div>
+            </div>
+            <p class="hint" id="metaEmpty" style="display:none">No ROI selected — draw one on the video or press <b>+ Add</b>.</p>
+        </div>
+
+        <div class="sec">
+            <h3>Crop &amp; trim</h3>
+            <div class="field">
+                <label>Save the clips into</label>
+                <div class="row">
+                    <input type="text" id="outFolderName" class="full" readonly
+                           value="the video folder" title="Where finished clips are written">
+                    <button onclick="chooseOutFolder()" title="Pick another folder">&#8230;</button>
+                    <button onclick="useVideoFolder()" title="Back to the video folder">&#8635;</button>
+                </div>
+            </div>
+            <div class="field">
+                <label>Subfolder (optional — created if missing)</label>
+                <input type="text" id="outDir" class="full" value="roi_clips"
+                       placeholder="empty = straight into the folder above">
+            </div>
+            <div class="field">
+                <label>File name template</label>
+                <input type="text" id="tmpl" class="full" value="{cage}_{sex}_{treatment}_roi{n}_{start}-{end}">
+                <p class="hint" id="tokenHint" style="margin-top:4px"></p>
+            </div>
+            <div class="field row">
+                <div style="flex:1">
+                    <label style="font-size:10px;color:#a6adc8">Text before</label>
+                    <input type="text" id="namePre" class="full" placeholder="(none)" spellcheck="false">
+                </div>
+                <div style="flex:1">
+                    <label style="font-size:10px;color:#a6adc8">Text after</label>
+                    <input type="text" id="namePost" class="full" placeholder="(none)" spellcheck="false">
+                </div>
+            </div>
+            <div class="field"><label>Will write</label><div class="preview-name" id="preview">—</div></div>
+            <div class="field row">
+                <div style="flex:1">
+                    <label style="font-size:10px;color:#a6adc8">Quality</label>
+                    <select id="quality" class="full">
+                        <option value="24">High — 24 Mbit/s</option>
+                        <option value="12" selected>Good — 12 Mbit/s</option>
+                        <option value="6">Small — 6 Mbit/s</option>
+                    </select>
+                </div>
+                <div style="flex:1">
+                    <label style="font-size:10px;color:#a6adc8">Speed</label>
+                    <select id="encRate" class="full">
+                        <option value="1" selected>1× — keeps every frame</option>
+                        <option value="2">2× — faster, may skip frames</option>
+                        <option value="4">4× — fastest, skips frames</option>
+                    </select>
+                </div>
+            </div>
+            <button class="primary full" id="cropBtn" onclick="cropAndTrim()"
+                    style="padding:10px;font-size:13.5px">Crop &amp; trim</button>
+            <p class="hint" id="encNote" style="margin-top:6px">Encodes here in the browser and saves the file — nothing to copy.</p>
+        </div>
+
+        <div class="sec">
+            <h3>Clips written <span id="qCount" style="color:#585b70">0</span><span class="spacer"></span>
+                <button onclick="clearJobs()">Clear</button></h3>
+            <div id="jobList"><p class="hint">Nothing yet.</p></div>
+            <p class="hint" style="margin-top:8px">
+                <a href="#" onclick="showScript();return false" style="color:#89b4fa;text-decoration:none">
+                   Advanced: ffmpeg commands for these crops</a> — for a lossless re-encode on a machine
+                that has ffmpeg installed.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<div class="overlay hidden" id="fieldOverlay" onclick="hideFieldEditor()">
+    <div class="box" onclick="event.stopPropagation()" style="width:660px">
+        <h3>Label categories</h3>
+        <p class="hint" style="margin-bottom:10px">These are the boxes you fill in for every ROI.
+           Rename them, rename their buttons, add a category, remove one. The green token is what
+           you put in the file-name template — it keeps working when you rename the category.</p>
+        <div id="fieldEditor" style="max-height:46vh;overflow:auto"></div>
+        <div class="actions">
+            <button onclick="addField()">+ Add category</button>
+            <button onclick="resetFieldsToDefault()">Reset to default</button>
+            <span style="flex:1"></span>
+            <button onclick="hideFieldEditor()">Cancel</button>
+            <button class="primary" onclick="applyFields()">Done</button>
+        </div>
+    </div>
+</div>
+
+<div class="overlay hidden" id="helpOverlay" onclick="hideHelp()">
+    <div class="box" onclick="event.stopPropagation()">
+        <h3>Keyboard shortcuts</h3>
+        <table>
+            <tr><td class="section" colspan="2">Playback</td></tr>
+            <tr><td>Space</td><td>Play / pause</td></tr>
+            <tr><td>← / →</td><td>Step one frame</td></tr>
+            <tr><td>Shift + ← / →</td><td>Jump 10 frames</td></tr>
+            <tr><td>Home / End</td><td>First / last frame</td></tr>
+            <tr><td>, / .</td><td>Slower / faster</td></tr>
+            <tr><td>L</td><td>Loop the selected range</td></tr>
+            <tr><td class="section" colspan="2">Range</td></tr>
+            <tr><td>I / O</td><td>Mark in / out at the playhead</td></tr>
+            <tr><td>F</td><td>Reset range to the whole clip</td></tr>
+            <tr><td class="section" colspan="2">ROIs</td></tr>
+            <tr><td>1 – 4</td><td>Select ROI</td></tr>
+            <tr><td>A</td><td>Add an ROI</td></tr>
+            <tr><td>Del / Backspace</td><td>Delete the selected ROI</td></tr>
+            <tr><td>Ctrl + Enter</td><td>Crop &amp; trim this clip</td></tr>
+            <tr><td>Esc</td><td>Deselect / close</td></tr>
+        </table>
+        <p class="hint" style="margin-top:14px">ROI boxes and labels auto-save to
+           <code>&lt;video&gt;.rois.json</code> beside each clip, in the same format the
+           Python version of this tool uses.</p>
+    </div>
+</div>
+
+<div class="overlay hidden" id="scriptOverlay" onclick="hideScript()">
+    <div class="box" onclick="event.stopPropagation()" style="width:780px">
+        <h3>ffmpeg commands <span class="tag" id="scriptCount"></span></h3>
+        <pre id="scriptText"></pre>
+        <div class="actions">
+            <button onclick="copyScript()">Copy to clipboard</button>
+            <button class="primary" onclick="writeScript()">Write into video folder</button>
+            <button onclick="hideScript()">Close (Esc)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// mp4-muxer 5.2.1 (MIT, Vanilagy) - inlined so this page needs no network.
+/**
+ * Minified by jsDelivr using Terser v5.39.0.
+ * Original file: /npm/mp4-muxer@5.2.1/build/mp4-muxer.js
+ *
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+"use strict";var Mp4Muxer=(()=>{var e=Object.defineProperty,t=Object.getOwnPropertyDescriptor,i=Object.getOwnPropertyNames,s=Object.prototype.hasOwnProperty,a=(e,t,i)=>{if(!t.has(e))throw TypeError("Cannot "+i)},r=(e,t,i)=>(a(e,t,"read from private field"),i?i.call(e):t.get(e)),n=(e,t,i)=>{if(t.has(e))throw TypeError("Cannot add the same private member more than once");t instanceof WeakSet?t.add(e):t.set(e,i)},o=(e,t,i,s)=>(a(e,t,"write to private field"),s?s.call(e,i):t.set(e,i),i),h=(e,t,i)=>(a(e,t,"access private method"),i),l={};((t,i)=>{for(var s in i)e(t,s,{get:i[s],enumerable:!0})})(l,{ArrayBufferTarget:()=>Me,FileSystemWritableFileStreamTarget:()=>Oe,Muxer:()=>Rt,StreamTarget:()=>We});var d,f,u,m,p,c,w,g,b=new Uint8Array(8),y=new DataView(b.buffer),k=e=>[(e%256+256)%256],T=e=>(y.setUint16(0,e,!1),[b[0],b[1]]),C=e=>(y.setUint32(0,e,!1),[b[1],b[2],b[3]]),v=e=>(y.setUint32(0,e,!1),[b[0],b[1],b[2],b[3]]),S=e=>(y.setUint32(0,Math.floor(e/2**32),!1),y.setUint32(4,e,!1),[b[0],b[1],b[2],b[3],b[4],b[5],b[6],b[7]]),x=e=>(y.setInt16(0,256*e,!1),[b[0],b[1]]),z=e=>(y.setInt32(0,65536*e,!1),[b[0],b[1],b[2],b[3]]),E=e=>(y.setInt32(0,2**30*e,!1),[b[0],b[1],b[2],b[3]]),A=(e,t=!1)=>{let i=Array(e.length).fill(null).map(((t,i)=>e.charCodeAt(i)));return t&&i.push(0),i},M=e=>e&&e[e.length-1],W=e=>{let t;for(let i of e)(!t||i.presentationTimestamp>t.presentationTimestamp)&&(t=i);return t},O=(e,t,i=!0)=>{let s=e*t;return i?Math.round(s):s},B=e=>{let t=e*(Math.PI/180),i=Math.cos(t),s=Math.sin(t);return[i,s,0,-s,i,0,0,0,1]},U=B(0),D=e=>[z(e[0]),z(e[1]),E(e[2]),z(e[3]),z(e[4]),E(e[5]),z(e[6]),z(e[7]),E(e[8])],j=e=>e?"object"!=typeof e?e:Array.isArray(e)?e.map(j):Object.fromEntries(Object.entries(e).map((([e,t])=>[e,j(t)]))):e,R=e=>e>=0&&e<2**32,I=(e,t,i)=>({type:e,contents:t&&new Uint8Array(t.flat(10)),children:i}),N=(e,t,i,s,a)=>I(e,[k(t),C(i),s??[]],a),V=e=>({type:"mdat",largeSize:e}),F=(e,t,i=!1)=>I("moov",null,[L(t,e),...e.map((e=>$(e,t))),i?me(e):null]),L=(e,t)=>{let i=O(Math.max(0,...t.filter((e=>e.samples.length>0)).map((e=>{const t=W(e.samples);return t.presentationTimestamp+t.duration}))),Bt),s=Math.max(...t.map((e=>e.id)))+1,a=!R(e)||!R(i),r=a?S:v;return N("mvhd",+a,0,[r(e),r(e),v(Bt),r(i),z(1),x(1),Array(10).fill(0),D(U),Array(24).fill(0),v(s)])},$=(e,t)=>I("trak",null,[P(e,t),H(e,t)]),P=(e,t)=>{let i,s=W(e.samples),a=O(s?s.presentationTimestamp+s.duration:0,Bt),r=!R(t)||!R(a),n=r?S:v;return i="video"===e.info.type?"number"==typeof e.info.rotation?B(e.info.rotation):e.info.rotation:U,N("tkhd",+r,3,[n(t),n(t),v(e.id),v(0),n(a),Array(8).fill(0),T(0),T(0),x("audio"===e.info.type?1:0),T(0),D(i),z("video"===e.info.type?e.info.width:0),z("video"===e.info.type?e.info.height:0)])},H=(e,t)=>I("mdia",null,[_(e,t),q("video"===e.info.type?"vide":"soun"),G(e)]),_=(e,t)=>{let i=W(e.samples),s=O(i?i.presentationTimestamp+i.duration:0,e.timescale),a=!R(t)||!R(s),r=a?S:v;return N("mdhd",+a,0,[r(t),r(t),v(e.timescale),r(s),T(21956),T(0)])},q=e=>N("hdlr",0,0,[A("mhlr"),A(e),v(0),v(0),v(0),A("mp4-muxer-hdlr",!0)]),G=e=>I("minf",null,["video"===e.info.type?J():K(),Q(),Z(e)]),J=()=>N("vmhd",0,1,[T(0),T(0),T(0),T(0)]),K=()=>N("smhd",0,0,[T(0),T(0)]),Q=()=>I("dinf",null,[X()]),X=()=>N("dref",0,0,[v(1)],[Y()]),Y=()=>N("url ",0,1),Z=e=>{const t=e.compositionTimeOffsetTable.length>1||e.compositionTimeOffsetTable.some((e=>0!==e.sampleCompositionTimeOffset));return I("stbl",null,[ee(e),oe(e),he(e),le(e),de(e),fe(e),t?ue(e):null])},ee=e=>N("stsd",0,0,[v(1)],["video"===e.info.type?te(Se[e.info.codec],e):ne(ze[e.info.codec],e)]),te=(e,t)=>{return I(e,[Array(6).fill(0),T(1),T(0),T(0),Array(12).fill(0),T(t.info.width),T(t.info.height),v(4718592),v(4718592),v(0),T(1),Array(32).fill(0),T(24),(i=65535,y.setInt16(0,i,!1),[b[0],b[1]])],[xe[t.info.codec](t),t.info.decoderConfig.colorSpace?re(t):null]);var i},ie={bt709:1,bt470bg:5,smpte170m:6},se={bt709:1,smpte170m:6,"iec61966-2-1":13},ae={rgb:0,bt709:1,bt470bg:5,smpte170m:6},re=e=>I("colr",[A("nclx"),T(ie[e.info.decoderConfig.colorSpace.primaries]),T(se[e.info.decoderConfig.colorSpace.transfer]),T(ae[e.info.decoderConfig.colorSpace.matrix]),k((e.info.decoderConfig.colorSpace.fullRange?1:0)<<7)]),ne=(e,t)=>I(e,[Array(6).fill(0),T(1),T(0),T(0),v(0),T(t.info.numberOfChannels),T(16),T(0),T(0),z(t.info.sampleRate)],[Ee[t.info.codec](t)]),oe=e=>N("stts",0,0,[v(e.timeToSampleTable.length),e.timeToSampleTable.map((e=>[v(e.sampleCount),v(e.sampleDelta)]))]),he=e=>{if(e.samples.every((e=>"key"===e.type)))return null;let t=[...e.samples.entries()].filter((([,e])=>"key"===e.type));return N("stss",0,0,[v(t.length),t.map((([e])=>v(e+1)))])},le=e=>N("stsc",0,0,[v(e.compactlyCodedChunkTable.length),e.compactlyCodedChunkTable.map((e=>[v(e.firstChunk),v(e.samplesPerChunk),v(1)]))]),de=e=>N("stsz",0,0,[v(0),v(e.samples.length),e.samples.map((e=>v(e.size)))]),fe=e=>e.finalizedChunks.length>0&&M(e.finalizedChunks).offset>=2**32?N("co64",0,0,[v(e.finalizedChunks.length),e.finalizedChunks.map((e=>S(e.offset)))]):N("stco",0,0,[v(e.finalizedChunks.length),e.finalizedChunks.map((e=>v(e.offset)))]),ue=e=>N("ctts",0,0,[v(e.compositionTimeOffsetTable.length),e.compositionTimeOffsetTable.map((e=>[v(e.sampleCount),v(e.sampleCompositionTimeOffset)]))]),me=e=>I("mvex",null,e.map(pe)),pe=e=>N("trex",0,0,[v(e.id),v(1),v(0),v(0),v(0)]),ce=(e,t)=>I("moof",null,[we(e),...t.map(be)]),we=e=>N("mfhd",0,0,[v(e)]),ge=e=>{let t=0,i=0,s="delta"===e.type;return i|=+s,t|=s?1:2,t<<24|i<<16},be=e=>I("traf",null,[ye(e),ke(e),Te(e)]),ye=e=>{let t=0;t|=8,t|=16,t|=32,t|=131072;let i=e.currentChunk.samples[1]??e.currentChunk.samples[0],s={duration:i.timescaleUnitsToNextSample,size:i.size,flags:ge(i)};return N("tfhd",0,131128,[v(e.id),v(s.duration),v(s.size),v(s.flags)])},ke=e=>N("tfdt",1,0,[S(O(e.currentChunk.startTimestamp,e.timescale))]),Te=e=>{let t=e.currentChunk.samples.map((e=>e.timescaleUnitsToNextSample)),i=e.currentChunk.samples.map((e=>e.size)),s=e.currentChunk.samples.map(ge),a=e.currentChunk.samples.map((t=>O(t.presentationTimestamp-t.decodeTimestamp,e.timescale))),r=new Set(t),n=new Set(i),o=new Set(s),h=new Set(a),l=2===o.size&&s[0]!==s[1],d=r.size>1,f=n.size>1,u=!l&&o.size>1,m=h.size>1||[...h].some((e=>0!==e)),p=0;return p|=1,p|=4*+l,p|=256*+d,p|=512*+f,p|=1024*+u,p|=2048*+m,N("trun",1,p,[v(e.currentChunk.samples.length),v(e.currentChunk.offset-e.currentChunk.moofOffset||0),l?v(s[0]):[],e.currentChunk.samples.map(((e,r)=>{return[d?v(t[r]):[],f?v(i[r]):[],u?v(s[r]):[],m?(n=a[r],y.setInt32(0,n,!1),[b[0],b[1],b[2],b[3]]):[]];var n}))])},Ce=(e,t)=>N("tfra",1,0,[v(e.id),v(63),v(e.finalizedChunks.length),e.finalizedChunks.map((i=>[S(O(i.startTimestamp,e.timescale)),S(i.moofOffset),v(t+1),v(1),v(1)]))]),ve=()=>N("mfro",0,0,[v(0)]),Se={avc:"avc1",hevc:"hvc1",vp9:"vp09",av1:"av01"},xe={avc:e=>e.info.decoderConfig&&I("avcC",[...new Uint8Array(e.info.decoderConfig.description)]),hevc:e=>e.info.decoderConfig&&I("hvcC",[...new Uint8Array(e.info.decoderConfig.description)]),vp9:e=>{if(!e.info.decoderConfig)return null;let t=e.info.decoderConfig;if(!t.colorSpace)throw new Error("'colorSpace' is required in the decoder config for VP9.");let i=t.codec.split("."),s=Number(i[1]),a=Number(i[2]),r=0+(Number(i[3])<<4)+Number(t.colorSpace.fullRange);return N("vpcC",1,0,[k(s),k(a),k(r),k(2),k(2),k(2),T(0)])},av1:()=>I("av1C",[129,0,0,0])},ze={aac:"mp4a",opus:"Opus"},Ee={aac:e=>{let t=new Uint8Array(e.info.decoderConfig.description);return N("esds",0,0,[v(58753152),k(32+t.byteLength),T(1),k(0),v(75530368),k(18+t.byteLength),k(64),k(21),C(0),v(130071),v(130071),v(92307584),k(t.byteLength),...t,v(109084800),k(1),k(2)])},opus:e=>{let t=3840,i=0;const s=e.info.decoderConfig?.description;if(s){if(s.byteLength<18)throw new TypeError("Invalid decoder description provided for Opus; must be at least 18 bytes long.");const e=ArrayBuffer.isView(s)?new DataView(s.buffer,s.byteOffset,s.byteLength):new DataView(s);t=e.getUint16(10,!0),i=e.getInt16(14,!0)}return I("dOps",[k(0),k(e.info.numberOfChannels),T(t),v(e.info.sampleRate),x(i),k(0)])}},Ae=(Symbol("isTarget"),class{}),Me=class extends Ae{constructor(){super(...arguments),this.buffer=null}},We=class extends Ae{constructor(e){if(super(),this.options=e,"object"!=typeof e)throw new TypeError("StreamTarget requires an options object to be passed to its constructor.");if(e.onData){if("function"!=typeof e.onData)throw new TypeError("options.onData, when provided, must be a function.");if(e.onData.length<2)throw new TypeError("options.onData, when provided, must be a function that takes in at least two arguments (data and position). Ignoring the position argument, which specifies the byte offset at which the data is to be written, can lead to broken outputs.")}if(void 0!==e.chunked&&"boolean"!=typeof e.chunked)throw new TypeError("options.chunked, when provided, must be a boolean.");if(void 0!==e.chunkSize&&(!Number.isInteger(e.chunkSize)||e.chunkSize<1024))throw new TypeError("options.chunkSize, when provided, must be an integer and not smaller than 1024.")}},Oe=class extends Ae{constructor(e,t){if(super(),this.stream=e,this.options=t,!(e instanceof FileSystemWritableFileStream))throw new TypeError("FileSystemWritableFileStreamTarget requires a FileSystemWritableFileStream instance.");if(void 0!==t&&"object"!=typeof t)throw new TypeError("FileSystemWritableFileStreamTarget's options, when provided, must be an object.");if(t&&void 0!==t.chunkSize&&(!Number.isInteger(t.chunkSize)||t.chunkSize<=0))throw new TypeError("options.chunkSize, when provided, must be a positive integer")}},Be=class{constructor(){this.pos=0,n(this,d,new Uint8Array(8)),n(this,f,new DataView(r(this,d).buffer)),this.offsets=new WeakMap}seek(e){this.pos=e}writeU32(e){r(this,f).setUint32(0,e,!1),this.write(r(this,d).subarray(0,4))}writeU64(e){r(this,f).setUint32(0,Math.floor(e/2**32),!1),r(this,f).setUint32(4,e,!1),this.write(r(this,d).subarray(0,8))}writeAscii(e){for(let t=0;t<e.length;t++)r(this,f).setUint8(t%8,e.charCodeAt(t)),t%8==7&&this.write(r(this,d));e.length%8!=0&&this.write(r(this,d).subarray(0,e.length%8))}writeBox(e){if(this.offsets.set(e,this.pos),e.contents&&!e.children)this.writeBoxHeader(e,e.size??e.contents.byteLength+8),this.write(e.contents);else{let t=this.pos;if(this.writeBoxHeader(e,0),e.contents&&this.write(e.contents),e.children)for(let t of e.children)t&&this.writeBox(t);let i=this.pos,s=e.size??i-t;this.seek(t),this.writeBoxHeader(e,s),this.seek(i)}}writeBoxHeader(e,t){this.writeU32(e.largeSize?1:t),this.writeAscii(e.type),e.largeSize&&this.writeU64(t)}measureBoxHeader(e){return 8+(e.largeSize?8:0)}patchBox(e){let t=this.pos;this.seek(this.offsets.get(e)),this.writeBox(e),this.seek(t)}measureBox(e){if(e.contents&&!e.children){return this.measureBoxHeader(e)+e.contents.byteLength}{let t=this.measureBoxHeader(e);if(e.contents&&(t+=e.contents.byteLength),e.children)for(let i of e.children)i&&(t+=this.measureBox(i));return t}}};d=new WeakMap,f=new WeakMap;var Ue=class extends Be{constructor(e){super(),n(this,w),n(this,u,void 0),n(this,m,new ArrayBuffer(65536)),n(this,p,new Uint8Array(r(this,m))),n(this,c,0),o(this,u,e)}write(e){h(this,w,g).call(this,this.pos+e.byteLength),r(this,p).set(e,this.pos),this.pos+=e.byteLength,o(this,c,Math.max(r(this,c),this.pos))}finalize(){h(this,w,g).call(this,this.pos),r(this,u).buffer=r(this,m).slice(0,Math.max(r(this,c),this.pos))}};u=new WeakMap,m=new WeakMap,p=new WeakMap,c=new WeakMap,w=new WeakSet,g=function(e){let t=r(this,m).byteLength;for(;t<e;)t*=2;if(t===r(this,m).byteLength)return;let i=new ArrayBuffer(t),s=new Uint8Array(i);s.set(r(this,p),0),o(this,m,i),o(this,p,s)};var De,je,Re,Ie,Ne,Ve,Fe,Le,$e,Pe,He,_e,qe,Ge=class extends Be{constructor(e){super(),n(this,Ve),n(this,Le),n(this,Pe),n(this,_e),n(this,De,void 0),n(this,je,[]),n(this,Re,void 0),n(this,Ie,void 0),n(this,Ne,[]),o(this,De,e),o(this,Re,e.options?.chunked??!1),o(this,Ie,e.options?.chunkSize??16777216)}write(e){r(this,je).push({data:e.slice(),start:this.pos}),this.pos+=e.byteLength}flush(){if(0===r(this,je).length)return;let e=[],t=[...r(this,je)].sort(((e,t)=>e.start-t.start));e.push({start:t[0].start,size:t[0].data.byteLength});for(let i=1;i<t.length;i++){let s=e[e.length-1],a=t[i];a.start<=s.start+s.size?s.size=Math.max(s.size,a.start+a.data.byteLength-s.start):e.push({start:a.start,size:a.data.byteLength})}for(let t of e){t.data=new Uint8Array(t.size);for(let e of r(this,je))t.start<=e.start&&e.start<t.start+t.size&&t.data.set(e.data,e.start-t.start);r(this,Re)?(h(this,Ve,Fe).call(this,t.data,t.start),h(this,_e,qe).call(this)):r(this,De).options.onData?.(t.data,t.start)}r(this,je).length=0}finalize(){r(this,Re)&&h(this,_e,qe).call(this,!0)}};De=new WeakMap,je=new WeakMap,Re=new WeakMap,Ie=new WeakMap,Ne=new WeakMap,Ve=new WeakSet,Fe=function(e,t){let i=r(this,Ne).findIndex((e=>e.start<=t&&t<e.start+r(this,Ie)));-1===i&&(i=h(this,Pe,He).call(this,t));let s=r(this,Ne)[i],a=t-s.start,n=e.subarray(0,Math.min(r(this,Ie)-a,e.byteLength));s.data.set(n,a);let o={start:a,end:a+n.byteLength};if(h(this,Le,$e).call(this,s,o),0===s.written[0].start&&s.written[0].end===r(this,Ie)&&(s.shouldFlush=!0),r(this,Ne).length>2){for(let e=0;e<r(this,Ne).length-1;e++)r(this,Ne)[e].shouldFlush=!0;h(this,_e,qe).call(this)}n.byteLength<e.byteLength&&h(this,Ve,Fe).call(this,e.subarray(n.byteLength),t+n.byteLength)},Le=new WeakSet,$e=function(e,t){let i=0,s=e.written.length-1,a=-1;for(;i<=s;){let r=Math.floor(i+(s-i+1)/2);e.written[r].start<=t.start?(i=r+1,a=r):s=r-1}for(e.written.splice(a+1,0,t),(-1===a||e.written[a].end<t.start)&&a++;a<e.written.length-1&&e.written[a].end>=e.written[a+1].start;)e.written[a].end=Math.max(e.written[a].end,e.written[a+1].end),e.written.splice(a+1,1)},Pe=new WeakSet,He=function(e){let t={start:Math.floor(e/r(this,Ie))*r(this,Ie),data:new Uint8Array(r(this,Ie)),written:[],shouldFlush:!1};return r(this,Ne).push(t),r(this,Ne).sort(((e,t)=>e.start-t.start)),r(this,Ne).indexOf(t)},_e=new WeakSet,qe=function(e=!1){for(let t=0;t<r(this,Ne).length;t++){let i=r(this,Ne)[t];if(i.shouldFlush||e){for(let e of i.written)r(this,De).options.onData?.(i.data.subarray(e.start,e.end),i.start+e.start);r(this,Ne).splice(t--,1)}}};var Je,Ke,Qe,Xe,Ye,Ze,et,tt,it,st,at,rt,nt,ot,ht,lt,dt,ft,ut,mt,pt,ct,wt,gt,bt,yt,kt,Tt,Ct,vt,St,xt,zt,Et,At,Mt,Wt,Ot=class extends Ge{constructor(e){super(new We({onData:(t,i)=>e.stream.write({type:"write",data:t,position:i}),chunked:!0,chunkSize:e.options?.chunkSize}))}},Bt=1e3,Ut=["avc","hevc","vp9","av1"],Dt=["aac","opus"],jt=["strict","offset","cross-track-offset"],Rt=class{constructor(e){if(n(this,nt),n(this,ht),n(this,dt),n(this,ut),n(this,pt),n(this,wt),n(this,bt),n(this,kt),n(this,Ct),n(this,St),n(this,zt),n(this,At),n(this,Je,void 0),n(this,Ke,void 0),n(this,Qe,void 0),n(this,Xe,void 0),n(this,Ye,null),n(this,Ze,null),n(this,et,Math.floor(Date.now()/1e3)+2082844800),n(this,tt,[]),n(this,it,1),n(this,st,[]),n(this,at,[]),n(this,rt,!1),h(this,nt,ot).call(this,e),e.video=j(e.video),e.audio=j(e.audio),e.fastStart=j(e.fastStart),this.target=e.target,o(this,Je,{firstTimestampBehavior:"strict",...e}),e.target instanceof Me)o(this,Ke,new Ue(e.target));else if(e.target instanceof We)o(this,Ke,new Ge(e.target));else{if(!(e.target instanceof Oe))throw new Error(`Invalid target: ${e.target}`);o(this,Ke,new Ot(e.target))}h(this,ut,mt).call(this),h(this,ht,lt).call(this)}addVideoChunk(e,t,i,s){if(!(e instanceof EncodedVideoChunk))throw new TypeError("addVideoChunk's first argument (sample) must be of type EncodedVideoChunk.");if(t&&"object"!=typeof t)throw new TypeError("addVideoChunk's second argument (meta), when provided, must be an object.");if(void 0!==i&&(!Number.isFinite(i)||i<0))throw new TypeError("addVideoChunk's third argument (timestamp), when provided, must be a non-negative real number.");if(void 0!==s&&!Number.isFinite(s))throw new TypeError("addVideoChunk's fourth argument (compositionTimeOffset), when provided, must be a real number.");let a=new Uint8Array(e.byteLength);e.copyTo(a),this.addVideoChunkRaw(a,e.type,i??e.timestamp,e.duration,t,s)}addVideoChunkRaw(e,t,i,s,a,n){if(!(e instanceof Uint8Array))throw new TypeError("addVideoChunkRaw's first argument (data) must be an instance of Uint8Array.");if("key"!==t&&"delta"!==t)throw new TypeError("addVideoChunkRaw's second argument (type) must be either 'key' or 'delta'.");if(!Number.isFinite(i)||i<0)throw new TypeError("addVideoChunkRaw's third argument (timestamp) must be a non-negative real number.");if(!Number.isFinite(s)||s<0)throw new TypeError("addVideoChunkRaw's fourth argument (duration) must be a non-negative real number.");if(a&&"object"!=typeof a)throw new TypeError("addVideoChunkRaw's fifth argument (meta), when provided, must be an object.");if(void 0!==n&&!Number.isFinite(n))throw new TypeError("addVideoChunkRaw's sixth argument (compositionTimeOffset), when provided, must be a real number.");if(h(this,At,Mt).call(this),!r(this,Je).video)throw new Error("No video track declared.");if("object"==typeof r(this,Je).fastStart&&r(this,Ye).samples.length===r(this,Je).fastStart.expectedVideoChunks)throw new Error(`Cannot add more video chunks than specified in 'fastStart' (${r(this,Je).fastStart.expectedVideoChunks}).`);let o=h(this,wt,gt).call(this,r(this,Ye),e,t,i,s,a,n);if("fragmented"===r(this,Je).fastStart&&r(this,Ze)){for(;r(this,at).length>0&&r(this,at)[0].decodeTimestamp<=o.decodeTimestamp;){let e=r(this,at).shift();h(this,bt,yt).call(this,r(this,Ze),e)}o.decodeTimestamp<=r(this,Ze).lastDecodeTimestamp?h(this,bt,yt).call(this,r(this,Ye),o):r(this,st).push(o)}else h(this,bt,yt).call(this,r(this,Ye),o)}addAudioChunk(e,t,i){if(!(e instanceof EncodedAudioChunk))throw new TypeError("addAudioChunk's first argument (sample) must be of type EncodedAudioChunk.");if(t&&"object"!=typeof t)throw new TypeError("addAudioChunk's second argument (meta), when provided, must be an object.");if(void 0!==i&&(!Number.isFinite(i)||i<0))throw new TypeError("addAudioChunk's third argument (timestamp), when provided, must be a non-negative real number.");let s=new Uint8Array(e.byteLength);e.copyTo(s),this.addAudioChunkRaw(s,e.type,i??e.timestamp,e.duration,t)}addAudioChunkRaw(e,t,i,s,a){if(!(e instanceof Uint8Array))throw new TypeError("addAudioChunkRaw's first argument (data) must be an instance of Uint8Array.");if("key"!==t&&"delta"!==t)throw new TypeError("addAudioChunkRaw's second argument (type) must be either 'key' or 'delta'.");if(!Number.isFinite(i)||i<0)throw new TypeError("addAudioChunkRaw's third argument (timestamp) must be a non-negative real number.");if(!Number.isFinite(s)||s<0)throw new TypeError("addAudioChunkRaw's fourth argument (duration) must be a non-negative real number.");if(a&&"object"!=typeof a)throw new TypeError("addAudioChunkRaw's fifth argument (meta), when provided, must be an object.");if(h(this,At,Mt).call(this),!r(this,Je).audio)throw new Error("No audio track declared.");if("object"==typeof r(this,Je).fastStart&&r(this,Ze).samples.length===r(this,Je).fastStart.expectedAudioChunks)throw new Error(`Cannot add more audio chunks than specified in 'fastStart' (${r(this,Je).fastStart.expectedAudioChunks}).`);let n=h(this,wt,gt).call(this,r(this,Ze),e,t,i,s,a);if("fragmented"===r(this,Je).fastStart&&r(this,Ye)){for(;r(this,st).length>0&&r(this,st)[0].decodeTimestamp<=n.decodeTimestamp;){let e=r(this,st).shift();h(this,bt,yt).call(this,r(this,Ye),e)}n.decodeTimestamp<=r(this,Ye).lastDecodeTimestamp?h(this,bt,yt).call(this,r(this,Ze),n):r(this,at).push(n)}else h(this,bt,yt).call(this,r(this,Ze),n)}finalize(){if(r(this,rt))throw new Error("Cannot finalize a muxer more than once.");if("fragmented"===r(this,Je).fastStart){for(let e of r(this,st))h(this,bt,yt).call(this,r(this,Ye),e);for(let e of r(this,at))h(this,bt,yt).call(this,r(this,Ze),e);h(this,St,xt).call(this,!1)}else r(this,Ye)&&h(this,Ct,vt).call(this,r(this,Ye)),r(this,Ze)&&h(this,Ct,vt).call(this,r(this,Ze));let e=[r(this,Ye),r(this,Ze)].filter(Boolean);if("in-memory"===r(this,Je).fastStart){let t;for(let i=0;i<2;i++){let i=F(e,r(this,et)),s=r(this,Ke).measureBox(i);t=r(this,Ke).measureBox(r(this,Xe));let a=r(this,Ke).pos+s+t;for(let e of r(this,tt)){e.offset=a;for(let{data:i}of e.samples)a+=i.byteLength,t+=i.byteLength}if(a<2**32)break;t>=2**32&&(r(this,Xe).largeSize=!0)}let i=F(e,r(this,et));r(this,Ke).writeBox(i),r(this,Xe).size=t,r(this,Ke).writeBox(r(this,Xe));for(let e of r(this,tt))for(let t of e.samples)r(this,Ke).write(t.data),t.data=null}else if("fragmented"===r(this,Je).fastStart){let t=r(this,Ke).pos,i=(e=>I("mfra",null,[...e.map(Ce),ve()]))(e);r(this,Ke).writeBox(i);let s=r(this,Ke).pos-t;r(this,Ke).seek(r(this,Ke).pos-4),r(this,Ke).writeU32(s)}else{let t=r(this,Ke).offsets.get(r(this,Xe)),i=r(this,Ke).pos-t;r(this,Xe).size=i,r(this,Xe).largeSize=i>=2**32,r(this,Ke).patchBox(r(this,Xe));let s=F(e,r(this,et));if("object"==typeof r(this,Je).fastStart){r(this,Ke).seek(r(this,Qe)),r(this,Ke).writeBox(s);let e=t-r(this,Ke).pos;r(this,Ke).writeBox({type:"free",size:e})}else r(this,Ke).writeBox(s)}h(this,zt,Et).call(this),r(this,Ke).finalize(),o(this,rt,!0)}};return Je=new WeakMap,Ke=new WeakMap,Qe=new WeakMap,Xe=new WeakMap,Ye=new WeakMap,Ze=new WeakMap,et=new WeakMap,tt=new WeakMap,it=new WeakMap,st=new WeakMap,at=new WeakMap,rt=new WeakMap,nt=new WeakSet,ot=function(e){if("object"!=typeof e)throw new TypeError("The muxer requires an options object to be passed to its constructor.");if(!(e.target instanceof Ae))throw new TypeError("The target must be provided and an instance of Target.");if(e.video){if(!Ut.includes(e.video.codec))throw new TypeError(`Unsupported video codec: ${e.video.codec}`);if(!Number.isInteger(e.video.width)||e.video.width<=0)throw new TypeError(`Invalid video width: ${e.video.width}. Must be a positive integer.`);if(!Number.isInteger(e.video.height)||e.video.height<=0)throw new TypeError(`Invalid video height: ${e.video.height}. Must be a positive integer.`);const t=e.video.rotation;if("number"==typeof t&&![0,90,180,270].includes(t))throw new TypeError(`Invalid video rotation: ${t}. Has to be 0, 90, 180 or 270.`);if(Array.isArray(t)&&(9!==t.length||t.some((e=>"number"!=typeof e))))throw new TypeError(`Invalid video transformation matrix: ${t.join()}`);if(void 0!==e.video.frameRate&&(!Number.isInteger(e.video.frameRate)||e.video.frameRate<=0))throw new TypeError(`Invalid video frame rate: ${e.video.frameRate}. Must be a positive integer.`)}if(e.audio){if(!Dt.includes(e.audio.codec))throw new TypeError(`Unsupported audio codec: ${e.audio.codec}`);if(!Number.isInteger(e.audio.numberOfChannels)||e.audio.numberOfChannels<=0)throw new TypeError(`Invalid number of audio channels: ${e.audio.numberOfChannels}. Must be a positive integer.`);if(!Number.isInteger(e.audio.sampleRate)||e.audio.sampleRate<=0)throw new TypeError(`Invalid audio sample rate: ${e.audio.sampleRate}. Must be a positive integer.`)}if(e.firstTimestampBehavior&&!jt.includes(e.firstTimestampBehavior))throw new TypeError(`Invalid first timestamp behavior: ${e.firstTimestampBehavior}`);if("object"==typeof e.fastStart){if(e.video){if(void 0===e.fastStart.expectedVideoChunks)throw new TypeError("'fastStart' is an object but is missing property 'expectedVideoChunks'.");if(!Number.isInteger(e.fastStart.expectedVideoChunks)||e.fastStart.expectedVideoChunks<0)throw new TypeError("'expectedVideoChunks' must be a non-negative integer.")}if(e.audio){if(void 0===e.fastStart.expectedAudioChunks)throw new TypeError("'fastStart' is an object but is missing property 'expectedAudioChunks'.");if(!Number.isInteger(e.fastStart.expectedAudioChunks)||e.fastStart.expectedAudioChunks<0)throw new TypeError("'expectedAudioChunks' must be a non-negative integer.")}}else if(![!1,"in-memory","fragmented"].includes(e.fastStart))throw new TypeError("'fastStart' option must be false, 'in-memory', 'fragmented' or an object.");if(void 0!==e.minFragmentDuration&&(!Number.isFinite(e.minFragmentDuration)||e.minFragmentDuration<0))throw new TypeError("'minFragmentDuration' must be a non-negative number.")},ht=new WeakSet,lt=function(){var e;if(r(this,Ke).writeBox((e={holdsAvc:"avc"===r(this,Je).video?.codec,fragmented:"fragmented"===r(this,Je).fastStart}).fragmented?I("ftyp",[A("iso5"),v(512),A("iso5"),A("iso6"),A("mp41")]):I("ftyp",[A("isom"),v(512),A("isom"),e.holdsAvc?A("avc1"):[],A("mp41")])),o(this,Qe,r(this,Ke).pos),"in-memory"===r(this,Je).fastStart)o(this,Xe,V(!1));else if("fragmented"===r(this,Je).fastStart);else{if("object"==typeof r(this,Je).fastStart){let e=h(this,dt,ft).call(this);r(this,Ke).seek(r(this,Ke).pos+e)}o(this,Xe,V(!0)),r(this,Ke).writeBox(r(this,Xe))}h(this,zt,Et).call(this)},dt=new WeakSet,ft=function(){if("object"!=typeof r(this,Je).fastStart)return;let e=0,t=[r(this,Je).fastStart.expectedVideoChunks,r(this,Je).fastStart.expectedAudioChunks];for(let i of t)i&&(e+=8*Math.ceil(2/3*i),e+=4*i,e+=12*Math.ceil(2/3*i),e+=4*i,e+=8*i);return e+=4096,e},ut=new WeakSet,mt=function(){if(r(this,Je).video&&o(this,Ye,{id:1,info:{type:"video",codec:r(this,Je).video.codec,width:r(this,Je).video.width,height:r(this,Je).video.height,rotation:r(this,Je).video.rotation??0,decoderConfig:null},timescale:r(this,Je).video.frameRate??57600,samples:[],finalizedChunks:[],currentChunk:null,firstDecodeTimestamp:void 0,lastDecodeTimestamp:-1,timeToSampleTable:[],compositionTimeOffsetTable:[],lastTimescaleUnits:null,lastSample:null,compactlyCodedChunkTable:[]}),r(this,Je).audio&&(o(this,Ze,{id:r(this,Je).video?2:1,info:{type:"audio",codec:r(this,Je).audio.codec,numberOfChannels:r(this,Je).audio.numberOfChannels,sampleRate:r(this,Je).audio.sampleRate,decoderConfig:null},timescale:r(this,Je).audio.sampleRate,samples:[],finalizedChunks:[],currentChunk:null,firstDecodeTimestamp:void 0,lastDecodeTimestamp:-1,timeToSampleTable:[],compositionTimeOffsetTable:[],lastTimescaleUnits:null,lastSample:null,compactlyCodedChunkTable:[]}),"aac"===r(this,Je).audio.codec)){let e=h(this,pt,ct).call(this,2,r(this,Je).audio.sampleRate,r(this,Je).audio.numberOfChannels);r(this,Ze).info.decoderConfig={codec:r(this,Je).audio.codec,description:e,numberOfChannels:r(this,Je).audio.numberOfChannels,sampleRate:r(this,Je).audio.sampleRate}}},pt=new WeakSet,ct=function(e,t,i){let s=[96e3,88200,64e3,48e3,44100,32e3,24e3,22050,16e3,12e3,11025,8e3,7350].indexOf(t),a=i,r="";r+=e.toString(2).padStart(5,"0"),r+=s.toString(2).padStart(4,"0"),15===s&&(r+=t.toString(2).padStart(24,"0")),r+=a.toString(2).padStart(4,"0");let n=8*Math.ceil(r.length/8);r=r.padEnd(n,"0");let o=new Uint8Array(r.length/8);for(let e=0;e<r.length;e+=8)o[e/8]=parseInt(r.slice(e,e+8),2);return o},wt=new WeakSet,gt=function(e,t,i,s,a,r,n){let o=s/1e6,l=(s-(n??0))/1e6,d=a/1e6,f=h(this,kt,Tt).call(this,o,l,e);return o=f.presentationTimestamp,l=f.decodeTimestamp,r?.decoderConfig&&(null===e.info.decoderConfig?e.info.decoderConfig=r.decoderConfig:Object.assign(e.info.decoderConfig,r.decoderConfig)),{presentationTimestamp:o,decodeTimestamp:l,duration:d,data:t,size:t.byteLength,type:i,timescaleUnitsToNextSample:O(d,e.timescale)}},bt=new WeakSet,yt=function(e,t){"fragmented"!==r(this,Je).fastStart&&e.samples.push(t);const i=O(t.presentationTimestamp-t.decodeTimestamp,e.timescale);if(null!==e.lastTimescaleUnits){let s=O(t.decodeTimestamp,e.timescale,!1),a=Math.round(s-e.lastTimescaleUnits);if(e.lastTimescaleUnits+=a,e.lastSample.timescaleUnitsToNextSample=a,"fragmented"!==r(this,Je).fastStart){let t=M(e.timeToSampleTable);1===t.sampleCount?(t.sampleDelta=a,t.sampleCount++):t.sampleDelta===a?t.sampleCount++:(t.sampleCount--,e.timeToSampleTable.push({sampleCount:2,sampleDelta:a}));const s=M(e.compositionTimeOffsetTable);s.sampleCompositionTimeOffset===i?s.sampleCount++:e.compositionTimeOffsetTable.push({sampleCount:1,sampleCompositionTimeOffset:i})}}else e.lastTimescaleUnits=0,"fragmented"!==r(this,Je).fastStart&&(e.timeToSampleTable.push({sampleCount:1,sampleDelta:O(t.duration,e.timescale)}),e.compositionTimeOffsetTable.push({sampleCount:1,sampleCompositionTimeOffset:i}));e.lastSample=t;let s=!1;if(e.currentChunk){let i=t.presentationTimestamp-e.currentChunk.startTimestamp;if("fragmented"===r(this,Je).fastStart){let a=r(this,Ye)??r(this,Ze);const n=r(this,Je).minFragmentDuration??1;e===a&&"key"===t.type&&i>=n&&(s=!0,h(this,St,xt).call(this))}else s=i>=.5}else s=!0;s&&(e.currentChunk&&h(this,Ct,vt).call(this,e),e.currentChunk={startTimestamp:t.presentationTimestamp,samples:[]}),e.currentChunk.samples.push(t)},kt=new WeakSet,Tt=function(e,t,i){const s="strict"===r(this,Je).firstTimestampBehavior,a=-1===i.lastDecodeTimestamp;if(s&&a&&0!==t)throw new Error(`The first chunk for your media track must have a timestamp of 0 (received DTS=${t}).Non-zero first timestamps are often caused by directly piping frames or audio data from a MediaStreamTrack into the encoder. Their timestamps are typically relative to the age of thedocument, which is probably what you want.\n\nIf you want to offset all timestamps of a track such that the first one is zero, set firstTimestampBehavior: 'offset' in the options.\n`);if("offset"===r(this,Je).firstTimestampBehavior||"cross-track-offset"===r(this,Je).firstTimestampBehavior){let s;void 0===i.firstDecodeTimestamp&&(i.firstDecodeTimestamp=t),s="offset"===r(this,Je).firstTimestampBehavior?i.firstDecodeTimestamp:Math.min(r(this,Ye)?.firstDecodeTimestamp??1/0,r(this,Ze)?.firstDecodeTimestamp??1/0),t-=s,e-=s}if(t<i.lastDecodeTimestamp)throw new Error(`Timestamps must be monotonically increasing (DTS went from ${1e6*i.lastDecodeTimestamp} to ${1e6*t}).`);return i.lastDecodeTimestamp=t,{presentationTimestamp:e,decodeTimestamp:t}},Ct=new WeakSet,vt=function(e){if("fragmented"===r(this,Je).fastStart)throw new Error("Can't finalize individual chunks if 'fastStart' is set to 'fragmented'.");if(e.currentChunk)if(e.finalizedChunks.push(e.currentChunk),r(this,tt).push(e.currentChunk),0!==e.compactlyCodedChunkTable.length&&M(e.compactlyCodedChunkTable).samplesPerChunk===e.currentChunk.samples.length||e.compactlyCodedChunkTable.push({firstChunk:e.finalizedChunks.length,samplesPerChunk:e.currentChunk.samples.length}),"in-memory"!==r(this,Je).fastStart){e.currentChunk.offset=r(this,Ke).pos;for(let t of e.currentChunk.samples)r(this,Ke).write(t.data),t.data=null;h(this,zt,Et).call(this)}else e.currentChunk.offset=0},St=new WeakSet,xt=function(e=!0){if("fragmented"!==r(this,Je).fastStart)throw new Error("Can't finalize a fragment unless 'fastStart' is set to 'fragmented'.");let t=[r(this,Ye),r(this,Ze)].filter((e=>e&&e.currentChunk));if(0===t.length)return;let i=(s=this,a=it,{set _(e){o(s,a,e,n)},get _(){return r(s,a,l)}})._++;var s,a,n,l;if(1===i){let e=F(t,r(this,et),!0);r(this,Ke).writeBox(e)}let d=r(this,Ke).pos,f=ce(i,t);r(this,Ke).writeBox(f);{let e=V(!1),i=0;for(let e of t)for(let t of e.currentChunk.samples)i+=t.size;let s=r(this,Ke).measureBox(e)+i;s>=2**32&&(e.largeSize=!0,s=r(this,Ke).measureBox(e)+i),e.size=s,r(this,Ke).writeBox(e)}for(let e of t){e.currentChunk.offset=r(this,Ke).pos,e.currentChunk.moofOffset=d;for(let t of e.currentChunk.samples)r(this,Ke).write(t.data),t.data=null}let u=r(this,Ke).pos;r(this,Ke).seek(r(this,Ke).offsets.get(f));let m=ce(i,t);r(this,Ke).writeBox(m),r(this,Ke).seek(u);for(let e of t)e.finalizedChunks.push(e.currentChunk),r(this,tt).push(e.currentChunk),e.currentChunk=null;e&&h(this,zt,Et).call(this)},zt=new WeakSet,Et=function(){r(this,Ke)instanceof Ge&&r(this,Ke).flush()},At=new WeakSet,Mt=function(){if(r(this,rt))throw new Error("Cannot add new video or audio chunks after the file has been finalized.")},Wt=l,((a,r,n,o)=>{if(r&&"object"==typeof r||"function"==typeof r)for(let h of i(r))s.call(a,h)||h===n||e(a,h,{get:()=>r[h],enumerable:!(o=t(r,h))||o.enumerable});return a})(e({},"__esModule",{value:!0}),Wt)})();"object"==typeof module&&"object"==typeof module.exports&&Object.assign(module.exports,Mp4Muxer);
+//# sourceMappingURL=/sm/d72d5cf9845053fd379eb03c8aa0076e0f937f51c85e59b9c023ad3f33721c0b.map
+</script>
+
+<script>
+'use strict';
+// ═══════════════════════════════════════════════════════════════
+//  Constants & state
+// ═══════════════════════════════════════════════════════════════
+const ROI_COLORS = ['#89b4fa', '#a6e3a1', '#f9e2af', '#f38ba8'];
+const MAX_ROIS = 4;
+// The label categories.  Editable in the page; remembered in this browser.
+const DEFAULT_FIELDS = [
+    { id: 'cage',      name: 'Cage number',      type: 'text',   options: [],                  hint: 'e.g. T2372710' },
+    { id: 'sex',       name: 'Sex',              type: 'choice', options: ['F', 'M'],          hint: '' },
+    { id: 'treatment', name: 'Treatment',        type: 'choice', options: ['Control', 'E2'],   hint: '' },
+    { id: 'label',     name: 'Animal ID / note', type: 'text',   options: [],                  hint: 'optional' },
+];
+const SPEEDS = [0.25, 0.5, 1, 2, 4];
+const VIDEO_RE = /\.(mp4|m4v|mov|webm|mkv|avi)$/i;
+
+const S = {
+    videos: [],          // {name, handle|file, size, url, rois:bool}
+    cur: null,
+    dirHandle: null,
+    native: { w: 0, h: 0 },
+    fps: 30, duration: 0,
+    rois: [], sel: -1,
+    inT: 0, outT: 0,
+    loop: false,
+    jobs: [],            // {name, status, progress, msg, frames, bytes}
+    clipboard: null,
+    fields: [],          // label categories; filled in at boot
+    outHandle: null,     // where finished clips go; null = the video folder
+    busy: false,
+};
+
+const $ = id => document.getElementById(id);
+const vid = $('vid'), ovl = $('ovl'), vwrap = $('vwrap'), stage = $('stage');
+const tlTrack = $('tlTrack'), tlSel = $('tlSel'), tlPlay = $('tlPlay');
+const dimL = $('dimL'), dimR = $('dimR'), tlRuler = $('tlRuler');
+
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmtSize = b => b > 1e9 ? (b/1e9).toFixed(2)+' GB' : (b/1e6).toFixed(0)+' MB';
+const stemOf = n => n.replace(/\.[^.]+$/, '');
+
+function fmtTime(t) {
+    t = Math.max(0, t || 0);
+    const m = Math.floor(t / 60), s = Math.floor(t % 60), ms = Math.round((t % 1) * 1000);
+    return `${m}:${String(s).padStart(2,'0')}.${String(ms).padStart(3,'0')}`;
+}
+function hms(t) {
+    t = Math.max(0, t || 0);
+    const h = Math.floor(t/3600), m = Math.floor((t%3600)/60), s = Math.floor(t%60);
+    return h ? `${h}h${String(m).padStart(2,'0')}m${String(s).padStart(2,'0')}s`
+             : `${m}m${String(s).padStart(2,'0')}s`;
+}
+
+let toastTimer = null;
+function toast(msg, isErr) {
+    const el = $('toast');
+    el.textContent = msg;
+    el.className = 'show' + (isErr ? ' err' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.className = ''; }, isErr ? 6000 : 2600);
+}
+let statusTimer = null;
+function setSaveStatus(state) {
+    const el = $('saveStatus');
+    el.className = 'save-status ' + (state || '');
+    el.textContent = state === 'saving' ? 'saving…' : state === 'saved' ? 'saved' : '';
+    if (state === 'saved') {
+        clearTimeout(statusTimer);
+        statusTimer = setTimeout(() => setSaveStatus(''), 1400);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Remember the last folder (IndexedDB holds the handle)
+// ═══════════════════════════════════════════════════════════════
+function idb(mode, fn) {
+    return new Promise((res, rej) => {
+        const rq = indexedDB.open('roi-clipper', 1);
+        rq.onupgradeneeded = () => rq.result.createObjectStore('handles');
+        rq.onerror = () => rej(rq.error);
+        rq.onsuccess = () => {
+            const tx = rq.result.transaction('handles', mode);
+            const out = fn(tx.objectStore('handles'));
+            // A get() with no stored value resolves to undefined, not the request object.
+            tx.oncomplete = () => res(out instanceof IDBRequest ? out.result : out);
+            tx.onerror = () => rej(tx.error);
+        };
+    });
+}
+const saveLastFolder = h => idb('readwrite', st => st.put(h, 'lastDir')).catch(() => {});
+const loadLastFolder = () => idb('readonly', st => st.get('lastDir')).catch(() => null);
+
+async function reopenLast() {
+    const h = await loadLastFolder();
+    if (!h) { toast('No remembered folder'); return; }
+    if ((await h.queryPermission({ mode: 'readwrite' })) !== 'granted' &&
+        (await h.requestPermission({ mode: 'readwrite' })) !== 'granted') {
+        toast('Permission denied', true); return;
+    }
+    loadDirectory(h);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Opening videos
+// ═══════════════════════════════════════════════════════════════
+async function openFolder() {
+    if (!window.showDirectoryPicker) {
+        toast('Folder access needs Chrome or Edge — use the drop zone instead', true);
+        return;
+    }
+    try {
+        const h = await window.showDirectoryPicker({ mode: 'readwrite' });
+        await loadDirectory(h);
+        saveLastFolder(h);
+    } catch (e) { if (e.name !== 'AbortError') toast('Error: ' + e.message, true); }
+}
+
+async function loadDirectory(dirHandle) {
+    S.dirHandle = dirHandle;
+    const vids = [], jsonNames = new Set();
+    for await (const [name, handle] of dirHandle) {
+        if (handle.kind !== 'file') continue;
+        if (VIDEO_RE.test(name)) vids.push({ name, handle, size: 0, rois: false });
+        else if (/\.rois\.json$/i.test(name)) jsonNames.add(name.replace(/\.rois\.json$/i, ''));
+    }
+    for (const v of vids) {
+        try { v.size = (await v.handle.getFile()).size; } catch (e) { /* keep 0 */ }
+        v.rois = jsonNames.has(stemOf(v.name));
+    }
+    vids.sort((a, b) => a.name.localeCompare(b.name));
+    S.videos = vids;
+    S.cur = null;
+    showApp();
+    updateSaveIndicator();
+    outFolderLabel();
+    renderVideoList();
+    if (vids.length) openVideo(vids[0]);
+    toast(`Loaded ${vids.length} video(s)`);
+}
+
+// Drag-drop / file picker fallback (no folder handle -> script is downloaded)
+function addFiles(files) {
+    const vids = [...files].filter(f => VIDEO_RE.test(f.name))
+        .map(f => ({ name: f.name, file: f, size: f.size, rois: false }));
+    if (!vids.length) { toast('No video files found', true); return; }
+    S.videos = S.videos.concat(vids);
+    S.videos.sort((a, b) => a.name.localeCompare(b.name));
+    showApp();
+    updateSaveIndicator();
+    outFolderLabel();
+    renderVideoList();
+    if (!S.cur) openVideo(vids[0]);
+    toast(`Added ${vids.length} video(s)`);
+}
+function addMoreVideos() {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'video/*'; inp.multiple = true;
+    inp.onchange = () => addFiles(inp.files);
+    inp.click();
+}
+async function setSaveFolder() {
+    if (!window.showDirectoryPicker) { toast('Needs Chrome or Edge', true); return; }
+    try {
+        const h = await window.showDirectoryPicker({ mode: 'readwrite' });
+        S.dirHandle = h;
+        saveLastFolder(h);
+        updateSaveIndicator();
+        outFolderLabel();
+        toast('Save folder set to ' + h.name);
+    } catch (e) { /* cancelled */ }
+}
+function updateSaveIndicator() {
+    const el = $('saveInd');
+    if (S.dirHandle) {
+        el.className = 'save-ind on';
+        $('saveIndText').innerHTML = 'Auto-save → <span class="folder-name">' + esc(S.dirHandle.name) + '</span>';
+    } else {
+        el.className = 'save-ind off';
+        $('saveIndText').textContent = 'Auto-save OFF — click to set folder';
+    }
+}
+function showApp() {
+    $('welcome').classList.add('hidden');
+    $('app').classList.add('active');
+}
+
+const dropZone = $('dropZone'), fileInput = $('fileInput');
+dropZone.onclick = () => fileInput.click();
+fileInput.onchange = () => addFiles(fileInput.files);
+['dragover', 'dragenter'].forEach(ev => dropZone.addEventListener(ev, e => {
+    e.preventDefault(); dropZone.classList.add('dragover');
+}));
+['dragleave', 'drop'].forEach(ev => dropZone.addEventListener(ev, e => {
+    e.preventDefault(); dropZone.classList.remove('dragover');
+}));
+dropZone.addEventListener('drop', async e => {
+    const items = [...(e.dataTransfer.items || [])];
+    if (items.length && items[0].getAsFileSystemHandle) {
+        const handles = await Promise.all(items.map(it => it.getAsFileSystemHandle().catch(() => null)));
+        const dir = handles.find(h => h && h.kind === 'directory');
+        if (dir) {
+            if ((await dir.requestPermission({ mode: 'readwrite' })) === 'granted') {
+                await loadDirectory(dir); saveLastFolder(dir); return;
+            }
+        }
+    }
+    addFiles(e.dataTransfer.files);
+});
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', e => e.preventDefault());
+
+// ═══════════════════════════════════════════════════════════════
+//  Video list
+// ═══════════════════════════════════════════════════════════════
+function renderVideoList() {
+    const filt = ($('search').value || '').toLowerCase();
+    const list = S.videos.filter(v => !filt || v.name.toLowerCase().includes(filt));
+    $('vcount').textContent = `(${list.length})`;
+    const el = $('videoList');
+    el.innerHTML = list.map(v => `
+        <div class="vitem${S.cur === v ? ' active' : ''}${v.rois ? ' has-rois' : ''}"
+             data-n="${esc(v.name)}" title="${esc(v.name)}">
+            <span class="dot"></span>
+            <span class="nm">${esc(v.name)}</span>
+            <span class="sz">${v.size ? fmtSize(v.size) : ''}</span>
+        </div>`).join('') || '<p class="hint" style="padding:12px">No videos match.</p>';
+    el.querySelectorAll('.vitem').forEach(it =>
+        it.onclick = () => openVideo(S.videos.find(v => v.name === it.dataset.n)));
+}
+$('search').addEventListener('input', renderVideoList);
+
+// ═══════════════════════════════════════════════════════════════
+//  Open one video
+// ═══════════════════════════════════════════════════════════════
+async function openVideo(v) {
+    if (!v) return;
+    if (S.cur && S.cur !== v) await saveRois();
+
+    S.cur = v; S.rois = []; S.sel = -1;
+    $('emptyMsg').style.display = 'none';
+    vwrap.style.display = '';
+
+    if (v.url) URL.revokeObjectURL(v.url);
+    const file = v.file || await v.handle.getFile();
+    v.size = v.size || file.size;
+    v.url = URL.createObjectURL(file);
+    vid.src = v.url;
+    renderVideoList();
+
+    const ok = await new Promise(res => {
+        vid.onloadedmetadata = () => res(true);
+        vid.onerror = () => res(false);
+    });
+    if (!ok) { toast('Browser could not decode ' + v.name, true); return; }
+
+    S.native = { w: vid.videoWidth, h: vid.videoHeight };
+    S.duration = vid.duration || 0;
+    S.fps = parseFloat($('fpsInput').value) || 30;
+    ovl.width = S.native.w; ovl.height = S.native.h;
+    $('dimInfo').textContent = `${S.native.w}×${S.native.h} · ${fmtTime(S.duration)}`;
+    fitStage();
+
+    const saved = await loadRois(v);
+    S.rois = (saved.rois || []).slice(0, MAX_ROIS).map(normRoi);
+    if (saved.range && saved.range.length === 2) {
+        S.inT = clamp(saved.range[0], 0, S.duration);
+        S.outT = clamp(saved.range[1], S.inT, S.duration);
+    } else { S.inT = 0; S.outT = S.duration; }
+    S.sel = S.rois.length ? 0 : -1;
+
+    buildRuler(); drawTimeline(); updateTimes(); renderRois(); drawOverlay();
+}
+
+// Values for categories that no longer exist are kept, not dropped -- an old
+// sidecar (or one from a colleague with a different set-up) survives a round trip.
+function normRoi(r) {
+    const o = Object.assign({}, r);
+    o.x = clamp(+r.x || 0, 0, 1);
+    o.y = clamp(+r.y || 0, 0, 1);
+    o.w = clamp(+r.w || .3, .005, 1);
+    o.h = clamp(+r.h || .3, .005, 1);
+    for (const f of S.fields) {
+        const v = o[f.id];
+        o[f.id] = (v === undefined || v === null || v === '')
+            ? fieldDefault(f) : String(v);
+    }
+    return o;
+}
+function onFpsChange() {
+    S.fps = parseFloat($('fpsInput').value) || 30;
+}
+
+function fitStage() {
+    if (!S.native.w || !S.native.h) return;
+    const box = stage.getBoundingClientRect();
+    const scale = Math.min((box.width - 16) / S.native.w, (box.height - 16) / S.native.h);
+    vid.style.width = Math.max(1, S.native.w * scale) + 'px';
+    vid.style.height = Math.max(1, S.native.h * scale) + 'px';
+}
+window.addEventListener('resize', () => { fitStage(); buildRuler(); drawTimeline(); });
+
+// ═══════════════════════════════════════════════════════════════
+//  ROI overlay — canvas coordinates are SOURCE pixels
+// ═══════════════════════════════════════════════════════════════
+const px = r => ({ x: r.x * S.native.w, y: r.y * S.native.h,
+                   w: r.w * S.native.w, h: r.h * S.native.h });
+function canvasScale() {
+    const rect = ovl.getBoundingClientRect();
+    return rect.width ? S.native.w / rect.width : 1;
+}
+function corners(b) {
+    return [[b.x, b.y], [b.x + b.w/2, b.y], [b.x + b.w, b.y],
+            [b.x + b.w, b.y + b.h/2], [b.x + b.w, b.y + b.h],
+            [b.x + b.w/2, b.y + b.h], [b.x, b.y + b.h], [b.x, b.y + b.h/2]];
+}
+const HANDLE_NAMES = ['nw','n','ne','e','se','s','sw','w'];
+
+function drawOverlay() {
+    if (!S.native.w) return;
+    const ctx = ovl.getContext('2d');
+    ctx.clearRect(0, 0, ovl.width, ovl.height);
+    const k = canvasScale(), lw = Math.max(1, 2 * k), hs = 9 * k;
+
+    S.rois.forEach((r, i) => {
+        const b = px(r), col = ROI_COLORS[i % 4], on = i === S.sel;
+        ctx.strokeStyle = col;
+        ctx.lineWidth = on ? lw * 1.6 : lw;
+        ctx.setLineDash(on ? [] : [8 * k, 5 * k]);
+        ctx.strokeRect(b.x, b.y, b.w, b.h);
+        ctx.setLineDash([]);
+        if (on) { ctx.fillStyle = col + '1f'; ctx.fillRect(b.x, b.y, b.w, b.h); }
+
+        const txt = `${i+1} · ${roiSummary(r) || 'unlabelled'}`;
+        ctx.font = `600 ${13 * k}px -apple-system, Segoe UI, sans-serif`;
+        const tw = ctx.measureText(txt).width, th = 19 * k;
+        const ty = b.y > th + 2 * k ? b.y - th - 2 * k : b.y + 2 * k;
+        ctx.fillStyle = col;
+        ctx.fillRect(b.x, ty, tw + 12 * k, th);
+        ctx.fillStyle = '#11111b';
+        ctx.fillText(txt, b.x + 6 * k, ty + th - 6 * k);
+
+        if (on) {
+            ctx.fillStyle = col;
+            for (const [hx, hy] of corners(b)) ctx.fillRect(hx - hs/2, hy - hs/2, hs, hs);
+        }
+    });
+}
+
+function evtPos(e) {
+    const rect = ovl.getBoundingClientRect();
+    return { x: (e.clientX - rect.left) * (S.native.w / rect.width),
+             y: (e.clientY - rect.top)  * (S.native.h / rect.height) };
+}
+
+let drag = null;
+ovl.addEventListener('pointerdown', e => {
+    if (!S.cur || !S.native.w) return;
+    const p = evtPos(e), tol = 11 * canvasScale();
+
+    if (S.sel >= 0) {
+        const cs = corners(px(S.rois[S.sel]));
+        for (let i = 0; i < cs.length; i++) {
+            if (Math.abs(p.x - cs[i][0]) <= tol && Math.abs(p.y - cs[i][1]) <= tol) {
+                drag = { mode: 'resize', h: HANDLE_NAMES[i], i: S.sel };
+                ovl.setPointerCapture(e.pointerId); return;
+            }
+        }
+    }
+    for (let i = S.rois.length - 1; i >= 0; i--) {
+        const b = px(S.rois[i]);
+        if (p.x >= b.x && p.x <= b.x + b.w && p.y >= b.y && p.y <= b.y + b.h) {
+            selectRoi(i);
+            drag = { mode: 'move', i, box: b, ox: p.x - b.x, oy: p.y - b.y };
+            ovl.setPointerCapture(e.pointerId); return;
+        }
+    }
+    if (S.rois.length >= MAX_ROIS) { toast('4 ROIs max — delete one first'); return; }
+    drag = { mode: 'draw', sx: p.x, sy: p.y, box: { x: p.x, y: p.y, w: 0, h: 0 } };
+    ovl.setPointerCapture(e.pointerId);
+});
+
+ovl.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const p = evtPos(e), NW = S.native.w, NH = S.native.h;
+    if (drag.mode === 'draw') {
+        drag.box = { x: Math.min(drag.sx, p.x), y: Math.min(drag.sy, p.y),
+                     w: Math.abs(p.x - drag.sx), h: Math.abs(p.y - drag.sy) };
+        drawOverlay();
+        const ctx = ovl.getContext('2d'), k = canvasScale();
+        ctx.strokeStyle = ROI_COLORS[S.rois.length % 4];
+        ctx.lineWidth = 2 * k; ctx.setLineDash([7 * k, 4 * k]);
+        ctx.strokeRect(drag.box.x, drag.box.y, drag.box.w, drag.box.h);
+        ctx.setLineDash([]);
+    } else if (drag.mode === 'move') {
+        const b = drag.box;
+        setRoiPx(drag.i, { x: clamp(p.x - drag.ox, 0, NW - b.w),
+                           y: clamp(p.y - drag.oy, 0, NH - b.h), w: b.w, h: b.h });
+    } else {
+        const b = px(S.rois[drag.i]);
+        let x0 = b.x, y0 = b.y, x1 = b.x + b.w, y1 = b.y + b.h;
+        if (drag.h.includes('w')) x0 = clamp(p.x, 0, x1 - 8);
+        if (drag.h.includes('e')) x1 = clamp(p.x, x0 + 8, NW);
+        if (drag.h.includes('n')) y0 = clamp(p.y, 0, y1 - 8);
+        if (drag.h.includes('s')) y1 = clamp(p.y, y0 + 8, NH);
+        setRoiPx(drag.i, { x: x0, y: y0, w: x1 - x0, h: y1 - y0 });
+    }
+});
+
+ovl.addEventListener('pointerup', () => {
+    if (!drag) return;
+    if (drag.mode === 'draw') {
+        const b = drag.box;
+        if (b.w > 12 && b.h > 12) {
+            S.rois.push(normRoi({ x: b.x / S.native.w, y: b.y / S.native.h,
+                                  w: b.w / S.native.w, h: b.h / S.native.h }));
+            S.sel = S.rois.length - 1;
+            renderRois();
+        }
+    }
+    drag = null;
+    drawOverlay();
+    scheduleSave();
+});
+
+function setRoiPx(i, b) {
+    const r = S.rois[i];
+    r.x = b.x / S.native.w; r.y = b.y / S.native.h;
+    r.w = b.w / S.native.w; r.h = b.h / S.native.h;
+    drawOverlay(); syncBoxInputs(); renderRois();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ROI list + metadata
+// ═══════════════════════════════════════════════════════════════
+function addRoi() {
+    if (!S.cur) { toast('Open a video first'); return; }
+    if (S.rois.length >= MAX_ROIS) { toast('4 ROIs max'); return; }
+    const n = S.rois.length;
+    S.rois.push(normRoi({ x: .08 + .22 * n, y: .25, w: .2, h: .35 }));
+    S.sel = S.rois.length - 1;
+    renderRois(); drawOverlay(); scheduleSave();
+}
+function delRoi(i) {
+    S.rois.splice(i, 1);
+    S.sel = Math.min(S.sel, S.rois.length - 1);
+    renderRois(); drawOverlay(); scheduleSave();
+}
+function selectRoi(i) { S.sel = i; renderRois(); drawOverlay(); }
+
+function renderRois() {
+    renderRoiList();
+    renderMeta();
+    updatePreview();
+}
+
+// The list alone -- typing in a label redraws this without rebuilding the
+// input the user is typing into.
+function renderRoiList() {
+    $('roiCount').textContent = `${S.rois.length} / ${MAX_ROIS}`;
+    $('addRoiBtn').disabled = S.rois.length >= MAX_ROIS;
+    const el = $('roiList');
+    if (!S.rois.length) {
+        el.innerHTML = '<p class="hint">None yet.</p>';
+    } else {
+        el.innerHTML = S.rois.map((r, i) => {
+            const b = px(r);
+            return `<div class="roi-item${i === S.sel ? ' sel' : ''}" data-i="${i}">
+                <span class="chip" style="background:${ROI_COLORS[i%4]}"></span>
+                <span class="info">
+                    <div class="t1">ROI ${i+1} — ${esc(roiSummary(r) || 'unlabelled')}</div>
+                    <div class="t2">${Math.round(b.w)}×${Math.round(b.h)} at ${Math.round(b.x)},${Math.round(b.y)}${r.label ? ' · ' + esc(r.label) : ''}</div>
+                </span>
+                <span class="x" data-del="${i}" title="Delete">×</span></div>`;
+        }).join('');
+        el.querySelectorAll('.roi-item').forEach(it => it.onclick = ev => {
+            if (ev.target.dataset.del !== undefined) delRoi(+ev.target.dataset.del);
+            else selectRoi(+it.dataset.i);
+        });
+    }
+}
+
+function segButtons(container, values, current, onPick, fmt) {
+    container.innerHTML = '';
+    values.forEach(v => {
+        const b = document.createElement('button');
+        b.textContent = fmt ? fmt(v) : v;
+        if (v === current) b.className = 'on';
+        b.onclick = () => onPick(v);
+        container.appendChild(b);
+    });
+}
+function renderMeta() {
+    const has = S.sel >= 0 && S.rois[S.sel];
+    $('metaBody').style.display = has ? '' : 'none';
+    $('metaEmpty').style.display = has ? 'none' : '';
+    $('metaWhich').textContent = has ? `ROI ${S.sel + 1}` : '';
+    if (!has) return;
+    const r = S.rois[S.sel];
+    const touch = () => { renderRois(); drawOverlay(); scheduleSave(); };
+
+    // keep the caret where it was if this runs while a label is being typed
+    const act = document.activeElement;
+    const keepId = act && act.dataset && act.dataset.fid ? act.dataset.fid : null;
+    const keepAt = keepId ? act.selectionStart : 0;
+
+    const host = $('labelFields');
+    host.innerHTML = '';
+    for (const f of S.fields) {
+        const wrap = document.createElement('div');
+        wrap.className = 'field';
+        const lab = document.createElement('label');
+        lab.textContent = f.name;
+        wrap.appendChild(lab);
+
+        if (f.type === 'choice') {
+            const row = document.createElement('div');
+            row.className = 'seg-row' + (f.options.length === 2 ? ' two' : '');
+            const cur = String(r[f.id] ?? '');
+            // a value from an older set-up stays selectable until it is changed
+            const opts = (!cur || f.options.includes(cur)) ? f.options : [cur, ...f.options];
+            segButtons(row, opts, cur, v => { r[f.id] = v; touch(); });
+            wrap.appendChild(row);
+        } else {
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.className = 'full';
+            inp.placeholder = f.hint || '';
+            inp.autocomplete = 'off';
+            inp.spellcheck = false;
+            inp.dataset.fid = f.id;
+            inp.value = String(r[f.id] ?? '');
+            const recent = recentValues(f.id);
+            if (recent.length) {
+                const dl = document.createElement('datalist');
+                dl.id = 'dl_' + f.id;
+                dl.innerHTML = recent.map(v => `<option value="${esc(v)}">`).join('');
+                inp.setAttribute('list', dl.id);
+                wrap.appendChild(dl);
+            }
+            inp.addEventListener('input', () => {
+                r[f.id] = inp.value;
+                renderRoiList(); drawOverlay(); updatePreview(); scheduleSave();
+            });
+            inp.addEventListener('change', () => {
+                inp.value = inp.value.trim();
+                r[f.id] = inp.value;
+                rememberValue(f.id, inp.value);
+                renderRois(); drawOverlay(); scheduleSave();
+            });
+            wrap.appendChild(inp);
+        }
+        host.appendChild(wrap);
+    }
+
+    if (keepId) {
+        const back = host.querySelector(`input[data-fid="${keepId}"]`);
+        if (back) { back.focus(); try { back.setSelectionRange(keepAt, keepAt); } catch (e) {} }
+    }
+    syncBoxInputs();
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Label categories: rename, add, remove
+// ═══════════════════════════════════════════════════════════════
+function slugId(name, taken) {
+    let base = String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '').slice(0, 20) || 'field';
+    if (/^[0-9]/.test(base)) base = 'f' + base;
+    let id = base, k = 2;
+    while (taken && taken.has(id)) id = base + (k++);
+    return id;
+}
+function cleanFields(list) {
+    const taken = new Set(), out = [];
+    for (const f of list || []) {
+        const name = String((f && f.name) || '').trim();
+        if (!name) continue;
+        const type = f && f.type === 'text' ? 'text' : 'choice';
+        let options = [...new Set(((f && f.options) || []).map(o => String(o).trim()).filter(Boolean))];
+        if (type === 'choice' && !options.length) options = ['A', 'B'];
+        let id = String((f && f.id) || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (!id || taken.has(id)) id = slugId(name, taken);
+        taken.add(id);
+        out.push({ id, name, type, options: type === 'choice' ? options : [], hint: (f && f.hint) || '' });
+    }
+    return out.length ? out : JSON.parse(JSON.stringify(DEFAULT_FIELDS));
+}
+function loadFields() {
+    try {
+        const raw = JSON.parse(localStorage.getItem('roiLabelFields') || 'null');
+        if (Array.isArray(raw) && raw.length) return cleanFields(raw);
+    } catch (e) {}
+    return JSON.parse(JSON.stringify(DEFAULT_FIELDS));
+}
+function saveFields() {
+    try { localStorage.setItem('roiLabelFields', JSON.stringify(S.fields)); } catch (e) {}
+}
+const fieldDefault = f => f.type === 'choice' ? (f.options[0] || '') : '';
+function roiSummary(r) {
+    return S.fields.map(f => String(r[f.id] || '').trim()).filter(Boolean).join(' \u00b7 ');
+}
+
+// Text values already typed come back as autocomplete on the next clip.
+function recentValues(id) {
+    try { return (JSON.parse(localStorage.getItem('roiRecent') || '{}')[id]) || []; }
+    catch (e) { return []; }
+}
+function rememberValue(id, v) {
+    v = String(v || '').trim();
+    if (!v) return;
+    let all = {};
+    try { all = JSON.parse(localStorage.getItem('roiRecent') || '{}'); } catch (e) {}
+    all[id] = [v, ...(all[id] || []).filter(x => x !== v)].slice(0, 30);
+    try { localStorage.setItem('roiRecent', JSON.stringify(all)); } catch (e) {}
+}
+
+let EDIT = null;
+function showFieldEditor() {
+    EDIT = S.fields.map(f => ({ ...f, options: f.options.slice(), _was: f.options.slice() }));
+    renderFieldEditor();
+    $('fieldOverlay').classList.remove('hidden');
+}
+function hideFieldEditor() {
+    $('fieldOverlay').classList.add('hidden');
+    EDIT = null;
+}
+function renderFieldEditor() {
+    const host = $('fieldEditor');
+    host.innerHTML = EDIT.map((f, i) => `
+        <div class="fe-row">
+            <div class="fe-head">
+                <input class="fe-name" data-i="${i}" value="${esc(f.name)}" placeholder="Category name">
+                <select class="fe-type" data-i="${i}">
+                    <option value="choice"${f.type === 'choice' ? ' selected' : ''}>buttons</option>
+                    <option value="text"${f.type === 'text' ? ' selected' : ''}>free text</option>
+                </select>
+                <code class="fe-token">{${esc(f.id || slugId(f.name))}}</code>
+                <button class="fe-del" data-del="${i}" title="Remove this category">&times;</button>
+            </div>
+            ${f.type === 'choice' ? `<div class="fe-opts">
+                ${f.options.map((o, j) => `<span class="fe-opt">
+                    <input data-i="${i}" data-j="${j}" value="${esc(o)}">
+                    <button data-rmopt="${i}.${j}" title="Remove this button">&times;</button></span>`).join('')}
+                <button data-addopt="${i}">+ button</button>
+            </div>` : '<p class="hint" style="margin-top:6px">typed in by hand</p>'}
+        </div>`).join('') || '<p class="hint">No categories yet — add one.</p>';
+
+    host.querySelectorAll('.fe-name').forEach(el =>
+        el.oninput = () => { EDIT[+el.dataset.i].name = el.value; });
+    host.querySelectorAll('.fe-type').forEach(el => el.onchange = () => {
+        const f = EDIT[+el.dataset.i];
+        f.type = el.value;
+        if (f.type === 'choice' && !f.options.length) f.options = ['A', 'B'];
+        renderFieldEditor();
+    });
+    host.querySelectorAll('.fe-opts input').forEach(el =>
+        el.oninput = () => { EDIT[+el.dataset.i].options[+el.dataset.j] = el.value; });
+    host.querySelectorAll('[data-del]').forEach(el => el.onclick = () => {
+        EDIT.splice(+el.dataset.del, 1);
+        renderFieldEditor();
+    });
+    host.querySelectorAll('[data-rmopt]').forEach(el => el.onclick = () => {
+        const [i, j] = el.dataset.rmopt.split('.').map(Number);
+        EDIT[i].options.splice(j, 1);
+        renderFieldEditor();
+    });
+    host.querySelectorAll('[data-addopt]').forEach(el => el.onclick = () => {
+        EDIT[+el.dataset.addopt].options.push('New');
+        renderFieldEditor();
+    });
+}
+function addField() {
+    EDIT.push({ id: '', name: 'New category', type: 'choice', options: ['A', 'B'], hint: '', _was: [] });
+    renderFieldEditor();
+}
+function resetFieldsToDefault() {
+    if (!confirm('Put the categories back to cage number / sex / treatment?')) return;
+    EDIT = JSON.parse(JSON.stringify(DEFAULT_FIELDS)).map(f => ({ ...f, _was: f.options.slice() }));
+    renderFieldEditor();
+}
+function applyFields() {
+    const cleaned = cleanFields(EDIT);
+    // a renamed button (E2 -> something else) follows through to this clip's ROIs
+    const renames = {};
+    EDIT.forEach((f, i) => {
+        const nf = cleaned.find(c => c.id && c.id === f.id) || cleaned[i];
+        if (!nf || nf.type !== 'choice') return;
+        (f._was || []).forEach((oldV, j) => {
+            const newV = f.options[j];
+            if (oldV && newV && oldV !== newV) (renames[nf.id] = renames[nf.id] || {})[oldV] = newV;
+        });
+    });
+    S.fields = cleaned;
+    saveFields();
+    for (const r of S.rois) {
+        for (const id in renames) if (renames[id][r[id]] !== undefined) r[id] = renames[id][r[id]];
+        Object.assign(r, normRoi(r));
+    }
+    hideFieldEditor();
+    renderTokenHint();
+    renderRois();
+    drawOverlay();
+    scheduleSave();
+    toast('Categories updated');
+}
+
+// Clickable token list under the file-name template.
+function renderTokenHint() {
+    const toks = ['stem', ...S.fields.map(f => f.id), 'n', 'start', 'end', 'dur', 'w', 'h'];
+    const el = $('tokenHint');
+    el.innerHTML = 'click to insert: ' +
+        toks.map(t => `<a href="#" class="tok" data-t="${esc(t)}">{${esc(t)}}</a>`).join(' ');
+    el.querySelectorAll('.tok').forEach(a => a.onclick = ev => {
+        ev.preventDefault();
+        const box = $('tmpl');
+        const at = box.selectionStart ?? box.value.length;
+        const to = box.selectionEnd ?? at;
+        box.value = box.value.slice(0, at) + '{' + a.dataset.t + '}' + box.value.slice(to);
+        box.focus();
+        box.setSelectionRange(at + a.dataset.t.length + 2, at + a.dataset.t.length + 2);
+        saveNaming();
+        updatePreview();
+    });
+}
+
+// The template and the before/after text stay put between sessions.
+function saveNaming() {
+    try {
+        localStorage.setItem('roiNaming', JSON.stringify({
+            tmpl: $('tmpl').value, pre: $('namePre').value, post: $('namePost').value,
+        }));
+    } catch (e) {}
+}
+function loadNaming() {
+    try {
+        const n = JSON.parse(localStorage.getItem('roiNaming') || 'null');
+        if (!n) return;
+        if (n.tmpl) $('tmpl').value = n.tmpl;
+        if (n.pre != null) $('namePre').value = n.pre;
+        if (n.post != null) $('namePost').value = n.post;
+    } catch (e) {}
+}
+['tmpl', 'namePre', 'namePost'].forEach(id =>
+    $(id).addEventListener('input', () => { saveNaming(); updatePreview(); }));
+
+// ── the exact box, in source pixels ──
+function syncBoxInputs() {
+    if (S.sel < 0) return;
+    const b = px(S.rois[S.sel]);
+    $('bx').value = Math.round(b.x); $('by').value = Math.round(b.y);
+    $('bw').value = Math.round(b.w); $('bh').value = Math.round(b.h);
+}
+['bx','by','bw','bh'].forEach(id => $(id).addEventListener('change', () => {
+    if (S.sel < 0) return;
+    const x = clamp(+$('bx').value || 0, 0, S.native.w - 2);
+    const y = clamp(+$('by').value || 0, 0, S.native.h - 2);
+    setRoiPx(S.sel, { x, y, w: clamp(+$('bw').value || 2, 2, S.native.w - x),
+                            h: clamp(+$('bh').value || 2, 2, S.native.h - y) });
+    scheduleSave();
+}));
+
+function copyLayout() {
+    if (!S.rois.length) { toast('Nothing to copy'); return; }
+    S.clipboard = JSON.parse(JSON.stringify(S.rois));
+    try { localStorage.setItem('roiClipboard', JSON.stringify(S.clipboard)); } catch (e) {}
+    toast(`Copied ${S.rois.length} ROI(s)`);
+}
+function pasteLayout() {
+    let c = S.clipboard;
+    if (!c) { try { c = JSON.parse(localStorage.getItem('roiClipboard') || 'null'); } catch (e) {} }
+    if (!c || !S.cur) { toast('Nothing to paste'); return; }
+    S.rois = c.slice(0, MAX_ROIS).map(normRoi);
+    S.sel = S.rois.length ? 0 : -1;
+    renderRois(); drawOverlay(); scheduleSave();
+    toast(`Pasted ${S.rois.length} ROI(s)`);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ROI sidecar JSON  (same format as the Python version)
+// ═══════════════════════════════════════════════════════════════
+async function writeFile(name, content) {
+    const fh = await S.dirHandle.getFileHandle(name, { create: true });
+    const w = await fh.createWritable();
+    await w.write(content);
+    await w.close();
+}
+async function loadRois(v) {
+    if (!S.dirHandle) return { rois: [], range: null };
+    try {
+        const fh = await S.dirHandle.getFileHandle(stemOf(v.name) + '.rois.json');
+        return JSON.parse(await (await fh.getFile()).text());
+    } catch (e) { return { rois: [], range: null }; }
+}
+let saveTimer = null;
+function scheduleSave() {
+    updatePreview();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveRois, 600);
+}
+async function saveRois() {
+    if (!S.cur || !S.dirHandle) return;
+    try {
+        setSaveStatus('saving');
+        await writeFile(stemOf(S.cur.name) + '.rois.json', JSON.stringify({
+            video: S.cur.name,
+            saved: new Date().toISOString().replace('T', ' ').slice(0, 19),
+            native: S.native,
+            range: [S.inT, S.outT],
+            fields: S.fields,
+            rois: S.rois,
+        }, null, 2) + '\n');
+        setSaveStatus('saved');
+        if (!S.cur.rois) { S.cur.rois = true; renderVideoList(); }
+    } catch (e) {
+        setSaveStatus('');
+        toast('Save failed: ' + e.message, true);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Timeline
+// ═══════════════════════════════════════════════════════════════
+function niceStep(dur, width) {
+    const target = dur / Math.max(2, Math.floor(width / 90));
+    return [1,2,5,10,15,30,60,120,300,600,900,1800,3600].find(s => s >= target) || 3600;
+}
+function buildRuler() {
+    const w = tlTrack.clientWidth;
+    if (!S.duration || !w) { tlRuler.innerHTML = ''; return; }
+    const step = niceStep(S.duration, w);
+    let html = '';
+    for (let t = 0; t <= S.duration + .001; t += step) {
+        const pct = (t / S.duration) * 100;
+        html += `<i style="left:${pct}%"></i><span style="left:${pct}%">${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}</span>`;
+    }
+    tlRuler.innerHTML = html;
+}
+function drawTimeline() {
+    if (!S.duration) return;
+    const a = (S.inT / S.duration) * 100, b = (S.outT / S.duration) * 100;
+    tlSel.style.left = a + '%';
+    tlSel.style.width = Math.max(0, b - a) + '%';
+    dimL.style.left = '0'; dimL.style.width = a + '%';
+    dimR.style.left = b + '%'; dimR.style.width = (100 - b) + '%';
+    tlPlay.style.left = ((vid.currentTime / S.duration) * 100) + '%';
+}
+function updateTimes() {
+    $('tIn').textContent = fmtTime(S.inT);
+    $('tOut').textContent = fmtTime(S.outT);
+    $('tDur').textContent = `(${fmtTime(S.outT - S.inT)})`;
+    updatePreview();
+}
+
+let tdrag = null;
+tlTrack.addEventListener('pointerdown', e => {
+    if (!S.duration) return;
+    const rect = tlTrack.getBoundingClientRect();
+    const t = clamp(((e.clientX - rect.left) / rect.width) * S.duration, 0, S.duration);
+    const hnd = e.target.dataset ? e.target.dataset.h : null;
+    if (hnd) tdrag = { mode: hnd };
+    else if (e.target === tlSel) tdrag = { mode: 'move', grab: t - S.inT, len: S.outT - S.inT };
+    else { vid.currentTime = t; tdrag = { mode: 'scrub' }; }
+    tlTrack.setPointerCapture(e.pointerId);
+    e.preventDefault();
+});
+tlTrack.addEventListener('pointermove', e => {
+    if (!tdrag || !S.duration) return;
+    const rect = tlTrack.getBoundingClientRect();
+    const t = clamp(((e.clientX - rect.left) / rect.width) * S.duration, 0, S.duration);
+    if (tdrag.mode === 'l')      S.inT  = Math.min(t, S.outT - .05);
+    else if (tdrag.mode === 'r') S.outT = Math.max(t, S.inT + .05);
+    else if (tdrag.mode === 'move') {
+        S.inT = clamp(t - tdrag.grab, 0, S.duration - tdrag.len);
+        S.outT = S.inT + tdrag.len;
+    } else vid.currentTime = t;
+    drawTimeline(); updateTimes();
+});
+tlTrack.addEventListener('pointerup', () => {
+    if (tdrag && tdrag.mode !== 'scrub') scheduleSave();
+    tdrag = null;
+});
+
+function setIn()  { S.inT = Math.min(vid.currentTime, S.outT - .05); drawTimeline(); updateTimes(); scheduleSave(); }
+function setOut() { S.outT = Math.max(vid.currentTime, S.inT + .05); drawTimeline(); updateTimes(); scheduleSave(); }
+function fullRange() { S.inT = 0; S.outT = S.duration; drawTimeline(); updateTimes(); scheduleSave(); }
+function toggleLoop() {
+    S.loop = !S.loop;
+    $('loopBtn').textContent = 'Loop: ' + (S.loop ? 'on' : 'off');
+    $('loopBtn').classList.toggle('primary', S.loop);
+    if (S.loop && (vid.currentTime < S.inT || vid.currentTime > S.outT)) vid.currentTime = S.inT;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Transport
+// ═══════════════════════════════════════════════════════════════
+vid.addEventListener('timeupdate', () => {
+    drawTimeline();
+    $('frameInfo').textContent =
+        `${fmtTime(vid.currentTime)} / ${fmtTime(S.duration)}  ·  frame ${Math.round(vid.currentTime * S.fps)}`;
+    if (S.loop && vid.currentTime >= S.outT - .02) vid.currentTime = S.inT;
+});
+vid.addEventListener('play',  () => $('playBtn').innerHTML = '&#10073;&#10073;');
+vid.addEventListener('pause', () => $('playBtn').innerHTML = '&#9654;');
+
+function togglePlay() { if (S.cur) vid.paused ? vid.play() : vid.pause(); }
+function step(n) { vid.pause(); vid.currentTime = clamp(vid.currentTime + n / S.fps, 0, S.duration); }
+function seekFirst() { vid.pause(); vid.currentTime = 0; }
+function seekLast()  { vid.pause(); vid.currentTime = Math.max(0, S.duration - 1 / S.fps); }
+function setSpeed(r) {
+    vid.playbackRate = r;
+    document.querySelectorAll('.speed-btn').forEach(b =>
+        b.classList.toggle('active', parseFloat(b.textContent) === r));
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Naming + export list
+// ═══════════════════════════════════════════════════════════════
+function evenDown(n) { n = Math.round(n); return Math.max(2, n - (n % 2)); }
+
+function cropOf(roi, native) {
+    let x = clamp(Math.round(roi.x * native.w), 0, native.w - 2);
+    let y = clamp(Math.round(roi.y * native.h), 0, native.h - 2);
+    const w = evenDown(Math.min(roi.w * native.w, native.w - x));
+    const h = evenDown(Math.min(roi.h * native.h, native.h - y));
+    return { x, y, w, h };
+}
+function renderName(tmpl, stem, roi, i, start, end, native) {
+    const c = cropOf(roi, native);
+    const ctx = {
+        stem, n: i + 1,
+        start: hms(start), end: hms(end), dur: hms(end - start),
+        w: c.w, h: c.h, x: c.x, y: c.y,
+    };
+    for (const f of S.fields) ctx[f.id] = roi[f.id] ?? '';
+    let out = tmpl;
+    for (const k in ctx) out = out.split('{' + k + '}').join(String(ctx[k]));
+    out = ($('namePre').value || '') + out + ($('namePost').value || '');
+    return out.replace(/\{[a-zA-Z0-9]+\}/g, '')
+              .replace(/[<>:"/\\|?*]/g, '_')
+              .replace(/_{2,}/g, '_')
+              .replace(/^[_\s]+|[_\s]+$/g, '') + '.mp4';
+}
+function updatePreview() {
+    const el = $('preview');
+    if (!S.cur || !S.rois.length) { el.textContent = '—'; return; }
+    const t = $('tmpl').value, stem = stemOf(S.cur.name);
+    el.innerHTML = S.rois.map((r, i) =>
+        esc(renderName(t, stem, r, i, S.inT, S.outT, S.native))).join('<br>');
+}
+$('tmpl').addEventListener('input', updatePreview);
+$('outDir').addEventListener('input', updatePreview);
+
+// ═══════════════════════════════════════════════════════════════
+//  What this browser can do
+// ═══════════════════════════════════════════════════════════════
+const ENC = { mode: null, mime: '', ext: 'mp4' };
+
+function detectEncoder() {
+    const hasWebCodecs = typeof VideoEncoder !== 'undefined'
+                      && typeof VideoFrame !== 'undefined'
+                      && typeof Mp4Muxer !== 'undefined';
+    if (hasWebCodecs) { ENC.mode = 'webcodecs'; ENC.mime = 'video/mp4'; ENC.ext = 'mp4'; return; }
+    const mime = typeof MediaRecorder !== 'undefined'
+        ? ['video/mp4;codecs=avc1.42E01E', 'video/webm;codecs=vp9', 'video/webm']
+              .find(m => MediaRecorder.isTypeSupported(m))
+        : null;
+    if (mime) {
+        ENC.mode = 'recorder';
+        ENC.mime = mime;
+        ENC.ext = mime.startsWith('video/mp4') ? 'mp4' : 'webm';
+        return;
+    }
+    ENC.mode = null;
+}
+
+function describeCapabilities() {
+    detectEncoder();
+    const cap = $('capNote');
+    if (cap) {
+        cap.textContent = [
+            window.showDirectoryPicker ? 'folder access available' : 'no folder access — clips download instead',
+            ENC.mode === 'webcodecs' ? 'H.264 MP4 encoding available'
+                : ENC.mode === 'recorder' ? 'basic recorder only (' + ENC.ext.toUpperCase() + ', 1x)'
+                : 'this browser cannot encode video',
+        ].join(' · ');
+    }
+    const note = $('encNote');
+    if (note) {
+        note.textContent = ENC.mode === 'webcodecs'
+            ? 'Encodes here in the browser (H.264 MP4) and writes the file for you — nothing to copy.'
+            : ENC.mode === 'recorder'
+            ? 'No WebCodecs here — falling back to the browser recorder: 1x speed, ' + ENC.ext.toUpperCase() + ' output.'
+            : 'This browser cannot encode video. Use Chrome or Edge, or take the ffmpeg commands below.';
+    }
+    if (ENC.mode === 'recorder') { $('encRate').value = '1'; $('encRate').disabled = true; }
+    if (!ENC.mode) $('cropBtn').disabled = true;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  Where the finished clips go
+// ═══════════════════════════════════════════════════════════════
+function outFolderLabel() {
+    $('outFolderName').value = S.outHandle ? S.outHandle.name
+        : S.dirHandle ? S.dirHandle.name + '  (the video folder)'
+        : 'your Downloads folder';
+}
+async function chooseOutFolder() {
+    if (!window.showDirectoryPicker) { toast('Folder picking needs Chrome or Edge', true); return; }
+    try {
+        const h = await window.showDirectoryPicker({ mode: 'readwrite' });
+        S.outHandle = h;
+        outFolderLabel();
+        toast('Clips will be saved into ' + h.name);
+    } catch (e) { /* cancelled */ }
+}
+function useVideoFolder() {
+    S.outHandle = null;
+    outFolderLabel();
+    toast(S.dirHandle ? 'Clips will be saved next to the videos' : 'No folder open — clips will download');
+}
+
+
+// Resolve (folder + optional subfolder) into a directory handle; null = download.
+async function resolveOutDir() {
+    let dir = S.outHandle || S.dirHandle;
+    if (!dir) return null;
+    const sub = outDirValue();
+    if (sub === '.') return dir;
+    for (const part of sub.split(/[\\/]+/)) {
+        if (!part || part === '.') continue;
+        dir = await dir.getDirectoryHandle(part, { create: true });
+    }
+    return dir;
+}
+
+async function fileExists(dir, name) {
+    try { await dir.getFileHandle(name); return true; } catch (e) { return false; }
+}
+async function uniqueName(dir, name) {
+    if (!dir) return name;
+    const m = name.match(/^(.*?)(\.[a-z0-9]+)$/i);
+    const base = m ? m[1] : name, ext = m ? m[2] : '';
+    let out = name, k = 2;
+    while (await fileExists(dir, out)) out = `${base}_${k++}${ext}`;
+    return out;
+}
+async function writeBlob(dir, name, blob) {
+    const fh = await dir.getFileHandle(name, { create: true });
+    const w = await fh.createWritable();
+    await w.write(blob);
+    await w.close();
+}
+function downloadBlob(name, blob) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  One crop = one encode.  Frames come out of a hidden <video>, so a
+//  multi-GB source streams off disk instead of being loaded into memory.
+// ═══════════════════════════════════════════════════════════════
+const once = (el, ev) => new Promise(r => el.addEventListener(ev, r, { once: true }));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+async function openHidden(file) {
+    const v = document.createElement('video');
+    v.src = URL.createObjectURL(file);
+    v.muted = true; v.playsInline = true; v.preload = 'auto';
+    await once(v, 'loadedmetadata');
+    if (v.readyState < 2) await once(v, 'loadeddata');
+    return v;
+}
+async function seekTo(v, t) {
+    if (Math.abs(v.currentTime - t) < 1e-3) return;
+    v.currentTime = t;
+    await once(v, 'seeked');
+}
+
+async function pickCodec(w, h, fps, bitrate) {
+    for (const codec of ['avc1.640034', 'avc1.640033', 'avc1.640028', 'avc1.4d0028', 'avc1.42E01E']) {
+        const cfg = { codec, width: w, height: h, bitrate, framerate: fps, avc: { format: 'avc' } };
+        try { if ((await VideoEncoder.isConfigSupported(cfg)).supported) return cfg; } catch (e) {}
+    }
+    return null;
+}
+
+// WebCodecs: we stamp every frame with its real source timestamp, so the clip
+// keeps the right duration even when the video is played back faster than 1x.
+async function encodeWebCodecs(v, crop, start, end, fps, bitrate, rate, onProgress) {
+    const cfg = await pickCodec(crop.w, crop.h, fps, bitrate);
+    if (!cfg) throw new Error('no H.264 encoder for ' + crop.w + 'x' + crop.h);
+    const muxer = new Mp4Muxer.Muxer({
+        target: new Mp4Muxer.ArrayBufferTarget(),
+        video: { codec: 'avc', width: crop.w, height: crop.h },
+        fastStart: 'in-memory',
+        firstTimestampBehavior: 'offset',
+    });
+    let err = null;
+    const enc = new VideoEncoder({
+        output: (chunk, meta) => muxer.addVideoChunk(chunk, meta),
+        error: e => { err = err || String(e); },
+    });
+    enc.configure(cfg);
+
+    const cv = new OffscreenCanvas(crop.w, crop.h);
+    const ctx = cv.getContext('2d', { alpha: false });
+    await seekTo(v, start);
+    v.playbackRate = rate;
+    const span = Math.max(0.001, end - start);
+    let n = 0, t0 = null;
+
+    await new Promise(res => {
+        const onFrame = (now, meta) => {
+            const t = meta.mediaTime;
+            if (t >= end - 1e-3 || err) { res(); return; }
+            if (t0 === null) t0 = t;                    // first captured frame is time zero
+            ctx.drawImage(v, crop.x, crop.y, crop.w, crop.h, 0, 0, crop.w, crop.h);
+            const frame = new VideoFrame(cv, {
+                timestamp: Math.max(0, Math.round((t - t0) * 1e6)),
+                duration: Math.round(1e6 / fps),
+            });
+            try { enc.encode(frame, { keyFrame: n % 150 === 0 }); }
+            catch (e) { err = err || String(e); }
+            frame.close();
+            n++;
+            if (n % 5 === 0) onProgress(Math.min(1, (t - start) / span));
+            if (enc.encodeQueueSize > 16) {             // let the encoder catch up
+                v.pause();
+                (async () => {
+                    while (enc.encodeQueueSize > 4 && !err) await sleep(5);
+                    try { await v.play(); } catch (e) {}
+                    v.requestVideoFrameCallback(onFrame);
+                })();
+            } else {
+                v.requestVideoFrameCallback(onFrame);
+            }
+        };
+        v.requestVideoFrameCallback(onFrame);
+        v.onended = res;
+        v.play().catch(e => { err = err || String(e); res(); });
+    });
+
+    v.pause();
+    await enc.flush();
+    enc.close();
+    if (err) throw new Error(err);
+    if (!n) throw new Error('no frames captured — is the range inside the clip?');
+    muxer.finalize();
+    return { blob: new Blob([muxer.target.buffer], { type: 'video/mp4' }), frames: n };
+}
+
+// Fallback for browsers without WebCodecs: record a canvas in real time.
+// MediaRecorder stamps frames by wall clock, so this one has to run at 1x.
+async function encodeRecorder(v, crop, start, end, onProgress) {
+    const cv = document.createElement('canvas');
+    cv.width = crop.w; cv.height = crop.h;
+    const ctx = cv.getContext('2d', { alpha: false });
+    const stream = cv.captureStream(0);
+    const track = stream.getVideoTracks()[0];
+    const rec = new MediaRecorder(stream, { mimeType: ENC.mime, videoBitsPerSecond: 12e6 });
+    const chunks = [];
+    rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+    await seekTo(v, start);
+    v.playbackRate = 1;
+    const span = Math.max(0.001, end - start);
+    let n = 0;
+    rec.start();
+    await new Promise(res => {
+        const draw = (now, meta) => {
+            const t = meta.mediaTime;
+            if (t >= end - 1e-3) { res(); return; }
+            ctx.drawImage(v, crop.x, crop.y, crop.w, crop.h, 0, 0, crop.w, crop.h);
+            track.requestFrame();
+            n++;
+            if (n % 5 === 0) onProgress(Math.min(1, (t - start) / span));
+            v.requestVideoFrameCallback(draw);
+        };
+        v.requestVideoFrameCallback(draw);
+        v.onended = res;
+        v.play().catch(() => res());
+    });
+    v.pause();
+    rec.stop();
+    await once(rec, 'stop');
+    if (!n) throw new Error('no frames captured — is the range inside the clip?');
+    return { blob: new Blob(chunks, { type: ENC.mime }), frames: n };
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  The one button
+// ═══════════════════════════════════════════════════════════════
+function specsForCurrent() {
+    if (!S.cur || !S.rois.length) return [];
+    const tmpl = $('tmpl').value, stem = stemOf(S.cur.name);
+    const taken = new Set();
+    return S.rois.map((roi, i) => {
+        let out = renderName(tmpl, stem, roi, i, S.inT, S.outT, S.native);
+        if (taken.has(out.toLowerCase())) {          // two ROIs resolving to one name
+            const base = out.replace(/\.mp4$/i, '');
+            let k = 2;
+            while (taken.has(`${base}_${k}.mp4`.toLowerCase())) k++;
+            out = `${base}_${k}.mp4`;
+        }
+        taken.add(out.toLowerCase());
+        return {
+            src: S.cur.name, stem, roi, idx: i, crop: cropOf(roi, S.native),
+            start: S.inT, end: S.outT, out,
+            crf: 18, preset: 'fast', audio: false,   // only used by the ffmpeg fallback text
+        };
+    });
+}
+
+async function cropAndTrim() {
+    if (S.busy) { toast('Still encoding — one at a time'); return; }
+    if (!S.cur) { toast('Open a video first', true); return; }
+    if (!S.rois.length) { toast('Draw an ROI first', true); return; }
+    if (S.outT - S.inT < .05) { toast('Time range is empty — set in / out first', true); return; }
+    detectEncoder();
+    if (!ENC.mode) { toast('This browser cannot encode video — use Chrome or Edge', true); return; }
+
+    const first = S.fields[0];
+    const blank = !first ? [] : S.rois.map((r, i) => [r, i])
+        .filter(([r]) => !String(r[first.id] || '').trim()).map(([, i]) => i + 1);
+    if (blank.length && !confirm('ROI ' + blank.join(', ') + ' has no ' +
+        first.name.toLowerCase() + '. Crop anyway?')) return;
+    S.rois.forEach(r => S.fields.filter(f => f.type === 'text')
+                                .forEach(f => rememberValue(f.id, r[f.id])));
+    saveNaming();
+    await saveRois();
+
+    const specs = specsForCurrent();
+    let dir = null;
+    try { dir = await resolveOutDir(); }
+    catch (e) { toast('Could not open the output folder: ' + e.message, true); return; }
+
+    vid.pause();
+    S.busy = true;
+    $('cropBtn').disabled = true;
+    $('cropBtn').textContent = 'Cropping…';
+    const file = S.cur.file || await S.cur.handle.getFile();
+    const rate = ENC.mode === 'webcodecs' ? (+$('encRate').value || 1) : 1;
+    const bitrate = (+$('quality').value || 12) * 1e6;
+    let ok = 0;
+
+    try {
+        for (const sp of specs) {
+            const job = {
+                name: sp.out.replace(/\.mp4$/i, '.' + ENC.ext),
+                status: 'encoding', progress: 0, msg: '',
+            };
+            S.jobs.push(job);
+            renderJobs();
+            let v = null;
+            try {
+                v = await openHidden(file);
+                const res = ENC.mode === 'webcodecs'
+                    ? await encodeWebCodecs(v, sp.crop, sp.start, sp.end, S.fps, bitrate, rate,
+                                            p => { job.progress = p; renderJobs(); })
+                    : await encodeRecorder(v, sp.crop, sp.start, sp.end,
+                                           p => { job.progress = p; renderJobs(); });
+                job.name = await uniqueName(dir, job.name);
+                if (dir) await writeBlob(dir, job.name, res.blob);
+                else downloadBlob(job.name, res.blob);
+                job.status = 'done';
+                job.progress = 1;
+                job.frames = res.frames;
+                job.bytes = res.blob.size;
+                ok++;
+            } catch (e) {
+                job.status = 'error';
+                job.msg = String((e && e.message) || e);
+            } finally {
+                if (v) { v.pause(); URL.revokeObjectURL(v.src); v.removeAttribute('src'); }
+            }
+            renderJobs();
+        }
+    } finally {
+        S.busy = false;
+        $('cropBtn').disabled = false;
+        $('cropBtn').textContent = 'Crop & trim';
+    }
+    toast(ok === specs.length
+        ? `Saved ${ok} clip(s) to ${dir ? (S.outHandle || S.dirHandle).name : 'Downloads'}`
+        : `${ok} of ${specs.length} saved — see the list for the error`, ok !== specs.length);
+}
+
+function renderJobs() {
+    $('qCount').textContent = S.jobs.length;
+    const el = $('jobList');
+    if (!S.jobs.length) { el.innerHTML = '<p class="hint">Nothing yet.</p>'; return; }
+    el.innerHTML = S.jobs.slice().reverse().map(j => {
+        const pct = Math.round((j.progress || 0) * 100);
+        const sub = j.status === 'done'
+            ? `${j.frames} frames · ${(j.bytes / 1e6).toFixed(1)} MB`
+            : j.status === 'error' ? `<span class="msg">${esc(j.msg)}</span>`
+            : `encoding ${pct}%`;
+        return `<div class="qitem ${j.status}">
+            <span class="qn">${esc(j.name)}
+                <div class="qs">${sub}</div>
+                <div class="bar"><i style="width:${pct}%"></i></div>
+            </span></div>`;
+    }).join('');
+}
+function clearJobs() { S.jobs = []; renderJobs(); }
+
+// ═══════════════════════════════════════════════════════════════
+//  ffmpeg script generation
+// ═══════════════════════════════════════════════════════════════
+const outDirValue = () => ($('outDir').value.trim() || '.').replace(/[\\/]+$/, '') || '.';
+
+function ffArgs(q, outPath, quote) {
+    const a = ['-hide_banner', '-y',
+        '-ss', q.start.toFixed(3), '-i', quote(q.src), '-t', (q.end - q.start).toFixed(3),
+        '-filter:v', quote(`crop=${q.crop.w}:${q.crop.h}:${q.crop.x}:${q.crop.y}`),
+        '-c:v', 'libx264', '-preset', q.preset, '-crf', String(q.crf), '-pix_fmt', 'yuv420p'];
+    a.push(...(q.audio ? ['-c:a', 'aac', '-b:a', '128k'] : ['-an']));
+    a.push('-movflags', '+faststart', quote(outPath));
+    return a.join(' ');
+}
+const qWin  = s => '"' + String(s).replace(/"/g, '""') + '"';
+const qUnix = s => "'" + String(s).replace(/'/g, "'\\''") + "'";
+
+function buildBat() {
+    const specs = specsForCurrent();
+    const dir = outDirValue(), stamp = new Date().toLocaleString();
+    // ASCII only below: cmd.exe renders this in the console codepage.
+    const L = ['@echo off',
+        'chcp 65001 >nul',              // so UTF-8 file names survive
+        'REM Generated by ROI Clipper - ' + stamp,
+        'REM Run from the folder holding the source videos.',
+        'setlocal', 'cd /d "%~dp0"'];
+    if (dir !== '.') L.push(`if not exist "${dir}" mkdir "${dir}"`);
+    L.push('');
+    specs.forEach((q, i) => {
+        const out = dir === '.' ? q.out : dir + '\\' + q.out;
+        L.push(`echo [${i + 1}/${specs.length}] ${q.out.replace(/[%^&<>|]/g, '')}`);
+        L.push('ffmpeg ' + ffArgs(q, out, qWin));
+        L.push('if errorlevel 1 echo    ^!^! FAILED: ' + q.out.replace(/[%^&<>|]/g, ''));
+        L.push('');
+    });
+    L.push('echo.', 'echo Done - ' + specs.length + ' clip(s).', 'pause');
+    // % is the cmd variable marker; double it so literal percent signs survive.
+    return L.join('\r\n').replace(/%(?!~dp0)/g, '%%') + '\r\n';
+}
+function buildSh() {
+    const specs = specsForCurrent();
+    const dir = outDirValue();
+    const L = ['#!/usr/bin/env bash',
+        '# Generated by ROI Clipper - ' + new Date().toLocaleString(),
+        'set -u',
+        'cd "$(dirname "$0")"'];
+    if (dir !== '.') L.push(`mkdir -p ${qUnix(dir)}`);
+    L.push('');
+    specs.forEach((q, i) => {
+        const out = dir === '.' ? q.out : dir + '/' + q.out;
+        L.push(`echo "[${i + 1}/${specs.length}] ${q.out}"`);
+        L.push('ffmpeg ' + ffArgs(q, out, qUnix) + ' || echo "   !! FAILED: ' + q.out + '"');
+        L.push('');
+    });
+    L.push(`echo "Done - ${specs.length} clip(s)."`);
+    return L.join('\n') + '\n';
+}
+
+async function writeScript() {
+    const specs = specsForCurrent();
+    if (!specs.length) { toast('Draw an ROI first', true); return; }
+    const bat = buildBat(), sh = buildSh();
+    if (S.dirHandle) {
+        try {
+            await writeFile('roi_export.bat', bat);
+            await writeFile('roi_export.sh', sh);
+            hideScript();
+            toast(`Wrote roi_export.bat (${specs.length} clips) into ${S.dirHandle.name}`);
+            return;
+        } catch (e) { toast('Write failed: ' + e.message, true); }
+    }
+    download('roi_export.bat', bat);
+    download('roi_export.sh', sh);
+    toast('No folder handle — downloaded the scripts instead');
+}
+function download(name, text) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+    a.download = name;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+function showScript() {
+    const specs = specsForCurrent();
+    if (!specs.length) { toast('Draw an ROI first', true); return; }
+    $('scriptCount').textContent = specs.length + ' clip(s)';
+    $('scriptText').textContent = buildBat();
+    $('scriptOverlay').classList.remove('hidden');
+}
+function hideScript() { $('scriptOverlay').classList.add('hidden'); }
+function copyScript() {
+    navigator.clipboard.writeText(buildBat())
+        .then(() => toast('Commands copied'))
+        .catch(() => toast('Copy failed — select the text manually', true));
+}
+function showHelp() { $('helpOverlay').classList.remove('hidden'); }
+function hideHelp() { $('helpOverlay').classList.add('hidden'); }
+
+// ═══════════════════════════════════════════════════════════════
+//  Keyboard
+// ═══════════════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'select' || tag === 'textarea') {
+        if (e.key === 'Escape') e.target.blur();
+        return;
+    }
+    if (e.ctrlKey && e.key === 'Enter') { cropAndTrim(); e.preventDefault(); return; }
+    if (e.ctrlKey || e.altKey || e.metaKey) return;
+
+    switch (e.key) {
+        case ' ': togglePlay(); break;
+        case 'ArrowLeft':  step(e.shiftKey ? -10 : -1); break;
+        case 'ArrowRight': step(e.shiftKey ?  10 :  1); break;
+        case 'Home': seekFirst(); break;
+        case 'End':  seekLast(); break;
+        case ',': setSpeed(SPEEDS[Math.max(0, SPEEDS.indexOf(vid.playbackRate) - 1)]); break;
+        case '.': setSpeed(SPEEDS[Math.min(SPEEDS.length - 1, SPEEDS.indexOf(vid.playbackRate) + 1)]); break;
+        case 'i': case 'I': setIn(); break;
+        case 'o': case 'O': setOut(); break;
+        case 'f': case 'F': fullRange(); break;
+        case 'l': case 'L': toggleLoop(); break;
+        case 'a': case 'A': addRoi(); break;
+        case '?': showHelp(); break;
+        case 'Escape': hideHelp(); hideScript(); hideFieldEditor(); S.sel = -1; renderRois(); drawOverlay(); break;
+        case 'Delete': case 'Backspace': if (S.sel >= 0) delRoi(S.sel); break;
+        default:
+            if (['1','2','3','4'].includes(e.key) && +e.key - 1 < S.rois.length) selectRoi(+e.key - 1);
+            else return;
+    }
+    e.preventDefault();
+});
+
+window.addEventListener('beforeunload', () => { if (S.cur && S.dirHandle) saveRois(); });
+
+// ── boot ──
+loadLastFolder().then(h => {
+    if (h) { $('reopenBtn').style.display = ''; $('reopenNote').style.display = ''; }
+});
+S.fields = loadFields();
+loadNaming();
+renderTokenHint();
+renderRois();
+renderJobs();
+describeCapabilities();
+outFolderLabel();
+</script>
+</body>
+</html>
