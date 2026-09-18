@@ -301,7 +301,7 @@ code { font-family: ui-monospace, Consolas, monospace; font-size: .92em; color: 
                 <button onclick="fullRange()" title="Whole clip (F)">Full clip</button>
                 <button id="loopBtn" onclick="toggleLoop()" title="Loop the selection (L)">Loop: off</button>
                 <span class="spacer" style="flex:1"></span>
-                <span style="color:#585b70">drag the blue band or its edges</span>
+                <span style="color:#585b70">drag edges to trim &middot; drag anywhere to scrub &middot; Alt-drag band to move &middot; wheel = zoom, middle-drag = pan</span>
             </div>
             <div class="tl-ruler" id="tlRuler"></div>
             <div class="tl-track" id="tlTrack">
@@ -775,7 +775,7 @@ async function openVideo(v) {
     if (!ok) { toast('Browser could not decode ' + v.name, true); return; }
 
     S.native = { w: vid.videoWidth, h: vid.videoHeight };
-    S.duration = vid.duration || 0;
+    S.duration = vid.duration || 0; resetView();
     S.fps = parseFloat($('fpsInput').value) || 30;
     ovl.width = S.native.w; ovl.height = S.native.h;
     $('dimInfo').textContent = `${S.native.w}×${S.native.h} · ${fmtTime(S.duration)}`;
@@ -1347,22 +1347,53 @@ function niceStep(dur, width) {
 function buildRuler() {
     const w = tlTrack.clientWidth;
     if (!S.duration || !w) { tlRuler.innerHTML = ''; return; }
-    const step = niceStep(S.duration, w);
+    if (!S.view) resetView();
+    const a = viewA(), b = viewB(), step = niceStep(b - a, w);
     let html = '';
-    for (let t = 0; t <= S.duration + .001; t += step) {
-        const pct = (t / S.duration) * 100;
-        html += `<i style="left:${pct}%"></i><span style="left:${pct}%">${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}</span>`;
+    for (let t = Math.ceil(a / step) * step; t <= b + .001; t += step) {
+        const pct = t2f(t) * 100;
+        if (pct < -0.5 || pct > 100.5) continue;
+        const lbl = step >= 1
+            ? `${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`
+            : `${t.toFixed(step >= 0.1 ? 1 : 2)}s`;
+        html += `<i style="left:${pct}%"></i><span style="left:${pct}%">${lbl}</span>`;
     }
     tlRuler.innerHTML = html;
 }
+// Visible window on the timeline. Zoom/pan change this; the trim range
+// (S.inT/S.outT) and the playhead (vid.currentTime) are independent of it.
+function viewA() { return S.view ? S.view.a : 0; }
+function viewB() { return S.view ? S.view.b : S.duration; }
+function viewSpan() { return Math.max(1e-3, viewB() - viewA()); }
+function t2f(t) { return (t - viewA()) / viewSpan(); }        // time -> 0..1 across the track
+function f2t(f) { return viewA() + f * viewSpan(); }
+function px2t(clientX) {
+    const r = tlTrack.getBoundingClientRect();
+    return clamp(f2t((clientX - r.left) / r.width), 0, S.duration);
+}
+function resetView() { S.view = { a: 0, b: S.duration || 0 }; }
+function clampView() {
+    const dur = S.duration || 0, min = 0.05;         // never zoom past ~50 ms
+    let a = S.view.a, b = S.view.b;
+    if (b - a < min) b = a + min;
+    if (b - a > dur) { a = 0; b = dur; }
+    if (a < 0) { b -= a; a = 0; }
+    if (b > dur) { a -= (b - dur); b = dur; if (a < 0) a = 0; }
+    S.view.a = a; S.view.b = b;
+}
+
 function drawTimeline() {
     if (!S.duration) return;
-    const a = (S.inT / S.duration) * 100, b = (S.outT / S.duration) * 100;
-    tlSel.style.left = a + '%';
-    tlSel.style.width = Math.max(0, b - a) + '%';
-    dimL.style.left = '0'; dimL.style.width = a + '%';
-    dimR.style.left = b + '%'; dimR.style.width = (100 - b) + '%';
-    tlPlay.style.left = ((vid.currentTime / S.duration) * 100) + '%';
+    if (!S.view) resetView();
+    const inF = t2f(S.inT), outF = t2f(S.outT);
+    const cl = f => Math.max(0, Math.min(1, f)) * 100;
+    tlSel.style.left = inF * 100 + '%';
+    tlSel.style.width = Math.max(0, outF - inF) * 100 + '%';
+    dimL.style.left = '0'; dimL.style.width = cl(inF) + '%';
+    dimR.style.left = cl(outF) + '%'; dimR.style.width = (100 - cl(outF)) + '%';
+    const pf = t2f(vid.currentTime);
+    tlPlay.style.left = pf * 100 + '%';
+    tlPlay.style.display = (pf < -0.01 || pf > 1.01) ? 'none' : 'block';
 }
 function updateTimes() {
     $('tIn').textContent = fmtTime(S.inT);
@@ -1371,22 +1402,38 @@ function updateTimes() {
     updatePreview();
 }
 
+// Two independent functions on one track:
+//   - the trim handles set In / Out; Alt-drag the blue band moves the whole range
+//   - a plain drag anywhere (including over the band) scrubs the playhead, so you
+//     can always see where you are, even when the playhead is inside the trim range
+//   - middle-drag pans, the wheel zooms; both leave the trim and playhead untouched
 let tdrag = null;
 tlTrack.addEventListener('pointerdown', e => {
     if (!S.duration) return;
-    const rect = tlTrack.getBoundingClientRect();
-    const t = clamp(((e.clientX - rect.left) / rect.width) * S.duration, 0, S.duration);
+    const t = px2t(e.clientX);
     const hnd = e.target.dataset ? e.target.dataset.h : null;
-    if (hnd) tdrag = { mode: hnd };
-    else if (e.target === tlSel) tdrag = { mode: 'move', grab: t - S.inT, len: S.outT - S.inT };
-    else { vid.currentTime = t; tdrag = { mode: 'scrub' }; }
+    if (e.button === 1) {                                    // middle: pan
+        tdrag = { mode: 'pan', x: e.clientX, a: viewA(), b: viewB() };
+    } else if (hnd) {                                        // edge: trim
+        tdrag = { mode: hnd };
+    } else if (e.target === tlSel && e.altKey) {             // Alt on band: move range
+        tdrag = { mode: 'move', grab: t - S.inT, len: S.outT - S.inT };
+    } else {                                                 // anything else: scrub
+        vid.currentTime = t; tdrag = { mode: 'scrub' };
+    }
     tlTrack.setPointerCapture(e.pointerId);
     e.preventDefault();
 });
 tlTrack.addEventListener('pointermove', e => {
     if (!tdrag || !S.duration) return;
-    const rect = tlTrack.getBoundingClientRect();
-    const t = clamp(((e.clientX - rect.left) / rect.width) * S.duration, 0, S.duration);
+    if (tdrag.mode === 'pan') {
+        const r = tlTrack.getBoundingClientRect();
+        const dt = ((e.clientX - tdrag.x) / r.width) * (tdrag.b - tdrag.a);
+        S.view.a = tdrag.a - dt; S.view.b = tdrag.b - dt; clampView();
+        drawTimeline(); buildRuler();
+        return;
+    }
+    const t = px2t(e.clientX);
     if (tdrag.mode === 'l')      S.inT  = Math.min(t, S.outT - .05);
     else if (tdrag.mode === 'r') S.outT = Math.max(t, S.inT + .05);
     else if (tdrag.mode === 'move') {
@@ -1396,13 +1443,33 @@ tlTrack.addEventListener('pointermove', e => {
     drawTimeline(); updateTimes();
 });
 tlTrack.addEventListener('pointerup', () => {
-    if (tdrag && tdrag.mode !== 'scrub') scheduleSave();
+    if (tdrag && tdrag.mode !== 'scrub' && tdrag.mode !== 'pan') scheduleSave();
     tdrag = null;
 });
+// Wheel: zoom around the cursor. Shift-wheel (or a horizontal wheel) pans instead.
+tlTrack.addEventListener('wheel', e => {
+    if (!S.duration) return;
+    e.preventDefault();
+    if (!S.view) resetView();
+    if (e.shiftKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+        const d = (e.deltaY || e.deltaX);
+        const shift = (d / 500) * viewSpan();
+        S.view.a += shift; S.view.b += shift;
+    } else {
+        const r = tlTrack.getBoundingClientRect();
+        const anchor = f2t((e.clientX - r.left) / r.width);   // time under the cursor stays put
+        const k = e.deltaY < 0 ? 0.82 : 1.22;                 // in / out
+        S.view.a = anchor - (anchor - viewA()) * k;
+        S.view.b = anchor + (viewB() - anchor) * k;
+    }
+    clampView();
+    drawTimeline(); buildRuler();
+}, { passive: false });
+tlTrack.addEventListener('auxclick', e => { if (e.button === 1) e.preventDefault(); });
 
 function setIn()  { S.inT = Math.min(vid.currentTime, S.outT - .05); drawTimeline(); updateTimes(); scheduleSave(); }
 function setOut() { S.outT = Math.max(vid.currentTime, S.inT + .05); drawTimeline(); updateTimes(); scheduleSave(); }
-function fullRange() { S.inT = 0; S.outT = S.duration; drawTimeline(); updateTimes(); scheduleSave(); }
+function fullRange() { S.inT = 0; S.outT = S.duration; resetView(); drawTimeline(); buildRuler(); updateTimes(); scheduleSave(); }
 function toggleLoop() {
     S.loop = !S.loop;
     $('loopBtn').textContent = 'Loop: ' + (S.loop ? 'on' : 'off');
