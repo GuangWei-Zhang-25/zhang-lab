@@ -162,7 +162,7 @@
         <div class="tool-eyebrow"><i class="fas fa-wave-square"></i> Behavior · Fiber Photometry</div>
         <h1 class="tool-name">EthoTrace</h1>
         <p class="tool-tagline">
-          Behavioral annotation and fiber-photometry analysis in one offline browser environment. Score bouts directly on the video timeline, and the same event definitions drive &Delta;F/F computation, event alignment, figures, and statistical testing, with no export step in between.
+          Behavioral annotation and fiber-photometry analysis in one offline browser environment. Score bouts directly on the video timeline, and the same event definitions drive event alignment, figures, and statistical testing on the &Delta;F/F computed in the same environment, with no export step in between.
         </p>
         <div class="tool-actions">
           <a href="Tools/ethotrace/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch EthoTrace</a>
@@ -181,7 +181,7 @@
       <div class="tool-body">
         <h3>What it does</h3>
         <p>
-          Relating neural activity to natural behavior is a chain of decisions: an experimenter defines when a behavior starts and stops, neural activity is aligned to that event, and measurements from the aligned signal support a statistical inference. These steps usually live in separate programs, with behavioral events exported from an annotation tool and re-imported into a photometry script. That hand-off is where errors enter without announcing themselves: a 30 frames/s assumption applied to a 25 frames/s recording places every bout at 1.2&times; its true time.
+          Relating neural activity to natural behavior is a chain of decisions: an experimenter defines when a behavior starts and stops, neural activity is aligned to that event, and measurements from the aligned signal support a statistical inference. These steps usually live in separate programs, with behavioral events exported from an annotation tool and re-imported into a photometry script. That hand-off is where errors enter without announcing themselves: an assumed frame rate or a misaligned export shifts every event in time, and no downstream script will object.
         </p>
         <p>
           <strong>EthoTrace</strong> keeps behavioral annotation and fiber-photometry analysis in one computational context. The video and the fluorescence record are opened together from a single session folder, and a bout marked on the video is the same object that is aligned, plotted, and tested. The whole application is one self-contained HTML file in plain JavaScript that runs in the browser on your own computer. There is no package to install, no Python or MATLAB runtime, no server, and no account, and your data are never uploaded.
@@ -203,7 +203,7 @@
 
         <div class="stage">
           <div class="stage-head"><span class="stage-num">1</span><h4>One folder, one timeline</h4></div>
-          <p>Open a session folder containing the behavioral video (MP4) and the photometry file (<code>Fluorescence.csv</code>, with a timestamp in milliseconds and paired 410-nm and 470-nm samples on each row). Both streams are loaded onto a single timeline that shares one clock starting at zero. Behavior is scored on a frame grid whose rate you set (30 frames/s by default), independently of the video's native frame rate, and photometry samples are placed by their own timestamps rather than by frame index. Annotations and analysis settings (<code>analysis_settings.json</code>) are written back into the same folder as plain files, so each session carries its own analysis configuration alongside its raw data.</p>
+          <p>Open a session folder containing the behavioral video (MP4) and the photometry file exported by the acquisition software (<code>Fluorescence.csv</code>: a configuration line, a header row, then one row per sample with a millisecond timestamp and paired 410-nm and 470-nm values). Both streams are loaded onto one timeline. Behavior is scored on a frame grid whose rate you set (30 frames/s by default), independently of the video's native frame rate. The analyses place photometry samples by their own timestamps rather than by frame index; the trace drawn under the video while annotating is a navigation aid spread evenly across the video's length. Annotations and analysis settings (<code>analysis_settings.json</code>) are written back into the same folder as plain files, so each session carries its own analysis configuration alongside its raw data.</p>
         </div>
 
         <div class="stage">
@@ -220,30 +220,33 @@
         <div class="stage">
           <div class="stage-head"><span class="stage-num">3</span><h4>Photometry processing <span class="stage-tag">· the baseline convention, stated</span></h4></div>
           <p>The 470-nm signal is regressed on the 410-nm isosbestic channel by ordinary least squares across the whole session. The baseline is the fitted control offset by the 10th percentile of the regression residuals, and the resulting &Delta;F/F is smoothed with a Savitzky&ndash;Golay filter (11-sample window, cubic). No other detrending, z-scoring, or per-trial baseline subtraction is applied.</p>
-          <p>The Annotate tab shows a fast <em>display</em> &Delta;F/F (baseline = fitted control) for navigation; every reported number uses the <em>analysis</em> &Delta;F/F defined above. Keeping the two explicitly separate avoids treating a trace read off the annotation screen as the analyzed signal.</p>
+          <p>The Annotate tab shows a fast <em>display</em> &Delta;F/F (baseline = fitted control) for navigation; every reported number uses the <em>analysis</em> &Delta;F/F defined above. Keeping the two explicitly separate avoids treating a trace read off the annotation screen as the analyzed signal. (If a session has only a precomputed &Delta;F/F and no raw <code>Fluorescence.csv</code>, the analysis runs on that trace and the report warns that the baseline convention and timing differ.)</p>
         </div>
 
         <div class="stage">
           <div class="stage-head"><span class="stage-num">4</span><h4>Individual events, then aligned averages</h4></div>
-          <p>A bout becomes an analysis object as soon as it is marked. Every retrieval is drawn as its own trial, from 5&nbsp;s before to 10&nbsp;s after onset, with neighboring bouts shaded by behavior. When behaviors occur as a stereotyped sequence, this shows whether a signal change belongs to the scored behavior or to what immediately preceded it, which an average across trials cannot.</p>
-          <p>Repeated bouts of any behavior are then aligned to their own onsets and shown as a heat map (longest bout first, one shared color scale) with the mean &plusmn; SEM beneath. Each bout keeps its full observed duration. Where an aligned window extends beyond a bout's available data, the cells are <strong>left empty rather than padded, held, or extrapolated</strong>: they appear hatched, and the mean is drawn dashed wherever fewer than half the bouts contribute, so declining data coverage is visible in the figure.</p>
+          <p>A bout becomes an analysis object as soon as it is marked. Every retrieval is drawn as its own trial, from 5&nbsp;s before to 10&nbsp;s after onset, with neighboring bouts shaded by behavior. When behaviors occur as a stereotyped sequence, a signal change near onset may belong to the scored behavior or to what immediately preceded it. Drawing each trial in its own behavioral context makes that ambiguity visible on the trial itself, which an average across trials cannot.</p>
+          <p>Repeated bouts of each of the four pup-directed behaviors (approach, investigation, retrieval, and nest-based care) are then aligned to their own onsets and shown as a heat map (longest bout first, one shared color scale) with the mean &plusmn; SEM beneath. Each bout keeps its full observed duration. Where an aligned window extends beyond a bout's available data, the cells are <strong>left empty rather than padded, held, or extrapolated</strong>: they appear hatched, and the mean is drawn dashed wherever fewer than half the bouts contribute, so declining data coverage is visible in the figure.</p>
         </div>
 
         <div class="stage">
           <div class="stage-head"><span class="stage-num">5</span><h4>Statistics, with the decision retained</h4></div>
-          <p>Each bout is reduced to the mean of its analysis &Delta;F/F from onset to offset, and every bout is shown as an individual point. The test for each comparison is selected from assumption checks computed on those same values:</p>
+          <p>Every bout enters the statistics as an individual observation, and the test for each comparison is selected from assumption checks computed on the values being compared:</p>
           <ul>
-            <li><strong>Before vs. after onset:</strong> a Shapiro&ndash;Wilk test on the paired differences selects a paired <em>t</em>-test or a Wilcoxon signed-rank test.</li>
-            <li><strong>Between behaviors:</strong> Shapiro&ndash;Wilk tests on each group and a median-centered Levene's test select Student's <em>t</em>-test, Welch's <em>t</em>-test, or the Mann&ndash;Whitney <em>U</em> test.</li>
+            <li><strong>Before vs. after onset:</strong> each bout contributes its mean &Delta;F/F over a window before onset and a window after onset (bouts that do not cover both windows are excluded). A Shapiro&ndash;Wilk test on the paired differences selects a paired <em>t</em>-test or a Wilcoxon signed-rank test.</li>
+            <li><strong>Between behaviors:</strong> each bout is reduced to the mean of its analysis &Delta;F/F from onset to offset and shown as an individual point on a box plot. Shapiro&ndash;Wilk tests on each group and a median-centered Levene's test select Student's <em>t</em>-test, Welch's <em>t</em>-test, or the Mann&ndash;Whitney <em>U</em> test.</li>
             <li>When a deciding assumption test returns <em>P</em> between 0.04 and 0.06, the choice is flagged as <strong>marginal</strong> and the <em>P</em> value of the test not selected is reported alongside it.</li>
             <li>Selection can instead be forced to parametric or nonparametric for a session, and the forced choice is recorded.</li>
           </ul>
-          <p>Tests are two-sided at &alpha; = 0.05, each with an effect size and a 95% confidence interval of the mean difference, and an optional Holm correction across the comparisons on a panel. A plain-text report (<code>Stats.txt</code>) lists every assumption check, every test, and every excluded bout, and figures export as PDF, PNG, or SVG.</p>
+          <p>Tests are two-sided at &alpha; = 0.05, each with an effect size and a 95% confidence interval of the mean difference, and a Holm correction can be applied across the comparisons on a panel (on by default in the current build). The <strong>Stats .txt</strong> button saves a plain-text report listing every assumption check, every test, and every excluded bout, and figures export as PDF, PNG, or SVG.</p>
         </div>
 
         <h3 class="ruled">Checked against NumPy and SciPy</h3>
         <p>
-          The &Delta;F/F computation and statistical tests are dependency-free JavaScript reimplementations, so they were verified against SciPy and NumPy. Across reference sessions and synthetic inputs, including 488 two-sample comparisons with ties and unequal group sizes, <em>P</em> values agreed within 2&nbsp;&times;&nbsp;10<sup>&minus;13</sup> relative error for the <em>t</em>, Wilcoxon signed-rank, Levene, and Mann&ndash;Whitney tests, and within 6&nbsp;&times;&nbsp;10<sup>&minus;9</sup> absolute error for Shapiro&ndash;Wilk. The analysis &Delta;F/F agreed with the NumPy/SciPy computation within 6&nbsp;&times;&nbsp;10<sup>&minus;16</sup>.
+          The &Delta;F/F computation and statistical tests are dependency-free JavaScript reimplementations, so the build described in the manuscript (23 September 2026) was verified against SciPy 1.17.1 and NumPy 2.4.3. Across six other recording sessions (against an in-house Python reference implementation) and synthetic inputs (against SciPy directly), including 488 two-sample comparisons with ties and unequal group sizes, <em>P</em> values agreed within 2&nbsp;&times;&nbsp;10<sup>&minus;13</sup> relative error for the <em>t</em>, Wilcoxon signed-rank, Levene, and Mann&ndash;Whitney tests, and within 6&nbsp;&times;&nbsp;10<sup>&minus;9</sup> absolute error for Shapiro&ndash;Wilk. In the demonstration session, all seven <em>P</em> values agreed within 10<sup>&minus;14</sup> relative error with the same tests selected, and the analysis &Delta;F/F agreed with the NumPy/SciPy computation within 6&nbsp;&times;&nbsp;10<sup>&minus;16</sup>.
+        </p>
+        <p>
+          This agreement is a property of that build, not a guarantee for later builds.
         </p>
         <p>
           The workflow is demonstrated in the manuscript on a 26.4-min pup-retrieval session in a Vgat-Cre dam, following 72 annotated bouts of approach, investigation, retrieval, and nest-based care from their defining video frames through neural alignment to statistical comparison.
@@ -251,7 +254,7 @@
 
         <h3 class="ruled">Scope</h3>
         <p>
-          EthoTrace complements, rather than replaces, dedicated photometry packages and behavioral event loggers. It analyzes one session at a time with the bout as the unit of analysis, so its tests describe a session rather than a population; comparisons across animals belong in whatever analysis consumes its exported values. It does not detect transients or batch-process sessions, and the current build scores five fixed categories for one animal on a single track. Synchronization assumes that video and photometry start together, so hardware (TTL) synchronization should be used where available.
+          EthoTrace complements, rather than replaces, dedicated photometry packages and behavioral event loggers. It analyzes one session at a time with the bout as the unit of analysis, so its tests describe a session rather than a population; comparisons across animals belong in whatever analysis consumes its exported values. It does not detect transients or batch-process sessions, and the current build scores five fixed category slots (which can be renamed) for one animal on a single track. Synchronization assumes that video and photometry start together, with photometry timestamps starting at zero at the video's first frame, so hardware (TTL) synchronization should be used where available.
         </p>
 
         <h3 class="ruled">Highlights</h3>
@@ -261,7 +264,7 @@
           <span class="feature-chip"><i class="fas fa-link"></i> Annotation and analysis on one timeline</span>
           <span class="feature-chip"><i class="fas fa-border-none"></i> Missing data left empty, never extrapolated</span>
           <span class="feature-chip"><i class="fas fa-code-branch"></i> Test-selection decisions recorded</span>
-          <span class="feature-chip"><i class="fas fa-check-double"></i> Verified against NumPy/SciPy</span>
+          <span class="feature-chip"><i class="fas fa-check-double"></i> Checked against NumPy/SciPy (manuscript build)</span>
         </div>
 
         <div class="quick-start">
@@ -278,7 +281,7 @@
           <i class="fas fa-envelope notice-icon"></i>
           <div>
             <h4>Questions, data, and source</h4>
-            <p>The session data supporting the manuscript will be posted on this page. The tool and data are also available from the corresponding authors on request: <a href="mailto:guangwei.zhang@vcuhealth.org?subject=EthoTrace">guangwei.zhang@vcuhealth.org</a> and <a href="mailto:can.tao@vcuhealth.org?subject=EthoTrace">can.tao@vcuhealth.org</a>.</p>
+            <p>The session data supporting the manuscript will be posted on this page. The tool is also available from the corresponding authors on request: <a href="mailto:guangwei.zhang@vcuhealth.org?subject=EthoTrace">guangwei.zhang@vcuhealth.org</a> and <a href="mailto:can.tao@vcuhealth.org?subject=EthoTrace">can.tao@vcuhealth.org</a>.</p>
           </div>
         </div>
 
