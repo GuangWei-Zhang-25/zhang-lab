@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EthoTrace | Zhang Lab Tools</title>
+  <meta name="description" content="EthoTrace: behavioral annotation and fiber-photometry analysis in one offline, browser-native environment, from the Zhang Laboratory at VCU">
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #1a365d;
+      --primary-light: #2c5282;
+      --primary-dark: #0f2744;
+      --accent: #c9a227;
+      --text-primary: #1a202c;
+      --text-secondary: #4a5568;
+      --text-muted: #718096;
+      --bg-light: #f7fafc;
+      --bg-warm: #fffbf5;
+      --white: #ffffff;
+      --border-light: #e2e8f0;
+      --border-medium: #cbd5e0;
+      --font-serif: 'Crimson Text', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: all 0.3s ease;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-sans); font-size: 16px; line-height: 1.7; color: var(--text-primary); background: var(--white); -webkit-font-smoothing: antialiased; }
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .navbar { position: fixed; width: 100%; top: 0; z-index: 1000; background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-light); transition: var(--transition); }
+    .navbar .container { max-width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 24px; }
+    .nav-brand a { text-decoration: none; color: inherit; display: flex; align-items: center; gap: 0.75rem; }
+    .nav-logo { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--primary); letter-spacing: -0.02em; }
+    .nav-divider { width: 1px; height: 24px; background: var(--border-medium); }
+    .nav-subtitle { font-size: 0.85rem; color: var(--text-muted); }
+    .nav-menu { display: flex; list-style: none; gap: 1.5rem; }
+    .nav-menu a { text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; transition: var(--transition); position: relative; }
+    .nav-menu a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--primary); transition: var(--transition); }
+    .nav-menu a:hover { color: var(--primary); } .nav-menu a:hover::after { width: 100%; }
+    .nav-toggle { display: none; flex-direction: column; cursor: pointer; gap: 5px; }
+    .nav-toggle span { width: 24px; height: 2px; background: var(--primary); }
+    .detail-main { margin-top: 70px; padding: 2.5rem 0 4rem; }
+    .back-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; margin-bottom: 1.5rem; transition: var(--transition); }
+    .back-link:hover { color: var(--primary); gap: 0.7rem; }
+    .tool-card { border: 1px solid var(--border-light); border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(26,54,93,0.06); }
+    .tool-hero { padding: 2.5rem 2.5rem 2rem; background: linear-gradient(135deg, #0f2744 0%, #1a365d 55%, #2c5282 100%); color: var(--white); }
+    .tool-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem; }
+    .tool-name { font-family: var(--font-serif); font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.15; }
+    .tool-tagline { font-size: 1.05rem; color: rgba(255,255,255,0.85); max-width: 660px; margin-bottom: 1.5rem; }
+    .tool-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+    .btn-launch { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.6rem; background: var(--accent); color: #3a2e0a; text-decoration: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; transition: var(--transition); }
+    .btn-launch:hover { background: #e0b736; transform: translateY(-2px); }
+    .tool-badge-note { font-size: 0.8rem; color: rgba(255,255,255,0.7); display: inline-flex; align-items: center; gap: 0.4rem; }
+    .btn-paper { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.5rem; background: rgba(255,255,255,0.1); color: var(--white); text-decoration: none; border: 1px solid rgba(255,255,255,0.35); border-radius: 8px; font-size: 0.95rem; font-weight: 600; transition: var(--transition); }
+    .btn-paper:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.6); }
+    .tool-author { display: flex; align-items: center; gap: 0.9rem; padding: 1.25rem 2.5rem; background: var(--bg-light); border-bottom: 1px solid var(--border-light); }
+    .tool-author img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; object-position: center 30%; border: 2px solid var(--white); box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    .tool-author-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4; }
+    .tool-author-text strong { color: var(--primary-dark); }
+    .tool-author-text a { color: var(--primary-light); text-decoration: none; font-weight: 500; }
+    .tool-author-text a:hover { text-decoration: underline; }
+    .tool-body { padding: 2.25rem 2.5rem 2.5rem; background: var(--white); }
+    .tool-body h3 { font-family: var(--font-serif); font-size: 1.35rem; color: var(--primary-dark); margin: 0 0 0.75rem; }
+    .tool-body h3.ruled { border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 1.5rem; }
+    .tool-body p { color: var(--text-secondary); margin-bottom: 1.1rem; }
+    .tool-body strong { color: var(--primary-dark); }
+    .tool-body code { font-size: 0.85em; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 4px; padding: 0.05em 0.35em; color: var(--primary-dark); }
+    .tool-body kbd { font-family: var(--font-sans); font-size: 0.8em; font-weight: 600; background: var(--white); border: 1px solid var(--border-medium); border-bottom-width: 2px; border-radius: 4px; padding: 0.05em 0.4em; color: var(--primary-dark); }
+
+    /* One-line pipeline: the same bouts flow through every stage */
+    .flow { display: flex; align-items: stretch; gap: 0.4rem; margin: 0.5rem 0 1.75rem; }
+    .flow-step { flex: 1 1 0; min-width: 0; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 10px; padding: 0.8rem 0.7rem; text-align: center; }
+    .flow-step i { color: var(--primary); font-size: 1.05rem; margin-bottom: 0.3rem; display: block; }
+    .flow-step b { display: block; font-size: 0.82rem; color: var(--primary-dark); line-height: 1.3; }
+    .flow-step span { display: block; font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; margin-top: 0.2rem; }
+    .flow-arrow { display: flex; align-items: center; color: var(--accent); font-size: 0.85rem; }
+
+    .stage { border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 1.5rem; }
+    .stage-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .stage-num { width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+    .stage-head h4 { font-family: var(--font-serif); font-size: 1.2rem; color: var(--primary-dark); margin: 0; }
+    .stage-head .stage-tag { font-size: 0.72rem; color: var(--text-muted); font-weight: 500; }
+    .stage p { font-size: 0.93rem; }
+    .stage ul { margin: -0.4rem 0 1.1rem 1.2rem; color: var(--text-secondary); font-size: 0.93rem; }
+    .stage li { margin-bottom: 0.3rem; }
+
+    .tool-features { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.5rem; }
+    .feature-chip { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 999px; padding: 0.45rem 0.9rem; font-size: 0.82rem; color: var(--text-secondary); }
+    .feature-chip i { color: var(--primary); font-size: 0.8rem; }
+
+    .quick-start { background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg-light) 100%); border-left: 4px solid var(--accent); border-radius: 8px; padding: 1.25rem 1.5rem; margin-top: 1.75rem; }
+    .quick-start h4 { font-family: var(--font-serif); color: var(--primary-dark); margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; }
+    .quick-start ol { font-size: 0.9rem; color: var(--text-secondary); margin: 0 0 0 1.2rem; }
+    .quick-start li { margin-bottom: 0.25rem; }
+    .quick-start a { color: var(--primary); font-weight: 500; }
+
+    .notice { display: flex; gap: 1rem; align-items: flex-start; background: var(--bg-light); border: 1px solid var(--border-light); border-left: 4px solid var(--primary-light); border-radius: 8px; padding: 1.1rem 1.4rem; margin-top: 1rem; }
+    .notice i.notice-icon { color: var(--primary-light); font-size: 1.1rem; margin-top: 0.2rem; }
+    .notice h4 { font-family: var(--font-serif); font-size: 1.05rem; color: var(--primary-dark); margin-bottom: 0.25rem; }
+    .notice p { font-size: 0.9rem; color: var(--text-secondary); margin: 0; }
+
+    .reference { margin-top: 1.75rem; padding: 1rem 1.25rem; border: 1px solid var(--border-light); border-radius: 8px; background: var(--bg-light); font-size: 0.85rem; color: var(--text-secondary); }
+    .reference strong { color: var(--primary-dark); }
+    .reference p { margin: 0 0 0.4rem; color: var(--text-secondary); }
+    .reference p:last-child { margin-bottom: 0; }
+    .reference a { color: var(--primary); font-weight: 500; }
+
+    .footer { background: var(--primary-dark); color: rgba(255,255,255,0.8); padding: 3rem 0; }
+    .footer-content { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .footer-brand { font-family: var(--font-serif); font-size: 1.25rem; color: var(--white); font-weight: 600; }
+    .footer-text { font-size: 0.875rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.875rem; }
+    .footer-links a:hover { color: var(--white); }
+    @media (max-width: 768px) {
+      .nav-menu { position: fixed; left: -100%; top: 70px; flex-direction: column; background: var(--white); width: 100%; text-align: center; padding: 2rem 0; gap: 1.5rem; transition: var(--transition); box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+      .nav-menu.active { left: 0; }
+      .nav-toggle { display: flex; }
+      .nav-subtitle, .nav-divider { display: none; }
+      .tool-hero, .tool-author, .tool-body { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .tool-name { font-size: 1.7rem; }
+      .flow { flex-direction: column; }
+      .flow-arrow { justify-content: center; transform: rotate(90deg); }
+      .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-brand">
+      <a href="index.html">
+        <span class="nav-logo">Zhang Lab</span>
+        <span class="nav-divider"></span>
+        <span class="nav-subtitle">Neuroscience at VCU</span>
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="publications.html">Publications</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="tools.html">Tools</a></li>
+      <li><a href="resources.html">Resources</a></li>
+      <li><a href="funding.html">Funding</a></li>
+      <li><a href="teaching.html">Teaching</a></li>
+      <li><a href="news.html">News</a></li>
+      <li><a href="activities.html">Activities</a></li>
+      <li><a href="contact.html">Join Us</a></li>
+    </ul>
+    <div class="nav-toggle"><span></span><span></span><span></span></div>
+  </div>
+</nav>
+
+<main class="detail-main">
+  <div class="container">
+    <a href="tools.html" class="back-link"><i class="fas fa-arrow-left"></i> All Tools</a>
+    <div class="tool-card">
+      <div class="tool-hero">
+        <div class="tool-eyebrow"><i class="fas fa-wave-square"></i> Behavior · Fiber Photometry</div>
+        <h1 class="tool-name">EthoTrace</h1>
+        <p class="tool-tagline">
+          Behavioral annotation and fiber-photometry analysis in one offline browser environment. Score bouts directly on the video timeline, and the same event definitions drive &Delta;F/F computation, event alignment, figures, and statistical testing, with no export step in between.
+        </p>
+        <div class="tool-actions">
+          <a href="Tools/ethotrace/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch EthoTrace</a>
+          <a href="Tools/ethotrace/index.html" class="btn-paper" download="EthoTrace.html" title="Download EthoTrace as a single HTML file (saves as EthoTrace.html)"><i class="fas fa-download"></i> Download (single HTML file)</a>
+          <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs offline: no install, no upload, no server</span>
+        </div>
+      </div>
+      <div class="tool-author">
+        <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo">
+        <div class="tool-author-text">
+          Developed by <strong>Henry Oo</strong>, with Dr. Can Tao &amp; Dr. Guang-Wei Zhang.
+          <a href="team.html">See the team page →</a>
+        </div>
+      </div>
+
+      <div class="tool-body">
+        <h3>What it does</h3>
+        <p>
+          Relating neural activity to natural behavior is a chain of decisions: an experimenter defines when a behavior starts and stops, neural activity is aligned to that event, and measurements from the aligned signal support a statistical inference. These steps usually live in separate programs, with behavioral events exported from an annotation tool and re-imported into a photometry script. That hand-off is where errors enter without announcing themselves: a 30 frames/s assumption applied to a 25 frames/s recording places every bout at 1.2&times; its true time.
+        </p>
+        <p>
+          <strong>EthoTrace</strong> keeps behavioral annotation and fiber-photometry analysis in one computational context. The video and the fluorescence record are opened together from a single session folder, and a bout marked on the video is the same object that is aligned, plotted, and tested. The whole application is one self-contained HTML file in plain JavaScript that runs in the browser on your own computer. There is no package to install, no Python or MATLAB runtime, no server, and no account, and your data are never uploaded.
+        </p>
+
+        <div class="flow" role="list" aria-label="EthoTrace workflow">
+          <div class="flow-step" role="listitem"><i class="fas fa-folder-open"></i><b>Session folder</b><span>video + Fluorescence.csv</span></div>
+          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+          <div class="flow-step" role="listitem"><i class="fas fa-film"></i><b>Annotate</b><span>bouts on the video timeline</span></div>
+          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+          <div class="flow-step" role="listitem"><i class="fas fa-wave-square"></i><b>&Delta;F/F</b><span>isosbestic-corrected</span></div>
+          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+          <div class="flow-step" role="listitem"><i class="fas fa-layer-group"></i><b>Align</b><span>trials, heat maps, mean &plusmn; SEM</span></div>
+          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
+          <div class="flow-step" role="listitem"><i class="fas fa-scale-balanced"></i><b>Statistics</b><span>with the test decision kept</span></div>
+        </div>
+
+        <h3>How it works</h3>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">1</span><h4>One folder, one timeline</h4></div>
+          <p>Open a session folder containing the behavioral video (MP4) and the photometry file (<code>Fluorescence.csv</code>, with a timestamp in milliseconds and paired 410-nm and 470-nm samples on each row). Both streams are loaded onto a single timeline that shares one clock starting at zero. Behavior is scored on a frame grid whose rate you set (30 frames/s by default), independently of the video's native frame rate, and photometry samples are placed by their own timestamps rather than by frame index. Annotations and analysis settings (<code>analysis_settings.json</code>) are written back into the same folder as plain files, so each session carries its own analysis configuration alongside its raw data.</p>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">2</span><h4>Annotate on the synchronized timeline</h4></div>
+          <p>The video plays above the &Delta;F/F trace and the behavior track, all sharing one zoom window, so signal and behavior are navigated together. Five categories sit on keys <kbd>1</kbd>&ndash;<kbd>5</kbd> (pup retrieval, nest-based care, pup approaching, pup investigation, and out of nest), and a bout is marked by pressing <kbd>I</kbd> at its first frame and <kbd>O</kbd> at its last.</p>
+          <ul>
+            <li>Bouts occupy one exclusive track, so no frame can carry two labels. They can be relabeled, resized, or deleted, with undo.</li>
+            <li>Annotations save automatically as a human-readable JSON file listing each bout's inclusive frame range and category.</li>
+            <li>Any bout can be exported as a video clip for inspection, or for training an automated classifier elsewhere.</li>
+            <li>The &Delta;F/F trace can be hidden so that scoring stays blind to the signal.</li>
+          </ul>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">3</span><h4>Photometry processing <span class="stage-tag">· the baseline convention, stated</span></h4></div>
+          <p>The 470-nm signal is regressed on the 410-nm isosbestic channel by ordinary least squares across the whole session. The baseline is the fitted control offset by the 10th percentile of the regression residuals, and the resulting &Delta;F/F is smoothed with a Savitzky&ndash;Golay filter (11-sample window, cubic). No other detrending, z-scoring, or per-trial baseline subtraction is applied.</p>
+          <p>The Annotate tab shows a fast <em>display</em> &Delta;F/F (baseline = fitted control) for navigation; every reported number uses the <em>analysis</em> &Delta;F/F defined above. Keeping the two explicitly separate avoids treating a trace read off the annotation screen as the analyzed signal.</p>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">4</span><h4>Individual events, then aligned averages</h4></div>
+          <p>A bout becomes an analysis object as soon as it is marked. Every retrieval is drawn as its own trial, from 5&nbsp;s before to 10&nbsp;s after onset, with neighboring bouts shaded by behavior. When behaviors occur as a stereotyped sequence, this shows whether a signal change belongs to the scored behavior or to what immediately preceded it, which an average across trials cannot.</p>
+          <p>Repeated bouts of any behavior are then aligned to their own onsets and shown as a heat map (longest bout first, one shared color scale) with the mean &plusmn; SEM beneath. Each bout keeps its full observed duration. Where an aligned window extends beyond a bout's available data, the cells are <strong>left empty rather than padded, held, or extrapolated</strong>: they appear hatched, and the mean is drawn dashed wherever fewer than half the bouts contribute, so declining data coverage is visible in the figure.</p>
+        </div>
+
+        <div class="stage">
+          <div class="stage-head"><span class="stage-num">5</span><h4>Statistics, with the decision retained</h4></div>
+          <p>Each bout is reduced to the mean of its analysis &Delta;F/F from onset to offset, and every bout is shown as an individual point. The test for each comparison is selected from assumption checks computed on those same values:</p>
+          <ul>
+            <li><strong>Before vs. after onset:</strong> a Shapiro&ndash;Wilk test on the paired differences selects a paired <em>t</em>-test or a Wilcoxon signed-rank test.</li>
+            <li><strong>Between behaviors:</strong> Shapiro&ndash;Wilk tests on each group and a median-centered Levene's test select Student's <em>t</em>-test, Welch's <em>t</em>-test, or the Mann&ndash;Whitney <em>U</em> test.</li>
+            <li>When a deciding assumption test returns <em>P</em> between 0.04 and 0.06, the choice is flagged as <strong>marginal</strong> and the <em>P</em> value of the test not selected is reported alongside it.</li>
+            <li>Selection can instead be forced to parametric or nonparametric for a session, and the forced choice is recorded.</li>
+          </ul>
+          <p>Tests are two-sided at &alpha; = 0.05, each with an effect size and a 95% confidence interval of the mean difference, and an optional Holm correction across the comparisons on a panel. A plain-text report (<code>Stats.txt</code>) lists every assumption check, every test, and every excluded bout, and figures export as PDF, PNG, or SVG.</p>
+        </div>
+
+        <h3 class="ruled">Checked against NumPy and SciPy</h3>
+        <p>
+          The &Delta;F/F computation and statistical tests are dependency-free JavaScript reimplementations, so they were verified against SciPy and NumPy. Across reference sessions and synthetic inputs, including 488 two-sample comparisons with ties and unequal group sizes, <em>P</em> values agreed within 2&nbsp;&times;&nbsp;10<sup>&minus;13</sup> relative error for the <em>t</em>, Wilcoxon signed-rank, Levene, and Mann&ndash;Whitney tests, and within 6&nbsp;&times;&nbsp;10<sup>&minus;9</sup> absolute error for Shapiro&ndash;Wilk. The analysis &Delta;F/F agreed with the NumPy/SciPy computation within 6&nbsp;&times;&nbsp;10<sup>&minus;16</sup>.
+        </p>
+        <p>
+          The workflow is demonstrated in the manuscript on a 26.4-min pup-retrieval session in a Vgat-Cre dam, following 72 annotated bouts of approach, investigation, retrieval, and nest-based care from their defining video frames through neural alignment to statistical comparison.
+        </p>
+
+        <h3 class="ruled">Scope</h3>
+        <p>
+          EthoTrace complements, rather than replaces, dedicated photometry packages and behavioral event loggers. It analyzes one session at a time with the bout as the unit of analysis, so its tests describe a session rather than a population; comparisons across animals belong in whatever analysis consumes its exported values. It does not detect transients or batch-process sessions, and the current build scores five fixed categories for one animal on a single track. Synchronization assumes that video and photometry start together, so hardware (TTL) synchronization should be used where available.
+        </p>
+
+        <h3 class="ruled">Highlights</h3>
+        <div class="tool-features">
+          <span class="feature-chip"><i class="fas fa-lock"></i> Offline: no install, no upload, no server</span>
+          <span class="feature-chip"><i class="fas fa-file-code"></i> One self-contained HTML file</span>
+          <span class="feature-chip"><i class="fas fa-link"></i> Annotation and analysis on one timeline</span>
+          <span class="feature-chip"><i class="fas fa-border-none"></i> Missing data left empty, never extrapolated</span>
+          <span class="feature-chip"><i class="fas fa-code-branch"></i> Test-selection decisions recorded</span>
+          <span class="feature-chip"><i class="fas fa-check-double"></i> Verified against NumPy/SciPy</span>
+        </div>
+
+        <div class="quick-start">
+          <h4><i class="fas fa-bolt"></i> Quick start</h4>
+          <ol>
+            <li>Use a desktop <strong>Chrome</strong> or <strong>Edge</strong> browser (EthoTrace reads and writes your session folder through the browser's File System Access API).</li>
+            <li>Click <a href="Tools/ethotrace/" target="_blank">Launch EthoTrace</a>, or download the single HTML file and open it locally.</li>
+            <li>Click <strong>Open Video Folder</strong> and choose a session folder with the MP4 video and its <code>Fluorescence.csv</code>. Annotations auto-save next to the video. (You can also drop the files onto the page and save manually.)</li>
+            <li>Mark bouts in the <strong>Annotate</strong> tab, then open the <strong>Analysis</strong> tab for the aligned figures and statistics.</li>
+          </ol>
+        </div>
+
+        <div class="notice">
+          <i class="fas fa-envelope notice-icon"></i>
+          <div>
+            <h4>Questions, data, and source</h4>
+            <p>The session data supporting the manuscript will be posted on this page. The tool and data are also available from the corresponding authors on request: <a href="mailto:guangwei.zhang@vcuhealth.org?subject=EthoTrace">guangwei.zhang@vcuhealth.org</a> and <a href="mailto:can.tao@vcuhealth.org?subject=EthoTrace">can.tao@vcuhealth.org</a>.</p>
+          </div>
+        </div>
+
+        <div class="reference">
+          <p><strong>Reference.</strong> Oo H, Tao C<sup>*</sup>, Zhang G-W<sup>*</sup>. <em>EthoTrace: from behaviour to neural dynamics in a unified analysis framework.</em> Manuscript in preparation, 2026. <sup>*</sup>Corresponding authors.</p>
+          <p>Department of Neuroscience and Anatomy, School of Medicine, Virginia Commonwealth University.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-brand">Zhang Lab</div>
+    <p class="footer-text">&copy; 2025 Guang-Wei Zhang Laboratory. Virginia Commonwealth University.</p>
+    <div class="footer-links">
+      <a href="https://anatomy.vcu.edu/" target="_blank">Department</a>
+      <a href="https://www.vcu.edu/" target="_blank">VCU</a>
+      <a href="contact.html">Join Us</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const navToggle = document.querySelector('.nav-toggle');
+const navMenu = document.querySelector('.nav-menu');
+navToggle.addEventListener('click', () => { navMenu.classList.toggle('active'); });
+</script>
+
+</body>
+</html>
