@@ -21,7 +21,9 @@ the ordered list of brain regions the track passes through (with depth spans).
 Region labels use the Allen **316 "summary structures"** (cortical areas, hippocampal
 subfields, thalamic / midbrain / hypothalamic nuclei, …), not just coarse divisions.
 Only the regions the probe crosses are highlighted; use the **search box** to find and
-pin any region, or **Show all region surfaces** to browse the whole set.
+pin any region, or **Show all region surfaces** to browse the whole set. White matter
+("fiber tracts") is never drawn; it still appears in the crossed-region list and tip
+readout so its depth span is visible.
 
 ## Coordinate frames
 - **Qiu2018 in-vivo** (default) — live-brain estimate. Bregma at CCF (AP 5400, DV 440,

@@ -41,6 +41,7 @@
   .reglist{max-height:210px;overflow-y:auto}
   .regitem{display:flex;align-items:center;gap:8px;font-size:12px;padding:4px 2px;border-bottom:1px solid #232b36}
   .regitem:last-child{border-bottom:0}
+  .regitem.nodraw{opacity:.55;font-style:italic}
   .sw{width:12px;height:12px;border-radius:3px;flex:none;border:1px solid #0006}
   .regitem .nm{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .regitem .dp{color:var(--muted);font-variant-numeric:tabular-nums;font-size:11px}
@@ -138,7 +139,7 @@
           style="width:100%;padding:6px 8px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;color:var(--txt);font-size:12px">
         <div class="reglist" id="searchRes" style="margin-top:6px"></div>
         <label class="tog" style="margin-top:6px"><input type="checkbox" id="allReg"> Show all region surfaces</label>
-        <div class="hint">Regions the probe crosses are highlighted automatically. Click any region in the lists to pin/zoom it.</div>
+        <div class="hint">Regions the probe crosses are highlighted automatically. Click any region in the lists to pin/zoom it. White matter (fiber tracts) is listed for depth but not drawn.</div>
       </div>
 
       <div class="sec">
@@ -253,6 +254,8 @@ const regionMeshes = {};     // id -> mesh
 const regionList = [];       // array of region meshes (fine structures)
 const meshById = {};
 let rootMesh = null;
+// white matter ("fiber tracts") is never drawn; it still counts for the crossed-region list and tip readout
+const NO_DRAW = new Set([1009]);
 
 for(const m of MAN){
   const pos = new Float32Array(buf, m.voff, m.vcount*3);
@@ -273,6 +276,7 @@ for(const m of MAN){
   meshById[m.id] = mesh;
   if(m.shell){ rootMesh = mesh; mat.opacity = m.opacity; mat.color.set(0xaab4c2); }
   else { mesh.visible=false; mesh.userData.baseOpacity=m.opacity; regionMeshes[m.id]=mesh; regionList.push(mesh); }
+  if(NO_DRAW.has(m.id)) mat.visible=false;   // renderer skips it; raycasts still see it
 }
 
 /* ---------- axes + bregma marker ---------- */
@@ -471,7 +475,9 @@ function updateRegions(){
     '<span class="nm" title="'+r.m.name+'">'+r.m.acr+' · '+r.m.name+'</span>'+
     '<span class="dp">'+r.a.toFixed(2)+'–'+r.b.toFixed(2)+'</span></div>').join('');
   box.querySelectorAll('.regitem').forEach(el=>{
-    el.onclick=()=>{ const r=rows[+el.dataset.i]; togglePin(r.m.id); frameMesh(r.m.id); };
+    const r=rows[+el.dataset.i];
+    if(NO_DRAW.has(r.m.id)){ el.classList.add('nodraw'); el.title='White matter: listed for depth only, not drawn'; return; }
+    el.onclick=()=>{ togglePin(r.m.id); frameMesh(r.m.id); };
   });
 }
 
@@ -576,7 +582,7 @@ canvas.addEventListener('pointerup',ev=>{
   if(drag==='orbit' && moved<4){
     // treat as click: set entry on brain surface
     setNDC(ev);
-    const h=rayHit([rootMesh, ...Object.values(regionMeshes)]);
+    const h=rayHit([rootMesh, ...Object.values(regionMeshes).filter(m=>!NO_DRAW.has(m.userData.id))]);
     if(h.length){
       const p=h[0].point.clone();
       const dir=new THREE.Vector3().subVectors(
@@ -644,7 +650,7 @@ document.querySelectorAll('#viewBtns button').forEach(b=>{
 
 /* ---------- show-all + search ---------- */
 $('allReg').onchange=e=>{ showAll=e.target.checked; regionsDirty=true; };
-const REG_IDX = MAN.filter(m=>!m.shell);
+const REG_IDX = MAN.filter(m=>!m.shell && !NO_DRAW.has(m.id));
 const searchRes=$('searchRes');
 function renderSearch(q){
   q=q.trim().toLowerCase();
