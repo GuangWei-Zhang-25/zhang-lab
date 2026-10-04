@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EthoTrace | Zhang Lab Tools</title>
   <meta name="description" content="EthoTrace: behavioral annotation and fiber-photometry analysis in one offline, browser-native environment, from the Zhang Laboratory at VCU">
+  <link rel="icon" type="image/png" href="images/ethotrace/favicon-64.png">
+  <link rel="apple-touch-icon" href="images/ethotrace/icon-256.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="EthoTrace | Zhang Lab">
+  <meta property="og:description" content="Behavioral annotation and fiber-photometry analysis in one offline browser environment.">
+  <meta property="og:url" content="https://guangweizhang.com/tool-ethotrace.html">
+  <meta property="og:image" content="https://guangweizhang.com/images/ethotrace/social-preview.jpg">
+  <meta name="twitter:card" content="summary_large_image">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -48,6 +56,9 @@
     .tool-hero { padding: 2.5rem 2.5rem 2rem; background: linear-gradient(135deg, #0f2744 0%, #1a365d 55%, #2c5282 100%); color: var(--white); }
     .tool-eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.9rem; }
     .tool-name { font-family: var(--font-serif); font-size: 2.1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.15; }
+    .tool-title-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .tool-title-row .tool-name { margin-bottom: 0; }
+    .tool-icon { width: 60px; height: 60px; flex-shrink: 0; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255,255,255,0.18), 0 6px 18px rgba(0,0,0,0.3); }
     .tool-tagline { font-size: 1.05rem; color: rgba(255,255,255,0.85); max-width: 660px; margin-bottom: 1.5rem; }
     .tool-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
     .btn-launch { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.6rem; background: var(--accent); color: #3a2e0a; text-decoration: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; transition: var(--transition); }
@@ -69,13 +80,11 @@
     .tool-body code { font-size: 0.85em; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 4px; padding: 0.05em 0.35em; color: var(--primary-dark); }
     .tool-body kbd { font-family: var(--font-sans); font-size: 0.8em; font-weight: 600; background: var(--white); border: 1px solid var(--border-medium); border-bottom-width: 2px; border-radius: 4px; padding: 0.05em 0.4em; color: var(--primary-dark); }
 
-    /* One-line pipeline: the same bouts flow through every stage */
-    .flow { display: flex; align-items: stretch; gap: 0.4rem; margin: 0.5rem 0 1.75rem; }
-    .flow-step { flex: 1 1 0; min-width: 0; background: var(--bg-light); border: 1px solid var(--border-light); border-radius: 10px; padding: 0.8rem 0.7rem; text-align: center; }
-    .flow-step i { color: var(--primary); font-size: 1.05rem; margin-bottom: 0.3rem; display: block; }
-    .flow-step b { display: block; font-size: 0.82rem; color: var(--primary-dark); line-height: 1.3; }
-    .flow-step span { display: block; font-size: 0.72rem; color: var(--text-muted); line-height: 1.35; margin-top: 0.2rem; }
-    .flow-arrow { display: flex; align-items: center; color: var(--accent); font-size: 0.85rem; }
+    .paper-fig { margin: 1.25rem 0 2rem; border: 1px solid var(--border-light); border-radius: 10px; overflow: hidden; background: var(--white); box-shadow: 0 12px 32px rgba(26,54,93,0.1); }
+    .paper-fig a { display: block; }
+    .paper-fig img { width: 100%; display: block; }
+    .paper-fig figcaption { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; padding: 0.6rem 0.9rem; border-top: 1px solid var(--border-light); background: var(--bg-light); }
+    .paper-fig figcaption strong { color: var(--primary-dark); }
 
     .stage { border-top: 1px solid var(--border-light); padding-top: 1.5rem; margin-top: 1.5rem; }
     .stage-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
@@ -121,8 +130,7 @@
       .nav-subtitle, .nav-divider { display: none; }
       .tool-hero, .tool-author, .tool-body { padding-left: 1.5rem; padding-right: 1.5rem; }
       .tool-name { font-size: 1.7rem; }
-      .flow { flex-direction: column; }
-      .flow-arrow { justify-content: center; transform: rotate(90deg); }
+      .tool-icon { width: 48px; height: 48px; border-radius: 11px; }
       .footer-content { flex-direction: column; gap: 1rem; text-align: center; }
     }
   </style>
@@ -160,7 +168,10 @@
     <div class="tool-card">
       <div class="tool-hero">
         <div class="tool-eyebrow"><i class="fas fa-wave-square"></i> Behavior · Fiber Photometry</div>
-        <h1 class="tool-name">EthoTrace</h1>
+        <div class="tool-title-row">
+          <img src="images/ethotrace/icon-256.png" alt="" class="tool-icon">
+          <h1 class="tool-name">EthoTrace</h1>
+        </div>
         <p class="tool-tagline">
           Behavioral annotation and fiber-photometry analysis in one offline browser environment. Score bouts directly on the video timeline, and the same event definitions drive event alignment, figures, and statistical testing on the &Delta;F/F computed in the same environment, with no export step in between.
         </p>
@@ -187,17 +198,12 @@
           <strong>EthoTrace</strong> keeps behavioral annotation and fiber-photometry analysis in one computational context. The video and the fluorescence record are opened together from a single session folder, and a bout marked on the video is the same object that is aligned, plotted, and tested. The whole application is one self-contained HTML file in plain JavaScript that runs in the browser on your own computer. There is no package to install, no Python or MATLAB runtime, no server, and no account, and your data are never uploaded.
         </p>
 
-        <div class="flow" role="list" aria-label="EthoTrace workflow">
-          <div class="flow-step" role="listitem"><i class="fas fa-folder-open"></i><b>Session folder</b><span>video + Fluorescence.csv</span></div>
-          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
-          <div class="flow-step" role="listitem"><i class="fas fa-film"></i><b>Annotate</b><span>bouts on the video timeline</span></div>
-          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
-          <div class="flow-step" role="listitem"><i class="fas fa-wave-square"></i><b>&Delta;F/F</b><span>isosbestic-corrected</span></div>
-          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
-          <div class="flow-step" role="listitem"><i class="fas fa-layer-group"></i><b>Align</b><span>trials, heat maps, mean &plusmn; SEM</span></div>
-          <div class="flow-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></div>
-          <div class="flow-step" role="listitem"><i class="fas fa-scale-balanced"></i><b>Statistics</b><span>with the test decision kept</span></div>
-        </div>
+        <figure class="paper-fig">
+          <a href="images/ethotrace/graphical-abstract.jpg" target="_blank" title="Open the full-size graphical abstract">
+            <img src="images/ethotrace/graphical-abstract.jpg" alt="Graphical abstract. The usual workflow passes data from an annotation program to a photometry script to a statistics script through exports. In EthoTrace, a session folder with Video1.mp4 and Fluorescence.csv is read in place; bouts are scored on one timeline shared by the video and the ΔF/F trace, every bout is aligned with missing data left empty rather than padded, and each statistical test is reported with the assumption check that chose it, including a marginal Shapiro–Wilk P = 0.046 that selected the Mann–Whitney U test while the t-test is reported too.">
+          </a>
+          <figcaption><strong>EthoTrace at a glance.</strong> In the usual workflow, annotation, photometry and statistics live in separate programs joined by exports. EthoTrace reads the session folder in place and keeps scoring, alignment and testing in one file. <em>Graphical abstract from the manuscript; click to enlarge.</em></figcaption>
+        </figure>
 
         <h3>How it works</h3>
 
