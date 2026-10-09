@@ -1,0 +1,653 @@
+{
+  "schema_version": 1,
+  "method": "Bounded semantic none registration and shared_warp categorical interpolation",
+  "options": {
+    "alignment": "none",
+    "max_shift_px": 24.0,
+    "max_rotation_deg": 0.0,
+    "subdivisions": 2,
+    "max_correction_rounds": 2,
+    "min_overlap_dice": 0.55,
+    "interpolation": "shared_warp"
+  },
+  "z_coordinates_mm": [
+    0.0,
+    0.2,
+    0.4,
+    0.6000000000000001,
+    0.8,
+    1.0,
+    1.2000000000000002,
+    1.4000000000000001,
+    1.6
+  ],
+  "spacing_xy_mm": [
+    0.08,
+    0.08
+  ],
+  "origin_xy_mm": [
+    -0.16,
+    -0.16
+  ],
+  "padding_yx_px": [
+    2,
+    2
+  ],
+  "input_shape_zyx": [
+    5,
+    32,
+    32
+  ],
+  "output_shape_zyx": [
+    9,
+    36,
+    36
+  ],
+  "anchor_indices": [
+    0,
+    2,
+    4,
+    6,
+    8
+  ],
+  "anchor_positions_mm": [
+    0.0,
+    0.4,
+    0.8,
+    1.2000000000000002,
+    1.6
+  ],
+  "transforms": [
+    {
+      "section": 0,
+      "rotation_deg": 0.0,
+      "translation_xy_px": [
+        0.0,
+        0.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 1,
+      "rotation_deg": 0.0,
+      "translation_xy_px": [
+        0.0,
+        0.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 2,
+      "rotation_deg": 0.0,
+      "translation_xy_px": [
+        0.0,
+        0.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 3,
+      "rotation_deg": 0.0,
+      "translation_xy_px": [
+        0.0,
+        0.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 4,
+      "rotation_deg": 0.0,
+      "translation_xy_px": [
+        0.0,
+        0.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "stage": "shared_warp",
+      "pair": [
+        0,
+        1
+      ],
+      "accepted": false,
+      "objective_before": 0.5165710828507408,
+      "objective_after": 0.5165710828507408,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.0,
+      "minimum_all_partial_jacobian": 1.0,
+      "reason": "No safe candidate improved overlap; signed-distance interpolation used."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        1,
+        2
+      ],
+      "accepted": true,
+      "objective_before": 0.2808932448671847,
+      "objective_after": 0.2862080570616275,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.05764800999999997,
+      "minimum_all_partial_jacobian": 0.33538224582560305,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        2,
+        3
+      ],
+      "accepted": true,
+      "objective_before": 0.5778117400190432,
+      "objective_after": 0.6011527853037792,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.16806999999999994,
+      "minimum_all_partial_jacobian": 0.27628463613124143,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        3,
+        4
+      ],
+      "accepted": true,
+      "objective_before": 0.46854592531905404,
+      "objective_after": 0.5925088284940969,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.16806999999999994,
+      "minimum_all_partial_jacobian": 0.31217983302905594,
+      "reason": "Strict regularized named-label overlap improvement."
+    }
+  ],
+  "warnings": [
+    {
+      "code": "low_alignment_confidence",
+      "pair": [
+        0,
+        1
+      ],
+      "dice": 0.5165710828507408,
+      "message": "No shared named evidence or adjacent overlap is below threshold; anatomical review is required."
+    },
+    {
+      "code": "low_alignment_confidence",
+      "pair": [
+        1,
+        2
+      ],
+      "dice": 0.2808932448671847,
+      "message": "No shared named evidence or adjacent overlap is below threshold; anatomical review is required."
+    },
+    {
+      "code": "low_alignment_confidence",
+      "pair": [
+        3,
+        4
+      ],
+      "dice": 0.46854592531905404,
+      "message": "No shared named evidence or adjacent overlap is below threshold; anatomical review is required."
+    },
+    {
+      "code": "unresolved_tissue",
+      "source_voxels": 31,
+      "output_voxels": 31,
+      "message": "65535 denotes unresolved tissue; excluded from registration objectives and retained as a source-supported interpolation identity."
+    }
+  ],
+  "metrics": {
+    "mean_dice_before": 0.4609554982640057,
+    "mean_dice_after": 0.4609554982640057,
+    "min_dice_after": 0.2808932448671847,
+    "flagged_pairs": 3,
+    "input_sections": 5,
+    "output_voxels": 11664,
+    "unknown_voxels": 31,
+    "correction_count": 3,
+    "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+    "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+  },
+  "pairs": [
+    {
+      "pair": [
+        0,
+        1
+      ],
+      "method": "signed_distance",
+      "flow": {
+        "accepted": false,
+        "objective_before": 0.5165710828507408,
+        "objective_after": 0.5165710828507408,
+        "flow_grid_stride": 1,
+        "flow_grid_shape": [
+          36,
+          36
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 0.0,
+        "minimum_all_partial_jacobian": 1.0,
+        "reason": "No safe candidate improved overlap; signed-distance interpolation used."
+      },
+      "maximum_inverse_residual_pixels": 0.0,
+      "before": {
+        "dice": 0.5165710828507408,
+        "shared_label_mean_dice": 0.458705979547678,
+        "known_tissue_dice": 0.7480314960629921,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.5165710828507408,
+        "shared_label_mean_dice": 0.458705979547678,
+        "known_tissue_dice": 0.7480314960629921,
+        "shared_named_labels": 3
+      }
+    },
+    {
+      "pair": [
+        1,
+        2
+      ],
+      "method": "shared_warp",
+      "flow": {
+        "accepted": true,
+        "objective_before": 0.2808932448671847,
+        "objective_after": 0.2862080570616275,
+        "flow_grid_stride": 1,
+        "flow_grid_shape": [
+          36,
+          36
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 0.05764800999999997,
+        "minimum_all_partial_jacobian": 0.33538224582560305,
+        "reason": "Strict regularized named-label overlap improvement."
+      },
+      "maximum_inverse_residual_pixels": 9.918677348008495e-05,
+      "before": {
+        "dice": 0.2808932448671847,
+        "shared_label_mean_dice": 0.19629422105860014,
+        "known_tissue_dice": 0.6192893401015228,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.2808932448671847,
+        "shared_label_mean_dice": 0.19629422105860014,
+        "known_tissue_dice": 0.6192893401015228,
+        "shared_named_labels": 3
+      }
+    },
+    {
+      "pair": [
+        2,
+        3
+      ],
+      "method": "shared_warp",
+      "flow": {
+        "accepted": true,
+        "objective_before": 0.5778117400190432,
+        "objective_after": 0.6011527853037792,
+        "flow_grid_stride": 1,
+        "flow_grid_shape": [
+          36,
+          36
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 0.16806999999999994,
+        "minimum_all_partial_jacobian": 0.27628463613124143,
+        "reason": "Strict regularized named-label overlap improvement."
+      },
+      "maximum_inverse_residual_pixels": 9.999070344066906e-05,
+      "before": {
+        "dice": 0.5778117400190432,
+        "shared_label_mean_dice": 0.5310633213859021,
+        "known_tissue_dice": 0.7648054145516074,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.5778117400190432,
+        "shared_label_mean_dice": 0.5310633213859021,
+        "known_tissue_dice": 0.7648054145516074,
+        "shared_named_labels": 3
+      }
+    },
+    {
+      "pair": [
+        3,
+        4
+      ],
+      "method": "shared_warp",
+      "flow": {
+        "accepted": true,
+        "objective_before": 0.46854592531905404,
+        "objective_after": 0.5925088284940969,
+        "flow_grid_stride": 1,
+        "flow_grid_shape": [
+          36,
+          36
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 0.16806999999999994,
+        "minimum_all_partial_jacobian": 0.31217983302905594,
+        "reason": "Strict regularized named-label overlap improvement."
+      },
+      "maximum_inverse_residual_pixels": 9.961254490953715e-05,
+      "before": {
+        "dice": 0.46854592531905404,
+        "shared_label_mean_dice": 0.40654854838110105,
+        "known_tissue_dice": 0.7165354330708661,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.46854592531905404,
+        "shared_label_mean_dice": 0.40654854838110105,
+        "known_tissue_dice": 0.7165354330708661,
+        "shared_named_labels": 3
+      }
+    }
+  ],
+  "source_label_ids": [
+    0,
+    1,
+    2,
+    3,
+    65535
+  ],
+  "output_label_ids": [
+    0,
+    1,
+    2,
+    3,
+    65535
+  ],
+  "evidence_codes": {
+    "0": "background",
+    "1": "named_aligned_anchor",
+    "2": "named_interpolated",
+    "3": "unresolved_aligned_anchor",
+    "4": "unresolved_interpolated"
+  },
+  "coordinate_convention": "Pixel centres: x=origin_x+column*sx, y=origin_y+row*sy; z from explicit z_coordinates_mm. Positive rotation is clockwise on a displayed x-right/y-down image. First section is the fixed registration gauge.",
+  "alignment_scope": "Automatic engineering overlap check of curated categorical sections; no anatomical validation or boundary detection.",
+  "limitations": [
+    "Parallel sections only; supplied z positions and in-plane calibration are authoritative.",
+    "Nearest-neighbour rigid resampling can alter component pixel counts; every source component must retain support, and aligned anchor rasters are preserved exactly.",
+    "Flow uses a bounded coarse named-label grid, generic smoothing and identity-boundary Jacobian checks; no spinal midline or canal prior is applied.",
+    "Positive signed-distance support is conservative: unsupported gaps remain background. Appearance/disappearance is a geometric interpolation assumption, not inferred anatomy.",
+    "Exact normalized-score ties use ascending source identifier order; small interpolated structures may vanish between anchors.",
+    "No biological accuracy, topology or cross-specimen correspondence guarantee; flagged pairs require anatomical review."
+  ],
+  "integrity": {
+    "category_ids_preserved": true,
+    "aligned_anchors_exact": true,
+    "original_anchors_preserved": true,
+    "original_labels_sha256": "247f5c142e60616a1d59543a0e80107d1622a420d9f397f1506143e02a1ae3ee"
+  },
+  "schema": "atlascraft-output-v2",
+  "software_version": "2.0.0",
+  "name": "AtlasCraft synthetic demonstration",
+  "label_names": {
+    "0": "Outside",
+    "65535": "Unresolved tissue",
+    "1": "Outer compartment",
+    "2": "Compartment A",
+    "3": "Compartment B"
+  },
+  "label_colors": {
+    "0": "#000000",
+    "65535": "#b8b3c7",
+    "1": "#78bbae",
+    "2": "#ea947d",
+    "3": "#e2bf64"
+  },
+  "coordinate_system": "Synthetic image X/Y and section Z in millimetres; not real anatomy",
+  "sources": [
+    {
+      "citation": "Procedural geometric demonstration created for AtlasCraft. No biological validation implied.",
+      "license": "Synthetic example; no third-party atlas source."
+    }
+  ],
+  "requested_options": {
+    "alignment": "none",
+    "subdivisions": 2
+  },
+  "human_review": {
+    "input_curated": true,
+    "output_anatomically_accepted": false
+  },
+  "agent_notes": [],
+  "volume_sha256": "30a6aa6163ae8a133029339b1647bd3a02d3434da433c071e39c1109686f1780",
+  "interpretation": "Alignment quality and interpolation are computational measures. Human experts must validate reconstructed anatomy. No missing anatomical identity is assigned by the agent.",
+  "nifti_export": "Uniform Z; sform stores the user-defined image XYZ frame in mm. Anatomical RAS/LPS orientation is not established.",
+  "viewer_artifacts": {
+    "viewer_html": "viewer.html",
+    "surface_preview_ply": "surfaces_preview.ply",
+    "viewer_summary": "viewer_summary.json",
+    "surface_preview": {
+      "kind": "Categorical marching-cubes display preview; not a measurement mesh",
+      "native_shape_zyx": [
+        9,
+        36,
+        36
+      ],
+      "preview_shape_zyx": [
+        9,
+        36,
+        36
+      ],
+      "sampling_indices_zyx": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ],
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          33,
+          34,
+          35
+        ]
+      ],
+      "triangles": 7388,
+      "regions_with_surfaces": 4,
+      "labels_without_preview_surface": [],
+      "physical_nonuniform_z_used": true,
+      "native_slice_arrays_unchanged": true,
+      "boundary_note": "Preview sampling can simplify or miss small structures. End surfaces are computational closures at the displayed grid boundary."
+    }
+  },
+  "runtime_seconds": 0.177
+}

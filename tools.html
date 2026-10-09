@@ -685,14 +685,14 @@
           </p>
           <div class="summary-author">
             <img src="images/Aarushi Rao.jpg" alt="Aarushi Rao">
-            <span>By <strong>Aarushi Rao</strong></span>
+            <span>Co-developed by <strong>Aarushi Rao</strong> &amp; <strong>Guang-Wei Zhang</strong></span>
           </div>
           <a href="https://www.biorxiv.org/content/10.64898/2026.07.15.737186v1" target="_blank" class="summary-paper"><i class="fas fa-file-lines"></i> Read the paper (bioRxiv, 2026)</a>
           <a href="tool-neuroflow.html#tutorial" class="summary-note"><i class="fas fa-video"></i> Watch the 15-min video tutorial</a>
           <div class="summary-actions">
             <a href="tool-neuroflow.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
-            <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
-            <a href="Tools/neuroflow/index.html" class="btn-download" download="neuroflow.html" title="Download NeuroFlow to run offline (saves as neuroflow.html)"><i class="fas fa-download"></i> Download</a>
+            <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch Brain</a>
+            <a href="Tools/neuroflow/index.html" class="btn-download" download="neuroflow-brain.html" title="Download NeuroFlow Brain to run offline"><i class="fas fa-download"></i> Download Brain</a>
           </div>
         </div>
       </div>
@@ -738,8 +738,28 @@
         </div>
       </div>
 
+      <!-- AtlasCraft -->
+      <div class="tool-summary" id="atlascraft">
+        <div class="summary-media"><i class="fas fa-layer-group media-icon"></i></div>
+        <div class="summary-body">
+          <div class="summary-eyebrow">Neuroanatomy · Atlas Reconstruction</div>
+          <div class="summary-name">AtlasCraft</div>
+          <p class="summary-desc">
+            Turn curated 2D label maps into an aligned, labelled 3D atlas with an interactive viewer and a record of the reconstruction.
+          </p>
+          <div class="summary-author no-photo"><i class="fas fa-code"></i><span>Developed by <strong>Can Tao</strong> &amp; <strong>Guang-Wei Zhang</strong></span></div>
+          <a href="#spinal-cord-atlas" class="summary-note"><i class="fas fa-cube"></i> Used to develop our 3D Mouse Spinal Cord Atlas</a>
+          <span class="summary-note"><i class="fas fa-laptop-code"></i> Version 2.0.0 · Builds locally with Python 3.10+; demo opens in your browser.</span>
+          <div class="summary-actions">
+            <a href="Tools/atlascraft/index.html" class="btn-launch" target="_blank" rel="noopener"><i class="fas fa-play"></i> Launch / setup</a>
+            <a href="Tools/atlascraft/AtlasCraft/examples/demo_result/viewer.html" class="btn-details" target="_blank" rel="noopener">Try demo <i class="fas fa-arrow-right"></i></a>
+            <a href="Tools/atlascraft/AtlasCraft_v2.0.0.zip" class="btn-download" download="AtlasCraft_v2.0.0.zip"><i class="fas fa-download"></i> Download</a>
+          </div>
+        </div>
+      </div>
+
       <!-- 3D Mouse Spinal Cord Atlas -->
-      <div class="tool-summary">
+      <div class="tool-summary" id="spinal-cord-atlas">
         <div class="summary-media"><i class="fas fa-cube media-icon"></i></div>
         <div class="summary-body">
           <div class="summary-eyebrow">Neuroanatomy · Spinal Cord</div>
@@ -747,6 +767,7 @@
           <p class="summary-desc">
             Explore the Allen P56 mouse spinal cord as a rotatable 3D volume: laminae, nuclei, motor pools, and white matter tracts, with cross-sections at any named level.
           </p>
+          <a href="#atlascraft" class="summary-note"><i class="fas fa-layer-group"></i> Developed using AtlasCraft</a>
           <div class="summary-author">
             <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
             <span>By <strong>Dr. Guang-Wei Zhang</strong></span>

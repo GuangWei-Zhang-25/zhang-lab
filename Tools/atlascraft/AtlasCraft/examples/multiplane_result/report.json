@@ -1,0 +1,18 @@
+{
+  "status": "awaiting_human_anatomical_review",
+  "metrics": {
+    "input_series": 2,
+    "output_voxels": 40000,
+    "conflicting_voxels": 1601,
+    "overlap_voxels": 3431,
+    "unknown_voxels": 1757
+  },
+  "warnings": [
+    "1601 voxels have conflicting regional identities across series and remain unresolved."
+  ],
+  "limitations": [
+    "Placements are supplied and reviewed by experts; no automatic anatomical orientation or cross-plane registration is claimed.",
+    "Common-grid resampling is categorical nearest-neighbour. Individual aligned source anchors remain exact in the per-series outputs.",
+    "Overlapping disagreement is retained as 65535; no majority vote or agent-invented identity resolves it."
+  ]
+}

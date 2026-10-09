@@ -1,0 +1,12 @@
+{
+  "output_anatomically_accepted": false,
+  "volume_sha256": "30a6aa6163ae8a133029339b1647bd3a02d3434da433c071e39c1109686f1780",
+  "reviewer": null,
+  "checks": [
+    "Verify source orientation, scale and region registry.",
+    "Inspect all transformed anchors against original anchors.",
+    "Review interpolated boundaries, appearance/disappearance of regions and unresolved tissue.",
+    "Examine alignment warnings and accepted/rejected corrections."
+  ],
+  "note": "An AI agent cannot sign anatomical acceptance."
+}

@@ -1,0 +1,34 @@
+{
+  "python": "3.12.14",
+  "platform": "Darwin arm64",
+  "fresh_wheel_install": true,
+  "system_site_packages": false,
+  "source_imports_from_installed_wheel": true,
+  "installed_module_count": 9,
+  "network_blocked_during_reconstruction": true,
+  "single_series_shape_zyx": [
+    17,
+    128,
+    128
+  ],
+  "multiplane_shape_zyx": [
+    25,
+    40,
+    40
+  ],
+  "live_provider_tested": false,
+  "module_origins_verified": {
+    "atlascraft": true,
+    "atlascraft.inputs": true,
+    "atlascraft.pipeline": true,
+    "atlascraft.multiplane": true,
+    "atlascraft.core": true,
+    "atlascraft._vendor": true,
+    "atlascraft._vendor.inverse_bilinear_newton": true,
+    "atlascraft._vendor.common_warp": true,
+    "atlascraft.viewer": true
+  },
+  "wheel_sha256": "d52a4b4575049034a527b9adc9cfc9c94b13a2bec7bfb05aa53eaebf7852c929",
+  "final_wheel_matches_source": true,
+  "final_demo_volume_hashes_unchanged": true
+}

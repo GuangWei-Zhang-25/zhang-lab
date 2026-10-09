@@ -1,0 +1,70 @@
+{
+  "schema": "atlascraft-input-v1",
+  "name": "AtlasCraft synthetic demonstration",
+  "curated": true,
+  "coordinate_system": "Synthetic image X/Y and section Z in millimetres; not real anatomy",
+  "spacing_xy_mm": [
+    0.04,
+    0.04
+  ],
+  "sections": [
+    {
+      "name": "Curated section 1",
+      "z_mm": 0.0,
+      "file": "section_01.png"
+    },
+    {
+      "name": "Curated section 2",
+      "z_mm": 0.4,
+      "file": "section_02.png"
+    },
+    {
+      "name": "Curated section 3",
+      "z_mm": 0.8,
+      "file": "section_03.png"
+    },
+    {
+      "name": "Curated section 4",
+      "z_mm": 1.2000000000000002,
+      "file": "section_04.png"
+    },
+    {
+      "name": "Curated section 5",
+      "z_mm": 1.6,
+      "file": "section_05.png"
+    }
+  ],
+  "labels": [
+    {
+      "id": 0,
+      "name": "Outside",
+      "color": "#000000"
+    },
+    {
+      "id": 1,
+      "name": "Outer compartment",
+      "color": "#78bbae"
+    },
+    {
+      "id": 2,
+      "name": "Compartment A",
+      "color": "#ea947d"
+    },
+    {
+      "id": 3,
+      "name": "Compartment B",
+      "color": "#e2bf64"
+    },
+    {
+      "id": 65535,
+      "name": "Unresolved tissue",
+      "color": "#b8b3c7"
+    }
+  ],
+  "sources": [
+    {
+      "citation": "Procedural geometric demonstration created for AtlasCraft. No biological validation implied.",
+      "license": "Synthetic example; no third-party atlas source."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "aligned_anchors.npz": "75b1e067ade0c118311e068a5da300262039c71ffa9ffb5c51397dbaf96aa623",
+  "atlas.nii.gz": "6e15fd51529db30902cc0c4ca674956d68cf7b92b79297eb9e3b7c14a278f9b6",
+  "atlas.npz": "a8a6a3a56adc705dd2af1bcdb9e2807a21343c1f592ce986ff6ac2d5e77e0866",
+  "boundaries.json": "969468daccd289e53a5313705e6ecbdff5cbc52d19b8c96e669546587edd4177",
+  "input_hashes.json": "1af5bfde3a083f0b3cad2d2d2073085500dbac7961de6651ef1feb202f3ad458",
+  "metadata.json": "651335af272092cf422b993da704f7791a3ad80d4a4c802e2a9647443975dc19",
+  "original_anchors.npz": "3f6b5073eaac2492dc9556fefee44ed4858a2a7e2af3050f366e95e30cfe358e",
+  "report.json": "1a60c8d4f1bb1ab8545888f799ac947459769fa353314ce5eba34935b61cad08",
+  "review.json": "afb2f326497ea1d21a20274907645018f7af540f81d355900504889077f883b9",
+  "source_manifest.json": "acdc27d3947f96f82b3013717feaea8b0991bb2a583d0c9e3710f2649d02a623",
+  "surfaces_preview.ply": "4a6f0304ddea791f26282aca0014a1624855b7de18e78d0fda5aef2995b19c22",
+  "tool_trace.json": "5e0039281104b0eef7d148baae65c2837ac476a4b44677b8606763352b68f0bd",
+  "viewer.html": "13c4f3be4369c5d27b12d0ea27e2a1f1b331cb442179d2aa4c4edcdcadb560a8",
+  "viewer_summary.json": "3d30f29c3c2b735f4cbc8cffd9aac3023146451acc25c0f3252334b5fb4acf90"
+}

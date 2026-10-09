@@ -1,0 +1,52 @@
+{
+  "created_local_date": "2026-10-07",
+  "kind": "Conceptual editable vector schematic only",
+  "dimensions_mm": [
+    190,
+    105
+  ],
+  "pdf_page_count": 1,
+  "fonts": [
+    {
+      "font": "/AAAAAA+Arial-BoldMT",
+      "embedded": true
+    },
+    {
+      "font": "/AAAAAA+ArialMT",
+      "embedded": true
+    }
+  ],
+  "svg_text_elements": 51,
+  "svg_panel_groups": 8,
+  "svg_embedded_raster_images": 0,
+  "png_pixels": [
+    2245,
+    1241
+  ],
+  "png_target_dpi": 300,
+  "original_empirical_panels_modified": false,
+  "visual_review": "Complete page inspected after rendering; readable labels, aligned arrows and no text overlap or clipping.",
+  "files": [
+    {
+      "name": "Figure1_AtlasCraft_Workflow_a-h.pdf",
+      "bytes": 69895,
+      "sha256": "ca2a5d4f3bff41fff210f914a7968c0884f6a6065095527a30fffc9e2741bd0f"
+    },
+    {
+      "name": "Figure1_AtlasCraft_Workflow_a-h.svg",
+      "bytes": 24414,
+      "sha256": "3c8df73fe135be965fe008b3549864280d3a091711eef2ee00cbbea1f4f81b52"
+    },
+    {
+      "name": "Figure1_AtlasCraft_Workflow_a-h.png",
+      "bytes": 299496,
+      "sha256": "60d45c7efff455bd39b3be59b10aa9b6ea7c64b03c960afa38ad03641dc83e91"
+    },
+    {
+      "name": "figurelegend.txt",
+      "bytes": 2122,
+      "sha256": "203e3d2cf89b5fb63c32a407566ab03ef52c0ec219fa6f9d40607f3f4b077880"
+    }
+  ],
+  "revision_note": "Clarified one supplied series-to-world transform per full reference stack in figure, caption and generator; latest render visually checked."
+}

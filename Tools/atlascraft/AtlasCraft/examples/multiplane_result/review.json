@@ -1,0 +1,6 @@
+{
+  "output_anatomically_accepted": false,
+  "reviewer": null,
+  "volume_sha256": "aceb7948742957ae43b5c533915ea1cdb4a510fa3e56a934c9d6dbeb450b0e7f",
+  "note": "Review common-frame placement, per-series anchors and cross-plane conflicts. The agent cannot approve anatomy."
+}

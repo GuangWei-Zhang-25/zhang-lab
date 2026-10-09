@@ -1,0 +1,573 @@
+{
+  "status": "awaiting_human_anatomical_review",
+  "integrity": {
+    "category_ids_preserved": true,
+    "aligned_anchors_exact": true,
+    "original_anchors_preserved": true,
+    "original_labels_sha256": "f00c2cbd2fd6eb053958b2bd1787062890324326c2c776c28867b3cfd4196b17"
+  },
+  "metrics": {
+    "mean_dice_before": 0.4569381279233267,
+    "mean_dice_after": 0.9251025384022088,
+    "min_dice_after": 0.9166183440518777,
+    "flagged_pairs": 0,
+    "input_sections": 5,
+    "output_voxels": 278528,
+    "unknown_voxels": 421,
+    "correction_count": 12,
+    "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+    "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+  },
+  "warnings": [
+    {
+      "code": "unresolved_tissue",
+      "source_voxels": 126,
+      "output_voxels": 421,
+      "message": "65535 denotes unresolved tissue; excluded from registration objectives and retained as a source-supported interpolation identity."
+    }
+  ],
+  "corrections": [
+    {
+      "stage": "initial_candidates",
+      "section": 1,
+      "accepted": true,
+      "objective_before": 0.5153992045932612,
+      "objective_after": 0.9120637462309799,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9120637462309799,
+      "objective_after": 0.9120637462309799,
+      "candidate_count": 11,
+      "from": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9120637462309799,
+      "objective_after": 0.9120637462309799,
+      "candidate_count": 11,
+      "from": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 1,
+      "accepted": true,
+      "objective_before": 0.9120637462309799,
+      "objective_after": 0.9163509829407666,
+      "candidate_count": 11,
+      "from": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_candidates",
+      "section": 2,
+      "accepted": true,
+      "objective_before": 0.6288815344892721,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.923787161891319,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.923787161891319,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.923787161891319,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_candidates",
+      "section": 3,
+      "accepted": true,
+      "objective_before": 0.6768682381168094,
+      "objective_after": 0.9133898833520313,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 3,
+      "accepted": false,
+      "objective_before": 0.9133898833520313,
+      "objective_after": 0.9133898833520313,
+      "candidate_count": 11,
+      "from": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 3,
+      "accepted": true,
+      "objective_before": 0.9133898833520313,
+      "objective_after": 0.9156632848014858,
+      "candidate_count": 11,
+      "from": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 3,
+      "accepted": false,
+      "objective_before": 0.9156632848014858,
+      "objective_after": 0.9156632848014858,
+      "candidate_count": 11,
+      "from": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_candidates",
+      "section": 4,
+      "accepted": true,
+      "objective_before": 0.734388946899416,
+      "objective_after": 0.9146959131410262,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9146959131410262,
+      "objective_after": 0.9146959131410262,
+      "candidate_count": 11,
+      "from": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9146959131410262,
+      "objective_after": 0.9146959131410262,
+      "candidate_count": 11,
+      "from": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 4,
+      "accepted": true,
+      "objective_before": 0.9146959131410262,
+      "objective_after": 0.9184420682155221,
+      "candidate_count": 11,
+      "from": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9204232390827095,
+      "objective_after": 0.9204232390827095,
+      "candidate_count": 11,
+      "from": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.9192998761241803,
+      "objective_after": 0.9192998761241803,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 3,
+      "accepted": true,
+      "objective_before": 0.9170700376196151,
+      "objective_after": 0.9205560114605568,
+      "candidate_count": 11,
+      "from": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9318233451251074,
+      "objective_after": 0.9318233451251074,
+      "candidate_count": 11,
+      "from": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9204232390827095,
+      "objective_after": 0.9204232390827095,
+      "candidate_count": 11,
+      "from": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 2,
+      "accepted": true,
+      "objective_before": 0.9161646559547737,
+      "objective_after": 0.9249416974937027,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -3.5
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 3,
+      "accepted": false,
+      "objective_before": 0.9271810350929229,
+      "objective_after": 0.9271810350929229,
+      "candidate_count": 11,
+      "from": [
+        3.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9318233451251074,
+      "objective_after": 0.9318233451251074,
+      "candidate_count": 11,
+      "from": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        0,
+        1
+      ],
+      "accepted": true,
+      "objective_before": 0.9166183440518777,
+      "objective_after": 0.9524156688170224,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 1.0,
+      "minimum_all_partial_jacobian": 0.31330320677116674,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        1,
+        2
+      ],
+      "accepted": true,
+      "objective_before": 0.9290408504822225,
+      "objective_after": 0.9553057149969877,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 1.0,
+      "minimum_all_partial_jacobian": 0.7269412325170368,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        2,
+        3
+      ],
+      "accepted": true,
+      "objective_before": 0.9227678917274051,
+      "objective_after": 0.928852392639842,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.7,
+      "minimum_all_partial_jacobian": 0.42042169529395323,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        3,
+        4
+      ],
+      "accepted": false,
+      "objective_before": 0.9319830673473297,
+      "objective_after": 0.9319830673473297,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.0,
+      "minimum_all_partial_jacobian": 1.0,
+      "reason": "No safe candidate improved overlap; signed-distance interpolation used."
+    }
+  ],
+  "agent_corrections": [],
+  "agent_notes": []
+}

@@ -1,0 +1,144 @@
+{
+  "status": "awaiting_human_anatomical_review",
+  "integrity": {
+    "category_ids_preserved": true,
+    "aligned_anchors_exact": true,
+    "original_anchors_preserved": true,
+    "original_labels_sha256": "247f5c142e60616a1d59543a0e80107d1622a420d9f397f1506143e02a1ae3ee"
+  },
+  "metrics": {
+    "mean_dice_before": 0.4609554982640057,
+    "mean_dice_after": 0.4609554982640057,
+    "min_dice_after": 0.2808932448671847,
+    "flagged_pairs": 3,
+    "input_sections": 5,
+    "output_voxels": 11664,
+    "unknown_voxels": 31,
+    "correction_count": 3,
+    "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+    "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+  },
+  "warnings": [
+    {
+      "code": "low_alignment_confidence",
+      "pair": [
+        0,
+        1
+      ],
+      "dice": 0.5165710828507408,
+      "message": "No shared named evidence or adjacent overlap is below threshold; anatomical review is required."
+    },
+    {
+      "code": "low_alignment_confidence",
+      "pair": [
+        1,
+        2
+      ],
+      "dice": 0.2808932448671847,
+      "message": "No shared named evidence or adjacent overlap is below threshold; anatomical review is required."
+    },
+    {
+      "code": "low_alignment_confidence",
+      "pair": [
+        3,
+        4
+      ],
+      "dice": 0.46854592531905404,
+      "message": "No shared named evidence or adjacent overlap is below threshold; anatomical review is required."
+    },
+    {
+      "code": "unresolved_tissue",
+      "source_voxels": 31,
+      "output_voxels": 31,
+      "message": "65535 denotes unresolved tissue; excluded from registration objectives and retained as a source-supported interpolation identity."
+    }
+  ],
+  "corrections": [
+    {
+      "stage": "shared_warp",
+      "pair": [
+        0,
+        1
+      ],
+      "accepted": false,
+      "objective_before": 0.5165710828507408,
+      "objective_after": 0.5165710828507408,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.0,
+      "minimum_all_partial_jacobian": 1.0,
+      "reason": "No safe candidate improved overlap; signed-distance interpolation used."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        1,
+        2
+      ],
+      "accepted": true,
+      "objective_before": 0.2808932448671847,
+      "objective_after": 0.2862080570616275,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.05764800999999997,
+      "minimum_all_partial_jacobian": 0.33538224582560305,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        2,
+        3
+      ],
+      "accepted": true,
+      "objective_before": 0.5778117400190432,
+      "objective_after": 0.6011527853037792,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.16806999999999994,
+      "minimum_all_partial_jacobian": 0.27628463613124143,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        3,
+        4
+      ],
+      "accepted": true,
+      "objective_before": 0.46854592531905404,
+      "objective_after": 0.5925088284940969,
+      "flow_grid_stride": 1,
+      "flow_grid_shape": [
+        36,
+        36
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.16806999999999994,
+      "minimum_all_partial_jacobian": 0.31217983302905594,
+      "reason": "Strict regularized named-label overlap improvement."
+    }
+  ],
+  "agent_corrections": [],
+  "agent_notes": []
+}

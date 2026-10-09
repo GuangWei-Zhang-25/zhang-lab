@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AtlasCraft | Zhang Lab Tools</title>
+  <meta name="description" content="Download and launch AtlasCraft 2.0.0, a local workflow for reconstructing labelled 3D atlases from curated 2D sections, or explore the browser demo.">
+  <style>
+    :root { color-scheme: light; --navy: #1a365d; --gold: #c9a227; --text: #1a202c; --muted: #4a5568; --line: #e2e8f0; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 16px/1.7 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--text); background: #f7fafc; }
+    a { color: #2c5282; text-underline-offset: 3px; }
+    a:focus-visible { outline: 3px solid var(--gold); outline-offset: 4px; }
+    header { background: #fff; border-bottom: 1px solid var(--line); }
+    .header-inner { max-width: 1000px; margin: auto; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { font: bold 24px Georgia, serif; color: var(--navy); text-decoration: none; }
+    .back { font-size: 14px; text-decoration: none; }
+    main { max-width: 1000px; margin: 38px auto 64px; padding: 0 28px; }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 12px 40px rgba(26,54,93,.06); }
+    .hero { padding: 42px; background: linear-gradient(135deg, #0f2744, #2c5282); color: #fff; }
+    .eyebrow { color: #e8cc6a; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { font: bold 48px/1.1 Georgia, serif; margin: 14px 0 18px; }
+    .hero p { color: #e2e8f0; max-width: 720px; margin: 0 0 24px; font-size: 18px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; padding: 12px 19px; border-radius: 8px; text-decoration: none; font-weight: 600; line-height: 1.5; border: 1px solid transparent; }
+    .primary { background: var(--gold); color: #302605; }
+    .secondary { color: #fff; border-color: #91a4bf; background: rgba(255,255,255,.08); }
+    .local { background: var(--navy); color: #fff; }
+    .release { margin-top: 20px; font-size: 13px; color: #cbd5e0; }
+    .content { padding: 32px 42px 40px; }
+    h2 { font: bold 26px/1.25 Georgia, serif; color: var(--navy); margin: 0 0 12px; }
+    h3 { font-size: 17px; color: var(--navy); margin: 24px 0 8px; }
+    p { color: var(--muted); margin: 0 0 18px; }
+    ol { padding-left: 24px; margin: 20px 0 24px; }
+    li { padding-left: 6px; margin: 0 0 16px; color: var(--muted); }
+    strong { color: var(--text); }
+    code { background: #edf2f7; border-radius: 4px; padding: 2px 6px; font-size: .9em; overflow-wrap: anywhere; }
+    .notice { border-left: 4px solid var(--gold); padding: 16px 20px; background: #fffbf5; border-radius: 6px; margin-bottom: 26px; }
+    .notice p { margin: 0; }
+    .running { border: 1px solid var(--line); border-radius: 10px; padding: 20px; margin-bottom: 30px; }
+    .running p { font-size: 14px; margin-bottom: 12px; }
+    .resources { border-top: 1px solid var(--line); padding-top: 28px; }
+    .resource-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin: 18px 0 0; }
+    footer { text-align: center; color: #718096; font-size: 13px; margin-top: 26px; }
+    @media (max-width: 600px) { .header-inner { padding: 18px 20px; } main { padding: 0 16px; margin-top: 22px; } .hero, .content { padding: 28px 24px; } h1 { font-size: 40px; } .hero p { font-size: 16px; } .actions .button { width: 100%; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <a class="brand" href="../../index.html">Zhang Lab</a>
+      <a class="back" href="../../tools.html#atlascraft">← All tools</a>
+    </div>
+  </header>
+  <main>
+    <article class="card">
+      <section class="hero">
+        <div class="eyebrow">Neuroanatomy · Atlas reconstruction</div>
+        <h1>AtlasCraft</h1>
+        <p>Turn curated 2D label maps into an aligned, labelled 3D atlas. Explore the reconstruction, inspect regional boundaries, and keep a record of the processing steps.</p>
+        <p>Developed by <strong>Can Tao</strong> &amp; <strong>Guang-Wei Zhang</strong>.</p>
+        <p>AtlasCraft was used to develop our <a href="../../tools.html#spinal-cord-atlas">3D Mouse Spinal Cord Atlas</a>.</p>
+        <div class="actions">
+          <a class="button primary" href="AtlasCraft_v2.0.0.zip" download="AtlasCraft_v2.0.0.zip">Download AtlasCraft</a>
+          <a class="button secondary" href="AtlasCraft/examples/demo_result/viewer.html" target="_blank" rel="noopener">Explore browser demo →</a>
+        </div>
+        <div class="release">Version 2.0.0 · Updated October 7, 2026 · ZIP, 1.35 MB</div>
+      </section>
+      <div class="content">
+        <div class="notice">
+          <p><strong>The demo opens directly in your browser.</strong> To build an atlas from your own sections, download the package and start the local app below. Reconstruction runs on your computer and needs no API key.</p>
+        </div>
+        <h2>Launch on your computer</h2>
+        <ol>
+          <li><strong>Download and extract the complete ZIP.</strong> Keep the files together in the extracted <code>AtlasCraft</code> folder. If you already have this folder locally, use its launch file.</li>
+          <li><strong>Use Python 3.10 or newer.</strong> Install it if needed before the first launch.</li>
+          <li><strong>Open the launch file.</strong> On Mac, double-click <code>Launch_AtlasCraft.command</code>; on Windows, double-click <code>Launch_AtlasCraft.bat</code>. The first launch installs dependencies and needs internet access. Later launches reuse the installed environment.</li>
+          <li><strong>Keep the terminal window open.</strong> AtlasCraft opens at <code>http://127.0.0.1:8766</code>. Choose <strong>Try synthetic example</strong>, or upload your curated JSON/ZIP input to build your own atlas.</li>
+        </ol>
+        <div class="running">
+          <p><strong>Already started AtlasCraft?</strong> Reopen its browser interface here. This link works after the launch file is running on this computer.</p>
+          <a class="button local" href="http://127.0.0.1:8766/" target="_blank" rel="noopener noreferrer">Open running app →</a>
+        </div>
+        <div class="resources">
+          <h2>Prepare your sections</h2>
+          <p>Supply human-reviewed categorical label maps, regional IDs, and section positions. The package includes synthetic examples and a guide to input preparation. Inspect the resulting atlas before accepting the reconstructed anatomy.</p>
+          <div class="resource-links">
+            <a href="AtlasCraft/START_HERE.html">Full getting-started guide</a>
+            <a href="AtlasCraft/examples/curated_sections.zip" download>Download example input</a>
+            <a href="AtlasCraft/figure1/Figure1_AtlasCraft_Workflow_a-h.pdf" target="_blank" rel="noopener">View workflow</a>
+          </div>
+        </div>
+      </div>
+    </article>
+    <footer>Zhang Laboratory · Virginia Commonwealth University</footer>
+  </main>
+</body>
+</html>

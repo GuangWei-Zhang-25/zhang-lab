@@ -1,0 +1,1153 @@
+{
+  "schema_version": 1,
+  "method": "Bounded semantic rigid registration and shared_warp categorical interpolation",
+  "options": {
+    "alignment": "rigid",
+    "max_shift_px": 24.0,
+    "max_rotation_deg": 12.0,
+    "subdivisions": 4,
+    "max_correction_rounds": 2,
+    "min_overlap_dice": 0.55,
+    "interpolation": "shared_warp"
+  },
+  "z_coordinates_mm": [
+    0.0,
+    0.1,
+    0.2,
+    0.30000000000000004,
+    0.4,
+    0.5,
+    0.6000000000000001,
+    0.7000000000000001,
+    0.8,
+    0.9000000000000001,
+    1.0,
+    1.1,
+    1.2000000000000002,
+    1.3000000000000003,
+    1.4000000000000001,
+    1.5,
+    1.6
+  ],
+  "spacing_xy_mm": [
+    0.04,
+    0.04
+  ],
+  "origin_xy_mm": [
+    -1.28,
+    -1.28
+  ],
+  "padding_yx_px": [
+    32,
+    32
+  ],
+  "input_shape_zyx": [
+    5,
+    64,
+    64
+  ],
+  "output_shape_zyx": [
+    17,
+    128,
+    128
+  ],
+  "anchor_indices": [
+    0,
+    4,
+    8,
+    12,
+    16
+  ],
+  "anchor_positions_mm": [
+    0.0,
+    0.4,
+    0.8,
+    1.2000000000000002,
+    1.6
+  ],
+  "transforms": [
+    {
+      "section": 0,
+      "rotation_deg": 0.0,
+      "translation_xy_px": [
+        0.0,
+        0.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          1.0,
+          -0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 1,
+      "rotation_deg": 3.0,
+      "translation_xy_px": [
+        5.0,
+        -4.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          0.9986295347545738,
+          -0.052335956242943835,
+          0.2676700910753463
+        ],
+        [
+          0.052335956242943835,
+          0.9986295347545738,
+          -0.2242165186568724
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 2,
+      "rotation_deg": -8.0,
+      "translation_xy_px": [
+        -3.5,
+        3.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          0.9902680687415704,
+          0.13917310096006544,
+          -0.3030958738240611
+        ],
+        [
+          -0.13917310096006544,
+          0.9902680687415704,
+          0.30762034059530363
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 3,
+      "rotation_deg": 3.0,
+      "translation_xy_px": [
+        -2.0,
+        -4.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          0.9986295347545738,
+          -0.052335956242943835,
+          -0.012329908924653729
+        ],
+        [
+          0.052335956242943835,
+          0.9986295347545738,
+          -0.2242165186568724
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "section": 4,
+      "rotation_deg": -3.0,
+      "translation_xy_px": [
+        3.0,
+        1.0
+      ],
+      "input_xy_mm_to_aligned_xy_mm": [
+        [
+          0.9986295347545738,
+          0.052335956242943835,
+          0.055783481343127606
+        ],
+        [
+          -0.052335956242943835,
+          0.9986295347545738,
+          0.10767009107534628
+        ],
+        [
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "corrections": [
+    {
+      "stage": "initial_candidates",
+      "section": 1,
+      "accepted": true,
+      "objective_before": 0.5153992045932612,
+      "objective_after": 0.9120637462309799,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9120637462309799,
+      "objective_after": 0.9120637462309799,
+      "candidate_count": 11,
+      "from": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9120637462309799,
+      "objective_after": 0.9120637462309799,
+      "candidate_count": 11,
+      "from": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 1,
+      "accepted": true,
+      "objective_before": 0.9120637462309799,
+      "objective_after": 0.9163509829407666,
+      "candidate_count": 11,
+      "from": [
+        4.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_candidates",
+      "section": 2,
+      "accepted": true,
+      "objective_before": 0.6288815344892721,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.923787161891319,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.923787161891319,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.923787161891319,
+      "objective_after": 0.923787161891319,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_candidates",
+      "section": 3,
+      "accepted": true,
+      "objective_before": 0.6768682381168094,
+      "objective_after": 0.9133898833520313,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 3,
+      "accepted": false,
+      "objective_before": 0.9133898833520313,
+      "objective_after": 0.9133898833520313,
+      "candidate_count": 11,
+      "from": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 3,
+      "accepted": true,
+      "objective_before": 0.9133898833520313,
+      "objective_after": 0.9156632848014858,
+      "candidate_count": 11,
+      "from": [
+        0.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 3,
+      "accepted": false,
+      "objective_before": 0.9156632848014858,
+      "objective_after": 0.9156632848014858,
+      "candidate_count": 11,
+      "from": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_candidates",
+      "section": 4,
+      "accepted": true,
+      "objective_before": 0.734388946899416,
+      "objective_after": 0.9146959131410262,
+      "candidate_count": 14,
+      "from": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "to": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "initial_refine_4",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9146959131410262,
+      "objective_after": 0.9146959131410262,
+      "candidate_count": 11,
+      "from": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_2",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9146959131410262,
+      "objective_after": 0.9146959131410262,
+      "candidate_count": 11,
+      "from": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "initial_refine_1",
+      "section": 4,
+      "accepted": true,
+      "objective_before": 0.9146959131410262,
+      "objective_after": 0.9184420682155221,
+      "candidate_count": 11,
+      "from": [
+        -4.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9204232390827095,
+      "objective_after": 0.9204232390827095,
+      "candidate_count": 11,
+      "from": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 2,
+      "accepted": false,
+      "objective_before": 0.9192998761241803,
+      "objective_after": 0.9192998761241803,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 3,
+      "accepted": true,
+      "objective_before": 0.9170700376196151,
+      "objective_after": 0.9205560114605568,
+      "candidate_count": 11,
+      "from": [
+        2.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "self_correction_round_1",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9318233451251074,
+      "objective_after": 0.9318233451251074,
+      "candidate_count": 11,
+      "from": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 1,
+      "accepted": false,
+      "objective_before": 0.9204232390827095,
+      "objective_after": 0.9204232390827095,
+      "candidate_count": 11,
+      "from": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        5.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 2,
+      "accepted": true,
+      "objective_before": 0.9161646559547737,
+      "objective_after": 0.9249416974937027,
+      "candidate_count": 11,
+      "from": [
+        -8.0,
+        3.0,
+        -4.0
+      ],
+      "to": [
+        -8.0,
+        3.0,
+        -3.5
+      ],
+      "reason": "Strict regularized overlap improvement."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 3,
+      "accepted": false,
+      "objective_before": 0.9271810350929229,
+      "objective_after": 0.9271810350929229,
+      "candidate_count": 11,
+      "from": [
+        3.0,
+        -4.0,
+        -2.0
+      ],
+      "to": [
+        3.0,
+        -4.0,
+        -2.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "self_correction_round_2",
+      "section": 4,
+      "accepted": false,
+      "objective_before": 0.9318233451251074,
+      "objective_after": 0.9318233451251074,
+      "candidate_count": 11,
+      "from": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "to": [
+        -3.0,
+        1.0,
+        3.0
+      ],
+      "reason": "No candidate improved the regularized overlap objective."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        0,
+        1
+      ],
+      "accepted": true,
+      "objective_before": 0.9166183440518777,
+      "objective_after": 0.9524156688170224,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 1.0,
+      "minimum_all_partial_jacobian": 0.31330320677116674,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        1,
+        2
+      ],
+      "accepted": true,
+      "objective_before": 0.9290408504822225,
+      "objective_after": 0.9553057149969877,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 1.0,
+      "minimum_all_partial_jacobian": 0.7269412325170368,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        2,
+        3
+      ],
+      "accepted": true,
+      "objective_before": 0.9227678917274051,
+      "objective_after": 0.928852392639842,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.7,
+      "minimum_all_partial_jacobian": 0.42042169529395323,
+      "reason": "Strict regularized named-label overlap improvement."
+    },
+    {
+      "stage": "shared_warp",
+      "pair": [
+        3,
+        4
+      ],
+      "accepted": false,
+      "objective_before": 0.9319830673473297,
+      "objective_after": 0.9319830673473297,
+      "flow_grid_stride": 2,
+      "flow_grid_shape": [
+        64,
+        64
+      ],
+      "sampled_common_named_labels": 3,
+      "full_common_named_labels": 3,
+      "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+      "strength": 0.0,
+      "minimum_all_partial_jacobian": 1.0,
+      "reason": "No safe candidate improved overlap; signed-distance interpolation used."
+    }
+  ],
+  "warnings": [
+    {
+      "code": "unresolved_tissue",
+      "source_voxels": 126,
+      "output_voxels": 421,
+      "message": "65535 denotes unresolved tissue; excluded from registration objectives and retained as a source-supported interpolation identity."
+    }
+  ],
+  "metrics": {
+    "mean_dice_before": 0.4569381279233267,
+    "mean_dice_after": 0.9251025384022088,
+    "min_dice_after": 0.9166183440518777,
+    "flagged_pairs": 0,
+    "input_sections": 5,
+    "output_voxels": 278528,
+    "unknown_voxels": 421,
+    "correction_count": 12,
+    "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+    "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+  },
+  "pairs": [
+    {
+      "pair": [
+        0,
+        1
+      ],
+      "method": "shared_warp",
+      "flow": {
+        "accepted": true,
+        "objective_before": 0.9166183440518777,
+        "objective_after": 0.9524156688170224,
+        "flow_grid_stride": 2,
+        "flow_grid_shape": [
+          64,
+          64
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 1.0,
+        "minimum_all_partial_jacobian": 0.31330320677116674,
+        "reason": "Strict regularized named-label overlap improvement."
+      },
+      "maximum_inverse_residual_pixels": 9.999978945168526e-05,
+      "before": {
+        "dice": 0.5153992045932612,
+        "shared_label_mean_dice": 0.45693337152328733,
+        "known_tissue_dice": 0.7492625368731564,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.9166183440518777,
+        "shared_label_mean_dice": 0.9169135397010318,
+        "known_tissue_dice": 0.9154375614552606,
+        "shared_named_labels": 3
+      }
+    },
+    {
+      "pair": [
+        1,
+        2
+      ],
+      "method": "shared_warp",
+      "flow": {
+        "accepted": true,
+        "objective_before": 0.9290408504822225,
+        "objective_after": 0.9553057149969877,
+        "flow_grid_stride": 2,
+        "flow_grid_shape": [
+          64,
+          64
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 1.0,
+        "minimum_all_partial_jacobian": 0.7269412325170368,
+        "reason": "Strict regularized named-label overlap improvement."
+      },
+      "maximum_inverse_residual_pixels": 9.995984754559409e-05,
+      "before": {
+        "dice": 0.28195475575481466,
+        "shared_label_mean_dice": 0.197095397155318,
+        "known_tissue_dice": 0.6213921901528013,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.9290408504822225,
+        "shared_label_mean_dice": 0.9293554386337891,
+        "known_tissue_dice": 0.9277824978759558,
+        "shared_named_labels": 3
+      }
+    },
+    {
+      "pair": [
+        2,
+        3
+      ],
+      "method": "shared_warp",
+      "flow": {
+        "accepted": true,
+        "objective_before": 0.9227678917274051,
+        "objective_after": 0.928852392639842,
+        "flow_grid_stride": 2,
+        "flow_grid_shape": [
+          64,
+          64
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 0.7,
+        "minimum_all_partial_jacobian": 0.42042169529395323,
+        "reason": "Strict regularized named-label overlap improvement."
+      },
+      "maximum_inverse_residual_pixels": 9.998466771338309e-05,
+      "before": {
+        "dice": 0.5713322573387717,
+        "shared_label_mean_dice": 0.5249933471511715,
+        "known_tissue_dice": 0.756687898089172,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.9227678917274051,
+        "shared_label_mean_dice": 0.920891837448372,
+        "known_tissue_dice": 0.9302721088435374,
+        "shared_named_labels": 3
+      }
+    },
+    {
+      "pair": [
+        3,
+        4
+      ],
+      "method": "signed_distance",
+      "flow": {
+        "accepted": false,
+        "objective_before": 0.9319830673473297,
+        "objective_after": 0.9319830673473297,
+        "flow_grid_stride": 2,
+        "flow_grid_shape": [
+          64,
+          64
+        ],
+        "sampled_common_named_labels": 3,
+        "full_common_named_labels": 3,
+        "regularization": "Generic Gaussian smoothing, displacement bound, identity boundary, all-time positive cell Jacobian; no midline/canal pins.",
+        "strength": 0.0,
+        "minimum_all_partial_jacobian": 1.0,
+        "reason": "No safe candidate improved overlap; signed-distance interpolation used."
+      },
+      "maximum_inverse_residual_pixels": 0.0,
+      "before": {
+        "dice": 0.4590662940064594,
+        "shared_label_mean_dice": 0.3945411803462444,
+        "known_tissue_dice": 0.7171667486473192,
+        "shared_named_labels": 3
+      },
+      "after": {
+        "dice": 0.9319830673473297,
+        "shared_label_mean_dice": 0.9356481255227448,
+        "known_tissue_dice": 0.9173228346456693,
+        "shared_named_labels": 3
+      }
+    }
+  ],
+  "source_label_ids": [
+    0,
+    1,
+    2,
+    3,
+    65535
+  ],
+  "output_label_ids": [
+    0,
+    1,
+    2,
+    3,
+    65535
+  ],
+  "evidence_codes": {
+    "0": "background",
+    "1": "named_aligned_anchor",
+    "2": "named_interpolated",
+    "3": "unresolved_aligned_anchor",
+    "4": "unresolved_interpolated"
+  },
+  "coordinate_convention": "Pixel centres: x=origin_x+column*sx, y=origin_y+row*sy; z from explicit z_coordinates_mm. Positive rotation is clockwise on a displayed x-right/y-down image. First section is the fixed registration gauge.",
+  "alignment_scope": "Automatic engineering overlap check of curated categorical sections; no anatomical validation or boundary detection.",
+  "limitations": [
+    "Parallel sections only; supplied z positions and in-plane calibration are authoritative.",
+    "Nearest-neighbour rigid resampling can alter component pixel counts; every source component must retain support, and aligned anchor rasters are preserved exactly.",
+    "Flow uses a bounded coarse named-label grid, generic smoothing and identity-boundary Jacobian checks; no spinal midline or canal prior is applied.",
+    "Positive signed-distance support is conservative: unsupported gaps remain background. Appearance/disappearance is a geometric interpolation assumption, not inferred anatomy.",
+    "Exact normalized-score ties use ascending source identifier order; small interpolated structures may vanish between anchors.",
+    "No biological accuracy, topology or cross-specimen correspondence guarantee; flagged pairs require anatomical review."
+  ],
+  "integrity": {
+    "category_ids_preserved": true,
+    "aligned_anchors_exact": true,
+    "original_anchors_preserved": true,
+    "original_labels_sha256": "f00c2cbd2fd6eb053958b2bd1787062890324326c2c776c28867b3cfd4196b17"
+  },
+  "schema": "atlascraft-output-v2",
+  "software_version": "2.0.0",
+  "name": "AtlasCraft synthetic demonstration",
+  "label_names": {
+    "0": "Outside",
+    "65535": "Unresolved tissue",
+    "1": "Outer compartment",
+    "2": "Compartment A",
+    "3": "Compartment B"
+  },
+  "label_colors": {
+    "0": "#000000",
+    "65535": "#b8b3c7",
+    "1": "#78bbae",
+    "2": "#ea947d",
+    "3": "#e2bf64"
+  },
+  "coordinate_system": "Synthetic image X/Y and section Z in millimetres; not real anatomy",
+  "sources": [
+    {
+      "citation": "Procedural geometric demonstration created for AtlasCraft. No biological validation implied.",
+      "license": "Synthetic example; no third-party atlas source."
+    }
+  ],
+  "requested_options": {},
+  "human_review": {
+    "input_curated": true,
+    "output_anatomically_accepted": false
+  },
+  "agent_notes": [],
+  "volume_sha256": "b1ea5ce866e8eefefb411731831998e825c58e6f630594ea61ae9ca56fcff92a",
+  "interpretation": "Alignment quality and interpolation are computational measures. Human experts must validate reconstructed anatomy. No missing anatomical identity is assigned by the agent.",
+  "nifti_export": "Uniform Z; sform stores the user-defined image XYZ frame in mm. Anatomical RAS/LPS orientation is not established.",
+  "viewer_artifacts": {
+    "viewer_html": "viewer.html",
+    "surface_preview_ply": "surfaces_preview.ply",
+    "viewer_summary": "viewer_summary.json",
+    "surface_preview": {
+      "kind": "Categorical marching-cubes display preview; not a measurement mesh",
+      "native_shape_zyx": [
+        17,
+        128,
+        128
+      ],
+      "preview_shape_zyx": [
+        17,
+        65,
+        65
+      ],
+      "sampling_indices_zyx": [
+        [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90,
+          92,
+          94,
+          96,
+          98,
+          100,
+          102,
+          104,
+          106,
+          108,
+          110,
+          112,
+          114,
+          116,
+          118,
+          120,
+          122,
+          124,
+          126,
+          127
+        ],
+        [
+          0,
+          2,
+          4,
+          6,
+          8,
+          10,
+          12,
+          14,
+          16,
+          18,
+          20,
+          22,
+          24,
+          26,
+          28,
+          30,
+          32,
+          34,
+          36,
+          38,
+          40,
+          42,
+          44,
+          46,
+          48,
+          50,
+          52,
+          54,
+          56,
+          58,
+          60,
+          62,
+          64,
+          66,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          80,
+          82,
+          84,
+          86,
+          88,
+          90,
+          92,
+          94,
+          96,
+          98,
+          100,
+          102,
+          104,
+          106,
+          108,
+          110,
+          112,
+          114,
+          116,
+          118,
+          120,
+          122,
+          124,
+          126,
+          127
+        ]
+      ],
+      "triangles": 8872,
+      "regions_with_surfaces": 4,
+      "labels_without_preview_surface": [],
+      "physical_nonuniform_z_used": true,
+      "native_slice_arrays_unchanged": true,
+      "boundary_note": "Preview sampling can simplify or miss small structures. End surfaces are computational closures at the displayed grid boundary."
+    }
+  },
+  "runtime_seconds": 0.719
+}

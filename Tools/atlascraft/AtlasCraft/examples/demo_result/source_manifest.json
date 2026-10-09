@@ -1,0 +1,75 @@
+{
+  "schema": "atlascraft-input-v1",
+  "name": "AtlasCraft synthetic demonstration",
+  "curated": true,
+  "coordinate_system": "Synthetic image X/Y and section Z in millimetres; not real anatomy",
+  "spacing_xy_mm": [
+    0.04,
+    0.04
+  ],
+  "sections": [
+    {
+      "name": "Curated section 1",
+      "z_mm": 0.0,
+      "file": "section_01.png",
+      "sha256": "1179e4f6cc1876c06d06821614b92ecaa314bb579fa13961d590d6bdb3045ed3"
+    },
+    {
+      "name": "Curated section 2",
+      "z_mm": 0.4,
+      "file": "section_02.png",
+      "sha256": "b8883e3cb14e65c77961c0c077e7e5a8c9f2655f1037522ff51e6bf9a88b581c"
+    },
+    {
+      "name": "Curated section 3",
+      "z_mm": 0.8,
+      "file": "section_03.png",
+      "sha256": "16552b1cf81d9caf6e57fae1d5b121045272f2ed78897eebd9e30788fa8c5183"
+    },
+    {
+      "name": "Curated section 4",
+      "z_mm": 1.2000000000000002,
+      "file": "section_04.png",
+      "sha256": "83d4bf2fe78de9f4e5df4e86ad163c64c98d5dd348ffa0029920b203cf4603dd"
+    },
+    {
+      "name": "Curated section 5",
+      "z_mm": 1.6,
+      "file": "section_05.png",
+      "sha256": "7b32211ce99c678ae2fc1867b03e4aaeadce69bb3a6c5e71628320cae35018de"
+    }
+  ],
+  "labels": [
+    {
+      "id": 0,
+      "name": "Outside",
+      "color": "#000000"
+    },
+    {
+      "id": 1,
+      "name": "Outer compartment",
+      "color": "#78bbae"
+    },
+    {
+      "id": 2,
+      "name": "Compartment A",
+      "color": "#ea947d"
+    },
+    {
+      "id": 3,
+      "name": "Compartment B",
+      "color": "#e2bf64"
+    },
+    {
+      "id": 65535,
+      "name": "Unresolved tissue",
+      "color": "#b8b3c7"
+    }
+  ],
+  "sources": [
+    {
+      "citation": "Procedural geometric demonstration created for AtlasCraft. No biological validation implied.",
+      "license": "Synthetic example; no third-party atlas source."
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+[
+  {
+    "tool": "validate_curated_references",
+    "arguments": {},
+    "result": {
+      "stage": 1,
+      "completed": false,
+      "input_sections": 5,
+      "input_shape_zyx": [
+        5,
+        32,
+        32
+      ]
+    }
+  },
+  {
+    "tool": "extract_boundaries_and_assign_regions",
+    "arguments": {},
+    "result": {
+      "stage": 2,
+      "completed": false,
+      "input_sections": 5,
+      "input_shape_zyx": [
+        5,
+        32,
+        32
+      ]
+    }
+  },
+  {
+    "tool": "align_interpolate_reconstruct",
+    "arguments": {},
+    "result": {
+      "stage": 3,
+      "completed": false,
+      "input_sections": 5,
+      "input_shape_zyx": [
+        5,
+        32,
+        32
+      ],
+      "metrics": {
+        "mean_dice_before": 0.4609554982640057,
+        "mean_dice_after": 0.4609554982640057,
+        "min_dice_after": 0.2808932448671847,
+        "flagged_pairs": 3,
+        "input_sections": 5,
+        "output_voxels": 11664,
+        "unknown_voxels": 31,
+        "correction_count": 3,
+        "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+        "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+      },
+      "warning_count": 4,
+      "output_voxels": 11664,
+      "unknown_voxels": 31,
+      "agent_retries_remaining": 2
+    }
+  },
+  {
+    "tool": "inspect_geometric_quality",
+    "arguments": {},
+    "result": {
+      "stage": 4,
+      "completed": false,
+      "input_sections": 5,
+      "input_shape_zyx": [
+        5,
+        32,
+        32
+      ],
+      "metrics": {
+        "mean_dice_before": 0.4609554982640057,
+        "mean_dice_after": 0.4609554982640057,
+        "min_dice_after": 0.2808932448671847,
+        "flagged_pairs": 3,
+        "input_sections": 5,
+        "output_voxels": 11664,
+        "unknown_voxels": 31,
+        "correction_count": 3,
+        "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+        "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+      },
+      "warning_count": 4,
+      "output_voxels": 11664,
+      "unknown_voxels": 31,
+      "agent_retries_remaining": 2
+    }
+  },
+  {
+    "tool": "export_atlas_and_viewer",
+    "arguments": {},
+    "result": {
+      "stage": 5,
+      "completed": true,
+      "input_sections": 5,
+      "input_shape_zyx": [
+        5,
+        32,
+        32
+      ],
+      "metrics": {
+        "mean_dice_before": 0.4609554982640057,
+        "mean_dice_after": 0.4609554982640057,
+        "min_dice_after": 0.2808932448671847,
+        "flagged_pairs": 3,
+        "input_sections": 5,
+        "output_voxels": 11664,
+        "unknown_voxels": 31,
+        "correction_count": 3,
+        "dice_scope": "Adjacent aligned-anchor overlap before and after rigid/translation registration; pair flow objectives are reported separately.",
+        "dice_definition": "0.8\u00d7mean Dice of shared named identities + 0.2\u00d7known-tissue-union Dice; excludes0/65535; null when no shared named identity."
+      },
+      "warning_count": 4,
+      "output_voxels": 11664,
+      "unknown_voxels": 31,
+      "agent_retries_remaining": 2
+    }
+  }
+]
