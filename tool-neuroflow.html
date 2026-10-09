@@ -159,6 +159,7 @@
         <p class="tool-tagline">
           A self-contained, browser-based workflow that takes mouse brain sections from raw histology images to region-resolved counts, registering each section to the Allen Mouse Brain atlas and quantifying labeled signal per brain region, entirely on your own computer.
         </p>
+        <p class="tool-tagline"><strong>New: Learn mode for signal detection.</strong> Mark examples of signal and background to train detection directly in your browser.</p>
         <div class="tool-actions">
           <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch NeuroFlow</a>
           <a href="https://www.biorxiv.org/content/10.64898/2026.07.15.737186v1" target="_blank" class="btn-paper"><i class="fas fa-file-lines"></i> Read the paper</a>
@@ -237,6 +238,7 @@
 
         <div class="stage">
           <div class="stage-head"><span class="stage-num">5</span><h4>Quantifier <span class="stage-tag">· signal detection</span></h4></div>
+          <p><strong>Learn mode:</strong> Mark signal and background examples on your section images to train a detector locally in your browser. Use the learned detector for signal detection, or switch to <strong>Color</strong> mode for manual color-based detection.</p>
           <p>Detect labeled signal by color. Pick a representative signal color by typing it or sampling with the eyedropper, restrict analysis to valid tissue with brush/lasso/erase mask tools, then set a contrast threshold (for green, the score is <em>G − max(R, B)</em>) and a connected-component size cutoff. A cyan preview shows every threshold-positive pixel. NeuroFlow works from <strong>source-image pixels only</strong>. It does not invent cells or synthetic centroids.</p>
           <figure class="paper-fig">
             <img src="images/neuroflow_paper/fig4-quantifier.png" alt="Quantifier signal-pixel detection stage">
