@@ -1,0 +1,12 @@
+{
+  "sourceEdition": "../neuroflow",
+  "sourceFilesSHA256": {
+    "build_assets.py": "0c6a36f0a5c92d2221d7e32c86931c0fe7f29449ec14d4a2ca8dfd48cbf32131",
+    "build_neuroflow.py": "8d0bdb86ee1ef3e01b8d4e7807c74b8ad0bca43d656bd741c65b5ae52a2ea7d8",
+    "lazy_mesh_patches.py": "eec066448f5b5691511c18e3f22bd6aa82d0454aa5f7117d74dad2d8f6e087fe",
+    "region_mesh_loader.js": "a811dbec2f298e2188ca6cb609c7844df8e4fa47c4857c08e58ec19dac14f3a0",
+    "validate_sidecars.py": "746ac6ad0bbf65524b13d814455cf3d088bf0f47b64fa53d7e44ead331ce2d99"
+  },
+  "purpose": "Separate smooth-surface edition; original exact edition remains unchanged.",
+  "sourceReportsCopied": false
+}

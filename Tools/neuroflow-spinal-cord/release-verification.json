@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "All 72 mesh checksums over file and HTTP",
+    "Unchanged measurement atlas and 34 reference images",
+    "seven-steps",
+    "workflow",
+    "live-learning",
+    "channel-learning",
+    "tiff-workflow",
+    "reference-viewers"
+  ],
+  "testedAt": "2026-10-09T22:23:35.943Z"
+}

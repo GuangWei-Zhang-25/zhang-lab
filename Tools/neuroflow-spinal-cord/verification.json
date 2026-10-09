@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "htmlSHA256": "11fe27994d484f48924107a2a84bfc898e0ae10faf358e1185de1e5c8f09663a",
+  "unchangedMeasurementAssets": true,
+  "runs": [
+    {
+      "url": "file:///Users/zhangg8/Documents/Neuroflow/spinal-cord-web/index.html",
+      "verifiedMeshes": 72
+    },
+    {
+      "url": "http://127.0.0.1:58805/index.html",
+      "verifiedMeshes": 72
+    }
+  ],
+  "errors": []
+}

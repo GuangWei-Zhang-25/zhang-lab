@@ -1,0 +1,3674 @@
+[
+  {
+    "id": 3003,
+    "sourceSHA256": "19bacef7786472f5497a6e8fbba8a180df009c9b726fa1f197a4e4b917b922a5",
+    "scriptSHA256": "c229e9107f3ae062385dd307f8d29bdb4d8c41dbd184e95af90712f396396dcb",
+    "sourceBytes": 73643955,
+    "webBytes": 822851,
+    "originalTriangles": 4605336,
+    "triangles": 61824,
+    "originalBounds": [
+      [
+        -1.2791308164596558,
+        -0.8108054995536804,
+        -0.022128799930214882
+      ],
+      [
+        1.2791308164596558,
+        -0.08033110201358795,
+        31.11044692993164
+      ]
+    ],
+    "entry": {
+      "id": 3003,
+      "acr": "1Sp",
+      "name": "lamina 1 of the spinal gray",
+      "color": "23B9D1",
+      "shell": false,
+      "voff": 0,
+      "vcount": 30872,
+      "ioff": 370464,
+      "icount": 61824,
+      "rawBytes": 1112352,
+      "rawSHA256": "c951e885783408eb5f1e2ef3a632b84d0c09176f35c17bf1cb3d13c996e7d60c",
+      "gzipBytes": 617109,
+      "gzipSHA256": "dd95b47eb4cf7a6cf8b38c20e66e7124b35a16b571c056f69541273979b14164",
+      "file": "3003.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.2535228729248047,
+          -0.820048451423645,
+          -0.024762598797678947
+        ],
+        [
+          1.2508436441421509,
+          -0.11981213092803955,
+          31.105016708374023
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3005,
+    "sourceSHA256": "fc532a2dd08450f0fbb2dfa6804793b9902cfb227a8c8f2be4c6c6a615d25b26",
+    "scriptSHA256": "82c6d3102ddb761d22f9411179bd01f4a250e78f3b7e5664ab6e229e981424fb",
+    "sourceBytes": 69569439,
+    "webBytes": 618371,
+    "originalTriangles": 4362976,
+    "triangles": 47026,
+    "originalBounds": [
+      [
+        -1.2218735218048096,
+        -0.7573464512825012,
+        -0.02214236557483673
+      ],
+      [
+        1.2218735218048096,
+        -0.08681683242321014,
+        31.110939025878906
+      ]
+    ],
+    "entry": {
+      "id": 3005,
+      "acr": "2SpI",
+      "name": "lamina 2 of the spinal gray, inner part",
+      "color": "F18472",
+      "shell": false,
+      "voff": 0,
+      "vcount": 23530,
+      "ioff": 282360,
+      "icount": 47026,
+      "rawBytes": 846672,
+      "rawSHA256": "2b635348a7a8d1f63859b53e18ef8571172cbd569cfcd52aa265c0a2fe25eddc",
+      "gzipBytes": 463748,
+      "gzipSHA256": "f4b492e4356a324639152a8f571c39bf73e1300591256636a5a1da667a651132",
+      "file": "3005.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.2088676691055298,
+          -0.7427144050598145,
+          -0.02364909090101719
+        ],
+        [
+          1.183189868927002,
+          -0.1270356923341751,
+          31.1124324798584
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3006,
+    "sourceSHA256": "c01d7f9249a314f0130f2819d7544ecb47e7fa01457ec1805c1a87d755e960cf",
+    "scriptSHA256": "9b14ac48ebeabc91e0a8b1c7956c98c3759dd7f32a6cf2a428d3f281225f8e6b",
+    "sourceBytes": 71183283,
+    "webBytes": 672175,
+    "originalTriangles": 4466624,
+    "triangles": 50910,
+    "originalBounds": [
+      [
+        -1.255589246749878,
+        -0.787046492099762,
+        -0.02213600091636181
+      ],
+      [
+        1.255589246749878,
+        -0.07333696633577347,
+        31.11090850830078
+      ]
+    ],
+    "entry": {
+      "id": 3006,
+      "acr": "2SpO",
+      "name": "lamina 2 of the spinal gray, outer part",
+      "color": "865CC2",
+      "shell": false,
+      "voff": 0,
+      "vcount": 25480,
+      "ioff": 305760,
+      "icount": 50910,
+      "rawBytes": 916680,
+      "rawSHA256": "2662a08c345eb1fc48a86e0a8ca32b2b818dfddc8257eb416bc25c9ca5ea65ae",
+      "gzipBytes": 504101,
+      "gzipSHA256": "52ef096423f60d8f3541ea6f8ced1d7514e45150699350e7ffadf3a2c69196fe",
+      "file": "3006.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.237289547920227,
+          -0.778374433517456,
+          -0.024081135168671608
+        ],
+        [
+          1.229562759399414,
+          -0.0994691252708435,
+          31.112567901611328
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3007,
+    "sourceSHA256": "e4080406dec8a7b5a9b4d488b8c52d7a7453e3bc945e19a2dd4ed4be4e161622",
+    "scriptSHA256": "5e07acd844c78f92465855f18f904cad1607b524f905aec7f2ad47fba9e2e10f",
+    "sourceBytes": 67329723,
+    "webBytes": 630803,
+    "originalTriangles": 4213660,
+    "triangles": 48050,
+    "originalBounds": [
+      [
+        -1.1624642610549927,
+        -0.7217063307762146,
+        -0.02215132862329483
+      ],
+      [
+        1.1624642610549927,
+        -0.14004245400428772,
+        31.111324310302734
+      ]
+    ],
+    "entry": {
+      "id": 3007,
+      "acr": "3Sp",
+      "name": "lamina 3 of the spinal gray",
+      "color": "4AB39B",
+      "shell": false,
+      "voff": 0,
+      "vcount": 24056,
+      "ioff": 288672,
+      "icount": 48050,
+      "rawBytes": 865272,
+      "rawSHA256": "78ebd882dabfd0980bfc1bf7364a971716c8a14b98000b20ce6595fc4959438f",
+      "gzipBytes": 473072,
+      "gzipSHA256": "0ce195bdf8352a5022ff2c7876d71ce489574d69a94ced7d3570eba5f8f686ef",
+      "file": "3007.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.147180438041687,
+          -0.7309030890464783,
+          -0.024920258671045303
+        ],
+        [
+          1.140172004699707,
+          -0.18049536645412445,
+          31.112483978271484
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3008,
+    "sourceSHA256": "e85cdff677fc0f587be5441296611d7ca6377325ea923e9995a920c328e870f2",
+    "scriptSHA256": "81f168add16a9cc1f549ee2cbd1de909bd89a7806d1b12ffd6917dce360a1582",
+    "sourceBytes": 69530719,
+    "webBytes": 798003,
+    "originalTriangles": 4321972,
+    "triangles": 59974,
+    "originalBounds": [
+      [
+        -1.079135775566101,
+        -0.6385449767112732,
+        -0.022150274366140366
+      ],
+      [
+        1.079135775566101,
+        -0.03241129219532013,
+        31.111309051513672
+      ]
+    ],
+    "entry": {
+      "id": 3008,
+      "acr": "4Sp",
+      "name": "lamina 4 of the spinal gray",
+      "color": "E6B955",
+      "shell": false,
+      "voff": 0,
+      "vcount": 29942,
+      "ioff": 359304,
+      "icount": 59974,
+      "rawBytes": 1078992,
+      "rawSHA256": "02337ab513779bfa760e8b49af36b3d19004ebb49c08c5a7fff7faa874d5e1e5",
+      "gzipBytes": 598472,
+      "gzipSHA256": "303d7791280a009cc13690a17000256a96d09fdbe4c68e9f48987b5df3495678",
+      "file": "3008.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.0661695003509521,
+          -0.6373140215873718,
+          -0.022945236414670944
+        ],
+        [
+          1.0769754648208618,
+          -0.03459516167640686,
+          31.11355209350586
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3009,
+    "sourceSHA256": "c3ec69a849fabb17e0cc06fe552f192b08bba9872a4c8b226d88e768b289c80f",
+    "scriptSHA256": "d22220e4b1c618da9e565f7837f6644fe4528fd4c6b20d82ab15f28ab1351ab1",
+    "sourceBytes": 7599087,
+    "webBytes": 285615,
+    "originalTriangles": 496392,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8159217834472656,
+        -0.6851873397827148,
+        25.357036590576172
+      ],
+      [
+        0.8159217834472656,
+        -0.12077708542346954,
+        31.111309051513672
+      ]
+    ],
+    "entry": {
+      "id": 3009,
+      "acr": "5Sp",
+      "name": "lamina 5 of the spinal gray",
+      "color": "BA8A32",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10029,
+      "ioff": 120348,
+      "icount": 20000,
+      "rawBytes": 360348,
+      "rawSHA256": "9662b17a48f2a0562b193b96d9640787e83158fae128524f7eefe64e1fe05d58",
+      "gzipBytes": 214181,
+      "gzipSHA256": "25af1087d3ac49278c5e50c49d21a3da0445b95fed8bd9339d4b9baa0cf09145",
+      "file": "3009.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8015810251235962,
+          -0.6373133659362793,
+          25.519325256347656
+        ],
+        [
+          0.8028508424758911,
+          -0.12083376199007034,
+          31.111309051513672
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3010,
+    "sourceSHA256": "efd230af27b5bf9a175cdde672d8c66e65e23e909e35fce9fbffb3375376bdd2",
+    "scriptSHA256": "6be088e231a251153b8ca03d35d3ca56d5d74b33199a43d33b2bdd2d77aa7d1d",
+    "sourceBytes": 36982455,
+    "webBytes": 512591,
+    "originalTriangles": 2374976,
+    "triangles": 39502,
+    "originalBounds": [
+      [
+        -0.9776944518089294,
+        -0.798469066619873,
+        -0.022138230502605438
+      ],
+      [
+        0.9776944518089294,
+        -0.07918242365121841,
+        26.167821884155273
+      ]
+    ],
+    "entry": {
+      "id": 3010,
+      "acr": "5SpL",
+      "name": "lamina 5 of the spinal gray, lateral part",
+      "color": "467AC0",
+      "shell": false,
+      "voff": 0,
+      "vcount": 19771,
+      "ioff": 237252,
+      "icount": 39502,
+      "rawBytes": 711276,
+      "rawSHA256": "70b844192f98737ef1f508e635c3b0a8ae39052befa242dbae52e514285ba5ba",
+      "gzipBytes": 384412,
+      "gzipSHA256": "8d2ac385ec6c0dcab8cf760d2235aeb0d0e1f68914ebeaf2b1da2c7210be0ca2",
+      "file": "3010.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.944090723991394,
+          -0.7092776298522949,
+          -0.022230803966522217
+        ],
+        [
+          0.9386400580406189,
+          -0.08624663949012756,
+          25.845237731933594
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3011,
+    "sourceSHA256": "370e52ec4db463813a0f6441697073d9554bd0c0070df7d9a9182c63b93ea349",
+    "scriptSHA256": "7892380127b12fe8101a2970ed433ba3b5a9e1b528d8b1097fe751f126bdcb8d",
+    "sourceBytes": 24499271,
+    "webBytes": 375511,
+    "originalTriangles": 1567812,
+    "triangles": 28916,
+    "originalBounds": [
+      [
+        -0.4839405119419098,
+        -0.4491075277328491,
+        -0.02215082198381424
+      ],
+      [
+        0.4839405119419098,
+        -0.032983824610710144,
+        25.85234260559082
+      ]
+    ],
+    "entry": {
+      "id": 3011,
+      "acr": "5SpM",
+      "name": "lamina 5 of the spinal gray, medial part",
+      "color": "D16E9D",
+      "shell": false,
+      "voff": 0,
+      "vcount": 14462,
+      "ioff": 173544,
+      "icount": 28916,
+      "rawBytes": 520536,
+      "rawSHA256": "41831083c4e67560485fa63269c056e1c1ece7cf78cadf13e2a5b6d28086ae40",
+      "gzipBytes": 281604,
+      "gzipSHA256": "6219d5b3ac6a6a9b0b848abc6b99204dbed48171717551b18d230a324f46a7e8",
+      "file": "3011.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.46686363220214844,
+          -0.4351606070995331,
+          -0.023115262389183044
+        ],
+        [
+          0.48950597643852234,
+          -0.037758052349090576,
+          25.83570671081543
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3012,
+    "sourceSHA256": "a3a969a25196e2290846686e8bd71a0408ca54961249956475e1690187a46139",
+    "scriptSHA256": "b33f4b574c68d0a622ad98bb8896e984dfdd07d773ca25b100430e84715c99d3",
+    "sourceBytes": 8467779,
+    "webBytes": 286407,
+    "originalTriangles": 528760,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.7684421539306641,
+        -0.2819790840148926,
+        2.325242757797241
+      ],
+      [
+        0.7684421539306641,
+        -0.009174683131277561,
+        7.677120685577393
+      ]
+    ],
+    "entry": {
+      "id": 3012,
+      "acr": "6Sp",
+      "name": "lamina 6 of the spinal gray",
+      "color": "E68B42",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "01551e3da3d3d1effd59e50148f84ce06467e1970e7a68b6244ceada865731cd",
+      "gzipBytes": 214774,
+      "gzipSHA256": "29d575547ad229776bdb71273151bbfe318eb26f703106ac4bff5365c6ab24ab",
+      "file": "3012.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7686843872070312,
+          -0.28190189599990845,
+          2.330650568008423
+        ],
+        [
+          0.7691504955291748,
+          -0.00891937967389822,
+          7.673268795013428
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3013,
+    "sourceSHA256": "bf4d35e2e532077ad4a7d3766a8d75d642cb4f0b208b352600e0c19bf3d6e18b",
+    "scriptSHA256": "f12ba6856ad04768f86c0707f028e09d92db69994a399f33e17f66f43631aae2",
+    "sourceBytes": 3422103,
+    "webBytes": 281559,
+    "originalTriangles": 223596,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.869621992111206,
+        -0.6319389343261719,
+        20.17514419555664
+      ],
+      [
+        0.869621992111206,
+        -0.08021421730518341,
+        25.889785766601562
+      ]
+    ],
+    "entry": {
+      "id": 3013,
+      "acr": "6SpL",
+      "name": "lamina 6 of the spinal gray, lateral part",
+      "color": "AA76CF",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10028,
+      "ioff": 120336,
+      "icount": 20000,
+      "rawBytes": 360336,
+      "rawSHA256": "ffe4d3a356c6b62fb4e581186d66f7f18ed0c084b17bd31d8a38812adb42eb22",
+      "gzipBytes": 211140,
+      "gzipSHA256": "b7b82cd309e0122c90cd6d47e14024268521d50f31e25772754667901f7a2d2c",
+      "file": "3013.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8694333434104919,
+          -0.6320649981498718,
+          20.174558639526367
+        ],
+        [
+          0.8696041107177734,
+          -0.08047683537006378,
+          25.888240814208984
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3014,
+    "sourceSHA256": "eccdb4d46d4a665fd9615a4d1d6503c038645afe9b767e07b1ce7c2a7c0719a5",
+    "scriptSHA256": "dbc99d664057eaef8b0eda231765b0d60ae95e9589ddaa769a1a81bdca6ace92",
+    "sourceBytes": 4360827,
+    "webBytes": 285751,
+    "originalTriangles": 277672,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.48363643884658813,
+        -0.241135373711586,
+        21.247943878173828
+      ],
+      [
+        0.48363643884658813,
+        -0.03177924454212189,
+        25.919965744018555
+      ]
+    ],
+    "entry": {
+      "id": 3014,
+      "acr": "6SpM",
+      "name": "lamina 6 of the spinal gray, medial part",
+      "color": "87AD43",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "98afcd79c2fce150f1e961557983d6ebb40b56ae9889c59701cdd9b8b6b92e0d",
+      "gzipBytes": 214283,
+      "gzipSHA256": "7aa21e6e1f7d5b179a9e68bb34e1c6583698598a8a22cf49556906f5b74d9cc8",
+      "file": "3014.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.4838574528694153,
+          -0.24119208753108978,
+          21.247535705566406
+        ],
+        [
+          0.4842368960380554,
+          -0.03176383301615715,
+          25.917922973632812
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3015,
+    "sourceSHA256": "d19228fda5fbdfae01b14d222cd25d85676c6ec9a92c09e182e4de5953141232",
+    "scriptSHA256": "15068c5ef5f83d233a0602572fa5a7ebe4782f4eb9e00155d872d510413adbf8",
+    "sourceBytes": 109894215,
+    "webBytes": 1231867,
+    "originalTriangles": 6797396,
+    "triangles": 89568,
+    "originalBounds": [
+      [
+        -1.0654094219207764,
+        -0.2518249750137329,
+        -0.022137682884931564
+      ],
+      [
+        1.0654094219207764,
+        0.6919258832931519,
+        31.111309051513672
+      ]
+    ],
+    "entry": {
+      "id": 3015,
+      "acr": "7Sp",
+      "name": "lamina 7 of the spinal gray",
+      "color": "20A69E",
+      "shell": false,
+      "voff": 0,
+      "vcount": 44766,
+      "ioff": 537192,
+      "icount": 89568,
+      "rawBytes": 1612008,
+      "rawSHA256": "ea8035d891ae7f03f80507cdb2e8835d5184550170dce015e262fd9535745b75",
+      "gzipBytes": 923869,
+      "gzipSHA256": "750aebcc4ba1e2428e59d4552e2b9f9b69d30ef2284e0955c0a30f03f7e956e3",
+      "file": "3015.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.0418009757995605,
+          -0.23684051632881165,
+          -0.022110216319561005
+        ],
+        [
+          1.0532941818237305,
+          0.6675580143928528,
+          31.111299514770508
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3016,
+    "sourceSHA256": "eed0d15fd108c5ec2a2f545b70fa5efc063a7d86105014a7a30c30f5777ffffe",
+    "scriptSHA256": "0cef6610b51b188a3f907acd56182fee024f0c6c870ba1bfdf646c99ce765f5a",
+    "sourceBytes": 72486347,
+    "webBytes": 657331,
+    "originalTriangles": 4524256,
+    "triangles": 48958,
+    "originalBounds": [
+      [
+        -0.810775876045227,
+        -0.03236362710595131,
+        -0.02215220034122467
+      ],
+      [
+        0.810775876045227,
+        0.7042752504348755,
+        31.111309051513672
+      ]
+    ],
+    "entry": {
+      "id": 3016,
+      "acr": "8Sp",
+      "name": "lamina 8 of the spinal gray",
+      "color": "B391D9",
+      "shell": false,
+      "voff": 0,
+      "vcount": 24460,
+      "ioff": 293520,
+      "icount": 48958,
+      "rawBytes": 881016,
+      "rawSHA256": "4f3a4d509a5f0dccd707d4390071dfc9884c453cf34f9ab8aa5b1be56343544e",
+      "gzipBytes": 492968,
+      "gzipSHA256": "383bc1c06cf9e5f54bea892d2e88b73e9bac7da0d3d92156ccb5aa91b3862a62",
+      "file": "3016.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7881726622581482,
+          -0.01586129330098629,
+          -0.022607076913118362
+        ],
+        [
+          0.7835889458656311,
+          0.6797133684158325,
+          31.11256980895996
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3018,
+    "sourceSHA256": "9c55153947ca4177bf5d5c687c019a12a40c6e189d9ab74ad7569e7767710f53",
+    "scriptSHA256": "f544bd82ea06e6167f641e8d9b2b388f35c3059d5c2182f40ef8fa017b2dc935",
+    "sourceBytes": 22216635,
+    "webBytes": 1169763,
+    "originalTriangles": 1423908,
+    "triangles": 85812,
+    "originalBounds": [
+      [
+        -0.13364750146865845,
+        -0.25318339467048645,
+        -0.022215960547327995
+      ],
+      [
+        0.13364750146865845,
+        0.2592318058013916,
+        31.11131477355957
+      ]
+    ],
+    "entry": {
+      "id": 3018,
+      "acr": "10Sp",
+      "name": "lamina 10 of the spinal gray",
+      "color": "EA967B",
+      "shell": false,
+      "voff": 0,
+      "vcount": 42862,
+      "ioff": 514344,
+      "icount": 85812,
+      "rawBytes": 1544088,
+      "rawSHA256": "66fcfe66ac0280d7866f1caa9db7694240b6489530e43842f6ccc787e5c6bfe6",
+      "gzipBytes": 877292,
+      "gzipSHA256": "e06f249ad99650d81419eb6d61fbf4a87e7402a8732d5d1ac3d9a73cce5ea346",
+      "file": "3018.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.13768796622753143,
+          -0.2334904670715332,
+          -0.021920226514339447
+        ],
+        [
+          0.12907351553440094,
+          0.2592805325984955,
+          31.108623504638672
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3019,
+    "sourceSHA256": "33d45a5b315585a466db1530c8e74457c641b9336bef4046b952082c91050689",
+    "scriptSHA256": "0325132f026c7f75379d3e799e2cc6939d2333bc870b190b383f70e643b11a28",
+    "sourceBytes": 2766587,
+    "webBytes": 281323,
+    "originalTriangles": 184236,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8345643281936646,
+        0.22761434316635132,
+        19.11001968383789
+      ],
+      [
+        0.8345643281936646,
+        0.4376746118068695,
+        23.079647064208984
+      ]
+    ],
+    "entry": {
+      "id": 3019,
+      "acr": "Ad9",
+      "name": "adductor motoneurons of lamina 9",
+      "color": "E0CCAE",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "4e3ab954e460aaff532b1316801734f0782699351a39f82292956969674047be",
+      "gzipBytes": 210963,
+      "gzipSHA256": "905f436e910c9a5639f916673965242ce52845d929d2d74003b2f03f1dcb047b",
+      "file": "3019.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8345670700073242,
+          0.2274780422449112,
+          19.10987091064453
+        ],
+        [
+          0.8345627784729004,
+          0.4376625418663025,
+          23.079076766967773
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3021,
+    "sourceSHA256": "0691d63df1ef9916a6969acec0706bba019f696ceb964bd0ea37244da7e8fdab",
+    "scriptSHA256": "708616112c0476e94f552fae19bc8d57ed7be11d417565bb202d96557bd17d64",
+    "sourceBytes": 17313863,
+    "webBytes": 266459,
+    "originalTriangles": 1111648,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.443600594997406,
+        0.14379186928272247,
+        -0.022131994366645813
+      ],
+      [
+        0.443600594997406,
+        0.5502226948738098,
+        24.617408752441406
+      ]
+    ],
+    "entry": {
+      "id": 3021,
+      "acr": "Ax9",
+      "name": "axial muscle motoneurons of lamina 9",
+      "color": "D64B29",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "8c470eae3719e77c9f033c681afd37cac2cd2992ba2465f10dce662fe717bc12",
+      "gzipBytes": 199813,
+      "gzipSHA256": "30412eb41ea3f64152817cd17dcead8c1dc2f4d0905882021f82e1382cbbe86c",
+      "file": "3021.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.4446799159049988,
+          0.14379191398620605,
+          -0.021444616839289665
+        ],
+        [
+          0.44226548075675964,
+          0.5469619631767273,
+          24.58836555480957
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3022,
+    "sourceSHA256": "18ae2472a9a2309eeca64862f5123dbaa2782e4cfa828490755643cb469d18a7",
+    "scriptSHA256": "5fc257ab593fe59e03c5da2e363bf13246b862704eeb1c35d52aa5ef023171a4",
+    "sourceBytes": 2522943,
+    "webBytes": 287371,
+    "originalTriangles": 167096,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -1.0424463748931885,
+        0.014267144724726677,
+        3.5036041736602783
+      ],
+      [
+        1.0424463748931885,
+        0.34859195351600647,
+        5.915596961975098
+      ]
+    ],
+    "entry": {
+      "id": 3022,
+      "acr": "Bi9",
+      "name": "biceps motoneurons of lamina 9",
+      "color": "B94646",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "0c5b10b6dba62c65bc9f7230a93aa76a0dac915f85990804dc2f7edebeae1954",
+      "gzipBytes": 215498,
+      "gzipSHA256": "84b0512900b0d4b7d189caf88e979b918df37bd436f667e9ca5f07b716ddfbdf",
+      "file": "3022.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.0424436330795288,
+          0.014041892252862453,
+          3.5035433769226074
+        ],
+        [
+          1.0424443483352661,
+          0.348639577627182,
+          5.914378643035889
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3023,
+    "sourceSHA256": "1150361e8b8bd520f2a0aacd9850121a8a3e9d9f6ca5bf116a1761313d1ecb3e",
+    "scriptSHA256": "c6e76bb704227d6023711e384a4dd9935086db9580578edafccb370c9e9cc734",
+    "sourceBytes": 2722051,
+    "webBytes": 421667,
+    "originalTriangles": 194898,
+    "triangles": 32390,
+    "originalBounds": [
+      [
+        -0.03876284137368202,
+        -0.05733171105384827,
+        -0.022133763879537582
+      ],
+      [
+        0.03876284137368202,
+        0.054880090057849884,
+        31.111305236816406
+      ]
+    ],
+    "entry": {
+      "id": 3023,
+      "acr": "CC",
+      "name": "central canal",
+      "color": "385C73",
+      "shell": false,
+      "voff": 0,
+      "vcount": 16198,
+      "ioff": 194376,
+      "icount": 32390,
+      "rawBytes": 583056,
+      "rawSHA256": "88eaf5ad84b07f259996e149757632d0e1798511022c9fe23f54fb5cc32771fc",
+      "gzipBytes": 316219,
+      "gzipSHA256": "86825b809ba52f253e7c0b264d30d80588d4383cc635af23b8622c910d66548a",
+      "file": "3023.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.027645831927657127,
+          -0.055301517248153687,
+          -0.02163243293762207
+        ],
+        [
+          0.027847453951835632,
+          0.054303012788295746,
+          31.11391830444336
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3025,
+    "sourceSHA256": "72f16b67c39b16b2f1eb47a9a950d1c2519b3bce6121167bf5bd8583ab754da3",
+    "scriptSHA256": "24bad62733395e8242e162f598d4937227f068a22146c5bd15f418dfc72ebc8e",
+    "sourceBytes": 3867087,
+    "webBytes": 294975,
+    "originalTriangles": 244512,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.342671275138855,
+        -0.22273430228233337,
+        -0.022137682884931564
+      ],
+      [
+        0.342671275138855,
+        0.04581893980503082,
+        4.93765115737915
+      ]
+    ],
+    "entry": {
+      "id": 3025,
+      "acr": "CeCv",
+      "name": "central cervical nucleus",
+      "color": "A1EDDE",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "574a0836343167eeca6a39a38fbf6ae67609a71bbd0e81043e1a21f4aeb009c9",
+      "gzipBytes": 221202,
+      "gzipSHA256": "600de1c82746915646d577bbbf7a7dbf4534fb44b8be06440102d9f185a614fd",
+      "file": "3025.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.3424796164035797,
+          -0.22275997698307037,
+          -0.02213769033551216
+        ],
+        [
+          0.3424763083457947,
+          0.04581893980503082,
+          4.934568881988525
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3026,
+    "sourceSHA256": "42562f4a8625b8ba5641cfa92e21192fad7efff4b329eb377d062927c64c0f9c",
+    "scriptSHA256": "7509a7f633233676447086dc1236bb861b4c8c0cc78f14c5fd9dc80c81eeacca",
+    "sourceBytes": 1460955,
+    "webBytes": 290711,
+    "originalTriangles": 95512,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.9348030090332031,
+        -0.667486310005188,
+        22.840133666992188
+      ],
+      [
+        0.9348030090332031,
+        0.28750020265579224,
+        24.654016494750977
+      ]
+    ],
+    "entry": {
+      "id": 3026,
+      "acr": "CEx9",
+      "name": "crural extensor motoneurons of lamina 9",
+      "color": "B95D46",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10060,
+      "ioff": 120720,
+      "icount": 20000,
+      "rawBytes": 360720,
+      "rawSHA256": "187ce305432d7fdd22280d04ad35a4337741656de2cbf2bec86f46f08a1daa0b",
+      "gzipBytes": 218002,
+      "gzipSHA256": "929cd4616db5ebbcf7d712a6a98105ea0848f24036d189056ca240e3c79a3d6b",
+      "file": "3026.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.9348989725112915,
+          -0.6675733923912048,
+          22.84038543701172
+        ],
+        [
+          0.9348921179771423,
+          0.28740808367729187,
+          24.65373992919922
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3027,
+    "sourceSHA256": "f069eabfc38fd347b47affe580142b3ce1897d900db79970f1231c3f08736df9",
+    "scriptSHA256": "1bf7d512a0d60d1442bcfb6cd7f733960e96bb1f0e681c1c29aac3ebeff53d07",
+    "sourceBytes": 1454503,
+    "webBytes": 287891,
+    "originalTriangles": 95536,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8359418511390686,
+        -0.7272560000419617,
+        23.030982971191406
+      ],
+      [
+        0.8359418511390686,
+        0.29398152232170105,
+        25.084688186645508
+      ]
+    ],
+    "entry": {
+      "id": 3027,
+      "acr": "CFl9",
+      "name": "crural flexor motoneurons of lamina 9",
+      "color": "EDEDA1",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "30f71c2c6cff5a1c14e16dd35b5c4488feaed32ce37f30462caf6e5ab45241f0",
+      "gzipBytes": 215887,
+      "gzipSHA256": "5c15f5183afe754ab6e2ff5c505c7b5666979b6d59acc409cfa41577d74ad5fe",
+      "file": "3027.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8359993100166321,
+          -0.7269821166992188,
+          23.03078269958496
+        ],
+        [
+          0.8359230756759644,
+          0.29400157928466797,
+          25.085250854492188
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3029,
+    "sourceSHA256": "711dbf044e90631365e5c8157504338c98f7dcfdb31c3fdf1f0f1740ce9eff5c",
+    "scriptSHA256": "880ac92c1a355c49ce3ac0d9fa40231ac29f2fae5083f4def82358516717540f",
+    "sourceBytes": 1635403,
+    "webBytes": 287379,
+    "originalTriangles": 106888,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.4899980425834656,
+        0.09801052510738373,
+        18.14006996154785
+      ],
+      [
+        0.4899980425834656,
+        0.4187149107456207,
+        21.374685287475586
+      ]
+    ],
+    "entry": {
+      "id": 3029,
+      "acr": "Cr9",
+      "name": "cremaster motoneurons of lamina 9",
+      "color": "29D6D6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "cac55cb15bd67b1ee5b8c2c30e593fd8fa9ecfcae5857a6a1a32dded6626c13d",
+      "gzipBytes": 215504,
+      "gzipSHA256": "59ffea5c5c582f58b72c7525738877c28d9040dd506fbee8c8489e7b0a1fc24d",
+      "file": "3029.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.48997655510902405,
+          0.09801042079925537,
+          18.139965057373047
+        ],
+        [
+          0.4900243580341339,
+          0.4187667667865753,
+          21.37305450439453
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3030,
+    "sourceSHA256": "bb75c041b90590b3c12c976ba2d6978083cc64820b45edce52c1101eb8d26718",
+    "scriptSHA256": "62d67fb26bee03d1870f28676a48d052b292c6241e30f52ac88cf7969972d6e9",
+    "sourceBytes": 19207675,
+    "webBytes": 276919,
+    "originalTriangles": 1226656,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.45482075214385986,
+        -0.8583292961120605,
+        -0.022137682884931564
+      ],
+      [
+        0.45482075214385986,
+        -0.24520543217658997,
+        13.597308158874512
+      ]
+    ],
+    "entry": {
+      "id": 3030,
+      "acr": "cu",
+      "name": "cuneate fasciculus",
+      "color": "A9C998",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10010,
+      "ioff": 120120,
+      "icount": 20000,
+      "rawBytes": 360120,
+      "rawSHA256": "3d8dc7047ba547ad0bdca83babb90ff90e4c09554c306925d24258d76d976bf1",
+      "gzipBytes": 207660,
+      "gzipSHA256": "dc8e019afb41681242bcb2dd5cb2c7d8a74a617ba98c84f718fb8f41d0092ccc",
+      "file": "3030.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.45189154148101807,
+          -0.8591727614402771,
+          -0.0220809169113636
+        ],
+        [
+          0.45482391119003296,
+          -0.24719560146331787,
+          13.588900566101074
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3031,
+    "sourceSHA256": "365d28604d855c8ff3fa7fd9de02701e5fd369db6f83ec263c4645f5a50de24a",
+    "scriptSHA256": "3835a1490893c1d0436d252b6cebca501ad64eccb2829e0290401f21a70ccf4f",
+    "sourceBytes": 5991287,
+    "webBytes": 264495,
+    "originalTriangles": 398008,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.24499249458312988,
+        -0.3248880207538605,
+        7.030807018280029
+      ],
+      [
+        0.24499249458312988,
+        -0.06055079773068428,
+        23.078170776367188
+      ]
+    ],
+    "entry": {
+      "id": 3031,
+      "acr": "D",
+      "name": "dorsal nucleus (Clarke)",
+      "color": "294BD6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "421e9273037ee0893f71fb626a3229f17cbd02566f56a8526c869877880e6104",
+      "gzipBytes": 198340,
+      "gzipSHA256": "cfde15b4c9371f3fd33bee7219b02d3bf0ce7720af9d5339fe9b0f9737781404",
+      "file": "3031.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.24189205467700958,
+          -0.3248879015445709,
+          7.037135601043701
+        ],
+        [
+          0.24126861989498138,
+          -0.060801662504673004,
+          23.07356834411621
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3032,
+    "sourceSHA256": "a10618cfed194a7fb546c881656ff0f23b33a81e1065a49f43356cc6849486d4",
+    "scriptSHA256": "621a975daa1b40f995147f1d515fed66c907846f131df128bda76dd7b0d81473",
+    "sourceBytes": 17843815,
+    "webBytes": 269319,
+    "originalTriangles": 1129276,
+    "triangles": 20618,
+    "originalBounds": [
+      [
+        -0.25984320044517517,
+        -0.5910274982452393,
+        -0.02220447175204754
+      ],
+      [
+        0.25984320044517517,
+        -0.05652567744255066,
+        31.087406158447266
+      ]
+    ],
+    "entry": {
+      "id": 3032,
+      "acr": "dcs",
+      "name": "dorsal corticospinal tract",
+      "color": "729AD4",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10312,
+      "ioff": 123744,
+      "icount": 20618,
+      "rawBytes": 371160,
+      "rawSHA256": "9f1501448edb6b3181d6a1eb7b01aa3383ee0696e88ee75f979eec9911bcc6e9",
+      "gzipBytes": 201959,
+      "gzipSHA256": "3b457f5e581e8bd7e8ed3d9440c177b7e5c9582ec0dcece30486cf30c6fafa1b",
+      "file": "3032.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.24932041764259338,
+          -0.5918578505516052,
+          -0.02266724593937397
+        ],
+        [
+          0.25317180156707764,
+          -0.05883130431175232,
+          31.02286148071289
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3033,
+    "sourceSHA256": "45745060fdb1244f9d6211e1c5a67a58aaea987079c69f64c6c66921cc6ca358",
+    "scriptSHA256": "3ab2ce7d54d99d8d876c046a536e6b94afb3747140269c9b4aa1f679f1803e5b",
+    "sourceBytes": 3602495,
+    "webBytes": 289707,
+    "originalTriangles": 234304,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.9424609541893005,
+        0.29299449920654297,
+        2.3645167350769043
+      ],
+      [
+        0.9424609541893005,
+        0.6206051111221313,
+        5.87887716293335
+      ]
+    ],
+    "entry": {
+      "id": 3033,
+      "acr": "De9",
+      "name": "deltoid motoneurons of lamina 9",
+      "color": "DC4756",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "e3972b4e173a492f5c9ae147c3c6ce3fc56e31a4b9daf87e27dbe24930a950ee",
+      "gzipBytes": 217251,
+      "gzipSHA256": "2f3164b79ccbe5385bddfbdffa928aae257c7a2a57cdd13ae16f60b66126bd7f",
+      "file": "3033.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.9423958659172058,
+          0.2928965985774994,
+          2.3689656257629395
+        ],
+        [
+          0.9427799582481384,
+          0.6207224130630493,
+          5.876594066619873
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3035,
+    "sourceSHA256": "79f59a637870787d84f6db8f71d4e4ea4f584673fe698f014f1c4999c642774d",
+    "scriptSHA256": "da3786c11b524496e1bc658cd924882bcd630fd9621c3a5c5384645169388854",
+    "sourceBytes": 72050023,
+    "webBytes": 814963,
+    "originalTriangles": 4504400,
+    "triangles": 60924,
+    "originalBounds": [
+      [
+        -1.3571857213974,
+        -0.8523890972137451,
+        -0.022137515246868134
+      ],
+      [
+        1.3571857213974,
+        -0.18167708814144135,
+        31.111303329467773
+      ]
+    ],
+    "entry": {
+      "id": 3035,
+      "acr": "dl",
+      "name": "dorsolateral fasciculus (Lissauer)",
+      "color": "4C6CE6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 30358,
+      "ioff": 364296,
+      "icount": 60924,
+      "rawBytes": 1095384,
+      "rawSHA256": "c3656205b5a9e4f87c3acd16b5be485ef26f9a29bb5755d54e883c50900eb702",
+      "gzipBytes": 611191,
+      "gzipSHA256": "4e48662270b3724248da9779a979839a6ae5508b3bd7a677a14d2a194eb32534",
+      "file": "3035.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.3245731592178345,
+          -0.8533644676208496,
+          -0.024519700556993484
+        ],
+        [
+          1.3343396186828613,
+          -0.20780165493488312,
+          31.105451583862305
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3036,
+    "sourceSHA256": "3f7b60a9653325aa9e8a4af043702b21f1589c167253d681622e7edf981a1ea2",
+    "scriptSHA256": "7fea2b1f6cf0c04102c28989673325a222e7d91ad117be7b41cb6252e1f9b2d5",
+    "sourceBytes": 4740251,
+    "webBytes": 282155,
+    "originalTriangles": 307636,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -1.3386019468307495,
+        -0.7686462998390198,
+        0.05585750937461853
+      ],
+      [
+        1.3386019468307495,
+        -0.17001491785049438,
+        5.281336307525635
+      ]
+    ],
+    "entry": {
+      "id": 3036,
+      "acr": "dr",
+      "name": "dorsal root",
+      "color": "DDA078",
+      "shell": false,
+      "voff": 0,
+      "vcount": 9940,
+      "ioff": 119280,
+      "icount": 20000,
+      "rawBytes": 359280,
+      "rawSHA256": "de625794016f4d8a53f40b979b5a9d4566e448775d160d4a02b4c3ff02ff03ac",
+      "gzipBytes": 211585,
+      "gzipSHA256": "f7c36e58230a2f397a8beba011848fdab1706158e8bf0e390e90eaffcc44c1c2",
+      "file": "3036.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.33760666847229,
+          -0.7629746198654175,
+          0.057696305215358734
+        ],
+        [
+          1.3381171226501465,
+          -0.17004506289958954,
+          5.2814555168151855
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3038,
+    "sourceSHA256": "34b7051f861ab7aa6d1804c7a17460e4218eb200f778ce3f9e4c5df50991e418",
+    "scriptSHA256": "1c2be6c6d617d760a93fbca01e4a9e598429fd1b91da65fe11de97c63d357a11",
+    "sourceBytes": 1005147,
+    "webBytes": 279103,
+    "originalTriangles": 67980,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.32357320189476013,
+        0.3296900689601898,
+        24.56583023071289
+      ],
+      [
+        0.32357320189476013,
+        0.44371771812438965,
+        26.953155517578125
+      ]
+    ],
+    "entry": {
+      "id": 3038,
+      "acr": "ExA9",
+      "name": "external anal sphincter motoneurons of lamina 9",
+      "color": "4CE6D8",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "e3c371e7c3a99a9e64c1f8c47fb1062dcb4d6e0cabbda8725e91b0dd4343fc8c",
+      "gzipBytes": 209296,
+      "gzipSHA256": "92ebf56f96145686c19204433d668c82824b555edb776ffb02741ad4137ba80d",
+      "file": "3038.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.3234829902648926,
+          0.32969367504119873,
+          24.56574249267578
+        ],
+        [
+          0.32346582412719727,
+          0.44371867179870605,
+          26.954822540283203
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3039,
+    "sourceSHA256": "3333c16fbee9b5e230441a601e9ba0523692ae2983121a33aa773ebe63f17aff",
+    "scriptSHA256": "ea4728b97893a939ca18d8f9f2c67743f2b253c4d72340ad63bc6d6c7a356501",
+    "sourceBytes": 1152151,
+    "webBytes": 280171,
+    "originalTriangles": 77580,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.6454271674156189,
+        0.38313084840774536,
+        24.563411712646484
+      ],
+      [
+        0.6454271674156189,
+        0.5088111758232117,
+        26.99515151977539
+      ]
+    ],
+    "entry": {
+      "id": 3039,
+      "acr": "ExU9",
+      "name": "external urethral sphincter motoneurons of lamina 9",
+      "color": "E0AEB3",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "3b33a5f4ad5ef2e8faa3a0899f82281959fc18a020816aa9840981736cfd1350",
+      "gzipBytes": 210097,
+      "gzipSHA256": "02120c49ae08b05b4c8a5e9c1c61bc7ad0cad151493fb139cc0a0dc34d73b697",
+      "file": "3039.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.64540034532547,
+          0.3831309676170349,
+          24.563608169555664
+        ],
+        [
+          0.6453886032104492,
+          0.5088080167770386,
+          26.99503517150879
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3040,
+    "sourceSHA256": "9d23785073a68381390d35a431479ef640acb577949a09d3d5e7321bdc6ebfe2",
+    "scriptSHA256": "bb326fdbb8345cfd30ead5c1c29f86fc4874db3985ac0295d9b1e75b5166e555",
+    "sourceBytes": 1853779,
+    "webBytes": 294103,
+    "originalTriangles": 118940,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -1.0246241092681885,
+        -0.7682527899742126,
+        5.515848636627197
+      ],
+      [
+        1.0246241092681885,
+        0.28267529606819153,
+        7.117307186126709
+      ]
+    ],
+    "entry": {
+      "id": 3040,
+      "acr": "FEx9",
+      "name": "forearm extensor motoneurons of lamina 9",
+      "color": "B9468B",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "34770cde38b4be47f0f93faa8e3001b888d352b788aa96a5fb667b2425b6632c",
+      "gzipBytes": 220546,
+      "gzipSHA256": "8bcdf662184d2c672d79a3062dc01c736ce8cd9a8c86870e2902360e3fa5e27d",
+      "file": "3040.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.0246245861053467,
+          -0.7686207294464111,
+          5.516183376312256
+        ],
+        [
+          1.0246074199676514,
+          0.2827643156051636,
+          7.117676734924316
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3041,
+    "sourceSHA256": "513dfcdf6d5758e3a8c87dde66ff39e5f891842af2621e518346417f86643d10",
+    "scriptSHA256": "583b8278680476f1395de8cb15d57c8046a8485c332af271cff69667a58f00a2",
+    "sourceBytes": 1475979,
+    "webBytes": 291891,
+    "originalTriangles": 95424,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.9008419513702393,
+        -0.8161041140556335,
+        5.781672954559326
+      ],
+      [
+        0.9008419513702393,
+        0.2702041566371918,
+        7.317964553833008
+      ]
+    ],
+    "entry": {
+      "id": 3041,
+      "acr": "FFl9",
+      "name": "forearm flexor motoneurons of lamina 9",
+      "color": "E0BDAE",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10008,
+      "ioff": 120096,
+      "icount": 20000,
+      "rawBytes": 360096,
+      "rawSHA256": "42e072da3e949eee3585f9d06a075894b1170be777fc6dbcb8dd9c52ee292bbd",
+      "gzipBytes": 218888,
+      "gzipSHA256": "5cab1257aa1329e07147aa52d8a39663bd014c13007c0217ea73781669566642",
+      "file": "3041.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.9009694457054138,
+          -0.8162949085235596,
+          5.781314373016357
+        ],
+        [
+          0.9009758830070496,
+          0.2702654302120209,
+          7.318172931671143
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3042,
+    "sourceSHA256": "a601cecc0ac1884007890b4cab3ed58f18ae062a3b6ef155d3c5d00db9448392",
+    "scriptSHA256": "cc808eb5ba29d781030021a7120117e923ead7920e3cf9666592fbb7186c142d",
+    "sourceBytes": 2385703,
+    "webBytes": 286419,
+    "originalTriangles": 155820,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -1.0014984607696533,
+        0.4059048295021057,
+        23.022342681884766
+      ],
+      [
+        1.0014984607696533,
+        0.6504105925559998,
+        25.839643478393555
+      ]
+    ],
+    "entry": {
+      "id": 3042,
+      "acr": "Gl9",
+      "name": "gluteal motoneurons of lamina 9",
+      "color": "C36060",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "3447dfd9191f9c81fc287b2265cd25469bf6af10cfd8faf8971e11c552799e83",
+      "gzipBytes": 214784,
+      "gzipSHA256": "f4fe04bf66dd7859aeb0a082a748ee2508371eb2b61036f4035a56d5a8dd6afb",
+      "file": "3042.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.0011451244354248,
+          0.4059339165687561,
+          23.024608612060547
+        ],
+        [
+          1.0008256435394287,
+          0.6502858996391296,
+          25.84004020690918
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3043,
+    "sourceSHA256": "bfb779edebf2d1d49c03b931e44ac4a39f66de71b7a50272e15e89d869fa894d",
+    "scriptSHA256": "45c921c650a1a5961d68c835d0739cddef72c050ba702d669dde78463eaec02d",
+    "sourceBytes": 31189559,
+    "webBytes": 476683,
+    "originalTriangles": 1992356,
+    "triangles": 36166,
+    "originalBounds": [
+      [
+        -0.2946091592311859,
+        -0.8701841235160828,
+        -0.022137682884931564
+      ],
+      [
+        0.2946091592311859,
+        -0.2397381216287613,
+        31.090478897094727
+      ]
+    ],
+    "entry": {
+      "id": 3043,
+      "acr": "gr",
+      "name": "gracile fasciculus",
+      "color": "8CBCDB",
+      "shell": false,
+      "voff": 0,
+      "vcount": 18084,
+      "ioff": 217008,
+      "icount": 36166,
+      "rawBytes": 651000,
+      "rawSHA256": "3362048ec2af33aaa13b9942cc90ebc9d19f462fe75ba0e477bcf6af33a2c9db",
+      "gzipBytes": 357483,
+      "gzipSHA256": "10b4bcf83b963f0aa3848d90fc3b0301f8786d01f58962896dddaca046c730af",
+      "file": "3043.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.29105323553085327,
+          -0.8701840043067932,
+          -0.021710647270083427
+        ],
+        [
+          0.2586672008037567,
+          -0.2720080018043518,
+          31.03462028503418
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3044,
+    "sourceSHA256": "ebc0e1dda3e254df6a6e256eab06c0eb83c5c03bb4f36253311ce4a832909001",
+    "scriptSHA256": "cd023950f56132f2da3cbce671947058df81aeabf802945777f69340ccd3ffdf",
+    "sourceBytes": 2517347,
+    "webBytes": 286703,
+    "originalTriangles": 164336,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.864212691783905,
+        0.3006906807422638,
+        22.98131561279297
+      ],
+      [
+        0.864212691783905,
+        0.5378738045692444,
+        25.807981491088867
+      ]
+    ],
+    "entry": {
+      "id": 3044,
+      "acr": "Hm9",
+      "name": "hamstring motoneurons of lamina 9",
+      "color": "B97446",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "a413d8a7b2c8a542a76485fc9b7e3b155667be6a008e5dac2cd9534988018d88",
+      "gzipBytes": 214996,
+      "gzipSHA256": "3ad7dbffdd069004ffab862a460dc6165fad51d3d1d07fef6b99632cdcf5b031",
+      "file": "3044.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8639311194419861,
+          0.3007734715938568,
+          22.982912063598633
+        ],
+        [
+          0.8638961911201477,
+          0.5379036068916321,
+          25.807289123535156
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3045,
+    "sourceSHA256": "6e7dc91bacfb4a5f14a58237148e3f82ee1c05ed4019c7a8fdeded40c0a06609",
+    "scriptSHA256": "1fa5e299995ec6ece97b346bbefdd0503b55c3a9800ff7d999cc1e5014bcbc41",
+    "sourceBytes": 2724811,
+    "webBytes": 288739,
+    "originalTriangles": 176372,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.3588404059410095,
+        -0.5078264474868774,
+        -0.02213764563202858
+      ],
+      [
+        0.3588404059410095,
+        -0.1382862776517868,
+        5.880093574523926
+      ]
+    ],
+    "entry": {
+      "id": 3045,
+      "acr": "IB",
+      "name": "internal basilar nucleus",
+      "color": "A1DEED",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "0378dec9b03c418986658b2b0f2be14b3545e8cdee21f1adbcbf61167e9ba677",
+      "gzipBytes": 216525,
+      "gzipSHA256": "de1cff3391390841e8bc7be220e3aa1c7045c9e9e0a345ffc7e70962627bb01b",
+      "file": "3045.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.35893714427948,
+          -0.5080651640892029,
+          -0.022137755528092384
+        ],
+        [
+          0.3589614927768707,
+          -0.13829663395881653,
+          5.878771781921387
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3046,
+    "sourceSHA256": "e2a4446139de5472f5440d47e0caa7fe8908370c52a2d384c85718cbf614f859",
+    "scriptSHA256": "e7c2addf6ee47264f19243c0a01ce98841f0a1225eeeb5849fb9749dfbd53a0e",
+    "sourceBytes": 14359931,
+    "webBytes": 278355,
+    "originalTriangles": 900660,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.6218768954277039,
+        -0.22358183562755585,
+        7.633603096008301
+      ],
+      [
+        0.6218768954277039,
+        0.02216731198132038,
+        27.97572135925293
+      ]
+    ],
+    "entry": {
+      "id": 3046,
+      "acr": "ICl",
+      "name": "intercalated nucleus",
+      "color": "D629C5",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10008,
+      "ioff": 120096,
+      "icount": 20000,
+      "rawBytes": 360096,
+      "rawSHA256": "66fa937b4d1321ffebf3f081acb975c360fab31589baf1d7124150aa85b8d3bc",
+      "gzipBytes": 208735,
+      "gzipSHA256": "3998abcd3188ae00e48b05a67d8f637ed5b0837a34a40ff9e30bf1115123e198",
+      "file": "3046.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.6219884753227234,
+          -0.22377681732177734,
+          7.633277416229248
+        ],
+        [
+          0.6218952536582947,
+          0.021290037781000137,
+          27.975547790527344
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3048,
+    "sourceSHA256": "4c638c3d3a98f8b5bd22570c129dce5c22557d5ceaef6bc61eaddfc75326d27a",
+    "scriptSHA256": "62d79f2f7453649554b73948699b67f75f27649723b1f0786f3d968c63d0d69d",
+    "sourceBytes": 3960043,
+    "webBytes": 284731,
+    "originalTriangles": 262252,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.6155720949172974,
+        0.22151924669742584,
+        7.617659568786621
+      ],
+      [
+        0.6155720949172974,
+        0.507455587387085,
+        14.26902961730957
+      ]
+    ],
+    "entry": {
+      "id": 3048,
+      "acr": "ICo9",
+      "name": "intercostal muscle motoneurons of lamina 9",
+      "color": "D16B52",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "d71d080b71403993c77063e393024f1fd481cf6b2b4ba45fc5cc24780962a331",
+      "gzipBytes": 213518,
+      "gzipSHA256": "c102f8625d4080983c60746e64537062ddd30fa68af17f3d722ed868f63ae072",
+      "file": "3048.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.6157271265983582,
+          0.22167207300662994,
+          7.617091655731201
+        ],
+        [
+          0.6157341003417969,
+          0.5077168345451355,
+          14.267157554626465
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3049,
+    "sourceSHA256": "7fe46f6e39125b88ffdebfdba01561411881149f54e6d17b5ab8c209bb1329b7",
+    "scriptSHA256": "bac3bc9ebb48f718d576f35661f5d5a23613513ea7c76666d28c9075ab3ff2dd",
+    "sourceBytes": 2202363,
+    "webBytes": 290207,
+    "originalTriangles": 144372,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.5031577348709106,
+        0.4533860981464386,
+        -0.022137682884931564
+      ],
+      [
+        0.5031577348709106,
+        0.7513720989227295,
+        2.4163899421691895
+      ]
+    ],
+    "entry": {
+      "id": 3049,
+      "acr": "IH9",
+      "name": "infrahyoid muscle motoneurons of lamina 9",
+      "color": "B4D629",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "b41086ea200a68f8608d7bbeb0fa27414a19d2dafa4ab0243d70b8e5b34eeb20",
+      "gzipBytes": 217626,
+      "gzipSHA256": "ebd4a8fbb8bac32030c7eca7cb8c1928a5498305e8a06ef261f66373ff5226d1",
+      "file": "3049.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.5029283165931702,
+          0.45350462198257446,
+          -0.022144552320241928
+        ],
+        [
+          0.5029685497283936,
+          0.7514348030090332,
+          2.416369676589966
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3050,
+    "sourceSHA256": "6f5f7d3e64b4c3670f547bf5a78e647b06d8f8e20f3fccd919448679299edb7f",
+    "scriptSHA256": "3218b7cb4dfe06d40291ea95cff368b054aef0fcc59648911878088b217974a3",
+    "sourceBytes": 7249555,
+    "webBytes": 278199,
+    "originalTriangles": 472272,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.7858687043190002,
+        -0.2595478892326355,
+        7.072481632232666
+      ],
+      [
+        0.7858687043190002,
+        0.06267102807760239,
+        19.145986557006836
+      ]
+    ],
+    "entry": {
+      "id": 3050,
+      "acr": "IML",
+      "name": "intermediolateral column",
+      "color": "29D680",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "fc5f41333468f500e9f6243cc488b56ba120e0d2f201fa261360e2a3f6a658eb",
+      "gzipBytes": 208618,
+      "gzipSHA256": "c115be58102f182b408474872ac97e6724d3ceab781e09bc9733c8dd6ea814d9",
+      "file": "3050.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7845040559768677,
+          -0.2595478594303131,
+          7.075886249542236
+        ],
+        [
+          0.785315215587616,
+          0.06211100146174431,
+          19.144229888916016
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3051,
+    "sourceSHA256": "4b79ef7ff4ec2af8b0066a2fd87388af47bcdf8e9caf6de32a586f8cf1cbd154",
+    "scriptSHA256": "87e2680732494a82dee37fa36948c6954b2eb1d20e6296a398f83b69c88d94cd",
+    "sourceBytes": 6755323,
+    "webBytes": 276271,
+    "originalTriangles": 435708,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.21674343943595886,
+        -0.305885910987854,
+        -0.02213694155216217
+      ],
+      [
+        0.21674343943595886,
+        0.06931912899017334,
+        21.324785232543945
+      ]
+    ],
+    "entry": {
+      "id": 3051,
+      "acr": "IMM",
+      "name": "intermediomedial column",
+      "color": "AEB8E0",
+      "shell": false,
+      "voff": 0,
+      "vcount": 9974,
+      "ioff": 119688,
+      "icount": 20000,
+      "rawBytes": 359688,
+      "rawSHA256": "673e67be88fbdaa6500825488cce63fd289e16bc148a1c528af5b6ece02c1ba2",
+      "gzipBytes": 207172,
+      "gzipSHA256": "b297c7b7c2cf2333f95e68ce8cf921b805efca15d859930acf000fe50e831578",
+      "file": "3051.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.21649886667728424,
+          -0.30618393421173096,
+          -0.022141268476843834
+        ],
+        [
+          0.21742293238639832,
+          0.06912251561880112,
+          21.322412490844727
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3053,
+    "sourceSHA256": "84c40fbfc5fbd68fdded0d89f9e94495724185817ba419c113ae2a29ce9c31a7",
+    "scriptSHA256": "372fae244fa1fea556b11bca640690bda815a05d934b43792616860e77d4ae8a",
+    "sourceBytes": 4360755,
+    "webBytes": 294759,
+    "originalTriangles": 281856,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -1.3988174200057983,
+        -0.5496858358383179,
+        -0.02217577025294304
+      ],
+      [
+        1.3988174200057983,
+        0.020559629425406456,
+        2.4960134029388428
+      ]
+    ],
+    "entry": {
+      "id": 3053,
+      "acr": "LatC",
+      "name": "lateral cervical nucleus",
+      "color": "EDA1E5",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10029,
+      "ioff": 120348,
+      "icount": 20000,
+      "rawBytes": 360348,
+      "rawSHA256": "08bf0d57db37d6359b93f8310e7a77293a525d741db4343c51e1dc45362e58f9",
+      "gzipBytes": 221038,
+      "gzipSHA256": "f5632c7b7f1244ab49c7913cb05da87701742ff085e512e0f1fefc2ea6b0a516",
+      "file": "3053.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.3985036611557007,
+          -0.5487316846847534,
+          -0.022140881046652794
+        ],
+        [
+          1.399094581604004,
+          0.020543919876217842,
+          2.4945006370544434
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3054,
+    "sourceSHA256": "23f09e88f676b69597b00abc79bcc69374ec304262385d05b81510ebed1426db",
+    "scriptSHA256": "536ad421d55375593ae964a1d751c598d3513918a7e421b6b39a6357b2c9749a",
+    "sourceBytes": 1044519,
+    "webBytes": 289135,
+    "originalTriangles": 68412,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.9829680919647217,
+        0.2587437033653259,
+        5.782232761383057
+      ],
+      [
+        0.9829680919647217,
+        0.4728255569934845,
+        7.127099990844727
+      ]
+    ],
+    "entry": {
+      "id": 3054,
+      "acr": "LD9",
+      "name": "latissimus dorsi motoneurons of lamina 9",
+      "color": "E265E2",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "644df102bc465bb9b325eb555e1ef51575135b541b0825cb9fa6d5c060b017bf",
+      "gzipBytes": 216822,
+      "gzipSHA256": "879f082457e7728ec1d994fce15cce7d1910cb944004e981da43a3b823c03ffd",
+      "file": "3054.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.9829714298248291,
+          0.2587105333805084,
+          5.78225040435791
+        ],
+        [
+          0.9829744100570679,
+          0.4729243516921997,
+          7.126601696014404
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3055,
+    "sourceSHA256": "8bc309c56c86d76f7c038e7e570d1f3925a30f6ad89f9c40d31ff5dbd0027f86",
+    "scriptSHA256": "96ff73f7789dde06e27d94dea559899c903dc8e778472a32e3e259ebee68923c",
+    "sourceBytes": 1209615,
+    "webBytes": 290147,
+    "originalTriangles": 79822,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.11128540337085724,
+        -0.18839803338050842,
+        15.50108814239502
+      ],
+      [
+        0.11128540337085724,
+        -0.05049007013440132,
+        19.267107009887695
+      ]
+    ],
+    "entry": {
+      "id": 3055,
+      "acr": "LDCom",
+      "name": "lumbar dorsal commissural nucleus",
+      "color": "4669B9",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10006,
+      "ioff": 120072,
+      "icount": 20000,
+      "rawBytes": 360072,
+      "rawSHA256": "e9f609576db130a443ef7fd9e04e39a22c6b70fb7d92d8297948f063893d4af3",
+      "gzipBytes": 217581,
+      "gzipSHA256": "e37001e37de728aca40efdf21a8eb73bdd55dd8cf5ca5590c6e3ddc37f991391",
+      "file": "3055.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.11127157509326935,
+          -0.18812043964862823,
+          15.500601768493652
+        ],
+        [
+          0.11127157509326935,
+          -0.05049007758498192,
+          19.266645431518555
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3056,
+    "sourceSHA256": "db32969f4d87860380c29744e7aa7c4949aacfb16312e0cdfd4ac2e11cac98a3",
+    "scriptSHA256": "ee7d1188874f996671605de5043b12d7380dbf8b20f88ed0df62bda07243ca58",
+    "sourceBytes": 118515443,
+    "webBytes": 1036155,
+    "originalTriangles": 7665384,
+    "triangles": 77330,
+    "originalBounds": [
+      [
+        -1.4225029945373535,
+        -0.810285747051239,
+        -0.022177228704094887
+      ],
+      [
+        1.4225029945373535,
+        0.9360149502754211,
+        31.111318588256836
+      ]
+    ],
+    "entry": {
+      "id": 3056,
+      "acr": "lf",
+      "name": "lateral funiculus",
+      "color": "4C80E6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 38685,
+      "ioff": 464220,
+      "icount": 77330,
+      "rawBytes": 1392180,
+      "rawSHA256": "16914f85f9f24b31987adb2b0a8f889a0cc8e2f8416f40e37b42bcafe1185d55",
+      "gzipBytes": 777085,
+      "gzipSHA256": "06fb57a8f9b3dfa422b3e44c8b94879e3227ca2a26bc5e1bdc3ac7270ebdbe58",
+      "file": "3056.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.4172286987304688,
+          -0.6499077677726746,
+          -0.02254585362970829
+        ],
+        [
+          1.4096144437789917,
+          0.9263619780540466,
+          31.112735748291016
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3057,
+    "sourceSHA256": "d5f77654e4a3448e8d69404f722f8f3df195cabb877818b6e3baf942ce99208d",
+    "scriptSHA256": "5474e3262b266fb2e55075ec68ce52a6523bde5157e2d76b5f4e7f66bdb4fffe",
+    "sourceBytes": 2143483,
+    "webBytes": 284295,
+    "originalTriangles": 140088,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.3771333396434784,
+        -0.1277017444372177,
+        18.143491744995117
+      ],
+      [
+        0.3771333396434784,
+        0.03266364708542824,
+        23.059843063354492
+      ]
+    ],
+    "entry": {
+      "id": 3057,
+      "acr": "LPrCb",
+      "name": "lumbar precerebellar nucleus",
+      "color": "A1A1ED",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "d09d15011b05947ad1c4ee2d197edc930a4f41a9e25e076ef01e2a85363f37ca",
+      "gzipBytes": 213191,
+      "gzipSHA256": "08c523dbded1d02d3bd42d491bffab259077fc5f08dd0607550f8041e7846b66",
+      "file": "3057.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.3771761655807495,
+          -0.12770485877990723,
+          18.143587112426758
+        ],
+        [
+          0.37714484333992004,
+          0.032666534185409546,
+          23.059919357299805
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3058,
+    "sourceSHA256": "0c4e2413cdc460f7d24288cf8940a57d4867d8f1a5bea9f66e8c4a63229bedf2",
+    "scriptSHA256": "bfd25b2d162f835c3a8a6d935e90f897e9d245150bc4d64fd046bb3224c1c972",
+    "sourceBytes": 409755,
+    "webBytes": 283219,
+    "originalTriangles": 28380,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.7446661591529846,
+        0.4118819534778595,
+        2.325673818588257
+      ],
+      [
+        0.7446661591529846,
+        0.5264888405799866,
+        3.542518377304077
+      ]
+    ],
+    "entry": {
+      "id": 3058,
+      "acr": "LS9",
+      "name": "levator scapulae motoneurons of lamina 9",
+      "color": "D6294B",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "3a9d16685364eff612ee539653945a3667452fdde0acbe58695dd382b5ffb00d",
+      "gzipBytes": 212384,
+      "gzipSHA256": "3e59857e6dfbcc088ec75231f52498c0c4e168e5d4a9ed9708ddcac72cdd4588",
+      "file": "3058.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7446661591529846,
+          0.4118872284889221,
+          2.325673818588257
+        ],
+        [
+          0.7446661591529846,
+          0.5264154076576233,
+          3.542518377304077
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3059,
+    "sourceSHA256": "157ba2d274f9c3dca0135253d3cbfb6fe2bf1279c5bc6b6fde4b2d5c20d41ce1",
+    "scriptSHA256": "2779501a516762c9835f0086da81fc4f0d2c09c99ad888ec8a1233aaba0e6f2e",
+    "sourceBytes": 47030703,
+    "webBytes": 407067,
+    "originalTriangles": 2948480,
+    "triangles": 31382,
+    "originalBounds": [
+      [
+        -1.2510557174682617,
+        -0.7507227063179016,
+        -0.022137682884931564
+      ],
+      [
+        1.2510557174682617,
+        -0.037331465631723404,
+        31.11130714416504
+      ]
+    ],
+    "entry": {
+      "id": 3059,
+      "acr": "LSp",
+      "name": "lateral spinal nucleus",
+      "color": "555AB5",
+      "shell": false,
+      "voff": 0,
+      "vcount": 15714,
+      "ioff": 188568,
+      "icount": 31382,
+      "rawBytes": 565152,
+      "rawSHA256": "ca813bf3c569b37c40afea9eed82d206c5027706ac673f477486eac7b5bdb465",
+      "gzipBytes": 305270,
+      "gzipSHA256": "bc2832179d80ff33f8efaa0a83d6b6ae38fb49d0d39034e4461f63f9064cfcad",
+      "file": "3059.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.2503379583358765,
+          -0.6476397514343262,
+          -0.02267839014530182
+        ],
+        [
+          1.2370281219482422,
+          -0.043255820870399475,
+          31.114307403564453
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3060,
+    "sourceSHA256": "392fdbc6696342ffac56ed56f8dc941882ef70f5aafb081ce9e50e8689e673fa",
+    "scriptSHA256": "b6584e57d4c17f302f967108cc274c686ed6d6f793d9a327bd7ecabadaa3d6ed",
+    "sourceBytes": 1532039,
+    "webBytes": 291207,
+    "originalTriangles": 99980,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8700513243675232,
+        -0.12795759737491608,
+        6.986737251281738
+      ],
+      [
+        0.8700513243675232,
+        0.20023353397846222,
+        8.253071784973145
+      ]
+    ],
+    "entry": {
+      "id": 3060,
+      "acr": "Man9",
+      "name": "manus motoneurons of lamina 9",
+      "color": "AC36C9",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "561ecf0e03230eaa384e4c623ef835baf014585cc52c29bc66359dde49c4b094",
+      "gzipBytes": 218374,
+      "gzipSHA256": "b9b113acdf7a3147bcbef950668ed74a21b52e411ae9899ead912e688c60e4b7",
+      "file": "3060.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8700178861618042,
+          -0.12767982482910156,
+          6.988269805908203
+        ],
+        [
+          0.8700740337371826,
+          0.20019927620887756,
+          8.25306510925293
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3061,
+    "sourceSHA256": "550ea837d091c7580c9c40450389cdced9aea57f7867298c6529c1f59462ff84",
+    "scriptSHA256": "41daad48978c6902023fc7ccbc081ee3921c153ddaf80ab958c54c3bedb3206c",
+    "sourceBytes": 2996679,
+    "webBytes": 290731,
+    "originalTriangles": 190708,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.9414382576942444,
+        0.36154425144195557,
+        5.781376838684082
+      ],
+      [
+        0.9414382576942444,
+        0.6972577571868896,
+        7.675534725189209
+      ]
+    ],
+    "entry": {
+      "id": 3061,
+      "acr": "Pec9",
+      "name": "pectoral muscle motoneurons of lamina 9",
+      "color": "80D629",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "28dae6ae75b92eda49c1f034476232dc8d285d7b56312c0c740185a683958e8c",
+      "gzipBytes": 218017,
+      "gzipSHA256": "63f9fa378b943709674ff3234c86669172294c7f1968fbabeb22250693ab22dd",
+      "file": "3061.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.9409820437431335,
+          0.3604024350643158,
+          5.781174659729004
+        ],
+        [
+          0.9410852789878845,
+          0.6971067190170288,
+          7.672794342041016
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3062,
+    "sourceSHA256": "fef0aec8be25141ea94d7138ab20806986f8dc72f9173f6dc5766d083889b1f2",
+    "scriptSHA256": "06f326124b4b8ce9831d0724286f12f9758a667e17d1f89966f06bf65c928fb1",
+    "sourceBytes": 2015175,
+    "webBytes": 288651,
+    "originalTriangles": 133752,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8711678981781006,
+        -0.5319473743438721,
+        24.43868637084961
+      ],
+      [
+        0.8711678981781006,
+        0.3765995502471924,
+        27.31137466430664
+      ]
+    ],
+    "entry": {
+      "id": 3062,
+      "acr": "Pes9",
+      "name": "pes motoneurons of lamina 9",
+      "color": "C36074",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "339907f0addbcb8b38f6df54857e571f8377e719e2e66778d60dcdc438bc9341",
+      "gzipBytes": 216459,
+      "gzipSHA256": "58aac7123df08d1a7f8ab62b95044beb2ec7d95dda130ccef05b2999549ca120",
+      "file": "3062.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8708483576774597,
+          -0.5322390198707581,
+          24.440404891967773
+        ],
+        [
+          0.8710678219795227,
+          0.376759797334671,
+          27.31058692932129
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3063,
+    "sourceSHA256": "5ca67a9db8cb8a54be09574386bd6924c5b5e62ba214c9285793fb4b6e753e3f",
+    "scriptSHA256": "d04489a53234e27f9f005190e458a50e5ba6b13d39d46792cae00a78dc02b17c",
+    "sourceBytes": 2053879,
+    "webBytes": 286411,
+    "originalTriangles": 133784,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.7172296643257141,
+        0.16931217908859253,
+        1.3993701934814453
+      ],
+      [
+        0.7172296643257141,
+        0.5740718841552734,
+        4.887345314025879
+      ]
+    ],
+    "entry": {
+      "id": 3063,
+      "acr": "Ph9",
+      "name": "phrenic motoneurons of lamina 9",
+      "color": "D6D629",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "b2779bb831e58b380cfab2af0dc9bbf144be262484d935c48373aabc644cbfcc",
+      "gzipBytes": 214777,
+      "gzipSHA256": "a1e4a4b2811e021cde2d827cb2b02bea98a7543619b85037a9de6a47486c23a8",
+      "file": "3063.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7172194719314575,
+          0.1692030131816864,
+          1.3994423151016235
+        ],
+        [
+          0.7172194719314575,
+          0.5740870833396912,
+          4.88792085647583
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3064,
+    "sourceSHA256": "5c999361a9486200855a406797156fed2279202b7f98e33565a62e311601bb98",
+    "scriptSHA256": "7ffa341d564e02b14845a687138455046d96ec98a4c3ff07af73874981232190",
+    "sourceBytes": 2547863,
+    "webBytes": 270923,
+    "originalTriangles": 173568,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.4009287655353546,
+        0.3356286585330963,
+        19.049869537353516
+      ],
+      [
+        0.4009287655353546,
+        0.5196961760520935,
+        23.077241897583008
+      ]
+    ],
+    "entry": {
+      "id": 3064,
+      "acr": "Ps9",
+      "name": "psoas motoneurons of lamina 9",
+      "color": "B9AD46",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "7cb4ddd35e3381b6b4c33251f8ca5163b911179f9e264f7108579cc7b6e607a5",
+      "gzipBytes": 203161,
+      "gzipSHA256": "bf9d09883a4e6fb1f488a05d0dbc3702ad23cf153aca040d1e91f712917530f6",
+      "file": "3064.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.40098387002944946,
+          0.3355181813240051,
+          19.051067352294922
+        ],
+        [
+          0.40096378326416016,
+          0.519850492477417,
+          23.07691192626953
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3065,
+    "sourceSHA256": "4e14cf05c94dc0ffe00091dba4089b81150a02ce3f0a40e0133d8d78b1e8617e",
+    "scriptSHA256": "ce8e8a2c14689ae062bc8911835485c89d408a96f72425a0561660da96691014",
+    "sourceBytes": 25983247,
+    "webBytes": 266399,
+    "originalTriangles": 1656780,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.3289789855480194,
+        -0.8641805648803711,
+        -0.02213718369603157
+      ],
+      [
+        0.3289789855480194,
+        -0.2233504056930542,
+        31.0524845123291
+      ]
+    ],
+    "entry": {
+      "id": 3065,
+      "acr": "psdc",
+      "name": "postsynaptic dorsal column pathway",
+      "color": "B8C46A",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10005,
+      "ioff": 120060,
+      "icount": 20000,
+      "rawBytes": 360060,
+      "rawSHA256": "b5f86efadaf6d5395cfe52a2b054f745c3a3cd851b60f2d4bcb22c13d5069777",
+      "gzipBytes": 199770,
+      "gzipSHA256": "ee8c6d1797ad6944aeec56d782b5ac76d80c7f1e2cad8d1cb4ff3b537beebfa4",
+      "file": "3065.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.2819362282752991,
+          -0.8641736507415771,
+          -0.020840678364038467
+        ],
+        [
+          0.27873140573501587,
+          -0.22318944334983826,
+          31.022314071655273
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3066,
+    "sourceSHA256": "0ebc73ee858a17e14f5aceaa986a8f94e57bcef5aad3ea5c43e43486710b4dca",
+    "scriptSHA256": "c166123b93e65eff0bc9149a3b3b7308c36504b5622b05c4644375d9c7ecd91b",
+    "sourceBytes": 3585919,
+    "webBytes": 276415,
+    "originalTriangles": 240052,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.9189509749412537,
+        -0.7506217360496521,
+        18.58218765258789
+      ],
+      [
+        0.9189509749412537,
+        0.596969485282898,
+        23.106252670288086
+      ]
+    ],
+    "entry": {
+      "id": 3066,
+      "acr": "Q9",
+      "name": "quadriceps motoneurons of lamina 9",
+      "color": "C93662",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "fdfa4cc266b530da73dc8d2f7876d0703d2a6d66fc67be998db7cf70f3a4accd",
+      "gzipBytes": 207282,
+      "gzipSHA256": "135c09b689d25e981cc8395238c4166b0e5fd2757e61787e9bdbfea4508b151c",
+      "file": "3066.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.9189171195030212,
+          -0.7505962252616882,
+          18.582679748535156
+        ],
+        [
+          0.9189580678939819,
+          0.5969698429107666,
+          23.105087280273438
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3067,
+    "sourceSHA256": "78025954a80c1629ea4526d0830536d90eb2b37e15731bf0b3a4858a40c7a404",
+    "scriptSHA256": "a08cbaa404c8222f582b337a3f029018fb7d627179b30e534e6f2c7cb6254eb9",
+    "sourceBytes": 1315991,
+    "webBytes": 287883,
+    "originalTriangles": 87476,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.798412561416626,
+        -0.7091149091720581,
+        17.943605422973633
+      ],
+      [
+        0.798412561416626,
+        0.543202817440033,
+        19.65753746032715
+      ]
+    ],
+    "entry": {
+      "id": 3067,
+      "acr": "QL9",
+      "name": "quadratus lumborum motoneurons of lamina 9",
+      "color": "D69129",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10024,
+      "ioff": 120288,
+      "icount": 20000,
+      "rawBytes": 360288,
+      "rawSHA256": "6d2093adc52a1ac27d9e68becd257403cd38f4b233c6863b4a58d298f56bf9eb",
+      "gzipBytes": 215881,
+      "gzipSHA256": "5bcbca2afddbb322009cfd16c9f9cf76c42a689604579a8bc8610003f95e43b5",
+      "file": "3067.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7982207536697388,
+          -0.709396481513977,
+          17.944053649902344
+        ],
+        [
+          0.7982207536697388,
+          0.5431286692619324,
+          19.657264709472656
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3068,
+    "sourceSHA256": "46213ef37a6930749bd2050b57bc02ace64fe983ab74e661134223a2811e13ef",
+    "scriptSHA256": "2dffff86cd921801eb40de550c0e008fbab79971eb1d88bbaaedf9bd4ae27022",
+    "sourceBytes": 1502827,
+    "webBytes": 287935,
+    "originalTriangles": 97664,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.5009989142417908,
+        0.4129598140716553,
+        2.3206114768981934
+      ],
+      [
+        0.5009989142417908,
+        0.620477020740509,
+        4.899532794952393
+      ]
+    ],
+    "entry": {
+      "id": 3068,
+      "acr": "Rh9",
+      "name": "rhomboid muscle motoneurons of lamina 9",
+      "color": "B96946",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "4db3f1163c33c8fbc87416f13d5f7f6394eecfe43fbe9cb3d2799869bbc40b61",
+      "gzipBytes": 215922,
+      "gzipSHA256": "aa250b46b36f28117902ec1b5d12991490aab2b645fd9e966cee07536ab88179",
+      "file": "3068.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.5009967088699341,
+          0.4129028022289276,
+          2.322462797164917
+        ],
+        [
+          0.5012921690940857,
+          0.620556116104126,
+          4.899980068206787
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3069,
+    "sourceSHA256": "76eb87eaf9f87200cbdb039e6e4aee5adfc3097d5730405d4259f28648e406f9",
+    "scriptSHA256": "007f7fb8bbf850cfdaf89f85ded3b86843acab6ef9994771c81374aa4b3b7c14",
+    "sourceBytes": 25397315,
+    "webBytes": 264567,
+    "originalTriangles": 1633020,
+    "triangles": 20824,
+    "originalBounds": [
+      [
+        -1.3986507654190063,
+        -0.5603938102722168,
+        -0.022137682884931564
+      ],
+      [
+        1.3986507654190063,
+        0.20629183948040009,
+        30.287099838256836
+      ]
+    ],
+    "entry": {
+      "id": 3069,
+      "acr": "rs",
+      "name": "rubrospinal tract",
+      "color": "7A87C2",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10416,
+      "ioff": 124992,
+      "icount": 20824,
+      "rawBytes": 374880,
+      "rawSHA256": "8fe0942dfa955e82373e9114d92d5c8a4e201674f3a0ad26cbd8bc9ec27ba4f4",
+      "gzipBytes": 198395,
+      "gzipSHA256": "9e31bfb74830e66cc5c35606988ce59bd500e1f40833c5bfc941c7e30601dda8",
+      "file": "3069.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.4024571180343628,
+          -0.4746690094470978,
+          -0.022524483501911163
+        ],
+        [
+          1.3811471462249756,
+          0.19317303597927094,
+          29.8155517578125
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3071,
+    "sourceSHA256": "cbb40a12e5b347764db2aad691058b82d09a910b0520751b8be1a06694cdea50",
+    "scriptSHA256": "269d4a11eec3127a290cc77857bff9d2831d42f8600b8042c1b8f72b590854ef",
+    "sourceBytes": 4070631,
+    "webBytes": 287419,
+    "originalTriangles": 272596,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.47261202335357666,
+        -0.7862871885299683,
+        24.0929012298584
+      ],
+      [
+        0.47261202335357666,
+        -0.08620508015155792,
+        31.111309051513672
+      ]
+    ],
+    "entry": {
+      "id": 3071,
+      "acr": "SDCom",
+      "name": "sacral dorsal commissural nucleus",
+      "color": "2929D6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10054,
+      "ioff": 120648,
+      "icount": 20000,
+      "rawBytes": 360648,
+      "rawSHA256": "7d569ef3a24a282c48493840f6468a369df8bb73abe8131d25ca1fcb5c518218",
+      "gzipBytes": 215533,
+      "gzipSHA256": "5e324d97ff49b420071f6eab653ee62bb3c0794804e7613c8277182b423646b2",
+      "file": "3071.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.47214052081108093,
+          -0.7864751219749451,
+          24.097206115722656
+        ],
+        [
+          0.4609859585762024,
+          -0.08645204454660416,
+          31.111309051513672
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3072,
+    "sourceSHA256": "7543e723711a5312b7a817dfd508abfa3a3f635c207f5483082a6e0aadc1a18a",
+    "scriptSHA256": "93c54e803971262c7d54052e8dbc3b19ce349dd2721c148bf050c824008478c7",
+    "sourceBytes": 1452919,
+    "webBytes": 286255,
+    "originalTriangles": 96888,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8714514374732971,
+        0.15148718655109406,
+        3.5167760848999023
+      ],
+      [
+        0.8714514374732971,
+        0.33742985129356384,
+        5.877643585205078
+      ]
+    ],
+    "entry": {
+      "id": 3072,
+      "acr": "SI9",
+      "name": "supraspinatus and infraspinatus motoneurons of lamina 9",
+      "color": "E08A9B",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "201021c256a0f216f4b81ab4af35a02aa03620ed7f6339993c171fb8a92e7fac",
+      "gzipBytes": 214662,
+      "gzipSHA256": "d991a4fb9da8d3b7fbc64d96a086767ed07ed9a330313e45e51a3058698d55ca",
+      "file": "3072.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8714263439178467,
+          0.15141862630844116,
+          3.5171074867248535
+        ],
+        [
+          0.8714263439178467,
+          0.33741605281829834,
+          5.877214431762695
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3073,
+    "sourceSHA256": "e40310bf0656951d2e1f9a52c8cffdda45b414d1219949bae3e3b115e8cae290",
+    "scriptSHA256": "a643786d3316bc801396c3d9c673faca2855e2ab8f02eb51308ce77fb8ea6fee",
+    "sourceBytes": 651675,
+    "webBytes": 287695,
+    "originalTriangles": 43808,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.37714263796806335,
+        0.24761909246444702,
+        -0.022137485444545746
+      ],
+      [
+        0.37714263796806335,
+        0.3771669268608093,
+        1.4213635921478271
+      ]
+    ],
+    "entry": {
+      "id": 3073,
+      "acr": "SM9",
+      "name": "sternomastoid motoneurons of lamina 9",
+      "color": "D7B25D",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "100f327916baf7598ec3f26200ace0ce8d823e107d68d4ad37d02e76e708d03b",
+      "gzipBytes": 215742,
+      "gzipSHA256": "d9e06a2cc519834635db9723bf6cf5e160a85f06750ba08052330bb426394f0e",
+      "file": "3073.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.3771440088748932,
+          0.2476339191198349,
+          -0.022137608379125595
+        ],
+        [
+          0.37713831663131714,
+          0.3771842122077942,
+          1.421593427658081
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3075,
+    "sourceSHA256": "4be9a243b8eca6c1f10f1131d2c0e51222388f6de525f1495c9b14787744aec2",
+    "scriptSHA256": "7555c63a553ff33452f661a20b5d46d2d4ccdafda390dc2a28df2bfc781e81a2",
+    "sourceBytes": 1560175,
+    "webBytes": 289099,
+    "originalTriangles": 101600,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.41281411051750183,
+        -0.578208863735199,
+        25.884233474731445
+      ],
+      [
+        0.41281411051750183,
+        0.12769408524036407,
+        30.32659912109375
+      ]
+    ],
+    "entry": {
+      "id": 3075,
+      "acr": "SPrCb",
+      "name": "sacral precerebellar nucleus",
+      "color": "7F29D6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10012,
+      "ioff": 120144,
+      "icount": 20000,
+      "rawBytes": 360144,
+      "rawSHA256": "effe249034db7be17f0ad57f8b64cc0f594e00f9c632c51a2b0ca3928011fb79",
+      "gzipBytes": 216795,
+      "gzipSHA256": "45960842c4597197b20bc51752f3fb2ac4ce1d7b865dced23156dd8a19bb5312",
+      "file": "3075.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.4128265678882599,
+          -0.5786873698234558,
+          25.884140014648438
+        ],
+        [
+          0.4128434956073761,
+          0.12770354747772217,
+          30.325971603393555
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3076,
+    "sourceSHA256": "b2f86d117e3751a7b02a953ccf79657a5293ed821feb1f227868ff05330d0937",
+    "scriptSHA256": "6de03a907a7d0f4f13adb0f466ea88cafbc9c7e3a19e8da0e87ba604d397f367",
+    "sourceBytes": 1065779,
+    "webBytes": 285955,
+    "originalTriangles": 70948,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.5857774019241333,
+        -0.218063622713089,
+        25.7512264251709
+      ],
+      [
+        0.5857774019241333,
+        -0.08021953701972961,
+        27.97829818725586
+      ]
+    ],
+    "entry": {
+      "id": 3076,
+      "acr": "SPSy",
+      "name": "sacral parasympathetic nucleus",
+      "color": "29A2D6",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "0fa9a3541732f017d3ac8671fc787297fe2955e902a8fb0e36783a86e7761039",
+      "gzipBytes": 214437,
+      "gzipSHA256": "e4cec4a6937b03a9e0888117573dfc08a021ede1ed48afcaed49196bdc00f3a8",
+      "file": "3076.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.5857613682746887,
+          -0.21803750097751617,
+          25.751712799072266
+        ],
+        [
+          0.5857774019241333,
+          -0.08021511137485504,
+          27.97844123840332
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3077,
+    "sourceSHA256": "6299334990a4f4c60a376084a19a0147c342b0e8b0da54f754e724993a97e6fe",
+    "scriptSHA256": "52b30c31e14b62c61807a822d72bb097e33e44c3a4acdbb60b02fdcfaa6534a9",
+    "sourceBytes": 1210459,
+    "webBytes": 290131,
+    "originalTriangles": 78560,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.5492359399795532,
+        0.3475101888179779,
+        4.8462443351745605
+      ],
+      [
+        0.5492359399795532,
+        0.5663582682609558,
+        6.460063934326172
+      ]
+    ],
+    "entry": {
+      "id": 3077,
+      "acr": "Sr9",
+      "name": "serratus anterior motoneurons in lamina 9",
+      "color": "C98036",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "52a5be1b9f290cc70abe49de59ae2fd1f22be97e814e807e9e32dfa0441f240a",
+      "gzipBytes": 217567,
+      "gzipSHA256": "cc7dfac4967e3809730e10660bc9f6f7f4d81ae7ece58e517318faa34522f98c",
+      "file": "3077.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.5492400527000427,
+          0.3475092649459839,
+          4.846199989318848
+        ],
+        [
+          0.5492627024650574,
+          0.5665665864944458,
+          6.4597859382629395
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3078,
+    "sourceSHA256": "5a67793801d4e465bb2d6f27b42a05fb76f389e81dc91ba7c0b669c0169e9671",
+    "scriptSHA256": "7a5dac5605275225325303b63c448e421babcf0b1b249e04923a9c6d5965258f",
+    "sourceBytes": 4610703,
+    "webBytes": 288239,
+    "originalTriangles": 294320,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.7154434323310852,
+        -0.6733867526054382,
+        26.51482391357422
+      ],
+      [
+        0.7154434323310852,
+        0.5018995404243469,
+        31.03517723083496
+      ]
+    ],
+    "entry": {
+      "id": 3078,
+      "acr": "Tail9",
+      "name": "tail muscle motoneurons of lamina 9",
+      "color": "D17852",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10048,
+      "ioff": 120576,
+      "icount": 20000,
+      "rawBytes": 360576,
+      "rawSHA256": "339a76a654e4e7fdfe7c2e46ac300ddfd9e54c364d345e8622952933141b3338",
+      "gzipBytes": 216148,
+      "gzipSHA256": "219d9753ba9ba8cf2de97431d390dd30680b72697b6ccc6a0a73399e345548d5",
+      "file": "3078.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.7150411605834961,
+          -0.6731875538825989,
+          26.513778686523438
+        ],
+        [
+          0.7149003148078918,
+          0.5015580654144287,
+          31.034915924072266
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3079,
+    "sourceSHA256": "e35e37254c30cb9f565218603a65d8fb6dab02fea40bd0dbaa340f71c655b25a",
+    "scriptSHA256": "35303d0d30b4dc95e1cecf2c49ab37d5b8b55789061560667152ac45b1756fdf",
+    "sourceBytes": 4814559,
+    "webBytes": 284067,
+    "originalTriangles": 316152,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.5927859544754028,
+        0.2049696296453476,
+        11.35197639465332
+      ],
+      [
+        0.5927859544754028,
+        0.5672364234924316,
+        18.18977928161621
+      ]
+    ],
+    "entry": {
+      "id": 3079,
+      "acr": "ThAb9",
+      "name": "thoracoabdominal wall muscle motoneurons of lamina 9",
+      "color": "D66E29",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "ccdd45a3a0d1db715e21b7d67376a25159c7690d8c949470557bd06ab251048a",
+      "gzipBytes": 213020,
+      "gzipSHA256": "be71e91c99763b6507be2398fa4680e280f4692b5a14be7a22031f4e9c939609",
+      "file": "3079.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.5924257636070251,
+          0.20508643984794617,
+          11.351198196411133
+        ],
+        [
+          0.5925319790840149,
+          0.5673119425773621,
+          18.189960479736328
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3080,
+    "sourceSHA256": "a42ee249df236e9f12db534b1634785621f2da6e91cd4fd99eca9323c1480682",
+    "scriptSHA256": "31c62bbe7f3b3ed20fdb29f219d6fd413f896ae5e2adb3c8a3da0aff055d1bf2",
+    "sourceBytes": 2857735,
+    "webBytes": 289191,
+    "originalTriangles": 184000,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -1.1195592880249023,
+        0.2693474590778351,
+        5.794554710388184
+      ],
+      [
+        1.1195592880249023,
+        0.6918801665306091,
+        7.6298136711120605
+      ]
+    ],
+    "entry": {
+      "id": 3080,
+      "acr": "Tr9",
+      "name": "triceps motoneurons of lamina 9",
+      "color": "D65D29",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "dd6e28e769435ee6ad67a269a172c835aaebaa39def0db02f0d2e1e7cd3e845b",
+      "gzipBytes": 216863,
+      "gzipSHA256": "104f425bd0d3d3fffd1f5a7acf481f8c11148de3e7a4ec2a402f3fbcc7a24fac",
+      "file": "3080.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.1194322109222412,
+          0.26998865604400635,
+          5.794305801391602
+        ],
+        [
+          1.1195480823516846,
+          0.6918836832046509,
+          7.629751205444336
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3081,
+    "sourceSHA256": "345a8f11dc82d6f3852f2f8239ff74f256fb7fe60adf843c2600e4caa88f560e",
+    "scriptSHA256": "be5a89380907383847571cbb6cde8f8e7e2ef14f71190ad8cd08de30f62c20b9",
+    "sourceBytes": 1098047,
+    "webBytes": 287759,
+    "originalTriangles": 73340,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.8761491775512695,
+        0.039235349744558334,
+        2.32443904876709
+      ],
+      [
+        0.8761491775512695,
+        0.3127121031284332,
+        3.675737142562866
+      ]
+    ],
+    "entry": {
+      "id": 3081,
+      "acr": "Tz9",
+      "name": "trapezius motoneurons of lamina 9",
+      "color": "DC5647",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "62939a5b4cc25858a19a974ed55603ceb85bfb50a23e494c07c44f297466a398",
+      "gzipBytes": 215790,
+      "gzipSHA256": "c8b019f5fa5244fd4b06a2187bc5952225b32c91bc6504a091d0ef9f83777f9c",
+      "file": "3081.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.8761491179466248,
+          0.03919428214430809,
+          2.323193073272705
+        ],
+        [
+          0.8761494159698486,
+          0.3129100501537323,
+          3.675737142562866
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3082,
+    "sourceSHA256": "3af44ec2ea17b2f743a949efa1726f19cab1c1d0b43cd93ef6f0ad3f25183ef6",
+    "scriptSHA256": "7bf8a0fbcf95f044ae95dc5ab4e1f7e0d5a90ddbf126a036b03508c777fe28cd",
+    "sourceBytes": 677891,
+    "webBytes": 286851,
+    "originalTriangles": 45076,
+    "triangles": 20000,
+    "originalBounds": [
+      [
+        -0.691015899181366,
+        0.39501631259918213,
+        1.3811454772949219
+      ],
+      [
+        0.691015899181366,
+        0.5623308420181274,
+        2.457587480545044
+      ]
+    ],
+    "entry": {
+      "id": 3082,
+      "acr": "TzSM9",
+      "name": "trapezius and sternomastoid motoneurons of lamina 9",
+      "color": "D62929",
+      "shell": false,
+      "voff": 0,
+      "vcount": 10004,
+      "ioff": 120048,
+      "icount": 20000,
+      "rawBytes": 360048,
+      "rawSHA256": "7baa0bf7d1edd02f04117ba1430c49b9dae0af97debcf5dc82998ba43e3ebe8e",
+      "gzipBytes": 215107,
+      "gzipSHA256": "b6e2d8432700b68407e2685cd2dca4fd5ed17e78e381b0cb88652dfb71a077cb",
+      "file": "3082.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.691015899181366,
+          0.39501604437828064,
+          1.3811454772949219
+        ],
+        [
+          0.691015899181366,
+          0.5623717904090881,
+          2.4573683738708496
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3085,
+    "sourceSHA256": "b271cbf36cf1569db33b76449cf37006a6a5d46f6855c0c146c72ef2c546485b",
+    "scriptSHA256": "ea31e52156a8a84cce47cc000582e654cdad323324c6d50e859962382df0d17f",
+    "sourceBytes": 94788727,
+    "webBytes": 793927,
+    "originalTriangles": 5868256,
+    "triangles": 58820,
+    "originalBounds": [
+      [
+        -1.1975363492965698,
+        0.09724847972393036,
+        -0.022166302427649498
+      ],
+      [
+        1.1975363492965698,
+        1.0781102180480957,
+        31.111309051513672
+      ]
+    ],
+    "entry": {
+      "id": 3085,
+      "acr": "vf",
+      "name": "ventral funiculus",
+      "color": "5DBFD7",
+      "shell": false,
+      "voff": 0,
+      "vcount": 29410,
+      "ioff": 352920,
+      "icount": 58820,
+      "rawBytes": 1058760,
+      "rawSHA256": "b959ec31bbcb7fa4b3742097448fe082268cf52de64a1a88983c5ab59d4e6597",
+      "gzipBytes": 595415,
+      "gzipSHA256": "c19d04f71a9552db2c48221ce1c18cf492e55a8e1a9f89bc81195761c80bf4b7",
+      "file": "3085.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.168738842010498,
+          0.11224133521318436,
+          -0.022288000211119652
+        ],
+        [
+          1.1772040128707886,
+          1.0786128044128418,
+          31.11273765563965
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 3088,
+    "sourceSHA256": "878b8d60ad37d0a408e118b498f8ebfa09e8d707d062bce771d9c1ef2c7eefc4",
+    "scriptSHA256": "17d1168f90f27f6af8cc429376fe5a87b21874f16bb09da6ba09b8b7cb77474a",
+    "sourceBytes": 12579271,
+    "webBytes": 363091,
+    "originalTriangles": 813568,
+    "triangles": 26968,
+    "originalBounds": [
+      [
+        -0.18634454905986786,
+        0.062375836074352264,
+        -0.022206613793969154
+      ],
+      [
+        0.18634454905986786,
+        0.37696000933647156,
+        31.111305236816406
+      ]
+    ],
+    "entry": {
+      "id": 3088,
+      "acr": "vwc",
+      "name": "ventral white commissure",
+      "color": "5DD784",
+      "shell": false,
+      "voff": 0,
+      "vcount": 13484,
+      "ioff": 161808,
+      "icount": 26968,
+      "rawBytes": 485424,
+      "rawSHA256": "3fd08305c82ab26cee069a517cf889c60a13237e53038d0ea622c5c25c815e2a",
+      "gzipBytes": 272288,
+      "gzipSHA256": "5ef76277af8f043db90fe3e43ab91ef4ded8f3e9cce9856bc2709ce5a26ac720",
+      "file": "3088.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -0.17218445241451263,
+          0.07112381607294083,
+          -0.022441497072577477
+        ],
+        [
+          0.173213392496109,
+          0.37779542803764343,
+          31.104225158691406
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  },
+  {
+    "id": 65535,
+    "sourceSHA256": "3d1e392294abe86be1c04cb98e687ae4ebbf0dc0b6a09ba29ce59aad6d81e7df",
+    "scriptSHA256": "1cbc855604f837aa0fab15272d785ee8ff9ae30883258b4eaff98f4de8df4f61",
+    "sourceBytes": 66758308,
+    "webBytes": 2934076,
+    "originalTriangles": 4117582,
+    "triangles": 201468,
+    "originalBounds": [
+      [
+        -1.422415018081665,
+        -0.8698344230651855,
+        -0.02213580720126629
+      ],
+      [
+        1.422415018081665,
+        1.0779143571853638,
+        31.110410690307617
+      ]
+    ],
+    "entry": {
+      "id": 65535,
+      "acr": "unresolved",
+      "name": "Occupied tissue with unresolved identity",
+      "color": "D4D9DD",
+      "shell": false,
+      "voff": 0,
+      "vcount": 104474,
+      "ioff": 1253688,
+      "icount": 201468,
+      "rawBytes": 3671304,
+      "rawSHA256": "ace020c08d13090a8d813849c72458efd24cc8425d83550a8c2c20048eecf7d7",
+      "gzipBytes": 2200527,
+      "gzipSHA256": "157f2ebce7be8be015816f37061ef8512bdd1fe5711b554f323c754ff59b23ec",
+      "file": "65535.mesh.bin.gz",
+      "sourceCoordinateOrder": "XYZ",
+      "bounds": [
+        [
+          -1.3982198238372803,
+          -0.8579651713371277,
+          -0.025271441787481308
+        ],
+        [
+          1.3982198238372803,
+          1.0785139799118042,
+          30.98914337158203
+        ]
+      ],
+      "displayLOD": "web-20000-triangles"
+    }
+  }
+]
