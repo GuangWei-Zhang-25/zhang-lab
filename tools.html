@@ -173,14 +173,14 @@
     }
 
     .tool-grid {
-      columns: 3 255px;
-      column-gap: 1.25rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 1.25rem;
     }
 
     .tool-grid > .tool-summary,
     .tool-grid > .tool-placeholder {
-      break-inside: avoid;
-      margin-bottom: 1.25rem;
+      min-height: 420px;
     }
 
     .tool-group-head {
@@ -260,7 +260,8 @@
 
     /* Media banner (illustration or gradient+icon) */
     .summary-media {
-      height: 96px;
+      height: 80px;
+      flex-shrink: 0;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -285,6 +286,7 @@
       padding: 0.9rem 1rem;
       display: flex;
       flex-direction: column;
+      flex: 1;
     }
 
     .summary-desc {
@@ -394,15 +396,39 @@
       flex-wrap: wrap;
     }
 
+    .tool-summary { height: 420px; }
+    .tool-summary:has(.summary-contributors) { height: auto; }
+    .summary-desc { margin-bottom: 0.65rem; }
+    .summary-author { margin-bottom: 0.65rem; }
+    .summary-body > .summary-actions:last-child { margin-top: auto; }
+    .summary-links { display: flex; gap: 0.75rem; margin-bottom: 0.55rem; }
+    .summary-links a { font-size: 0.72rem; color: var(--primary); }
+    @media (max-width: 640px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .tool-summary { height: auto; min-height: 0; }
+      .tool-grid > .tool-placeholder { min-height: 200px; }
+    }
+
     .edition-actions {
-      margin-top: 0.7rem;
-      padding-top: 0.65rem;
+      margin-top: 0.45rem;
+      padding-top: 0.45rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.4rem;
       border-top: 1px solid var(--border-light);
+    }
+
+    .edition-actions .summary-actions { flex-wrap: nowrap; flex-shrink: 0; gap: 0.3rem; }
+    .edition-actions .summary-actions a { padding: 0.4rem 0.5rem; font-size: 0.72rem; }
+    .tool-grid > .tool-placeholder { min-height: 200px; }
+    @media (max-width: 640px) {
+      .tool-grid > .tool-summary { min-height: 0; }
     }
 
     .edition-label {
       display: block;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0;
       color: var(--primary-dark);
       font-size: 0.78rem;
       font-weight: 600;
@@ -705,7 +731,7 @@
           <div class="summary-eyebrow">Neuroanatomy · Cell Mapping</div>
           <div class="summary-name">NeuroFlow</div>
           <p class="summary-desc">
-            Register mouse brain or spinal cord sections to their reference atlas and quantify labeled signal by region. Both editions include <strong>Learn mode</strong> for signal detection.
+            Map mouse brain and spinal cord sections to an atlas, then quantify signal by region. Includes <strong>Learn mode</strong> for signal detection.
           </p>
           <div class="summary-author">
             <div class="summary-avatars">
@@ -714,10 +740,10 @@
             </div>
             <span>Co-developed by <strong>Aarushi Rao</strong> &amp; <strong>Guang-Wei Zhang</strong></span>
           </div>
-          <a href="https://www.biorxiv.org/content/10.64898/2026.07.15.737186v1" target="_blank" class="summary-paper"><i class="fas fa-file-lines"></i> Read the paper (bioRxiv, 2026)</a>
-          <a href="tool-neuroflow.html#tutorial" class="summary-note"><i class="fas fa-video"></i> Watch the 15-min video tutorial</a>
-          <div class="summary-actions">
-            <a href="tool-neuroflow.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
+          <div class="summary-links">
+            <a href="tool-neuroflow.html">Details</a>
+            <a href="https://www.biorxiv.org/content/10.64898/2026.07.15.737186v1" target="_blank" rel="noopener">Paper</a>
+            <a href="tool-neuroflow.html#tutorial">Video tutorial</a>
           </div>
           <div class="edition-actions">
             <span class="edition-label">Mouse Brain</span>
@@ -743,7 +769,7 @@
           <div class="summary-eyebrow">Behavior · Fiber Photometry</div>
           <div class="summary-name">EthoTrace</div>
           <p class="summary-desc">
-            Score behavior on the video timeline and analyze fiber photometry in one offline page: event alignment, figures, and statistics all come from the same annotated bouts.
+            Annotate behavior and analyze fiber photometry in one offline page, with event alignment, figures, and statistics.
           </p>
           <div class="summary-author">
             <img src="images/Henry Oo Headshot.jpeg" alt="Henry Oo">
@@ -785,7 +811,7 @@
           <div class="summary-eyebrow">Neuroanatomy · Atlas Reconstruction</div>
           <div class="summary-name">AtlasCraft</div>
           <p class="summary-desc">
-            An AI-agent and human cooperative system for crafting anatomical atlases, turning curated 2D label maps into aligned, labelled 3D atlases.
+            An <strong>AI-agent and human cooperative system</strong> for crafting anatomical atlases from curated 2D label maps.
           </p>
           <div class="summary-author">
             <div class="summary-avatars">
@@ -794,8 +820,8 @@
             </div>
             <span>Developed by <strong>Can Tao</strong> &amp; <strong>Guang-Wei Zhang</strong></span>
           </div>
-          <a href="#spinal-cord-atlas" class="summary-note"><i class="fas fa-cube"></i> Used to develop our 3D Mouse Spinal Cord Atlas</a>
-          <span class="summary-note"><i class="fas fa-laptop-code"></i> Version 2.0.0 · Builds locally with Python 3.10+; demo opens in your browser.</span>
+          <a href="#spinal-cord-atlas" class="summary-note"><i class="fas fa-cube"></i> Used to build our spinal cord atlas</a>
+          <span class="summary-note"><i class="fas fa-laptop-code"></i> v2.0 · Local Python app + browser demo</span>
           <div class="summary-actions">
             <a href="Tools/atlascraft/index.html" class="btn-launch" target="_blank" rel="noopener"><i class="fas fa-play"></i> Launch / setup</a>
             <a href="Tools/atlascraft/AtlasCraft/examples/demo_result/viewer.html" class="btn-details" target="_blank" rel="noopener">Try demo <i class="fas fa-arrow-right"></i></a>
@@ -811,21 +837,20 @@
           <div class="summary-eyebrow">Neuroanatomy · Spinal Cord</div>
           <div class="summary-name">3D Mouse Spinal Cord Atlas</div>
           <p class="summary-desc">
-            Explore the Allen P56 mouse spinal cord as a rotatable 3D volume: laminae, nuclei, motor pools, and white matter tracts, with cross-sections at any named level.
+            Explore the Allen P56 mouse spinal cord in 3D, with named regions and cross-sections at each spinal level.
           </p>
           <a href="#atlascraft" class="summary-note"><i class="fas fa-layer-group"></i> Developed using AtlasCraft</a>
           <div class="summary-author">
             <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
             <span>By <strong>Dr. Guang-Wei Zhang</strong></span>
           </div>
-          <a class="summary-note" style="display:flex;align-items:flex-start;"><i class="fas fa-database"></i> Full-resolution label volume, 795 &times; 373 &times; 493 at 5.94 &micro;m in plane. See the README for geometry.</a>
-          <a class="summary-note" href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-colour-table.html" target="_blank" style="display:flex;align-items:flex-start;"><i class="fas fa-palette"></i> Colour and region table: all 91 regions with hex, RGB, voxel value, and Allen ID.</a>
+          <a class="summary-note" href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-colour-table.html" target="_blank" style="display:flex;align-items:flex-start;"><i class="fas fa-palette"></i> View colours and IDs for all 91 regions</a>
           <div class="summary-actions">
             <a href="Tools/3D_Mouse_SpinalCord/spinal_cord_index.html" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch</a>
             <a href="Tools/3D_Mouse_SpinalCord/spinal_cord_index.html" class="btn-download" download="mouse-spinal-cord-atlas.html" title="Save the HTML file and open it in your browser"><i class="fas fa-download"></i> Download Viewer</a>
-            <a href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-labels.nii.gz" class="btn-download" download title="3D volumetric data: NIfTI-1, uint8, 2.7 MB"><i class="fas fa-download"></i> 3D volume (NIfTI)</a>
-            <a href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-labels.tif" class="btn-download" download title="795-page stacked TIFF, uint8, 3.1 MB"><i class="fas fa-layer-group"></i> TIFF stack</a>
-            <a href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-labels.csv" class="btn-download" download title="Colour code table: 91 regions with hex, RGB, voxel value, Allen ID, group and voxel count"><i class="fas fa-table"></i> Colour table (CSV)</a>
+            <a href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-labels.nii.gz" class="btn-download" download title="3D volumetric data: NIfTI-1, uint8, 2.7 MB"><i class="fas fa-download"></i> NIfTI</a>
+            <a href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-labels.tif" class="btn-download" download title="795-page stacked TIFF, uint8, 3.1 MB"><i class="fas fa-layer-group"></i> TIFF</a>
+            <a href="Tools/3D_Mouse_SpinalCord/data/allen-p56-spinal-cord-labels.csv" class="btn-download" download title="Colour code table: 91 regions with hex, RGB, voxel value, Allen ID, group and voxel count"><i class="fas fa-table"></i> CSV</a>
           </div>
         </div>
       </div>
@@ -871,7 +896,7 @@
           <div class="summary-eyebrow">General · Single Animal</div>
           <div class="summary-name">Behavioral Annotator</div>
           <p class="summary-desc">
-            A browser-based GUI for annotating animal behaviors in videos, frame by frame, built to power our Animal Behavioral Dataset effort.
+            Annotate animal behavior frame by frame with a customizable ethogram for single-animal video analysis.
           </p>
           <div class="summary-author">
             <img src="images/Catherine Tao headshort.png" alt="Can Tao" style="object-position: center 35%;">
@@ -892,7 +917,7 @@
           <div class="summary-eyebrow">Social Interaction · 4 Tracks</div>
           <div class="summary-name">Social Behavior Annotator</div>
           <p class="summary-desc">
-            Score social interactions in mouse videos across four dedicated timeline tracks (Active, Passive, Reactive Social, and Mounting), frame by frame.
+            Score social behavior frame by frame across four tracks: active, passive, reactive, and mounting.
           </p>
           <div class="summary-author">
             <div class="summary-avatars">
@@ -917,7 +942,7 @@
           <div class="summary-eyebrow">Parenting · 7 Tracks</div>
           <div class="summary-name">Parenting Behavior Annotator</div>
           <p class="summary-desc">
-            Score parenting behaviors across seven timeline tracks: a pooled parenting prediction plus Attack, Crouch, Lick, Nest building, Retrieve, and Sniff. Built for a collaborating lab.
+            Score parenting behavior across seven tracks, including crouching, licking, nesting, retrieval, and sniffing.
           </p>
           <div class="summary-author">
             <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
@@ -1042,7 +1067,7 @@
           <div class="summary-eyebrow">Video · Cropping &amp; Trimming</div>
           <div class="summary-name">ROI Clipper</div>
           <p class="summary-desc">
-            Load a video, draw regions of interest to crop, and trim in time to the segments you need, then export the clips right in the browser. It also generates a ready-to-run <strong>ffmpeg</strong> batch script you can copy and paste to crop and trim every clip at once locally, for a lossless re-encode on any machine with ffmpeg installed.
+            Crop video regions and trim time segments in your browser. Export clips or generate an <strong>ffmpeg</strong> script for batch processing.
           </p>
           <div class="summary-author">
             <img src="images/zhang new headshot.png" alt="Guang-Wei Zhang">
