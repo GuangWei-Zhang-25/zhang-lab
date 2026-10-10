@@ -173,9 +173,14 @@
     }
 
     .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-      gap: 1.25rem;
+      columns: 3 255px;
+      column-gap: 1.25rem;
+    }
+
+    .tool-grid > .tool-summary,
+    .tool-grid > .tool-placeholder {
+      break-inside: avoid;
+      margin-bottom: 1.25rem;
     }
 
     .tool-group-head {
@@ -255,7 +260,7 @@
 
     /* Media banner (illustration or gradient+icon) */
     .summary-media {
-      height: 118px;
+      height: 96px;
       position: relative;
       overflow: hidden;
       display: flex;
@@ -277,17 +282,15 @@
     }
 
     .summary-body {
-      padding: 1rem 1.2rem 1.1rem;
+      padding: 0.9rem 1rem;
       display: flex;
       flex-direction: column;
-      flex-grow: 1;
     }
 
     .summary-desc {
       font-size: 0.83rem;
       color: var(--text-secondary);
       line-height: 1.55;
-      flex-grow: 1;
       margin-bottom: 0.8rem;
     }
 
@@ -389,6 +392,27 @@
       display: flex;
       gap: 0.6rem;
       flex-wrap: wrap;
+    }
+
+    .edition-actions {
+      margin-top: 0.7rem;
+      padding-top: 0.65rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .edition-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--primary-dark);
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .summary-actions .btn-launch,
+    .summary-actions .btn-download,
+    .summary-actions .btn-details {
+      padding: 0.45rem 0.7rem;
+      font-size: 0.78rem;
     }
 
     .btn-launch {
@@ -695,13 +719,19 @@
           <div class="summary-actions">
             <a href="tool-neuroflow.html" class="btn-details">Details <i class="fas fa-arrow-right"></i></a>
           </div>
-          <div class="summary-actions" aria-label="Mouse brain NeuroFlow" style="margin-top: 0.6rem;">
-            <a href="Tools/neuroflow/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch Mouse Brain NeuroFlow</a>
-            <a href="Tools/neuroflow/index.html" class="btn-download" download="neuroflow-brain.html" title="Download NeuroFlow Brain to run offline"><i class="fas fa-download"></i> Download Mouse Brain NeuroFlow</a>
+          <div class="edition-actions">
+            <span class="edition-label">Mouse Brain</span>
+            <div class="summary-actions" aria-label="Mouse Brain NeuroFlow">
+            <a href="Tools/neuroflow/" class="btn-launch" target="_blank" aria-label="Launch Mouse Brain NeuroFlow"><i class="fas fa-play"></i> Launch</a>
+            <a href="Tools/neuroflow/index.html" class="btn-download" download="neuroflow-brain.html" title="Download NeuroFlow Brain to run offline" aria-label="Download Mouse Brain NeuroFlow"><i class="fas fa-download"></i> Download</a>
+            </div>
           </div>
-          <div class="summary-actions" id="neuroflow-spinal-cord" aria-label="Mouse spinal cord NeuroFlow" style="margin-top: 0.6rem;">
-            <a href="Tools/neuroflow-spinal-cord/index.html" class="btn-launch" target="_blank" rel="noopener"><i class="fas fa-play"></i> Launch Mouse Spinal Cord NeuroFlow</a>
-            <a href="Tools/neuroflow-spinal-cord.zip" class="btn-download" download="spinal-cord-web.zip" title="Extract the ZIP and open index.html; keep all files together"><i class="fas fa-download"></i> Download Mouse Spinal Cord NeuroFlow</a>
+          <div class="edition-actions" id="neuroflow-spinal-cord">
+            <span class="edition-label">Mouse Spinal Cord</span>
+            <div class="summary-actions" aria-label="Mouse Spinal Cord NeuroFlow">
+            <a href="Tools/neuroflow-spinal-cord/index.html" class="btn-launch" target="_blank" rel="noopener" aria-label="Launch Mouse Spinal Cord NeuroFlow"><i class="fas fa-play"></i> Launch</a>
+            <a href="Tools/neuroflow-spinal-cord.zip" class="btn-download" download="spinal-cord-web.zip" title="Extract the ZIP and open index.html; keep all files together" aria-label="Download Mouse Spinal Cord NeuroFlow"><i class="fas fa-download"></i> Download</a>
+            </div>
           </div>
         </div>
       </div>
