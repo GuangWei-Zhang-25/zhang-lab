@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Resources | Zhang Lab</title>
-  <meta name="description" content="Public research databases, grants by career stage, and laboratory equipment usage and instructions from the Zhang Lab.">
+  <meta name="description" content="Public research databases, grants by career stage, laboratory equipment instructions, and VCU internal links from the Zhang Lab.">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -60,7 +60,7 @@
     a.r:hover{color:var(--primary)}
     a.r:hover::before{background:var(--accent)}
 
-    .resource-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:18px 0 24px}
+    .resource-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 24px}
     .resource-nav a{padding:14px 16px;border:1px solid var(--border-light);border-top:3px solid var(--accent);border-radius:7px;text-decoration:none;color:var(--primary);background:var(--bg-light)}
     .resource-nav a:hover{border-color:var(--primary-light)}
     .resource-nav strong{display:block;font-size:.9rem}
@@ -68,6 +68,7 @@
     .resource-group{margin:16px 0 20px}
     .resource-group h3{font-size:.88rem;color:var(--primary);margin-bottom:6px}
     .group-note{font-size:.76rem;color:var(--text-secondary);margin-bottom:8px}
+    @media(max-width:1000px){.resource-nav{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:700px){.resource-nav{grid-template-columns:1fr;gap:8px}}
     [hidden]{display:none!important}
     .equipment-guide{border:1px solid var(--border-light);border-radius:7px;background:var(--bg-light);font-size:.82rem}
@@ -140,7 +141,7 @@
 <div class="container">
   <div class="page-head">
     <h1>Resources</h1>
-    <p>Research databases, funding opportunities, and practical lab guides.</p>
+    <p>Research databases, funding opportunities, lab guides, and VCU internal links.</p>
     <input id="q" type="search" placeholder="Filter by name or keyword&hellip;" autocomplete="off" aria-label="Filter resources">
     <span class="count" id="count" aria-live="polite">59 resources</span>
   </div>
@@ -149,6 +150,7 @@
 <a href="#public-databases"><strong>Public databases</strong><span>Datasets, tissue banks &amp; research resources</span></a>
 <a href="#grants"><strong>Grants by career stage</strong><span>Training, travel &amp; investigator support</span></a>
 <a href="#equipment-usage"><strong>Equipment usage &amp; instructions</strong><span>Lab protocols, settings &amp; reference photos</span></a>
+<a href="#vcu-internal-systems"><strong>VCU internal links</strong><span>Purchasing, administration &amp; lab safety</span></a>
 </nav>
 <section class="cat" id="public-databases">
 <h2><i class="fas fa-database" aria-hidden="true"></i>Public databases<span class="cnt"></span></h2>
@@ -312,7 +314,11 @@
         </figure>
         </div>
       </div>
-    </details><div class="resource-group">
+    </details>
+</section>
+<section class="cat" id="vcu-internal-systems">
+<h2><i class="fas fa-building-columns" aria-hidden="true"></i>VCU internal links<span class="cnt"></span></h2>
+<div class="resource-group">
 <h3>VCU purchasing, administration &amp; safety</h3>
 <p class="group-note">VCU eID required; some systems require the VCU network or VPN.</p>
 <div class="rlist">
