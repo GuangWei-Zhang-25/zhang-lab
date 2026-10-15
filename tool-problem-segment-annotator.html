@@ -146,7 +146,7 @@
           <div class="pipeline-step"><h4>3. Track corrections</h4><p>Select a segment and press C to toggle problem or corrected status. Export the marks as JSON.</p></div>
         </div>
         <h3>What to prepare</h3>
-        <p>This tool uses the supplied tracker's export format: an <code>index.json</code> clip list, each clip's tracking metadata (<code>.json</code>) and arrays (<code>.bin</code>), and MP4 videos named to match the clip slugs. Keep the export's folder structure intact; subfolders are supported. A video alone is not sufficient, and arbitrary tracking CSV files are not supported.</p>
+        <p>Place each MP4 video beside its matching tracking file: <code>&lt;name&gt;_masks.npz</code> for masks, or a compatible <code>.csv</code> table for bounding boxes, using the same name stem. Subfolders are searched too. A video alone is not sufficient; no <code>index.json</code> is required. For CSV-only results, use a browser with the folder-upload fallback; the native folder picker in this version reads NPZ tracking files.</p>
         <h3>Review controls</h3>
         <div class="tool-features">
           <span class="feature-chip">I / O: mark start / end</span>

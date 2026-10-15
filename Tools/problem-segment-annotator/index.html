@@ -1,6 +1,5 @@
 <!doctype html>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Problem segment annotator</title>
 <style>
 :root{--bg:#0f1115;--pan:#161a21;--line:#262c36;--fg:#e6e9ef;--dim:#8b95a7}
@@ -75,6 +74,7 @@ table.st td{vertical-align:middle}
 #need{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;
   align-items:center;justify-content:center;background:#0f1115;z-index:4;text-align:center}
 .small{color:var(--dim);font-size:11px}
+#app.noside{grid-template-columns:1fr}#app.noside #side{display:none}
 .idrow{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:5px;
   cursor:pointer;margin-bottom:2px;border:1px solid transparent}
 .idrow:hover{background:#1e232c}.idrow.sel{border-color:#e5e7eb;background:#1e232c}
@@ -82,7 +82,7 @@ table.st td{vertical-align:middle}
 .idrow select{flex:1;padding:2px 4px;font-size:11px}
 .blk{box-shadow:0 0 0 1px #e5e7eb inset}
 </style>
-<div id="app">
+<div id="app" class="noside">
   <div id="side">
     <div id="cliphdr" style="display:none"><h4>clips</h4><div id="clips"></div></div>
     <div id="saved" class="small" style="margin-top:10px"></div>
@@ -112,9 +112,11 @@ table.st td{vertical-align:middle}
       transform:translateX(-50%);background:rgba(14,79,99,.92);padding:4px 12px;
       border-radius:5px;font-size:12px;z-index:3"></div>
     <div id="need">
-      <div style="font-size:15px">Choose your tracking results folder</div>
-      <div class="small" style="max-width:440px">Include index.json, the tracking .json/.bin files, and matching .mp4 videos. Subfolders are supported.
-        Nothing is uploaded — the videos are read straight from your disk.</div>
+      <div style="font-size:15px">Choose the folder with the videos</div>
+      <div class="small" style="max-width:460px">It must hold each clip's video and its
+        tracking file — <b>&lt;name&gt;_masks.npz</b> (masks) or a <b>.csv</b> table (boxes) with the
+        same name stem; subfolders are searched too. Nothing is uploaded
+        — everything is read straight from your disk.</div>
       <button id="pickd" style="padding:8px 18px;font-size:13px">Choose folder</button>
       <div id="needmsg" class="small"></div>
       <input type="file" id="fdir" multiple webkitdirectory style="display:none">
@@ -165,7 +167,7 @@ let IDS={},IDHIST=[],selA=null,idState='';
 // No suggestions, no pre-labelling. Everything on the timeline is something the
 // reviewer put there.
 
-const SA=typeof window.__AS_DATA__!=='undefined';
+const SA=true;   // always 'standalone': the page carries no data, the folder does
 let INDEX=[],D=null,SAD=null,VID={},VOFF=0,cur=0;
 let SEGS=[],sel=null,undoStack=[],markA=null;
 let Z={z:1,ox:0,oy:0},TL={a:0,b:1};
@@ -194,51 +196,150 @@ let drag=null,tlPan=null,seeking=false,geoC=null;
 // advancing further per step instead of falling behind.
 let RATE=1, NATIVE_MAX=2, synth=null, curF=0;
 
-// ---------- data ----------
-function b64(s){const bs=atob(s),u=new Uint8Array(bs.length);
-  for(let i=0;i<bs.length;i++)u[i]=bs.charCodeAt(i);return u;}
-async function gunzip(s){const bin=b64(s);
-  if(typeof DecompressionStream==='undefined')return bin.buffer;
-  return await new Response(new Blob([bin]).stream()
-    .pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();}
-async function saInit(){if(!SA||SAD)return;
-  const buf=await gunzip(window.__AS_DATA__),u8=new Uint8Array(buf);
-  const hl=new DataView(buf).getUint32(0,true);
-  SAD={head:JSON.parse(new TextDecoder().decode(u8.subarray(4,4+hl))),blob:buf,base:4+hl};}
+// ---------- data: NOTHING is embedded in this page ----------
+// A clip is a <clip>_masks.npz (the ground truth) plus its video, found anywhere in the
+// chosen folder (subfolders too) and paired by cage + date in the file NAME
+// (A_O_F_2026-09-21), so suffixes such as _GT, copy numbers or letter case do not matter.
+// Files of one clip share a name STEM: session1.mp4, session1_masks.npz,
+// session1_problems.json ... The stem is the file name minus the extension, minus the
+// role suffixes this tool and the pipeline use, minus a browser copy number. Nothing
+// about any particular dataset is assumed.
+const ROLE=/(_GT)?(_(masks|groundtruth|tracks|tracking|problems|identities|corrections))?$/i;
+const clipKey=nm=>{let b=nm.replace(/\.[A-Za-z0-9]+$/,'').replace(/\s*\(\d+\)$/,'').replace(/[- ]copy$/i,'');
+  b=b.replace(ROLE,'').replace(/_GT$/i,'');
+  return b?b.toLowerCase():null;};
+async function inflateRaw(u8){return new Uint8Array(await new Response(new Blob([u8]).stream()
+  .pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());}
+function parseNpy(u8){
+  const dv=new DataView(u8.buffer,u8.byteOffset,u8.byteLength),maj=u8[6];
+  const hl=maj===1?dv.getUint16(8,true):dv.getUint32(8,true),h0=maj===1?10:12;
+  const hdr=new TextDecoder().decode(u8.subarray(h0,h0+hl));
+  const descr=hdr.match(/'descr':\s*'([^']+)'/)[1];
+  const shape=hdr.match(/'shape':\s*\(([^)]*)\)/)[1].split(',').map(x=>x.trim()).filter(Boolean).map(Number);
+  const body=u8.slice(h0+hl);
+  const T={'|i1':Int8Array,'<i1':Int8Array,'|u1':Uint8Array,'<u1':Uint8Array,'<i2':Int16Array,
+    '<i4':Int32Array,'<f4':Float32Array,'<f8':Float64Array,'<i8':BigInt64Array,'<u8':BigUint64Array}[descr];
+  if(!T)throw new Error('unsupported dtype '+descr);
+  let arr=new T(body.buffer,0,body.byteLength/T.BYTES_PER_ELEMENT);
+  if(T===BigInt64Array||T===BigUint64Array)arr=Float64Array.from(arr,Number);
+  return {a:arr,shape};}
+async function readNpz(file){            // .npz = zip of .npy, stored or deflated
+  const buf=new Uint8Array(await file.arrayBuffer()),dv=new DataView(buf.buffer);
+  let e=buf.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;
+  if(e<0)throw new Error('not an .npz (zip) file');
+  let n=dv.getUint16(e+10,true),off=dv.getUint32(e+16,true);
+  if(off===0xffffffff){const l=Number(dv.getBigUint64(e-20+8,true));
+    n=Number(dv.getBigUint64(l+32,true));off=Number(dv.getBigUint64(l+48,true));}
+  const out={};
+  for(let k=0;k<n;k++){
+    const meth=dv.getUint16(off+10,true),nl=dv.getUint16(off+28,true),
+          xl=dv.getUint16(off+30,true),cl=dv.getUint16(off+32,true);
+    let csz=dv.getUint32(off+20,true),usz=dv.getUint32(off+24,true),loc=dv.getUint32(off+42,true);
+    if(csz===0xffffffff||usz===0xffffffff||loc===0xffffffff){
+      let p=off+46+nl;const end=p+xl;
+      while(p<end){const id=dv.getUint16(p,true),sz=dv.getUint16(p+2,true);
+        if(id===1){let q=p+4;
+          if(usz===0xffffffff){q+=8;}
+          if(csz===0xffffffff){csz=Number(dv.getBigUint64(q,true));q+=8;}
+          if(loc===0xffffffff){loc=Number(dv.getBigUint64(q,true));}}
+        p+=4+sz;}}
+    const name=new TextDecoder().decode(buf.subarray(off+46,off+46+nl));
+    const ds=loc+30+dv.getUint16(loc+26,true)+dv.getUint16(loc+28,true);
+    const raw=buf.subarray(ds,ds+csz);
+    out[name.replace(/\.npy$/,'')]=parseNpy(meth===8?await inflateRaw(raw):raw.slice());
+    off+=46+nl+xl+cl;}
+  return out;}
+// COCO compressed RLE string -> run lengths (port of pycocotools rleFrString)
+function rleFr(s){const c=[];let p=0,m=0;
+  while(p<s.length){let x=0,k=0,more=1;
+    while(more){const v=s[p]-48;x|=(v&0x1f)<<(5*k);more=v&0x20;p++;k++;
+      if(!more&&(v&0x10))x|=-1<<(5*k);}
+    if(m>2)x+=c[m-2];c.push(x);m++;}
+  return c;}
+// A plain table also works: one row per animal per frame with at least frame, animal,
+// x, y, w, h (box) and/or cx, cy (centre). Without masks, boxes are drawn instead.
+async function loadCsv(f){
+  const lines=(await f.text()).split(/\r?\n/).filter(Boolean),hd=lines[0].split(',').map(x=>x.trim().toLowerCase());
+  const c=k=>hd.indexOf(k),need=['frame','animal'];
+  for(const k of need)if(c(k)<0)throw new Error(`${f.name}: no "${k}" column`);
+  const rows=lines.slice(1).map(l=>l.split(','));
+  const ids=[...new Set(rows.map(r=>r[c('animal')]))].sort(),aid=Object.fromEntries(ids.map((x,i)=>[x,i]));
+  let N=0;for(const r of rows)N=Math.max(N,+r[c('frame')]+1);
+  const n=ids.length,box=new Int16Array(N*n*4).fill(-1),cent=new Float32Array(N*n*2).fill(NaN),status=new Uint8Array(N*n);
+  let W=0,H=0,fps=0,skip=0;
+  for(const r of rows){const t=+r[c('frame')],a=aid[r[c('animal')]],i=t*n+a;
+    const v=k=>c(k)>=0&&r[c(k)]!==''?+r[c(k)]:NaN;
+    const x=v('x'),y=v('y'),w=v('w'),h=v('h');let cx=v('cx'),cy=v('cy');
+    if(isFinite(x)&&isFinite(w)){box[i*4]=x;box[i*4+1]=y;box[i*4+2]=x+w;box[i*4+3]=y+h;
+      if(!isFinite(cx)){cx=x+w/2;cy=y+h/2;}W=Math.max(W,x+w);H=Math.max(H,y+h);}
+    if(isFinite(cx)){cent[i*2]=cx;cent[i*2+1]=cy;status[i]=1;
+      if(!(isFinite(x)&&isFinite(w))){box[i*4]=cx-20;box[i*4+1]=cy-20;box[i*4+2]=cx+20;box[i*4+3]=cy+20;}}
+    if(!fps&&t>0&&c('t_clip_s')>=0&&+r[c('t_clip_s')]>0)fps=Math.round(t/+r[c('t_clip_s')]);
+    if(!skip&&c('t_src_s')>=0&&c('t_clip_s')>=0)skip=+r[c('t_src_s')]-+r[c('t_clip_s')];}
+  return {N,n,fps:fps||10,skip:skip||0,BL:40,W:W>1280?1920:(W>640?1280:640),H:H>720?1080:(H>480?720:480),
+          box,cent,status,rle:null};}
+async function loadClip(r){
+  if(r.data)return r.data;
+  if(!r.npz)return r.data=await loadCsv(r.csv);
+  const z=await readNpz(r.npz);
+  for(const k of ['bboxes','centroids','areas','rle_buf','rle_start','rle_len','rle_frame','rle_animal','N_FR'])
+    if(!z[k])throw new Error(`${r.npz.name} has no "${k}" -- not a ground-truth masks file`);
+  const sc=k=>z[k]?Number(z[k].a[0]):undefined;
+  const N=sc('N_FR'),n=z.bboxes.shape[1],box=new Int16Array(N*n*4),
+        cent=new Float32Array(N*n*2),status=new Uint8Array(N*n);
+  for(let i=0;i<N*n;i++){
+    if(z.areas.a[i]>0)status[i]=1;
+    for(let c=0;c<4;c++)box[i*4+c]=Math.round(z.bboxes.a[i*4+c]);
+    cent[i*2]=z.centroids.a[i*2];cent[i*2+1]=z.centroids.a[i*2+1];}
+  const rf=z.rle_frame.a,byF=Array.from({length:N},()=>[]);
+  for(let k=0;k<rf.length;k++)if(rf[k]<N)byF[rf[k]].push(k);
+  const md=sc('mask_down')||1,mh=sc('mask_h')||1080,mw=sc('mask_w')||1920;
+  return r.data={N,n,fps:sc('fps')||10,skip:sc('skip_s')||0,BL:sc('body_length_px')||40,
+    W:mw*md,H:mh*md,box,cent,status,
+    rle:{buf:z.rle_buf.a,rs:z.rle_start.a,rl:z.rle_len.a,ra:z.rle_animal.a,byF,mh,mw,md}};}
+
+// masks for one frame, drawn at half resolution: fill + a one-pixel edge per animal
+const MS=2;let mcv=null,mctx=null,mimg=null,mlab=null;
+const hexRgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+function drawMasks(g,t,COL){
+  const R=D.rle,w=Math.ceil(D.W/MS),h=Math.ceil(D.H/MS);
+  if(!mcv||mcv.width!==w||mcv.height!==h){mcv=document.createElement('canvas');mcv.width=w;mcv.height=h;
+    mctx=mcv.getContext('2d');mimg=mctx.createImageData(w,h);mlab=new Uint8Array(w*h);}
+  mlab.fill(0);mimg.data.fill(0);const pix=[];
+  for(const k of R.byF[t]){const a=R.ra[k];if(a>=D.n||!D.status[t*D.n+a])continue;
+    const cn=rleFr(R.buf.subarray(R.rs[k],R.rs[k]+R.rl[k]));let pos=0;
+    for(let j=0;j<cn.length;j++){const c=cn[j];
+      if(j&1)for(let q=pos;q<pos+c;q++){
+        const x=((q/R.mh)|0)*R.md,y=(q%R.mh)*R.md,li=((y/MS)|0)*w+((x/MS)|0);
+        if(!mlab[li]){mlab[li]=a+1;pix.push(li);}}
+      pos+=c;}}
+  const d=mimg.data,rgb=[];
+  for(let a=0;a<D.n;a++)rgb.push(hexRgb(COL[a]));
+  for(const li of pix){const L=mlab[li],a=L-1,x=li%w;
+    const edge=x===0||x===w-1||li<w||li>=w*(h-1)||mlab[li-1]!==L||mlab[li+1]!==L||mlab[li-w]!==L||mlab[li+w]!==L;
+    if(!edge&&!showFill)continue;
+    const blk=IDS[a]&&IDS[a].marker==='Black',c=edge&&blk?[255,255,255]:rgb[a];
+    d[li*4]=c[0];d[li*4+1]=c[1];d[li*4+2]=c[2];d[li*4+3]=edge?255:77;}
+  mctx.putImageData(mimg,0,0);
+  g.save();g.imageSmoothingEnabled=false;g.drawImage(mcv,0,0,w*MS,h*MS);g.restore();}
 
 async function boot(){
-  if(SA){await saInit();INDEX=SAD.head.index;}
-  else { $('#needmsg').textContent='Choose a folder containing the tracking export and videos to begin.'; return; }
-  $('#clips').innerHTML=INDEX.map((r,i)=>
-    `<div class="clip" data-i="${i}">${r.name||r.slug}</div>`).join('');
-  $$('.clip').forEach(e=>e.onclick=()=>pick(+e.dataset.i));
-  // Deliberately NOT opening a clip here. Without a video the page would come up
-  // showing outlines on a black rectangle, which looks like a broken load rather than
-  // a page waiting for input. The folder is the first and only thing to do.
-  $('#needmsg').textContent=`${INDEX.length} clips are embedded in this page`;
-  // the sidebar stays empty until there is a folder: a list of clips that cannot be
-  // opened yet is just something to click on and be disappointed by
-  $('#side').style.display='none';
-}
+  $('#needmsg').textContent='This page holds no data: each clip is read from its own '+
+    'tracking file and video in the folder you choose, so it works for any dataset.';}
 let hintT=null;
 function hint(msg){const e=$('#hint2');e.textContent=msg;e.style.display='';
   clearTimeout(hintT);hintT=setTimeout(()=>{e.style.display='none';},3500);}
 
 async function pick(i){
   $$('.clip').forEach(e=>e.classList.toggle('sel',+e.dataset.i===i));
-  const r=INDEX[i];let meta,buf;
-  if(SA){meta=SAD.head.meta[r.slug];const[o,n]=SAD.head.bin[r.slug];
-    buf=SAD.blob.slice(SAD.base+o,SAD.base+o+n);}
-  else{meta=JSON.parse(await localFile(r.data+'.json').text());
-       buf=await localFile(r.data+'.bin').arrayBuffer();}
-  const L=meta.layout,N=meta.n_frames,n=meta.n_mice;
-  const g=(k,C,b)=>new C(buf.slice(L[k].offset,L[k].offset+L[k].count*b));
-  D={r,meta,N,n,fps:meta.fps,W:meta.W,H:meta.H,skip:meta.skip_s||0,
-     BL:meta.body_length_px||40,
-     box:g('box',Int16Array,2),status:g('status',Uint8Array,1),
-     cent:g('cent',Float32Array,4),
-     polyN:L.poly_n?g('poly_n',Uint8Array,1):null,
-     polyXY:L.poly_xy?g('poly_xy',Uint8Array,1):null,polyK:meta.poly_k||12};
+  const r=INDEX[i];let X;
+  hint(`reading ${r.trk.name}…`);
+  try{X=await loadClip(r);}catch(err){
+    $('#need').style.display='flex';
+    $('#needmsg').textContent=`could not read ${r.trk.name}: ${err.message}`;return;}
+  const N=X.N;
+  D={r,meta:{},N,n:X.n,fps:X.fps,W:X.W,H:X.H,skip:X.skip,BL:X.BL,
+     box:X.box,status:X.status,cent:X.cent,rle:X.rle,polyN:null,polyXY:null,polyK:12};
   cur=0;Z={z:1,ox:0,oy:0};TL={a:0,b:N};sel=null;undoStack=[];markA=null;
   SEGS=[];
   // Restore from the JSON in the folder first -- that is the authoritative copy, and it
@@ -250,7 +351,7 @@ async function pick(i){
   VOFF=rec?rec.offset:0;
   $('#need').style.display=rec?'none':'flex';
   if(!rec)$('#needmsg').textContent=
-    `no video for ${r.slug} in the chosen folder — pick the folder again`;
+    `no video for ${r.name} in the chosen folder (its tracking is loaded) — add the .mp4 and choose the folder again`;
   if(rec){$('#vid').src=rec.url;$('#vid').load();}
   geoC=null;renderSegs();draw();drawTL();
 }
@@ -307,19 +408,12 @@ function draw(){
         started?g.lineTo(x,y):(g.moveTo(x,y),started=true);}
       halo(a);g.stroke();g.globalAlpha=1;}
   }
+  if(showMask&&D.rle)drawMasks(g,cur,COL);
   for(let a=0;a<D.n;a++){
     const i=cur*D.n+a,bx=[D.box[i*2*2],D.box[i*2*2+1],D.box[i*2*2+2],D.box[i*2*2+3]];
     if(D.status[i]===0)continue;
     g.lineWidth=lw(2);g.strokeStyle=COL[a%COL.length];
-    const hasPoly=D.polyN&&D.polyN[i]>2;
-    if(showMask&&hasPoly){
-      const k=D.polyN[i],o=i*D.polyK*2,w=bx[2]-bx[0],h=bx[3]-bx[1];
-      g.beginPath();
-      for(let p=0;p<k;p++){const x=bx[0]+D.polyXY[o+p*2]/255*w,y=bx[1]+D.polyXY[o+p*2+1]/255*h;
-        p?g.lineTo(x,y):g.moveTo(x,y);}
-      g.closePath();
-      if(showFill){g.fillStyle=COL[a%COL.length]+FILL_A;g.fill();}
-      halo(a);g.stroke();}
+    const hasPoly=!!D.rle;
     // The box stands in for a missing mask only while the MASK LAYER IS ON -- otherwise
     // the fallback would override the reviewer and make it impossible to clear the
     // overlay entirely. With both layers off you get the bare video, which is what you
@@ -610,72 +704,90 @@ addEventListener('keydown',e=>{
 // and inaccurate -- nothing leaves the machine. showDirectoryPicker asks to VIEW files
 // instead, and only the .mp4 files are ever read. The input stays as the fallback for
 // browsers without it, and for the case where a file:// page is refused the API.
-let LOCAL_FILES=[];
-function localFile(path){
-  const clean=path.replace(/^(\.\/|\.\.\/)+/,'');
-  const exact=LOCAL_FILES.filter(x=>x.path===clean||x.path.endsWith('/'+clean));
-  const matches=exact.length?exact:LOCAL_FILES.filter(x=>x.file.name===clean.split('/').pop());
-  if(matches.length!==1)throw new Error('Missing or ambiguous tracking file: '+path);
-  return matches[0].file;
-}
-async function openFolder(files){
-  try{
-    LOCAL_FILES=files;
-    if(!SA){
-      INDEX=JSON.parse(await localFile('index.json').text());
-      if(!Array.isArray(INDEX)||!INDEX.length||INDEX.some(r=>!r.slug||!r.data))
-        throw new Error('index.json must contain a nonempty list of clips with slug and data fields.');
-      for(const r of INDEX){localFile(r.data+'.json');localFile(r.data+'.bin');}
-      $('#clips').innerHTML=INDEX.map((r,i)=>`<div class="clip" data-i="${i}">${esc(r.name||r.slug)}</div>`).join('');
-      $$('.clip').forEach(e=>e.onclick=()=>pick(+e.dataset.i).catch(showLoadError));
-    }
-    await takeFiles(files.map(x=>x.file));
-  }catch(err){showLoadError(err);}
-}
-function showLoadError(err){
-  $('#need').style.display='flex';
-  $('#needmsg').textContent=err.message||'Unable to open the tracking export.';
-}
 $('#pickd').onclick=async()=>{
   if(window.showDirectoryPicker){
     try{
       const dir=await window.showDirectoryPicker({mode:'readwrite',id:'as-clips'});
-      DIRH=dir;
-      designState=await loadDesign();
+      DIRH=dir;                       // used to autosave the marks back here
+      designState=await loadDesign(); // and to read back the group assignments
+      $('#needmsg').textContent='reading the folder…';
       const files=[];
-      async function walk(folder,prefix=''){
-        for await(const h of folder.values()){
-          if(h.kind==='directory')await walk(h,prefix+h.name+'/');
-          else if(/\.(mp4|json|bin)$/i.test(h.name))files.push({path:prefix+h.name,file:await h.getFile()});
-        }
-      }
-      await walk(dir);await openFolder(files);return;
-    }catch(err){if(err&&err.name==='AbortError')return;}
+      async function walk(d,depth,path){
+        for await(const h of d.values()){
+          if(h.kind==='file'&&/\.(mp4|npz|json)$/i.test(h.name)){
+            const f=await h.getFile();f._dir=d;f._path=path;files.push(f);}
+          else if(h.kind==='directory'&&depth<4)await walk(h,depth+1,path?path+'/'+h.name:h.name);}}
+      await walk(dir,0,'');
+      takeFiles(files);return;
+    }catch(err){
+      if(err&&err.name==='AbortError')return;       // the user closed the picker
+      /* otherwise fall through to the input */
+    }
   }
-  DIRH=null;$('#fdir').click();
-};
-$('#fdir').onchange=e=>openFolder([...e.target.files].map(file=>({file,path:file.webkitRelativePath||file.name})));
-async function takeFiles(files){
-  const norm=x=>x.replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase();
+  $('#fdir').click();};
+$('#fdir').onchange=e=>{
+  $('#needmsg').textContent=`reading ${e.target.files.length} files from the folder…`;
+  takeFiles(e.target.files);};
+// files chosen through the upload fallback, by name, so the marks and colour files that
+// sit beside the videos are read too (the folder picker reads them through DIRH)
+let UPFILES={};
+function takeFiles(files){
+  try{takeFiles0(files);}catch(err){
+    $('#need').style.display='flex';
+    $('#needmsg').textContent=`could not read that folder: ${err&&err.message||err}`;
+    console.error(err);}}
+function takeFiles0(files){
+  UPFILES={};const byDir={};
   for(const f of files){
-    if(!/\.mp4$/i.test(f.name))continue;
-    const base=f.name.replace(/\.mp4$/i,'');
-    const hit=INDEX.find(r=>r.slug===base)||INDEX.find(r=>norm(r.slug)===norm(base));
-    if(!hit)continue;
-    VID[hit.slug]={url:URL.createObjectURL(f),offset:0};}
-  const have=INDEX.filter(r=>VID[r.slug]).length;
-  $$('.clip').forEach(e=>{const r=INDEX[+e.dataset.i];
-    e.style.opacity=VID[r.slug]?'':'.4';
-    e.title=VID[r.slug]?'':'no video for this clip in the chosen folder';});
-  if(!have){
-    $('#needmsg').textContent='No matching videos in that folder. The .mp4 files must '+
-      'match the clip slugs in index.json.';
+    UPFILES[f.name]=f;
+    const k=clipKey(f.name);if(!k)continue;
+    // pair a clip's files only inside ONE folder: rounds keep same-named files apart
+    const dp=f._path!==undefined?f._path:(f.webkitRelativePath||'').split('/').slice(0,-1).join('/');
+    const g=byDir[k+'|'+dp]=byDir[k+'|'+dp]||{key:k,dir:dp,videos:[],npz:null,csv:null,json:{}};
+    const e=g;
+    if(/\.npz$/i.test(f.name)){if(!e.npz||/_masks\.npz$/i.test(f.name))e.npz=f;}
+    else if(/\.csv$/i.test(f.name)){if(!e.csv||/_groundtruth\.csv$/i.test(f.name))e.csv=f;}
+    else if(/\.mp4$/i.test(f.name))e.videos.push(f);
+    else if(/\.json$/i.test(f.name))e.json[f.name]=f;}
+  // a clip held by several folders (a parent of several rounds was chosen): use the one
+  // with both tracking and video, newest tracking first, and say so
+  const by={},dup={};
+  for(const g of Object.values(byDir)){
+    const cur=by[g.key],score=x=>((x.npz||x.csv)?2:0)+(x.videos.length?1:0);
+    if(cur)(dup[g.key]=dup[g.key]||new Set([cur.dir])).add(g.dir);
+    if(!cur||score(g)>score(cur)||(score(g)===score(cur)&&g.npz&&cur.npz&&
+        g.npz.lastModified>cur.npz.lastModified))by[g.key]=g;}
+  for(const k in CDC)delete CDC[k];for(const k in SCC)delete SCC[k];
+  VID={};
+  INDEX=Object.values(by).filter(e=>e.npz||e.csv).sort((a,b)=>a.key<b.key?-1:1).map(e=>{
+    // prefer the video named like the delivered one (…_GT.mp4) if there are several
+    const v=e.videos.sort((a,b)=>(/_GT\./i.test(b.name)?1:0)-(/_GT\./i.test(a.name)?1:0))[0]||null;
+    // the clip's own name: its video's stem (so marks files sit beside it as
+    // <video stem>_problems.json), else the tracking file's stem minus its role suffix
+    const trk=e.npz||e.csv;
+    const slug=v?v.name.replace(/\.[A-Za-z0-9]+$/,''):trk.name.replace(/\.[A-Za-z0-9]+$/,'').replace(ROLE,'');
+    return {slug,name:slug+(Object.keys(dup).length&&e.dir?`  ·  ${e.dir}`:''),
+            folder:e.dir,npz:e.npz,csv:e.csv,trk,video:v,
+            dir:(v&&v._dir)||trk._dir||null,json:e.json};});
+  for(const r of INDEX)if(r.video)VID[r.slug]={url:URL.createObjectURL(r.video),offset:0};
+  const nv=Object.values(by).filter(e=>!e.npz&&!e.csv&&e.videos.length).length;
+  if(!INDEX.length){
+    $('#needmsg').textContent='No tracking files (.npz or .csv) in that folder or its subfolders'+
+      (nv?` (${nv} video${nv>1?'s':''} found, but no tracking file next to them)`:'')+
+      '. Choose the folder that holds the videos and their tracking files.';
     return;}
-  $('#needmsg').textContent=`${have} of ${INDEX.length} clips matched`;
-  $('#side').style.display='block';$('#cliphdr').style.display=have>1?'block':'none';
-  if(D&&VID[D.r.slug]){VOFF=0;$('#vid').src=VID[D.r.slug].url;$('#vid').load();
-    $('#need').style.display='none';}
-  else{const i=INDEX.findIndex(r=>VID[r.slug]);if(i>=0)await pick(i);}}
+  const have=INDEX.filter(r=>r.video).length;
+  $('#clips').innerHTML=INDEX.map((r,i)=>
+    `<div class="clip" data-i="${i}" ${r.video?'':'style="opacity:.45" title="no video found for this clip"'}>${r.name}${r.video?'':' · no video'}</div>`).join('');
+  $$('.clip').forEach(e=>e.onclick=()=>pick(+e.dataset.i));
+  const nd=Object.keys(dup).length;
+  $('#needmsg').textContent=`${INDEX.length} clips found, ${have} with video`+
+    (nv?`; ${nv} video${nv>1?'s':''} without a tracking file ignored`:'');
+  if(nd)hint(`${nd} clip${nd>1?'s are':' is'} in several subfolders — showing one copy each (folder named in the list). `+
+    'To review a particular round, choose that subfolder itself.');
+  $('#app').classList.remove('noside');geoC=null;
+  $('#cliphdr').style.display=INDEX.length>1?'block':'none';
+  const i=INDEX.findIndex(r=>VID[r.slug]);pick(i>=0?i:0);}
 
 // keep the overlay on the frame the video is actually showing
 const v=$('#vid');
@@ -723,17 +835,9 @@ const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[
 async function clipData(i){
   const r=INDEX[i];
   if(CDC[r.slug])return CDC[r.slug];
-  let meta,buf;
-  if(SA){meta=SAD.head.meta[r.slug];const[o,c]=SAD.head.bin[r.slug];
-    buf=SAD.blob.slice(SAD.base+o,SAD.base+o+c);}
-  else{meta=JSON.parse(await localFile(r.data+'.json').text());
-       buf=await localFile(r.data+'.bin').arrayBuffer();}
-  const L=meta.layout;
-  const g=(k,C,b)=>new C(buf.slice(L[k].offset,L[k].offset+L[k].count*b));
+  const X=await loadClip(r);
   return CDC[r.slug]={i,slug:r.slug,name:r.name||r.slug,
-    N:meta.n_frames,n:meta.n_mice,fps:meta.fps,W:meta.W,H:meta.H,
-    BL:meta.body_length_px||40,
-    status:g('status',Uint8Array,1),cent:g('cent',Float32Array,4)};}
+    N:X.N,n:X.n,fps:X.fps,W:X.W,H:X.H,BL:X.BL,status:X.status,cent:X.cent};}
 
 function posAt(X,f,a){
   if(X.status[f*X.n+a]===0)return null;
@@ -1659,7 +1763,27 @@ $('#tabSta').onclick=()=>showTab('sta');
 $('#tabGrp').onclick=()=>showTab('grp');
 
 // ---------- autosave ----------
+async function readClipJson(slug,suffix){
+  // the clip's own folder first (fresh, picks up what this page just saved), then the
+  // file as it was when the folder was chosen
+  const ent=INDEX.find(x=>x.slug===slug)||{},nm=slug+suffix;
+  if(ent.dir&&ent.dir.getFileHandle){try{
+    return JSON.parse(await (await (await ent.dir.getFileHandle(nm)).getFile()).text());}catch(e){}}
+  const f=(ent.json||{})[nm]||UPFILES[nm];
+  if(f){try{return JSON.parse(await f.text());}catch(e){}}
+  return null;}
+const clipDir=r=>(r&&r.dir&&r.dir.getFileHandle)?r.dir:DIRH;
 async function loadMarks(slug){
+  const jf=await readClipJson(slug,'_problems.json');
+  let ls=null;try{ls=JSON.parse(localStorage.getItem(LSKEY)||'{}')[slug];}catch(e){}
+  const lsT=ls&&!Array.isArray(ls)?ls.t:'';
+  if(jf&&!(clipDir(INDEX.find(x=>x.slug===slug))===null&&lsT&&lsT>(jf.updated||''))){try{
+    const j=jf;
+    saveState=clipDir(INDEX.find(x=>x.slug===slug))?`loaded ${slug}_problems.json`
+      :`loaded ${slug}_problems.json — opened by upload, so changes stay in this browser: use Download to save`;
+    return (j.segments||[]).map(x=>{const{start_frame,end_frame,start_s,end_s,...rest}=x;
+      return {s:start_frame,e:end_frame,...rest};});
+  }catch(e){}}
   if(DIRH){
     try{
       const fh=await DIRH.getFileHandle(slug+'_problems.json');
@@ -1673,7 +1797,8 @@ async function loadMarks(slug){
   }
   try{
     const all=JSON.parse(localStorage.getItem(LSKEY)||'{}');
-    if(all[slug]){saveState='restored from this browser';return all[slug];}
+    if(all[slug]){saveState='restored from this browser';
+      return Array.isArray(all[slug])?all[slug]:all[slug].segs;}
   }catch(e){}
   saveState=DIRH?'autosaving to the folder':'autosaving in this browser';
   return [];
@@ -1704,11 +1829,11 @@ function autosave(){
     const text=JSON.stringify(payload,null,1);
     try{
       const all=JSON.parse(localStorage.getItem(LSKEY)||'{}');
-      all[D.r.slug]=SEGS;localStorage.setItem(LSKEY,JSON.stringify(all));
+      all[D.r.slug]={t:payload.updated,segs:SEGS};localStorage.setItem(LSKEY,JSON.stringify(all));
     }catch(e){}
-    if(DIRH){
+    if(clipDir(D.r)){
       try{
-        const fh=await DIRH.getFileHandle(D.r.slug+'_problems.json',{create:true});
+        const fh=await clipDir(D.r).getFileHandle(D.r.slug+'_problems.json',{create:true});
         const w=await fh.createWritable();await w.write(text);await w.close();
         saveState=`saved to ${D.r.slug}_problems.json`;renderSegs();return;
       }catch(e){ saveState='could not write to the folder — use Download'; }
@@ -1785,10 +1910,12 @@ const IDKEY='as_ids_v1';
 async function loadIds(slug){
   IDS={};IDHIST=[];idState='';
   let j=null;
-  if(DIRH){try{const fh=await DIRH.getFileHandle(slug+'_identities.json');
-    j=JSON.parse(await (await fh.getFile()).text());idState=`loaded ${slug}_identities.json`;}catch(e){}}
-  if(!j){try{const all=JSON.parse(localStorage.getItem(IDKEY)||'{}');
-    if(all[slug]){j=all[slug];idState='restored from this browser';}}catch(e){}}
+  // the folder's file, unless this browser holds NEWER edits (made after opening the
+  // folder by upload, where the page cannot write the file back)
+  const jf=await readClipJson(slug,'_identities.json');
+  let ls=null;try{ls=JSON.parse(localStorage.getItem(IDKEY)||'{}')[slug];}catch(e){}
+  if(jf&&!(ls&&(ls.updated||'')>(jf.updated||''))){j=jf;idState=`loaded ${slug}_identities.json`;}
+  else if(ls){j=ls;idState='restored from this browser';}
   if(j){for(const r of (j.assignments||[]))
           if(MK[r.marker])IDS[r.track_id]={marker:r.marker,frame:r.assigned_frame,at:r.assigned_at};
         IDHIST=j.history||[];}
@@ -1809,7 +1936,7 @@ function saveIds(){
     const text=JSON.stringify(payload,null,1);
     try{const all=JSON.parse(localStorage.getItem(IDKEY)||'{}');all[D.r.slug]=payload;
       localStorage.setItem(IDKEY,JSON.stringify(all));}catch(e){}
-    if(DIRH){try{const fh=await DIRH.getFileHandle(D.r.slug+'_identities.json',{create:true});
+    if(clipDir(D.r)){try{const fh=await clipDir(D.r).getFileHandle(D.r.slug+'_identities.json',{create:true});
         const w=await fh.createWritable();await w.write(text);await w.close();
         idState=`saved to ${D.r.slug}_identities.json`;renderIds();return;}
       catch(e){idState='could not write to the folder — use Download';}}
@@ -1820,5 +1947,5 @@ function saveIds(){
       a.download=D.r.slug+'_identities.json';a.click();};
     renderIds();},300);}
 
-boot().then(async()=>{designState=await loadDesign();}).catch(showLoadError);
+boot().then(async()=>{designState=await loadDesign();});
 </script>
