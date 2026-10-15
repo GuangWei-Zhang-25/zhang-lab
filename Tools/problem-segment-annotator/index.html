@@ -1,0 +1,1824 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Problem segment annotator</title>
+<style>
+:root{--bg:#0f1115;--pan:#161a21;--line:#262c36;--fg:#e6e9ef;--dim:#8b95a7}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
+  font:13px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow:hidden}
+#app{display:grid;grid-template-columns:260px 1fr;grid-template-rows:1fr 150px;height:100%}
+#side{grid-row:1/3;background:var(--pan);border-right:1px solid var(--line);
+  overflow-y:auto;padding:10px}
+#main{position:relative;background:#000;overflow:hidden}
+#tlwrap{background:var(--pan);border-top:1px solid var(--line);padding:6px 10px;
+  display:flex;flex-direction:column;gap:4px}
+h4{margin:12px 0 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);font-weight:600}
+h4:first-child{margin-top:0}
+.clip{padding:6px 8px;border-radius:5px;cursor:pointer;font-size:12px}
+.clip:hover{background:#1e232c}.clip.sel{background:#0e4f63}
+.cat{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;
+  cursor:pointer;margin-bottom:3px;border:1px solid transparent}
+.cat:hover{background:#1e232c}.cat.sel{border-color:#64748b;background:#1e232c}
+.sw{width:13px;height:13px;border-radius:3px;flex:0 0 auto}
+.key{margin-left:auto;color:var(--dim);font-size:10px}
+#segs{max-height:30vh;overflow-y:auto}
+.seg{padding:5px 8px;border-radius:4px;cursor:pointer;font-size:11px;
+  display:flex;gap:6px;align-items:center;border-left:3px solid transparent}
+.seg:hover{background:#1e232c}.seg.sel{background:#243044}
+.seg .t{color:var(--dim);font-variant-numeric:tabular-nums}
+/* The video is never composited by the browser. It is a 1x1 invisible decode source
+   and every pixel reaches the screen through the canvas, because a <video> and a
+   <canvas> stacked on top of each other are painted independently and the overlay
+   ends up a frame behind the picture. One surface cannot skew against itself. */
+#vid{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  pointer-events:none;z-index:0}
+/* The video sits full-size BEHIND the canvas rather than shrunk to 1px at zero
+   opacity, which is what it used to be. Browsers treat a 1x1 transparent video as
+   off-screen and deprioritise its decode, which is felt exactly where the decode
+   budget is tightest -- fast playback. It is still never seen: draw() fills the
+   canvas with opaque black before it blits, so the canvas covers it completely. */
+#ov{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+#bar{position:absolute;left:0;right:0;bottom:0;display:flex;gap:6px;align-items:center;
+  padding:7px 10px;background:linear-gradient(transparent,rgba(0,0,0,.85));z-index:3}
+button,select{background:#1e222b;color:var(--fg);border:1px solid var(--line);
+  border-radius:5px;padding:4px 9px;font-size:12px;cursor:pointer}
+button:hover{background:#273040}button.on{background:#0e4f63;border-color:#1d7f9c}
+#tl{width:100%;height:92px;display:block;cursor:crosshair}
+#tabs{position:absolute;top:8px;right:10px;display:flex;gap:4px;z-index:5}
+#tabs button{padding:3px 12px;font-size:11px}
+#stats,#grp{position:absolute;inset:0;background:var(--bg);overflow-y:auto;
+  padding:16px;display:none;z-index:4}
+.card{background:var(--pan);border:1px solid var(--line);border-radius:8px;
+  padding:12px 14px;margin-bottom:14px}
+.card h3{margin:0 0 4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--dim);font-weight:600}
+.card .sub{color:var(--dim);font-size:11px;margin-bottom:10px}
+table.st{border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+table.st th,table.st td{padding:4px 14px 4px 0;text-align:left}
+table.st th{color:var(--dim);font-weight:600;font-size:11px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.chips .lbl{color:var(--dim);font-size:11px;margin-right:4px;min-width:62px}
+button.chip{padding:3px 9px;font-size:11px;border-radius:12px}
+button.chip.lite{background:transparent;color:var(--dim)}
+button.chip.lite:hover{background:#273040;color:var(--fg)}
+input.tin{background:#161a22;color:var(--fg);border:1px solid var(--line);
+  border-radius:4px;padding:2px 6px;font-size:11px;width:110px}
+input.tin:focus{outline:none;border-color:#1d7f9c}
+table.st td{vertical-align:middle}
+#hud{position:absolute;top:8px;left:10px;background:rgba(0,0,0,.6);padding:3px 9px;
+  border-radius:5px;font-size:11px;font-variant-numeric:tabular-nums;z-index:3}
+#tip{position:fixed;background:#0b0e13;border:1px solid var(--line);border-radius:5px;
+  padding:5px 8px;font-size:11px;pointer-events:none;display:none;z-index:9}
+#need{position:absolute;inset:0;display:flex;flex-direction:column;gap:10px;
+  align-items:center;justify-content:center;background:#0f1115;z-index:4;text-align:center}
+.small{color:var(--dim);font-size:11px}
+.idrow{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:5px;
+  cursor:pointer;margin-bottom:2px;border:1px solid transparent}
+.idrow:hover{background:#1e232c}.idrow.sel{border-color:#e5e7eb;background:#1e232c}
+.idrow .let{font-weight:600;width:14px}
+.idrow select{flex:1;padding:2px 4px;font-size:11px}
+.blk{box-shadow:0 0 0 1px #e5e7eb inset}
+</style>
+<div id="app">
+  <div id="side">
+    <div id="cliphdr" style="display:none"><h4>clips</h4><div id="clips"></div></div>
+    <div id="saved" class="small" style="margin-top:10px"></div>
+    <button id="dl" style="display:none;margin-top:6px">⬇ download marks</button>
+    <div id="idpanel" style="display:none">
+      <h4 style="margin-top:16px">identity colours</h4>
+      <div class="small" style="margin-bottom:6px">click an animal in the video, then
+        1 Red · 2 Green · 3 Blue · 4 Black · 5 Red+Green (yellow) · 0 clears.
+        Each colour belongs to one animal.</div>
+      <div id="idrows"></div>
+      <div id="idinfo" class="small" style="margin-top:4px"></div>
+      <button id="iddl" style="display:none;margin-top:6px">⬇ download colours</button>
+    </div>
+  </div>
+  <div id="main">
+    <div id="tabs">
+      <button id="tabRev" class="on">review</button>
+      <button id="tabSta">statistics</button>
+      <button id="tabGrp">groups</button>
+    </div>
+    <div id="stats"></div>
+    <div id="grp"></div>
+    <video id="vid" playsinline muted></video>
+    <canvas id="ov"></canvas>
+    <div id="hud"></div>
+    <div id="hint2" style="display:none;position:absolute;top:8px;left:50%;
+      transform:translateX(-50%);background:rgba(14,79,99,.92);padding:4px 12px;
+      border-radius:5px;font-size:12px;z-index:3"></div>
+    <div id="need">
+      <div style="font-size:15px">Choose your tracking results folder</div>
+      <div class="small" style="max-width:440px">Include index.json, the tracking .json/.bin files, and matching .mp4 videos. Subfolders are supported.
+        Nothing is uploaded — the videos are read straight from your disk.</div>
+      <button id="pickd" style="padding:8px 18px;font-size:13px">Choose folder</button>
+      <div id="needmsg" class="small"></div>
+      <input type="file" id="fdir" multiple webkitdirectory style="display:none">
+    </div>
+    <div id="bar">
+      <button id="play">▶</button>
+      <button id="pf">◀ frame</button><button id="nf">frame ▶</button>
+      <select id="spd"><option>0.25</option><option>0.5</option><option selected>1</option>
+        <option>2</option><option>3</option><option>4</option><option>8</option><option>16</option>
+        <option>32</option></select>
+      <button id="prev">◀ prev</button><button id="next">next ▶</button>
+      <button id="bbox">▭ box (b)</button>
+      <button id="mask" class="on">◧ mask (m)</button>
+      <button id="fill" class="on">▨ fill (f)</button>
+      <button id="trail" class="on">↝ trail (t)</button>
+      <span class="small" style="margin-left:auto">I marks in · O marks out · Del removes · c corrected/problem · ⌘Z undo · b box · m mask · f fill · t trail · click animal + 1–5 colour</span>
+    </div>
+  </div>
+  <div id="tlwrap"><canvas id="tl"></canvas>
+    <div class="small">drag = scrub the video · scroll = zoom · shift+drag = pan ·
+      I marks in, O marks out · drag an existing bar to move it, its edge to resize</div>
+  </div>
+</div>
+<div id="tip"></div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+// The label set is deliberately tiny. This tool is not for scoring behaviour -- it is
+// for adjudicating the handful of places the tracker could not settle, so every label
+// is a verdict on the TRACKING, and "ok" is the one used most.
+// ONE kind of segment: a problem. Marking something is the reviewer saying "this is
+// wrong", and nothing else needs saying -- what KIND of wrong is obvious from the
+// frames, and a taxonomy only slows the pass down.
+const PROB='#ef4444';
+// A mark keeps the status it was saved with. "corrected" = a section that was
+// reported as a problem and has since been fixed; it stays on the timeline (teal) so
+// the place can be found and inspected again, and new marks are added beside it.
+const CORR='#14b8a6';
+const segCol=sg=>sg&&sg.status==='corrected'?CORR:PROB;
+// IDENTITY COLOURS: the physical marker each animal carries. The set is fixed -- five
+// markers, each on at most one animal of a clip -- and RedGreen is DRAWN yellow.
+const MARKERS=[
+  {k:'Red',c:'#ef4444',key:'1'},{k:'Green',c:'#22c55e',key:'2'},
+  {k:'Blue',c:'#3b82f6',key:'3'},{k:'Black',c:'#000000',key:'4'},
+  {k:'RedGreen',c:'#facc15',key:'5',label:'Red+Green (yellow)'}];
+const MK=Object.fromEntries(MARKERS.map(m=>[m.k,m]));
+const LET='ABCDEFGHIJ';
+let IDS={},IDHIST=[],selA=null,idState='';
+// No suggestions, no pre-labelling. Everything on the timeline is something the
+// reviewer put there.
+
+const SA=typeof window.__AS_DATA__!=='undefined';
+let INDEX=[],D=null,SAD=null,VID={},VOFF=0,cur=0;
+let SEGS=[],sel=null,undoStack=[],markA=null;
+let Z={z:1,ox:0,oy:0},TL={a:0,b:1};
+// three independent layers: the segmentation is the real record, the box is
+// only its bounding rectangle, and the trail shows where each animal has just
+// been -- which is what makes an identity swap visible as it happens
+let showMask=true,showBox=false,showTrail=true,TRAIL_S=5;
+// Filling the segmentation makes it obvious at a glance WHICH pixels the tracker
+// claims, which an outline alone leaves to the eye -- particularly where the two
+// animals touch and the two outlines run side by side. Kept semi-transparent so the
+// fur underneath stays visible and the fill cannot hide what it is covering.
+let showFill=true;const FILL_A='4d';
+let drag=null,tlPan=null,seeking=false,geoC=null;
+// Beyond this rate the browser's own playbackRate stutters, and it refuses past 16x
+// entirely, so fast review is driven from our own clock instead: advance a frame
+// counter by wall-clock time, seek the video to follow, and draw the overlay from the
+// counter. The overlay is then authoritative and cannot lag behind the picture, which
+// is the failure this replaces -- at 8x the boxes used to trail the video by frames.
+//
+// THE BOUNDARY USED TO BE 4, AND THE TEST IS `r <= NATIVE_MAX`, so 4x itself -- the
+// most-used review speed -- ran on native playbackRate, the one rate the note above
+// says is already marginal. Everything FASTER than 4x got the smooth path and 4x did
+// not. It is 2 now, so 4x is decoder-paced like the rest. Decode throughput was never
+// the limit (measured 1245 fps on this clip against the 40 fps that 4x asks for); the
+// cost is per-frame delivery and overlay paint, which the paced path absorbs by
+// advancing further per step instead of falling behind.
+let RATE=1, NATIVE_MAX=2, synth=null, curF=0;
+
+// ---------- data ----------
+function b64(s){const bs=atob(s),u=new Uint8Array(bs.length);
+  for(let i=0;i<bs.length;i++)u[i]=bs.charCodeAt(i);return u;}
+async function gunzip(s){const bin=b64(s);
+  if(typeof DecompressionStream==='undefined')return bin.buffer;
+  return await new Response(new Blob([bin]).stream()
+    .pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();}
+async function saInit(){if(!SA||SAD)return;
+  const buf=await gunzip(window.__AS_DATA__),u8=new Uint8Array(buf);
+  const hl=new DataView(buf).getUint32(0,true);
+  SAD={head:JSON.parse(new TextDecoder().decode(u8.subarray(4,4+hl))),blob:buf,base:4+hl};}
+
+async function boot(){
+  if(SA){await saInit();INDEX=SAD.head.index;}
+  else { $('#needmsg').textContent='Choose a folder containing the tracking export and videos to begin.'; return; }
+  $('#clips').innerHTML=INDEX.map((r,i)=>
+    `<div class="clip" data-i="${i}">${r.name||r.slug}</div>`).join('');
+  $$('.clip').forEach(e=>e.onclick=()=>pick(+e.dataset.i));
+  // Deliberately NOT opening a clip here. Without a video the page would come up
+  // showing outlines on a black rectangle, which looks like a broken load rather than
+  // a page waiting for input. The folder is the first and only thing to do.
+  $('#needmsg').textContent=`${INDEX.length} clips are embedded in this page`;
+  // the sidebar stays empty until there is a folder: a list of clips that cannot be
+  // opened yet is just something to click on and be disappointed by
+  $('#side').style.display='none';
+}
+let hintT=null;
+function hint(msg){const e=$('#hint2');e.textContent=msg;e.style.display='';
+  clearTimeout(hintT);hintT=setTimeout(()=>{e.style.display='none';},3500);}
+
+async function pick(i){
+  $$('.clip').forEach(e=>e.classList.toggle('sel',+e.dataset.i===i));
+  const r=INDEX[i];let meta,buf;
+  if(SA){meta=SAD.head.meta[r.slug];const[o,n]=SAD.head.bin[r.slug];
+    buf=SAD.blob.slice(SAD.base+o,SAD.base+o+n);}
+  else{meta=JSON.parse(await localFile(r.data+'.json').text());
+       buf=await localFile(r.data+'.bin').arrayBuffer();}
+  const L=meta.layout,N=meta.n_frames,n=meta.n_mice;
+  const g=(k,C,b)=>new C(buf.slice(L[k].offset,L[k].offset+L[k].count*b));
+  D={r,meta,N,n,fps:meta.fps,W:meta.W,H:meta.H,skip:meta.skip_s||0,
+     BL:meta.body_length_px||40,
+     box:g('box',Int16Array,2),status:g('status',Uint8Array,1),
+     cent:g('cent',Float32Array,4),
+     polyN:L.poly_n?g('poly_n',Uint8Array,1):null,
+     polyXY:L.poly_xy?g('poly_xy',Uint8Array,1):null,polyK:meta.poly_k||12};
+  cur=0;Z={z:1,ox:0,oy:0};TL={a:0,b:N};sel=null;undoStack=[];markA=null;
+  SEGS=[];
+  // Restore from the JSON in the folder first -- that is the authoritative copy, and it
+  // survives a different browser or machine. The browser's own copy is the fallback for
+  // when the folder could not be written to.
+  SEGS=await loadMarks(r.slug);
+  selA=null;await loadIds(r.slug);
+  const rec=VID[r.slug];
+  VOFF=rec?rec.offset:0;
+  $('#need').style.display=rec?'none':'flex';
+  if(!rec)$('#needmsg').textContent=
+    `no video for ${r.slug} in the chosen folder — pick the folder again`;
+  if(rec){$('#vid').src=rec.url;$('#vid').load();}
+  geoC=null;renderSegs();draw();drawTL();
+}
+
+
+// ---------- geometry ----------
+function geo(){const c=$('#main').getBoundingClientRect();
+  if(geoC&&geoC.w===c.width&&geoC.h===c.height)return geoC;
+  // Map the TRACKING space, not the video's pixel size. The delivered clips are
+  // downscaled to 960x540 while every coordinate is in the original 1920x1080, so
+  // using videoWidth drew every mask at twice its proper position and size. The
+  // aspect ratio is the same, so the letterboxed rectangle is identical either way --
+  // only the scale factor differs, which is exactly what went wrong.
+  const k=Math.min(c.width/D.W,c.height/D.H);
+  geoC={k,ox:(c.width-D.W*k)/2,oy:(c.height-D.H*k)/2,w:c.width,h:c.height};return geoC;}
+function applyZoom(){geoC=null;draw();}
+
+// ---------- drawing ----------
+function draw(){
+  if(!D)return;const c=$('#ov'),G=geo();
+  const r=window.devicePixelRatio||1,b=$('#main').getBoundingClientRect();
+  if(c.width!==b.width*r||c.height!==b.height*r){c.width=b.width*r;c.height=b.height*r;}
+  const g=c.getContext('2d');g.setTransform(r,0,0,r,0,0);
+  g.fillStyle='#000';g.fillRect(0,0,b.width,b.height);
+  // Paint the frame itself, cropping the SOURCE rather than scaling the whole image,
+  // so zooming shows real pixels instead of an upscaled blur.
+  const v=$('#vid');
+  if(v.readyState>=2&&v.videoWidth){
+    const vs=v.videoWidth/D.W;                    // video px per tracking px
+    // The SOURCE crop is D.W/Z.z tracking units wide, and it has to fill the same
+    // rectangle the overlay draws into, which is D.W*k screen px. Writing D.W*k*Z.z
+    // here scaled the picture by an extra factor of Z.z against the outlines -- exact
+    // at Z.z=1, which is why it only showed up once zoomed.
+    const sw=(D.W/Z.z)*vs, sh=(D.H/Z.z)*vs;
+    try{g.drawImage(v,Z.ox*vs,Z.oy*vs,sw,sh,G.ox,G.oy,D.W*G.k,D.H*G.k);}catch(e){}
+  }
+  g.save();g.translate(G.ox,G.oy);g.scale(G.k*Z.z,G.k*Z.z);g.translate(-Z.ox,-Z.oy);
+  const COL0=['#00c8ff','#ff4dd8','#ffb020','#39d353','#a78bfa']  // five animals, spaced around the hue circle: a 2-colour palette cycling with %2 gave A/C/E the same colour, which is exactly the confusion the reviewer is here to resolve;
+  // an assigned marker colour replaces the default track colour everywhere
+  const COL={length:1e9};for(let a=0;a<D.n;a++)COL[a]=IDS[a]?MK[IDS[a].marker].c:COL0[a%COL0.length];
+  const lw=v=>v/(G.k*Z.z);
+  // black on black fur is invisible: a black outline gets a white halo
+  const halo=a=>{if(IDS[a]&&IDS[a].marker==='Black'){const w=g.lineWidth;
+    g.save();g.strokeStyle='#ffffff';g.lineWidth=w*2.4;g.stroke();g.restore();}};
+  if(showTrail&&D.cent){
+    const back=Math.round(TRAIL_S*D.fps);
+    for(let a=0;a<D.n;a++){
+      g.strokeStyle=COL[a%COL.length];g.lineWidth=lw(1.6);g.globalAlpha=.75;g.beginPath();
+      let started=false;
+      for(let f=Math.max(0,cur-back);f<=cur;f++){
+        const i=f*D.n+a;if(D.status[i]===0)continue;
+        const x=D.cent[i*2],y=D.cent[i*2+1];
+        if(!isFinite(x)||!isFinite(y))continue;
+        started?g.lineTo(x,y):(g.moveTo(x,y),started=true);}
+      halo(a);g.stroke();g.globalAlpha=1;}
+  }
+  for(let a=0;a<D.n;a++){
+    const i=cur*D.n+a,bx=[D.box[i*2*2],D.box[i*2*2+1],D.box[i*2*2+2],D.box[i*2*2+3]];
+    if(D.status[i]===0)continue;
+    g.lineWidth=lw(2);g.strokeStyle=COL[a%COL.length];
+    const hasPoly=D.polyN&&D.polyN[i]>2;
+    if(showMask&&hasPoly){
+      const k=D.polyN[i],o=i*D.polyK*2,w=bx[2]-bx[0],h=bx[3]-bx[1];
+      g.beginPath();
+      for(let p=0;p<k;p++){const x=bx[0]+D.polyXY[o+p*2]/255*w,y=bx[1]+D.polyXY[o+p*2+1]/255*h;
+        p?g.lineTo(x,y):g.moveTo(x,y);}
+      g.closePath();
+      if(showFill){g.fillStyle=COL[a%COL.length]+FILL_A;g.fill();}
+      halo(a);g.stroke();}
+    // The box stands in for a missing mask only while the MASK LAYER IS ON -- otherwise
+    // the fallback would override the reviewer and make it impossible to clear the
+    // overlay entirely. With both layers off you get the bare video, which is what you
+    // want when judging whether an outline is flattering the tracking.
+    if(showBox||(showMask&&!hasPoly)){
+      g.lineWidth=lw(showBox?1.5:2);
+      g.strokeRect(bx[0],bx[1],bx[2]-bx[0],bx[3]-bx[1]);}
+    // identity tag: letter + marker, and a dashed frame on the animal being assigned
+    if(IDS[a]||selA===a){
+      const fs=lw(13);g.font=`600 ${fs}px system-ui`;
+      const tag=LET[a]+(IDS[a]?' · '+(MK[IDS[a].marker].label||IDS[a].marker):'');
+      const tw=g.measureText(tag).width;
+      g.fillStyle='rgba(0,0,0,.65)';g.fillRect(bx[0],bx[1]-fs*1.5,tw+lw(8),fs*1.4);
+      g.fillStyle=IDS[a]&&IDS[a].marker!=='Black'?COL[a]:'#ffffff';
+      g.fillText(tag,bx[0]+lw(4),bx[1]-fs*.45);}
+    if(selA===a){g.save();g.setLineDash([lw(6),lw(4)]);g.strokeStyle='#ffffff';
+      g.lineWidth=lw(1.5);g.strokeRect(bx[0]-lw(6),bx[1]-lw(6),bx[2]-bx[0]+lw(12),bx[3]-bx[1]+lw(12));
+      g.restore();}
+  }
+  g.restore();
+  const t=(cur/D.fps),mm=String(Math.floor(t/60)).padStart(2,'0'),
+        ss=(t%60).toFixed(1).padStart(4,'0');
+  const s=segAt(cur);
+  const off=!showMask&&!showBox&&!showTrail;
+  $('#hud').textContent=`f${cur} / ${D.N}   ${mm}:${ss}`+
+    (s?(s.status==='corrected'?'   ▸ inside a CORRECTED section (reported earlier)'
+        :'   ▸ inside a marked problem'):'')+
+    (off?'   · overlay off (b/m/t)':'');
+}
+
+// ---------- timeline ----------
+function drawTL(){
+  if(!D)return;const c=$('#tl'),r=window.devicePixelRatio||1;
+  const w=c.parentElement.clientWidth-20,h=92;
+  if(c.width!==w*r||c.height!==h*r){c.width=w*r;c.height=h*r;
+    c.style.width=w+'px';c.style.height=h+'px';}
+  const g=c.getContext('2d');g.setTransform(r,0,0,r,0,0);
+  g.fillStyle='#12151b';g.fillRect(0,0,w,h);
+  const A=TL.a,B=TL.b,S=B-A,x=f=>(f-A)/S*w;
+  // ONE lane. Marks are rare and short, so stacking them in sub-lanes only added rows
+  // to read; overlapping marks simply draw over each other and the list on the left is
+  // the place to disambiguate them.
+  const LY=10,LH=44;
+  g.fillStyle='#1b1f27';g.fillRect(0,LY,w,LH);
+  for(const sg of SEGS){
+    const x0=Math.max(0,x(sg.s)),x1=Math.min(w,x(sg.e+1));if(x1<0||x0>w)continue;
+    const wd=Math.max(2,x1-x0);
+    g.fillStyle=segCol(sg)+'55';g.fillRect(x0,LY,wd,LH);
+    g.strokeStyle=segCol(sg);g.lineWidth=sg===sel?2:1;
+    g.strokeRect(x0+.5,LY+.5,wd-1,LH-1);
+    if(sg===sel||hoverSeg===sg){            // grips, so the edges look draggable
+      g.fillStyle=segCol(sg);
+      g.fillRect(x0,LY,3,LH);g.fillRect(x1-3,LY,3,LH);}
+    if(wd>54){g.fillStyle='#e6e9ef';g.font='10px system-ui';
+      g.fillText(((sg.e-sg.s+1)/D.fps).toFixed(1)+'s',x0+6,LY+LH-6);}
+  }
+  // the pending mark: from I to wherever the playhead is now, so the extent is visible
+  // before O confirms it
+  if(markA!=null){
+    const x0=Math.max(0,x(Math.min(markA,cur))),x1=Math.min(w,x(Math.max(markA,cur)+1));
+    g.fillStyle='rgba(34,197,94,.22)';g.fillRect(x0,LY,Math.max(2,x1-x0),LH);
+    g.strokeStyle='#22c55e';g.setLineDash([4,3]);g.lineWidth=1.5;
+    g.strokeRect(x0+.5,LY+.5,Math.max(2,x1-x0)-1,LH-1);g.setLineDash([]);
+    g.fillStyle='#22c55e';g.font='10px system-ui';
+    g.fillText('O to confirm',x0+6,LY+12);}
+  const px=x(cur);g.strokeStyle='#fff';g.lineWidth=1;
+  g.beginPath();g.moveTo(px,0);g.lineTo(px,h-14);g.stroke();
+  g.fillStyle='#64748b';g.font='9px system-ui';
+  for(let k=0;k<=6;k++){const f=A+k/6*S,t=(D.skip+f/D.fps);
+    g.fillText(`${String(Math.floor(t/60)).padStart(2,'0')}:${String(Math.floor(t%60)).padStart(2,'0')}`,
+      Math.min(w-26,k/6*w),h-3);}
+}
+const tlF=e=>{const b=$('#tl').getBoundingClientRect();
+  return Math.round(TL.a+(e.clientX-b.left)/b.width*(TL.b-TL.a));};
+function segAt(f){for(const s of SEGS)if(f>=s.s&&f<=s.e)return s;return null;}
+let hoverSeg=null,hoverEdge=null;
+function hitSeg(e){const f=tlF(e),b=$('#tl').getBoundingClientRect();
+  const y=e.clientY-b.top;
+  if(y<10||y>54)return null;
+  for(const s of SEGS)if(f>=s.s&&f<=s.e)return s;
+  return null;}
+// which edge, if any, the pointer is over -- used for the cursor and the grips
+function edgeAt(e,s){
+  if(!s)return null;
+  const b=$('#tl').getBoundingClientRect(),w=b.width,X=f=>(f-TL.a)/(TL.b-TL.a)*w;
+  const px=e.clientX-b.left;
+  if(Math.abs(px-X(s.s))<6)return 's';
+  if(Math.abs(px-X(s.e+1))<6)return 'e';
+  return null;}
+
+// ---------- editing ----------
+function push(){undoStack.push(JSON.stringify(SEGS));if(undoStack.length>80)undoStack.shift();}
+function persist(){autosave();}
+function addSeg(s,e){push();
+  SEGS.push({s:Math.min(s,e),e:Math.max(s,e),status:'problem'});
+  SEGS.sort((a,b)=>a.s-b.s);persist();renderSegs();drawTL();}
+function removeSeg(s){push();SEGS=SEGS.filter(o=>o!==s);sel=null;persist();renderSegs();drawTL();}
+function renderSegs(){
+  // No list to render any more. The timeline IS the list: marks are few and short, and
+  // a sidebar copy of them was one more thing to read and keep in sync.
+  const n=SEGS.length;
+  $('#saved').textContent=n?`${n} mark${n>1?'s':''} · ${saveState}`:saveState;
+}
+
+// ---------- playback ----------
+function seek(f){if(!D)return;cur=Math.max(0,Math.min(D.N-1,f|0));curF=cur;
+  // with a mark pending, the block is redrawn every time the playhead moves so its
+  // likely end is visible before O is pressed
+  const v=$('#vid');if(v.src)v.currentTime=(cur/D.fps)+VOFF;
+  centreTL();draw();drawTL();}
+function centreTL(){const S=TL.b-TL.a;
+  if(cur<TL.a||cur>TL.b){TL.a=Math.max(0,cur-S/2);TL.b=TL.a+S;drawTL();}}
+$('#play').onclick=()=>{const v=$('#vid');
+  const playing=synth||!v.paused;
+  if(playing){stopSynth();v.pause();$('#play').textContent='▶';}
+  else{$('#play').textContent='❚❚';
+    if(RATE>NATIVE_MAX)startSynth();else{v.playbackRate=RATE;v.play();}}};
+$('#pf').onclick=()=>seek(cur-1);$('#nf').onclick=()=>seek(cur+1);
+$('#spd').onchange=e=>setRate(+e.target.value);
+function setRate(r){
+  RATE=r;const v=$('#vid');
+  if(r<=NATIVE_MAX){stopSynth();v.playbackRate=r;if(!v.paused)v.play();}
+  else{v.pause();v.playbackRate=1;if($('#play').textContent==='❚❚')startSynth();}}
+function stopSynth(){
+  if(synth){const v=$('#vid');v.removeEventListener('seeked',synth.onSeeked);
+    clearTimeout(synth.timer);synth=null;}}
+function startSynth(){
+  if(synth||!D)return;
+  const v=$('#vid');
+  // DECODER-PACED. The first version advanced on every animation frame and seeked the
+  // video to follow, which at 16-32x asks for ~60 seeks a second of half-second jumps.
+  // The decoder cannot keep up, so the overlay was right and the PICTURE lagged behind
+  // it. Now the next seek is only requested once the previous one has landed, and the
+  // frame index is taken from where the video ACTUALLY is rather than where we asked
+  // it to go -- so the two can never disagree. If the decoder is slow the skim simply
+  // runs below its nominal speed, which is honest and far better than a mismatch.
+  // WANT is where the clock says we should be, carried as a fraction of a frame. The
+  // old version instead rounded each step on its own with a floor of one frame, so a
+  // run of fast steps advanced a whole frame each time and overshot the requested
+  // speed; accumulating means short steps add up rather than each being rounded up.
+  let last=performance.now(),want=cur;
+  synth={onSeeked:null,timer:null};
+  const land=()=>{
+    if(!synth)return;
+    cur=Math.max(0,Math.min(D.N-1,Math.floor((v.currentTime-VOFF)*D.fps+1e-4)));
+    if(cur>want)want=cur;
+    curF=cur;centreTL();draw();drawTL();
+    if(cur>=D.N-1){stopSynth();$('#play').textContent='▶';return;}
+    next();};
+  const next=()=>{
+    if(!synth)return;
+    const now=performance.now(),dt=Math.min(0.5,(now-last)/1000);last=now;
+    want+=RATE*D.fps*dt;
+    // never ask for a frame we are already on, so a step can never fail to progress
+    const tgt=Math.min(D.N-1,Math.max(cur+1,Math.round(want)));
+    if(tgt>want)want=tgt;
+    clearTimeout(synth.timer);
+    // a guard in case 'seeked' never arrives (it can be dropped near the end of a file)
+    synth.timer=setTimeout(land,400);
+    // EXACT SEEK, NOT fastSeek. fastSeek snaps to the nearest keyframe, so it can land
+    // behind the frame asked for; at a modest rate the step is smaller than one
+    // keyframe interval and it snaps back to the same keyframe every time, which
+    // freezes playback. That hazard is why this path was confined to very high rates.
+    // The review encodes now carry a keyframe every second instead of every 25, so an
+    // exact seek costs at most a few frames of decode past the keyframe and lands
+    // where it was told -- which makes every step monotonic at any rate.
+    v.currentTime=tgt/D.fps+VOFF;};
+  synth.onSeeked=()=>{clearTimeout(synth.timer);land();};
+  v.addEventListener('seeked',synth.onSeeked);
+  next();}
+$('#mask').onclick=()=>{showMask=!showMask;$('#mask').classList.toggle('on',showMask);draw();};
+$('#bbox').onclick=()=>{showBox=!showBox;$('#bbox').classList.toggle('on',showBox);draw();};
+$('#trail').onclick=()=>{showTrail=!showTrail;$('#trail').classList.toggle('on',showTrail);draw();};
+$('#fill').onclick=()=>{showFill=!showFill;$('#fill').classList.toggle('on',showFill);draw();};
+const problems=()=>SEGS;
+$('#next').onclick=()=>{const n=problems().find(s=>s.s>cur);
+  if(n)seek(Math.max(0,n.s-Math.round(D.fps*2)));else hint('no later mark');};
+$('#prev').onclick=()=>{const p=[...problems()].reverse().find(s=>s.s<cur-2);
+  if(p)seek(Math.max(0,p.s-Math.round(D.fps*2)));};
+
+// ---------- timeline interaction ----------
+$('#tl').addEventListener('mousedown',e=>{
+  if(e.shiftKey){tlPan={x:e.clientX,a:TL.a,s:TL.b-TL.a};return;}
+  const s=hitSeg(e);
+  if(s){sel=s;drag={s,edge:edgeAt(e,s),f0:tlF(e),s0:s.s,e0:s.e};
+    $('#tl').style.cursor=drag.edge?'ew-resize':'grabbing';
+    renderSegs();drawTL();return;}
+  // Dragging the timeline only scrubs. A segment is created solely by I then O, so
+  // that reviewing the video can never leave stray segments behind -- the same
+  // rule as the behavioural annotator.
+  sel=null;seeking=true;seek(tlF(e));renderSegs();});
+addEventListener('mousemove',e=>{
+  if(statsOpen)return;      // the analysis tabs have their own hover readouts
+  if(tlPan){const b=$('#tl').getBoundingClientRect();
+    TL.a=Math.round(tlPan.a-(e.clientX-tlPan.x)/b.width*tlPan.s);TL.b=TL.a+tlPan.s;drawTL();return;}
+  if(drag&&drag.s){const d=tlF(e)-drag.f0;
+    if(drag.edge==='s')drag.s.s=Math.min(drag.e0,drag.s0+d);
+    else if(drag.edge==='e')drag.s.e=Math.max(drag.s0,drag.e0+d);
+    else{drag.s.s=drag.s0+d;drag.s.e=drag.e0+d;}
+    drawTL();return;}
+  if(seeking){seek(tlF(e));return;}
+  const s=hitSeg(e),tip=$('#tip');
+  const edge=edgeAt(e,s);
+  if(s!==hoverSeg||edge!==hoverEdge){hoverSeg=s;hoverEdge=edge;drawTL();}
+  // the cursor is the affordance: resize arrows on an edge, a move cursor on the body
+  $('#tl').style.cursor=edge?'ew-resize':(s?'grab':'crosshair');
+  if(s){tip.style.display='';tip.style.left=(e.clientX+12)+'px';tip.style.top=(e.clientY-30)+'px';
+    tip.textContent=edge?'drag to move this end'
+      :`${s.status||'problem'} · ${((s.e-s.s+1)/(D?D.fps:10)).toFixed(1)}s`+
+       (s.note?` · ${s.note}`:'')+` · drag to move, Del to remove, c toggles corrected`;}
+  else tip.style.display='none';});
+addEventListener('mouseup',()=>{
+  if(drag&&drag.s){push();persist();renderSegs();}
+  drag=null;tlPan=null;seeking=false;});
+$('#tl').addEventListener('wheel',e=>{e.preventDefault();
+  const f=tlF(e),S=TL.b-TL.a,ns=Math.max(30,Math.min(D.N,S*(e.deltaY>0?1.25:0.8)));
+  const r=(f-TL.a)/S;TL.a=Math.round(f-r*ns);TL.b=TL.a+ns;
+  if(TL.a<0){TL.b-=TL.a;TL.a=0;}if(TL.b>D.N){TL.a-=TL.b-D.N;TL.b=D.N;TL.a=Math.max(0,TL.a);}
+  drawTL();},{passive:false});
+
+// ---------- video zoom/pan ----------
+$('#main').addEventListener('wheel',e=>{
+  // #stats lives inside #main, so this handler would swallow the wheel and the
+  // statistics page -- which is several screens long -- could not be scrolled.
+  if(statsOpen)return;
+  e.preventDefault();
+  const G=geo(),b=$('#main').getBoundingClientRect();
+  const mx=Z.ox+(e.clientX-b.left-G.ox)/(G.k*Z.z),my=Z.oy+(e.clientY-b.top-G.oy)/(G.k*Z.z);
+  const nz=Math.max(1,Math.min(8,Z.z*(e.deltaY>0?0.85:1.18)));
+  Z.ox=mx-(mx-Z.ox)*(Z.z/nz);Z.oy=my-(my-Z.oy)*(Z.z/nz);Z.z=nz;zClamp();applyZoom();},
+  {passive:false});
+// Drag to pan, once zoomed in. Panning moves Z.ox/Z.oy, which both the picture and
+// the outlines are drawn from, so they cannot come apart.
+$('#main').addEventListener('mousedown',e=>{
+  if(statsOpen||!D||Z.z<=1||e.target.closest('#bar,#tabs'))return;
+  const G=geo(),x0=e.clientX,y0=e.clientY,ox=Z.ox,oy=Z.oy;
+  $('#main').style.cursor='grabbing';
+  const mv=ev=>{Z.ox=ox-(ev.clientX-x0)/(G.k*Z.z);Z.oy=oy-(ev.clientY-y0)/(G.k*Z.z);
+    zClamp();applyZoom();};
+  const up=()=>{$('#main').style.cursor='';
+    removeEventListener('mousemove',mv);removeEventListener('mouseup',up);};
+  addEventListener('mousemove',mv);addEventListener('mouseup',up);});
+
+// Keep the visible window inside the frame. The overlay and the picture both derive
+// from Z.ox/Z.oy, so clamping HERE keeps them in step; clamping the image crop alone
+// would move the picture and leave the outlines behind.
+function zClamp(){
+  Z.ox=Math.max(0,Math.min(D.W-D.W/Z.z,Z.ox));
+  Z.oy=Math.max(0,Math.min(D.H-D.H/Z.z,Z.oy));}
+
+// ---------- keys ----------
+addEventListener('keydown',e=>{
+  if(!D||statsOpen||/input|textarea/i.test(e.target.tagName))return;
+  if(e.key==='i'){markA=cur;
+    hint('marking — play or scrub to the end, then O to confirm (Esc cancels)');
+    drawTL();return;}
+  if(e.key==='o'){
+    if(markA==null){hint('press I first to mark the start');return;}
+    addSeg(markA,cur);
+    hint(`problem marked: f${Math.min(markA,cur)}–${Math.max(markA,cur)} `+
+         `(${((Math.abs(cur-markA)+1)/D.fps).toFixed(1)}s) — Del removes it`);
+    markA=null;drawTL();return;}
+  if(e.key==='Escape'&&markA!=null){markA=null;hint('in-point cleared');drawTL();return;}
+  if((e.key==='Delete'||e.key==='Backspace')&&sel){removeSeg(sel);return;}
+  if(e.key==='c'&&sel){push();
+    sel.status=sel.status==='corrected'?'problem':'corrected';
+    if(sel.status==='corrected')sel.corrected_on=sel.corrected_on||new Date().toISOString();
+    persist();renderSegs();drawTL();draw();hint(`mark set to ${sel.status}`);return;}
+  if(selA!=null&&/^[0-5]$/.test(e.key)){
+    if(e.key==='0')assignId(selA,null);
+    else assignId(selA,MARKERS.find(m=>m.key===e.key).k);
+    return;}
+  if(e.key==='Escape'&&selA!=null){selA=null;renderIds();draw();return;}
+  if(e.key==='m'){$('#mask').click();return;}
+  if(e.key==='b'){$('#bbox').click();return;}
+  if(e.key==='t'){$('#trail').click();return;}
+  if(e.key==='f'){$('#fill').click();return;}
+  if(e.key==='z'&&(e.ctrlKey||e.metaKey)){e.preventDefault();
+    if(undoStack.length){SEGS=JSON.parse(undoStack.pop());sel=null;persist();renderSegs();drawTL();}return;}
+  if(e.key===' '){e.preventDefault();$('#play').click();return;}
+  if(e.key==='ArrowLeft'){seek(cur-(e.shiftKey?Math.round(D.fps*5):1));e.preventDefault();}
+  if(e.key==='ArrowRight'){seek(cur+(e.shiftKey?Math.round(D.fps*5):1));e.preventDefault();}
+  if(e.key===']')$('#next').click();
+  if(e.key==='[')$('#prev').click();});
+
+// ---------- video files ----------
+// A <input webkitdirectory> makes Chrome ask to "Upload" the folder, which is alarming
+// and inaccurate -- nothing leaves the machine. showDirectoryPicker asks to VIEW files
+// instead, and only the .mp4 files are ever read. The input stays as the fallback for
+// browsers without it, and for the case where a file:// page is refused the API.
+let LOCAL_FILES=[];
+function localFile(path){
+  const clean=path.replace(/^(\.\/|\.\.\/)+/,'');
+  const exact=LOCAL_FILES.filter(x=>x.path===clean||x.path.endsWith('/'+clean));
+  const matches=exact.length?exact:LOCAL_FILES.filter(x=>x.file.name===clean.split('/').pop());
+  if(matches.length!==1)throw new Error('Missing or ambiguous tracking file: '+path);
+  return matches[0].file;
+}
+async function openFolder(files){
+  try{
+    LOCAL_FILES=files;
+    if(!SA){
+      INDEX=JSON.parse(await localFile('index.json').text());
+      if(!Array.isArray(INDEX)||!INDEX.length||INDEX.some(r=>!r.slug||!r.data))
+        throw new Error('index.json must contain a nonempty list of clips with slug and data fields.');
+      for(const r of INDEX){localFile(r.data+'.json');localFile(r.data+'.bin');}
+      $('#clips').innerHTML=INDEX.map((r,i)=>`<div class="clip" data-i="${i}">${esc(r.name||r.slug)}</div>`).join('');
+      $$('.clip').forEach(e=>e.onclick=()=>pick(+e.dataset.i).catch(showLoadError));
+    }
+    await takeFiles(files.map(x=>x.file));
+  }catch(err){showLoadError(err);}
+}
+function showLoadError(err){
+  $('#need').style.display='flex';
+  $('#needmsg').textContent=err.message||'Unable to open the tracking export.';
+}
+$('#pickd').onclick=async()=>{
+  if(window.showDirectoryPicker){
+    try{
+      const dir=await window.showDirectoryPicker({mode:'readwrite',id:'as-clips'});
+      DIRH=dir;
+      designState=await loadDesign();
+      const files=[];
+      async function walk(folder,prefix=''){
+        for await(const h of folder.values()){
+          if(h.kind==='directory')await walk(h,prefix+h.name+'/');
+          else if(/\.(mp4|json|bin)$/i.test(h.name))files.push({path:prefix+h.name,file:await h.getFile()});
+        }
+      }
+      await walk(dir);await openFolder(files);return;
+    }catch(err){if(err&&err.name==='AbortError')return;}
+  }
+  DIRH=null;$('#fdir').click();
+};
+$('#fdir').onchange=e=>openFolder([...e.target.files].map(file=>({file,path:file.webkitRelativePath||file.name})));
+async function takeFiles(files){
+  const norm=x=>x.replace(/[^A-Za-z0-9]+/g,'_').replace(/^_+|_+$/g,'').toLowerCase();
+  for(const f of files){
+    if(!/\.mp4$/i.test(f.name))continue;
+    const base=f.name.replace(/\.mp4$/i,'');
+    const hit=INDEX.find(r=>r.slug===base)||INDEX.find(r=>norm(r.slug)===norm(base));
+    if(!hit)continue;
+    VID[hit.slug]={url:URL.createObjectURL(f),offset:0};}
+  const have=INDEX.filter(r=>VID[r.slug]).length;
+  $$('.clip').forEach(e=>{const r=INDEX[+e.dataset.i];
+    e.style.opacity=VID[r.slug]?'':'.4';
+    e.title=VID[r.slug]?'':'no video for this clip in the chosen folder';});
+  if(!have){
+    $('#needmsg').textContent='No matching videos in that folder. The .mp4 files must '+
+      'match the clip slugs in index.json.';
+    return;}
+  $('#needmsg').textContent=`${have} of ${INDEX.length} clips matched`;
+  $('#side').style.display='block';$('#cliphdr').style.display=have>1?'block':'none';
+  if(D&&VID[D.r.slug]){VOFF=0;$('#vid').src=VID[D.r.slug].url;$('#vid').load();
+    $('#need').style.display='none';}
+  else{const i=INDEX.findIndex(r=>VID[r.slug]);if(i>=0)await pick(i);}}
+
+// keep the overlay on the frame the video is actually showing
+const v=$('#vid');
+function onFrame(_,md){if(D&&!synth){const f=Math.floor((md.mediaTime-VOFF)*D.fps+1e-4);
+  if(f!==cur&&f>=0&&f<D.N){cur=f;centreTL();draw();drawTL();}}
+  v.requestVideoFrameCallback(onFrame);}
+if(v.requestVideoFrameCallback)v.requestVideoFrameCallback(onFrame);
+else setInterval(()=>{if(D&&!synth&&!v.paused){const f=Math.round((v.currentTime-VOFF)*D.fps);
+  if(f!==cur){cur=f;draw();drawTL();}}},60);
+v.addEventListener('loadedmetadata',()=>{geoC=null;applyZoom();});
+v.addEventListener('seeked',()=>{if(!synth)draw();});
+v.addEventListener('loadeddata',()=>draw());
+addEventListener('resize',()=>{geoC=null;applyZoom();drawTL();});
+
+
+// ================= statistics =================================================
+// Everything here is derived from the same arrays the overlay draws, so the numbers
+// and the picture can never disagree. Distances are reported in BODY LENGTHS: the
+// camera is fixed and the animals are a known size, so a body length is a real unit
+// here, whereas pixels mean nothing to a reader and there is no mm calibration.
+//
+// The panels are in the order they are read. Time space first, because it is the only
+// view that shows where AND when at once. The social ethogram next, because the
+// question these recordings ask is when the two animals were together. Then where each
+// of them spent its time. Everything below that is a number to check the picture
+// against.
+const MOVE_BL=0.25;      // BL/s below which an animal counts as still
+const NEAR_BL=1.0;       // centre-to-centre distance counted as "together"
+const TOUCH_BL=0.5;      // ... and as "in contact"
+const COLS=['#00c8ff','#ff4dd8','#ffd166','#7bd389','#a78bfa','#fb923c'];
+const NM=['A','B','C','D','E','F'];
+
+let statsOpen=false;
+// Which clips and which animals the panels cover. Statistics are asked ACROSS videos,
+// so the clip is a property of the panel and not of the player: the stats tab can show
+// a clip other than the one loaded for review, and several of them at once.
+const ST={clips:new Set(),ids:new Set([0,1]),cam:{yaw:-0.65,pitch:0.5,zoom:1},
+          traj:'super'};
+const CDC={},SCC={};                  // per-slug caches: arrays, derived statistics
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+// The positions of ANY clip, loaded without disturbing the player. This is what makes
+// the tab cross-video: every clip is already embedded in the page, so comparing two of
+// them costs a slice of an ArrayBuffer, not a reload.
+async function clipData(i){
+  const r=INDEX[i];
+  if(CDC[r.slug])return CDC[r.slug];
+  let meta,buf;
+  if(SA){meta=SAD.head.meta[r.slug];const[o,c]=SAD.head.bin[r.slug];
+    buf=SAD.blob.slice(SAD.base+o,SAD.base+o+c);}
+  else{meta=JSON.parse(await localFile(r.data+'.json').text());
+       buf=await localFile(r.data+'.bin').arrayBuffer();}
+  const L=meta.layout;
+  const g=(k,C,b)=>new C(buf.slice(L[k].offset,L[k].offset+L[k].count*b));
+  return CDC[r.slug]={i,slug:r.slug,name:r.name||r.slug,
+    N:meta.n_frames,n:meta.n_mice,fps:meta.fps,W:meta.W,H:meta.H,
+    BL:meta.body_length_px||40,
+    status:g('status',Uint8Array,1),cent:g('cent',Float32Array,4)};}
+
+function posAt(X,f,a){
+  if(X.status[f*X.n+a]===0)return null;
+  const i=(f*X.n+a)*2,x=X.cent[i],y=X.cent[i+1];
+  return (isFinite(x)&&isFinite(y))?[x,y]:null;}
+
+function statsOf(X){
+  if(SCC[X.slug])return SCC[X.slug];
+  const N=X.N,n=X.n,BL=X.BL,fps=X.fps;
+  const per=[...Array(n)].map(()=>({dist:0,frames:0,moving:0,speeds:[]}));
+  const sep=new Float32Array(N).fill(NaN);
+  // the previous position AND the frame it came from: a step is only counted between
+  // CONSECUTIVE tracked frames. Bridging a gap would turn "it was somewhere else when
+  // we picked it up again four seconds later" into a single stride, and then
+  // d*fps would report that stride as a speed the animal never reached.
+  let prev=[...Array(n)].map(()=>null),prevF=new Int32Array(n).fill(-99);
+  for(let f=0;f<N;f++){
+    const p=[];
+    for(let a=0;a<n;a++){
+      const q=posAt(X,f,a);p.push(q);
+      if(q){per[a].frames++;
+        if(prev[a]&&prevF[a]===f-1){
+          const d=Math.hypot(q[0]-prev[a][0],q[1]-prev[a][1])/BL;
+          // a jump larger than a body length in one frame is a tracking artefact,
+          // not travel, and would otherwise dominate the distance total
+          if(d<1.0){per[a].dist+=d;const v=d*fps;per[a].speeds.push(v);
+            if(v>MOVE_BL)per[a].moving++;}}
+        prev[a]=q;prevF[a]=f;}}
+    if(n>=2&&p[0]&&p[1])sep[f]=Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])/BL;}
+  // contiguous stretches under a threshold, at least 0.3 s long. NaN compares false,
+  // so an untracked frame ends a bout rather than silently extending it.
+  const minf=Math.max(1,Math.round(0.3*fps));
+  const runs=t=>{const out=[];let st=-1;
+    for(let f=0;f<N;f++){const c=sep[f]<t;
+      if(c&&st<0)st=f;
+      if(st>=0&&(!c||f===N-1)){const e=c?f:f-1;
+        if(e-st+1>=minf)out.push([st,e]);st=-1;}}
+    return out;};
+  let near=0,touch=0,valid=0;
+  for(let f=0;f<N;f++){const v=sep[f];if(!isFinite(v))continue;
+    valid++;if(v<NEAR_BL)near++;if(v<TOUCH_BL)touch++;}
+  return SCC[X.slug]={per,sep,bouts:runs(TOUCH_BL),nears:runs(NEAR_BL),
+                      near,touch,valid};}
+const med=a=>{if(!a.length)return 0;const b=[...a].sort((x,y)=>x-y);
+  return b[b.length>>1];};
+const mmss=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+
+function cv(el,fill){
+  const c=typeof el==='string'?$(el):el;
+  if(!c)return null;
+  const r=window.devicePixelRatio||1,w=c.clientWidth,h=c.clientHeight;
+  c.width=Math.max(1,w*r);c.height=Math.max(1,h*r);
+  const g=c.getContext('2d');g.setTransform(r,0,0,r,0,0);
+  g.fillStyle=fill||'#12151b';g.fillRect(0,0,w,h);return[g,w,h,c];}
+
+// ---------- 1. time space (3D) ----------
+// x and y are the arena; the third axis is TIME. Rotate it towards the vertical and it
+// is a trajectory map; rotate it flat and it is a set of timelines. The point of the
+// view is the middle ground, where a loop the animal made and the minute it made it in
+// are both legible, and where two animals meeting shows up as their paths converging.
+function rot3(cam,x,y,t){
+  const cy=Math.cos(cam.yaw),sy=Math.sin(cam.yaw);
+  const x1=x*cy-y*sy,y1=x*sy+y*cy;
+  const cp=Math.cos(cam.pitch),sp=Math.sin(cam.pitch);
+  return [x1,y1*sp+t*cp,y1*cp-t*sp];}   // screen x, screen up, depth
+
+function mk3(X,w,h){
+  const ay=X.H/X.W,cam=ST.cam;
+  const cor=[];
+  for(const sx of[-1,1])for(const sy of[-ay,ay])for(const st of[-1,1])
+    cor.push(rot3(cam,sx,sy,st));
+  const xs=cor.map(p=>p[0]),us=cor.map(p=>p[1]);
+  const x0=Math.min(...xs),x1=Math.max(...xs),u0=Math.min(...us),u1=Math.max(...us);
+  const s=Math.min(w*0.82/Math.max(1e-6,x1-x0),h*0.86/Math.max(1e-6,u1-u0))*cam.zoom;
+  const cx=w/2-(x0+x1)/2*s,cu=h/2+(u0+u1)/2*s;
+  // pixel -> normalised cube -> screen
+  return (px,py,f)=>{
+    const p=rot3(cam,px/X.W*2-1,(py/X.H*2-1)*ay,f/Math.max(1,X.N-1)*2-1);
+    return [cx+p[0]*s,cu-p[1]*s];};}
+
+function draw3(el,X,isCur){
+  const r=cv(el,'#0d1016');if(!r)return;
+  const [g,w,h]=r,P=mk3(X,w,h),S=statsOf(X);
+  const edge=(a,b)=>{g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke();};
+  const C=(x,y,f)=>P(x,y,f);
+  // the cube: the arena floor at the first frame and at the last, joined at the corners
+  g.lineWidth=1;
+  for(const f of[0,X.N-1]){
+    g.strokeStyle=f?'#2a3140':'#3b4657';
+    const q=[C(0,0,f),C(X.W,0,f),C(X.W,X.H,f),C(0,X.H,f)];
+    g.beginPath();g.moveTo(q[0][0],q[0][1]);
+    for(let i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);
+    g.closePath();g.stroke();}
+  g.strokeStyle='#222833';
+  for(const [x,y] of[[0,0],[X.W,0],[X.W,X.H],[0,X.H]])edge(C(x,y,0),C(x,y,X.N-1));
+  // minute rings, so the time axis can be read off rather than guessed at
+  g.strokeStyle='#1b212b';
+  for(let m=60;m<X.N/X.fps;m+=60){const f=Math.round(m*X.fps);
+    const q=[C(0,0,f),C(X.W,0,f),C(X.W,X.H,f),C(0,X.H,f)];
+    g.beginPath();g.moveTo(q[0][0],q[0][1]);
+    for(let i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);
+    g.closePath();g.stroke();}
+  // the paths
+  const step=Math.max(1,Math.round(X.N/2600));
+  for(let a=0;a<X.n;a++){
+    if(!ST.ids.has(a))continue;
+    g.strokeStyle=COLS[a%COLS.length];g.lineWidth=1;g.globalAlpha=.8;
+    g.beginPath();let on=false;
+    for(let f=0;f<X.N;f+=step){const p=posAt(X,f,a);
+      if(!p){on=false;continue;}
+      const q=C(p[0],p[1],f);
+      on?g.lineTo(q[0],q[1]):(g.moveTo(q[0],q[1]),on=true);}
+    g.stroke();g.globalAlpha=1;}
+  // every contact bout drawn as a rung between the two paths: in this view an
+  // interaction is literally a place where the two ribbons are tied together
+  if(X.n>=2&&ST.ids.has(0)&&ST.ids.has(1)){
+    g.strokeStyle='rgba(239,68,68,.55)';g.lineWidth=1;
+    for(const b of S.bouts){const f=(b[0]+b[1])>>1;
+      const p=posAt(X,f,0),q=posAt(X,f,1);if(!p||!q)continue;
+      edge(C(p[0],p[1],f),C(q[0],q[1],f));}}
+  // where the review tab is sitting right now
+  if(isCur&&D&&D.r.slug===X.slug){
+    const f=Math.max(0,Math.min(X.N-1,cur));
+    g.strokeStyle='#e5e7eb';g.lineWidth=1.2;
+    const q=[C(0,0,f),C(X.W,0,f),C(X.W,X.H,f),C(0,X.H,f)];
+    g.beginPath();g.moveTo(q[0][0],q[0][1]);
+    for(let i=1;i<4;i++)g.lineTo(q[i][0],q[i][1]);
+    g.closePath();g.stroke();
+    for(let a=0;a<X.n;a++){const p=posAt(X,f,a);if(!p||!ST.ids.has(a))continue;
+      const c=C(p[0],p[1],f);g.fillStyle=COLS[a%COLS.length];
+      g.beginPath();g.arc(c[0],c[1],3,0,7);g.fill();}}
+  g.fillStyle='#64748b';g.font='10px system-ui';
+  const t0=C(0,X.H,0),t1=C(0,X.H,X.N-1);
+  g.fillText('0:00',t0[0]-10,t0[1]+12);
+  g.fillText(mmss(X.N/X.fps),t1[0]-10,t1[1]-4);}
+
+let cams=[];   // the 3D canvases currently on screen, redrawn together while rotating
+function draw3all(){for(const c of cams)draw3(c.el,c.X,c.cur);}
+
+function wire3(el,X,isCur){
+  cams.push({el,X,cur:isCur});
+  el.style.cursor='grab';
+  el.addEventListener('mousedown',e=>{
+    e.preventDefault();el.style.cursor='grabbing';
+    const x0=e.clientX,y0=e.clientY,c0={...ST.cam};
+    const mv=ev=>{ST.cam.yaw=c0.yaw+(ev.clientX-x0)*0.008;
+      ST.cam.pitch=Math.max(0.02,Math.min(1.53,c0.pitch+(ev.clientY-y0)*0.006));
+      draw3all();};
+    const up=()=>{el.style.cursor='grab';
+      removeEventListener('mousemove',mv);removeEventListener('mouseup',up);};
+    addEventListener('mousemove',mv);addEventListener('mouseup',up);});
+  el.addEventListener('wheel',e=>{e.preventDefault();e.stopPropagation();
+    ST.cam.zoom=Math.max(0.4,Math.min(6,ST.cam.zoom*(e.deltaY>0?0.9:1.11)));
+    draw3all();},{passive:false});
+  el.addEventListener('dblclick',()=>{ST.cam={yaw:-0.65,pitch:0.5,zoom:1};draw3all();});}
+
+// ---------- 2. social ethogram ----------
+// One lane per state, blocks where the state holds -- the same shape as a behavioural
+// ethogram, because that is what it is: "together" and "in contact" scored from the
+// distance between the two animals rather than by eye.
+function drawEth(el,X,isCur){
+  const r=cv(el,'#12151b');if(!r)return;
+  const [g,w,h,c]=r,S=statsOf(X),N=X.N;
+  const lanes=[['together','#2563eb',S.nears],['contact','#ef4444',S.bouts]];
+  const lh=16,top=4,lab=58;
+  const px=f=>lab+f/N*(w-lab-6);
+  lanes.forEach((L,i)=>{
+    const y=top+i*(lh+5);
+    g.fillStyle='#1b212b';g.fillRect(lab,y,w-lab-6,lh);
+    g.fillStyle=L[1];
+    for(const b of L[2]){const a=px(b[0]),e=px(b[1]+1);
+      g.fillRect(a,y,Math.max(1,e-a),lh);}
+    g.fillStyle='#94a3b8';g.font='10px system-ui';g.textAlign='right';
+    g.fillText(L[0],lab-8,y+lh-4);g.textAlign='left';});
+  // a minute axis under the lanes
+  const yb=top+lanes.length*(lh+5);
+  g.strokeStyle='#2a3140';g.beginPath();g.moveTo(lab,yb+.5);g.lineTo(w-6,yb+.5);g.stroke();
+  g.fillStyle='#64748b';g.font='10px system-ui';
+  const dur=N/X.fps,tick=dur>1800?300:dur>600?120:60;
+  for(let s=0;s<=dur;s+=tick){const x=px(s*X.fps);
+    g.strokeStyle='#2a3140';g.beginPath();g.moveTo(x,yb);g.lineTo(x,yb+4);g.stroke();
+    g.fillText(mmss(s),x-10,yb+15);}
+  if(isCur&&D&&D.r.slug===X.slug){
+    const x=px(Math.max(0,Math.min(N-1,cur)));
+    g.strokeStyle='#e5e7eb';g.lineWidth=1;
+    g.beginPath();g.moveTo(x,top);g.lineTo(x,yb);g.stroke();}
+  c.style.cursor='pointer';
+  c.onclick=async e=>{
+    const b=c.getBoundingClientRect();
+    const f=Math.round((e.clientX-b.left-lab)/(b.width-lab-6)*N);
+    if(f<0||f>=N)return;
+    if(!D||D.r.slug!==X.slug)await pick(X.i);
+    seek(f);showTab('rev');};}
+
+// ---------- 3. spatial density, per ID ----------
+// Occupancy is counted on a fine lattice and then blurred, rather than drawn as cells.
+// A lattice of visible squares invites the eye to read a boundary between two of them
+// that the data does not contain -- the animal's position is continuous and the grid
+// is only an accumulator, so it should not survive into the picture.
+function blur2(src,GX,GY,sig){
+  const r=Math.max(1,Math.ceil(sig*2.5)),k=new Float32Array(2*r+1);
+  let ks=0;
+  for(let i=-r;i<=r;i++){k[i+r]=Math.exp(-i*i/(2*sig*sig));ks+=k[i+r];}
+  for(let i=0;i<k.length;i++)k[i]/=ks;
+  const t=new Float32Array(GX*GY),o=new Float32Array(GX*GY);
+  for(let y=0;y<GY;y++)for(let x=0;x<GX;x++){
+    let a=0,wsum=0;
+    for(let d=-r;d<=r;d++){const xx=x+d;if(xx<0||xx>=GX)continue;
+      a+=src[y*GX+xx]*k[d+r];wsum+=k[d+r];}
+    t[y*GX+x]=wsum?a/wsum:0;}
+  for(let y=0;y<GY;y++)for(let x=0;x<GX;x++){
+    let a=0,wsum=0;
+    for(let d=-r;d<=r;d++){const yy=y+d;if(yy<0||yy>=GY)continue;
+      a+=t[yy*GX+x]*k[d+r];wsum+=k[d+r];}
+    o[y*GX+x]=wsum?a/wsum:0;}
+  return o;}
+
+function drawHeat(el,X,a){
+  const r=cv(el);if(!r)return;
+  const [g,w,h]=r;
+  const GX=96,GY=Math.max(8,Math.round(GX*X.H/X.W));
+  const acc=new Float32Array(GX*GY);
+  for(let f=0;f<X.N;f++){const p=posAt(X,f,a);if(!p)continue;
+    const gx=Math.min(GX-1,Math.max(0,Math.floor(p[0]/X.W*GX)));
+    const gy=Math.min(GY-1,Math.max(0,Math.floor(p[1]/X.H*GY)));
+    acc[gy*GX+gx]++;}
+  const grid=blur2(acc,GX,GY,2.2);
+  let mx=0;for(const v of grid)if(v>mx)mx=v;
+  if(!mx)return;
+  const col=COLS[a%COLS.length];
+  const rgb=[parseInt(col.slice(1,3),16),parseInt(col.slice(3,5),16),
+             parseInt(col.slice(5,7),16)];
+  // painted at lattice resolution into an offscreen image and scaled up with the
+  // browser's own interpolation, which is what removes the last of the blockiness
+  const off=document.createElement('canvas');off.width=GX;off.height=GY;
+  const og=off.getContext('2d'),im=og.createImageData(GX,GY);
+  for(let i=0;i<GX*GY;i++){
+    // sqrt so a corner the animal sat in does not flatten everywhere else to black
+    const t=Math.sqrt(grid[i]/mx);
+    im.data[i*4]=rgb[0];im.data[i*4+1]=rgb[1];im.data[i*4+2]=rgb[2];
+    im.data[i*4+3]=Math.round(255*Math.min(1,t));}
+  og.putImageData(im,0,0);
+  const k=Math.min(w/GX,h/GY),ox=(w-GX*k)/2,oy=(h-GY*k)/2;
+  g.imageSmoothingEnabled=true;g.imageSmoothingQuality='high';
+  g.drawImage(off,ox,oy,GX*k,GY*k);}
+
+// ---------- the flat panels ----------
+// `only` draws a single animal; without it every visible ID is superimposed. Both are
+// wanted: superimposed shows whether the two animals used the same parts of the arena,
+// individually shows the shape of one path without the other drawn over it.
+function drawTraj(el,X,only){
+  const r=cv(el);if(!r)return;
+  const [g,w,h]=r,k=Math.min(w/X.W,h/X.H),ox=(w-X.W*k)/2,oy=(h-X.H*k)/2;
+  g.strokeStyle='#2a3140';g.strokeRect(ox,oy,X.W*k,X.H*k);
+  for(let a=0;a<X.n;a++){
+    if(only!=null?a!==only:!ST.ids.has(a))continue;
+    g.strokeStyle=COLS[a%COLS.length];g.lineWidth=.7;
+    g.globalAlpha=only!=null?.75:.6;
+    g.beginPath();let on=false;
+    for(let f=0;f<X.N;f+=2){const p=posAt(X,f,a);
+      if(!p){on=false;continue;}
+      const x=ox+p[0]*k,y=oy+p[1]*k;
+      on?g.lineTo(x,y):(g.moveTo(x,y),on=true);}
+    g.stroke();g.globalAlpha=1;}}
+
+// Both time plots read out under the cursor and jump on a click, so a spike in the
+// trace can be taken straight to the frame that produced it rather than estimated off
+// the x axis. The readout is the same tooltip the timeline uses.
+function hoverPlot(c,X,fmt){
+  c.style.cursor='pointer';
+  c.onmousemove=e=>{
+    const b=c.getBoundingClientRect(),tip=$('#tip');
+    const u=(e.clientX-b.left)/b.width,f=Math.max(0,Math.min(X.N-1,Math.round(u*X.N)));
+    tip.style.display='';tip.style.left=(e.clientX+12)+'px';
+    tip.style.top=(e.clientY-34)+'px';
+    tip.innerHTML=`<b>${mmss(f/X.fps)}</b> · f${f}<br>${fmt(f,u)}`;};
+  c.onmouseleave=()=>{$('#tip').style.display='none';};
+  c.onclick=async e=>{
+    const b=c.getBoundingClientRect();
+    const f=Math.floor((e.clientX-b.left)/b.width*X.N);
+    $('#tip').style.display='none';
+    if(!D||D.r.slug!==X.slug)await pick(X.i);
+    seek(Math.max(0,Math.min(X.N-1,f)));showTab('rev');};}
+
+function drawSep(el,X,isCur){
+  const r=cv(el);if(!r)return;
+  const [g,w,h,c]=r,S=statsOf(X),N=X.N,maxd=6;
+  g.fillStyle='rgba(239,68,68,.13)';
+  g.fillRect(0,h-(TOUCH_BL/maxd)*h,w,(TOUCH_BL/maxd)*h);
+  g.strokeStyle='#94a3b8';g.lineWidth=1;g.beginPath();
+  for(let px=0;px<w;px++){
+    const f=Math.floor(px/w*N),v=S.sep[f];
+    const y=h-Math.min(1,(isFinite(v)?v:maxd)/maxd)*h;
+    px?g.lineTo(px,y):g.moveTo(px,y);}
+  g.stroke();
+  if(isCur&&D&&D.r.slug===X.slug){const x=Math.max(0,Math.min(N-1,cur))/N*w;
+    g.strokeStyle='#e5e7eb';g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();}
+  g.fillStyle='#64748b';g.font='10px system-ui';
+  g.fillText(maxd+' BL',4,11);g.fillText('0',4,h-3);
+  hoverPlot(c,X,f=>{const v=S.sep[f];
+    return isFinite(v)?`${v.toFixed(2)} BL apart${v<TOUCH_BL?' · contact':
+      v<NEAR_BL?' · together':''}`:'one animal untracked';});}
+
+function drawSpeed(el,X,isCur){
+  const r=cv(el);if(!r)return;
+  const [g,w,h,c]=r,N=X.N,k=Math.max(1,Math.round(X.fps/2)),maxv=6;
+  // the smoothed series is kept so the hover readout quotes the plotted number rather
+  // than recomputing a slightly different one
+  const series=[];
+  for(let a=0;a<X.n;a++){
+    const ser=new Float32Array(w).fill(NaN);
+    if(!ST.ids.has(a)){series.push(ser);continue;}
+    for(let px=0;px<w;px++){
+      const f=Math.floor(px/w*N);let acc=0,cnt=0;
+      for(let j=f;j<Math.min(N-1,f+k);j++){
+        const p=posAt(X,j,a),q=posAt(X,j+1,a);   // consecutive frames, as in statsOf
+        if(p&&q){const d=Math.hypot(q[0]-p[0],q[1]-p[1])/X.BL;
+          if(d<1.0){acc+=d*X.fps;cnt++;}}}
+      if(cnt)ser[px]=acc/cnt;}
+    series.push(ser);
+    g.strokeStyle=COLS[a%COLS.length];g.lineWidth=1;g.beginPath();let on=false;
+    for(let px=0;px<w;px++){const v=ser[px];
+      if(!isFinite(v)){on=false;continue;}
+      const y=h-Math.min(1,v/maxv)*h;
+      on?g.lineTo(px,y):(g.moveTo(px,y),on=true);}
+    g.stroke();}
+  // the moving/still threshold, so "time moving" in the table has a line to point at
+  g.strokeStyle='rgba(148,163,184,.35)';g.setLineDash([3,3]);g.beginPath();
+  g.moveTo(0,h-MOVE_BL/maxv*h);g.lineTo(w,h-MOVE_BL/maxv*h);g.stroke();g.setLineDash([]);
+  if(isCur&&D&&D.r.slug===X.slug){const x=Math.max(0,Math.min(N-1,cur))/N*w;
+    g.strokeStyle='#e5e7eb';g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke();}
+  g.fillStyle='#64748b';g.font='10px system-ui';g.fillText(maxv+' BL/s',4,11);
+  hoverPlot(c,X,(f,u)=>{const px=Math.max(0,Math.min(w-1,Math.round(u*w)));
+    return [...Array(X.n)].map((_,a)=>ST.ids.has(a)?
+      `<span style="color:${COLS[a%COLS.length]}">${NM[a]}</span> ${
+        isFinite(series[a][px])?series[a][px].toFixed(2)+' BL/s':'—'}`:'')
+      .filter(Boolean).join('<br>');});}
+
+// ---------- the statistics tab ----------
+function statsScope(){
+  if(!ST.clips.size){
+    const i=D?INDEX.indexOf(D.r):0;
+    ST.clips.add(i<0?0:i);}
+  return [...ST.clips].filter(i=>i>=0&&i<INDEX.length).sort((a,b)=>a-b);}
+
+async function renderStats(){
+  const el=$('#stats');
+  if(!INDEX.length){el.innerHTML='<div class="card">nothing loaded</div>';return;}
+  const sel=statsScope();
+  if(!sel.length){el.innerHTML='<div class="card">pick a clip above</div>';return;}
+  const Xs=await Promise.all(sel.map(clipData));
+  const nmax=Math.max(...Xs.map(X=>X.n));
+  for(const a of[...ST.ids])if(a>=nmax)ST.ids.delete(a);
+  if(!ST.ids.size)for(let a=0;a<nmax;a++)ST.ids.add(a);
+  const many=Xs.length>1,g2=many?'grid2':'';
+  const curSlug=D?D.r.slug:null;
+  const gtag=X=>{const gname=groupOf(X.slug);
+    return gname?` <span style="color:${groupColor(gname)}">· ${esc(gname)}</span>`:'';};
+  const tag=(X,k,id,hh)=>
+    `<div><div class="sub" style="margin:0 0 4px;${X.slug===curSlug?
+      'color:#e5e7eb':''}">${esc(X.name)}${gtag(X)}${X.slug===curSlug?' · open':''}</div>
+     <canvas id="${id}${k}" style="width:100%;height:${hh}px"></canvas></div>`;
+
+  const chips=INDEX.map((r,i)=>
+    `<button class="chip${ST.clips.has(i)?' on':''}" data-c="${i}">${
+      esc(r.name||r.slug)}</button>`).join('');
+  const idchips=[...Array(nmax)].map((_,a)=>
+    `<button class="chip${ST.ids.has(a)?' on':''}" data-id="${a}"
+      style="border-color:${ST.ids.has(a)?COLS[a%COLS.length]:''}">${NM[a]}</button>`)
+    .join('');
+
+  // the comparison table: one row per animal per selected clip, so two videos can be
+  // read against each other without leaving the page
+  const pct=(x,t)=>t?((100*x/t).toFixed(1)+'%'):'--';
+  let rows='';
+  for(const X of Xs){const S=statsOf(X);
+    for(let a=0;a<X.n;a++){
+      if(!ST.ids.has(a))continue;
+      const p=S.per[a];
+      rows+=`<tr><td style="color:${X.slug===curSlug?'#e5e7eb':'#8a93a5'}">${
+          many?esc(X.name):mmss(X.N/X.fps)}</td>`+
+        `<td style="color:${COLS[a%COLS.length]}">${NM[a]}${
+            roleOf(X.slug,a)?' · '+esc(roleOf(X.slug,a)):''}</td>`+
+        `<td>${p.dist.toFixed(0)} BL</td>`+
+        `<td>${(p.dist/(X.N/X.fps)).toFixed(3)} BL/s</td>`+
+        `<td>${med(p.speeds).toFixed(2)} BL/s</td>`+
+        `<td>${pct(p.moving,p.speeds.length)}</td>`+
+        `<td>${pct(p.frames,X.N)}</td></tr>`;}}
+  let irows='';
+  for(const X of Xs){const S=statsOf(X);
+    const bt=S.bouts.reduce((t,b)=>t+(b[1]-b[0]+1),0);
+    irows+=`<tr><td style="color:${X.slug===curSlug?'#e5e7eb':'#8a93a5'}">${
+        esc(X.name)}</td>`+
+      `<td>${pct(S.near,S.valid)}</td><td>${pct(S.touch,S.valid)}</td>`+
+      `<td>${S.bouts.length}</td><td>${(bt/X.fps).toFixed(0)} s</td>`+
+      `<td>${S.bouts.length?(bt/S.bouts.length/X.fps).toFixed(1):'--'} s</td>`+
+      `<td>${S.bouts.length?
+        (Math.max(...S.bouts.map(b=>b[1]-b[0]+1))/X.fps).toFixed(1):'--'} s</td></tr>`;}
+
+  el.innerHTML=`
+   <div class="card">
+     <h3>scope</h3>
+     <div class="sub">every clip is already in this page, so pick as many as you want
+       to compare — the panels below repeat for each one</div>
+     <div class="chips"><span class="lbl">clips</span>${chips}
+       <button class="chip lite" id="cAll">all</button>
+       <button class="chip lite" id="cCur">open clip</button></div>
+     <div class="chips" style="margin-top:6px"><span class="lbl">IDs shown</span>
+       ${idchips}<button class="chip lite" id="iAll">all</button></div>
+   </div>
+
+   <div class="card"><h3>time space</h3>
+     <div class="sub">the arena in x and y, time as the third axis ·
+       drag to rotate · wheel to zoom · double-click to reset.
+       Red rungs are contact bouts.</div>
+     <div class="${g2}">${Xs.map((X,k)=>tag(X,k,'c3d',many?300:400)).join('')}</div></div>
+
+   <div class="card"><h3>social ethogram</h3>
+     <div class="sub">together is under ${NEAR_BL} body length between centres,
+       contact under ${TOUCH_BL} · click anywhere to jump there</div>
+     ${Xs.map((X,k)=>tag(X,k,'cEth',74)).join('')}</div>
+
+   <div class="card"><h3>spatial density</h3>
+     <div class="sub">per ID · where each animal spent its time, brighter is longer</div>
+     ${Xs.map((X,k)=>`<div style="margin-bottom:10px">
+       <div class="sub" style="margin:0 0 4px;${X.slug===curSlug?'color:#e5e7eb':''}">${
+         esc(X.name)}</div>
+       <div class="grid2">${[...Array(X.n)].map((_,a)=>ST.ids.has(a)?
+         `<div><div class="sub" style="color:${COLS[a%COLS.length]};margin:0 0 3px">${
+            NM[a]}${roleOf(X.slug,a)?' · '+esc(roleOf(X.slug,a)):''}</div>
+          <canvas id="cH${k}_${a}" style="width:100%;height:130px"></canvas></div>`:'')
+         .join('')}</div></div>`).join('')}</div>
+
+   <div class="card"><h3>trajectory map</h3>
+     <div class="sub" style="display:flex;gap:6px;align-items:center">
+       <span>the whole clip</span>
+       <button class="chip${ST.traj==='super'?' on':''}" id="tSup">superimposed</button>
+       <button class="chip${ST.traj==='ind'?' on':''}" id="tInd">individual</button></div>
+     ${ST.traj==='super'
+       ? `<div class="${g2}">${Xs.map((X,k)=>tag(X,k,'cTraj',many?220:300)).join('')}</div>`
+       : Xs.map((X,k)=>`<div style="margin-bottom:10px">
+           <div class="sub" style="margin:0 0 4px;${X.slug===curSlug?'color:#e5e7eb':''}">${
+             esc(X.name)}${gtag(X)}</div>
+           <div class="grid2">${[...Array(X.n)].map((_,a)=>ST.ids.has(a)?
+             `<div><div class="sub" style="color:${COLS[a%COLS.length]};margin:0 0 3px">${
+                NM[a]}${roleOf(X.slug,a)?' · '+esc(roleOf(X.slug,a)):''}</div>
+              <canvas id="cT${k}_${a}" style="width:100%;height:220px"></canvas></div>`:'')
+             .join('')}</div></div>`).join('')}</div>
+
+   <div class="card"><h3>pair distance</h3>
+     <div class="sub">centre to centre; the shaded band is contact ·
+       click to jump there</div>
+     ${Xs.map((X,k)=>tag(X,k,'cSep',130)).join('')}</div>
+
+   <div class="card"><h3>velocity</h3>
+     <div class="sub">body lengths per second, smoothed over half a second</div>
+     ${Xs.map((X,k)=>tag(X,k,'cSpd',130)).join('')}</div>
+
+   <div class="card"><h3>summary</h3>
+     <div class="sub">one body length = ${Xs[0].BL.toFixed(0)} px</div>
+     <table class="st"><tr><th>${many?'clip':'length'}</th><th></th><th>distance</th>
+       <th>mean speed</th><th>median speed</th><th>time moving</th>
+       <th>tracked</th></tr>${rows}</table></div>
+
+   <div class="card"><h3>interaction</h3>
+     <div class="sub">from the distance between the two animals</div>
+     <table class="st"><tr><th>clip</th><th>together</th><th>in contact</th>
+       <th>bouts</th><th>total</th><th>mean bout</th><th>longest</th></tr>
+       ${irows}</table></div>
+   <div style="height:24px"></div>`;
+
+  cams=[];
+  Xs.forEach((X,k)=>{
+    const c3=$('#c3d'+k);
+    if(c3){draw3(c3,X,true);wire3(c3,X,true);}
+    drawEth($('#cEth'+k),X,true);
+    for(let a=0;a<X.n;a++)if(ST.ids.has(a))drawHeat($(`#cH${k}_${a}`),X,a);
+    if(ST.traj==='super')drawTraj($('#cTraj'+k),X);
+    else for(let a=0;a<X.n;a++)if(ST.ids.has(a))drawTraj($(`#cT${k}_${a}`),X,a);
+    drawSep($('#cSep'+k),X,true);
+    drawSpeed($('#cSpd'+k),X,true);});
+
+  $$('#stats .chip[data-c]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.c;
+    ST.clips.has(i)?ST.clips.delete(i):ST.clips.add(i);
+    if(!ST.clips.size)ST.clips.add(i);
+    renderStats();});
+  $$('#stats .chip[data-id]').forEach(b=>b.onclick=()=>{
+    const a=+b.dataset.id;
+    ST.ids.has(a)?ST.ids.delete(a):ST.ids.add(a);
+    if(!ST.ids.size)ST.ids.add(a);
+    renderStats();});
+  $('#cAll').onclick=()=>{INDEX.forEach((_,i)=>ST.clips.add(i));renderStats();};
+  $('#cCur').onclick=()=>{ST.clips.clear();
+    ST.clips.add(D?Math.max(0,INDEX.indexOf(D.r)):0);renderStats();};
+  $('#iAll').onclick=()=>{ST.ids.clear();
+    for(let a=0;a<nmax;a++)ST.ids.add(a);renderStats();};
+  $('#tSup').onclick=()=>{ST.traj='super';renderStats();};
+  $('#tInd').onclick=()=>{ST.traj='ind';renderStats();};
+}
+
+
+// ================= study design: groups and roles =============================
+// A VIDEO is the experimental unit. One recording contributes one number to a group,
+// whatever happens inside it -- two animals in the same cage are not two independent
+// samples of a treatment, and averaging them first is what keeps n honest. Where a
+// measure is per animal (distance, speed) the animals in a video are averaged before
+// the video enters the group, unless the comparison is explicitly BY ROLE, in which
+// case each role contributes its own animal and the video still contributes once to
+// each role.
+//
+// Roles are free text on purpose. "subject" and "partner" suit one design, "treated"
+// and "cagemate" another, "mouse 1" and "mouse 2" a third, and the tool has no business
+// deciding which. Typing a name into any row creates it everywhere.
+let DESIGN={groups:{},roles:{},order:[],roleOrder:[]};
+const DKEY='as_design_v1';
+const GCOLS=['#38bdf8','#f472b6','#fbbf24','#4ade80','#a78bfa','#fb7185',
+             '#2dd4bf','#f97316'];
+
+const groupOf=slug=>(DESIGN.groups||{})[slug]||'';
+const roleOf=(slug,a)=>((DESIGN.roles||{})[slug]||[])[a]||'';
+function groupNames(){
+  const s=[];
+  for(const g of DESIGN.order||[])if(g&&!s.includes(g))s.push(g);
+  for(const k in DESIGN.groups){const g=DESIGN.groups[k];
+    if(g&&!s.includes(g))s.push(g);}
+  return s;}
+function roleNames(){
+  const s=[];
+  for(const r of DESIGN.roleOrder||[])if(r&&!s.includes(r))s.push(r);
+  for(const k in DESIGN.roles)for(const r of DESIGN.roles[k]||[])
+    if(r&&!s.includes(r))s.push(r);
+  return s;}
+function groupColor(g){const i=groupNames().indexOf(g);
+  return GCOLS[(i<0?GCOLS.length-1:i)%GCOLS.length];}
+
+async function loadDesign(){
+  if(DIRH){
+    try{
+      const fh=await DIRH.getFileHandle('study_design.json');
+      DESIGN=JSON.parse(await (await fh.getFile()).text());
+      DESIGN.groups=DESIGN.groups||{};DESIGN.roles=DESIGN.roles||{};
+      DESIGN.order=DESIGN.order||[];DESIGN.roleOrder=DESIGN.roleOrder||[];
+      return 'loaded study_design.json';
+    }catch(e){}
+  }
+  try{const j=localStorage.getItem(DKEY);
+    if(j){DESIGN=JSON.parse(j);DESIGN.groups=DESIGN.groups||{};
+      DESIGN.roles=DESIGN.roles||{};DESIGN.order=DESIGN.order||[];
+      DESIGN.roleOrder=DESIGN.roleOrder||[];return 'restored from this browser';}
+  }catch(e){}
+  return 'not set yet';}
+
+let dsaveT=null,designState='not set yet';
+function saveDesign(){
+  DESIGN.order=groupNames();DESIGN.roleOrder=roleNames();
+  try{localStorage.setItem(DKEY,JSON.stringify(DESIGN));}catch(e){}
+  clearTimeout(dsaveT);
+  dsaveT=setTimeout(async()=>{
+    const text=JSON.stringify({...DESIGN,updated:new Date().toISOString()},null,1);
+    if(DIRH){
+      try{
+        const fh=await DIRH.getFileHandle('study_design.json',{create:true});
+        const w=await fh.createWritable();await w.write(text);await w.close();
+        designState='saved to study_design.json';
+      }catch(e){designState='could not write to the folder — kept in this browser';}
+    }else designState='kept in this browser';
+    const e=$('#dstate');if(e)e.textContent=designState;
+  },350);}
+
+// ---------- the numbers a group is compared on ----------
+const METRICS=[
+ {k:'dist',  lab:'distance travelled',unit:'BL',    lvl:'animal',
+  f:(S,X,a)=>S.per[a].dist},
+ {k:'mspd',  lab:'mean speed',        unit:'BL/s',  lvl:'animal',
+  f:(S,X,a)=>S.per[a].dist/(X.N/X.fps)},
+ {k:'medspd',lab:'median speed',      unit:'BL/s',  lvl:'animal',
+  f:(S,X,a)=>med(S.per[a].speeds)},
+ {k:'move',  lab:'time moving',       unit:'%',     lvl:'animal',
+  f:(S,X,a)=>100*S.per[a].moving/Math.max(1,S.per[a].speeds.length)},
+ {k:'near',  lab:'time together',     unit:'%',     lvl:'video',
+  f:(S,X)=>100*S.near/Math.max(1,S.valid)},
+ {k:'touch', lab:'time in contact',   unit:'%',     lvl:'video',
+  f:(S,X)=>100*S.touch/Math.max(1,S.valid)},
+ {k:'nb',    lab:'contact bouts',     unit:'per min',lvl:'video',
+  f:(S,X)=>S.bouts.length/(X.N/X.fps/60)},
+ {k:'ctot',  lab:'total contact',     unit:'s',     lvl:'video',
+  f:(S,X)=>S.bouts.reduce((t,b)=>t+(b[1]-b[0]+1),0)/X.fps},
+ {k:'cmean', lab:'mean bout length',  unit:'s',     lvl:'video',
+  f:(S,X)=>S.bouts.length?S.bouts.reduce((t,b)=>t+(b[1]-b[0]+1),0)/S.bouts.length/X.fps:0},
+ {k:'cmax',  lab:'longest bout',      unit:'s',     lvl:'video',
+  f:(S,X)=>S.bouts.length?Math.max(...S.bouts.map(b=>b[1]-b[0]+1))/X.fps:0},
+];
+const GV={metric:'touch',by:'group'};
+
+const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:NaN;
+const sd=a=>{if(a.length<2)return NaN;const m=mean(a);
+  return Math.sqrt(a.reduce((t,v)=>t+(v-m)*(v-m),0)/(a.length-1));};
+const sem=a=>a.length<2?NaN:sd(a)/Math.sqrt(a.length);
+
+function collect(metric,by,Xs){
+  const out=new Map();
+  const push=(k,o)=>{if(!out.has(k))out.set(k,[]);out.get(k).push(o);};
+  for(const X of Xs){
+    const S=statsOf(X),g=groupOf(X.slug)||'(no group)';
+    if(metric.lvl==='video'){
+      // a whole-video measure has no role to split by, so BY ROLE falls back to group
+      push(by==='role'?'all videos':g,{v:metric.f(S,X),name:X.name,slug:X.slug});
+      continue;}
+    if(by==='group'){
+      const vs=[];
+      for(let a=0;a<X.n;a++)if(ST.ids.has(a))vs.push(metric.f(S,X,a));
+      if(vs.length)push(g,{v:mean(vs),name:X.name,slug:X.slug});
+      continue;}
+    const byKey=new Map();
+    for(let a=0;a<X.n;a++){
+      if(!ST.ids.has(a))continue;
+      const r=roleOf(X.slug,a)||NM[a];
+      const key=by==='role'?r:g+' · '+r;
+      if(!byKey.has(key))byKey.set(key,[]);
+      byKey.get(key).push(metric.f(S,X,a));}
+    for(const [k,vs] of byKey)push(k,{v:mean(vs),name:X.name,slug:X.slug});}
+  return out;}
+
+// ---------- significance ----------
+// Welch for two groups because cage sizes are rarely equal and variances rarely are
+// either; one-way ANOVA above two, with uncorrected Welch pairs underneath and said so.
+function gammln(x){
+  const c=[76.18009172947146,-86.50532032941677,24.01409824083091,
+           -1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];
+  let y=x,tmp=x+5.5;tmp-=(x+0.5)*Math.log(tmp);
+  let ser=1.000000000190015;
+  for(let j=0;j<6;j++)ser+=c[j]/++y;
+  return -tmp+Math.log(2.5066282746310005*ser/x);}
+function betacf(a,b,x){
+  const MAXIT=300,EPS=3e-12,FPMIN=1e-300;
+  const qab=a+b,qap=a+1,qam=a-1;
+  let c=1,d=1-qab*x/qap;
+  if(Math.abs(d)<FPMIN)d=FPMIN;
+  d=1/d;let h=d;
+  for(let m=1;m<=MAXIT;m++){
+    const m2=2*m;
+    let aa=m*(b-m)*x/((qam+m2)*(a+m2));
+    d=1+aa*d;if(Math.abs(d)<FPMIN)d=FPMIN;
+    c=1+aa/c;if(Math.abs(c)<FPMIN)c=FPMIN;
+    d=1/d;h*=d*c;
+    aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));
+    d=1+aa*d;if(Math.abs(d)<FPMIN)d=FPMIN;
+    c=1+aa/c;if(Math.abs(c)<FPMIN)c=FPMIN;
+    d=1/d;const del=d*c;h*=del;
+    if(Math.abs(del-1)<EPS)break;}
+  return h;}
+function betai(a,b,x){
+  if(!(x>0))return 0;if(x>=1)return 1;
+  const bt=Math.exp(gammln(a+b)-gammln(a)-gammln(b)+a*Math.log(x)+b*Math.log(1-x));
+  return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+const pT=(t,df)=>(df>0&&isFinite(t))?betai(df/2,0.5,df/(df+t*t)):NaN;
+const pF=(F,d1,d2)=>(F>0&&d1>0&&d2>0)?betai(d2/2,d1/2,d2/(d2+d1*F)):NaN;
+
+function welch(x,y){
+  const n1=x.length,n2=y.length;
+  if(n1<2||n2<2)return null;
+  const m1=mean(x),m2=mean(y),v1=sd(x)**2,v2=sd(y)**2;
+  const se=Math.sqrt(v1/n1+v2/n2);
+  if(!(se>0))return null;
+  const t=(m1-m2)/se;
+  const df=(v1/n1+v2/n2)**2/(((v1/n1)**2)/(n1-1)+((v2/n2)**2)/(n2-1));
+  // Hedges' g: Cohen's d with the small-sample correction, which matters at n of 4
+  const sp=Math.sqrt(((n1-1)*v1+(n2-1)*v2)/(n1+n2-2));
+  const J=1-3/(4*(n1+n2)-9);
+  return {t,df,p:pT(t,df),g:sp>0?J*(m1-m2)/sp:NaN};}
+function anova(sets){
+  const k=sets.length,all=[].concat(...sets),Nt=all.length;
+  if(k<2||Nt-k<1)return null;
+  const gm=mean(all);
+  let ssb=0,ssw=0;
+  for(const s of sets){const m=mean(s);ssb+=s.length*(m-gm)**2;
+    for(const v of s)ssw+=(v-m)**2;}
+  const d1=k-1,d2=Nt-k;
+  if(!(ssw>0))return null;
+  const F=(ssb/d1)/(ssw/d2);
+  return {F,d1,d2,p:pF(F,d1,d2),eta:ssb/(ssb+ssw)};}
+const pstr=p=>!isFinite(p)?'—':p<1e-4?'<0.0001':p.toFixed(4);
+const stars=p=>!isFinite(p)?'':p<.001?'***':p<.01?'**':p<.05?'*':'n.s.';
+
+// ---------- charts ----------
+function drawBars(el,entries,unit,colFor){
+  const r=cv(el);if(!r)return;
+  const [g,w,h]=r;
+  if(!entries.length){g.fillStyle='#64748b';g.font='12px system-ui';
+    g.fillText('nothing to plot — assign some groups above',12,24);return;}
+  const L=46,R=10,T=14,B=44,pw=w-L-R,ph=h-T-B;
+  let mx=0;for(const [,vs] of entries)for(const o of vs)if(o.v>mx)mx=o.v;
+  for(const [,vs] of entries){const m=mean(vs.map(o=>o.v)),e=sem(vs.map(o=>o.v));
+    if(isFinite(m+e)&&m+e>mx)mx=m+e;}
+  mx=mx>0?mx*1.15:1;
+  const Y=v=>T+ph-Math.max(0,Math.min(1,v/mx))*ph;
+  g.strokeStyle='#2a3140';g.lineWidth=1;
+  g.beginPath();g.moveTo(L,T);g.lineTo(L,T+ph);g.lineTo(L+pw,T+ph);g.stroke();
+  g.fillStyle='#64748b';g.font='10px system-ui';g.textAlign='right';
+  for(let i=0;i<=4;i++){const v=mx*i/4,y=Y(v);
+    g.fillText(v>=100?v.toFixed(0):v>=10?v.toFixed(1):v.toFixed(2),L-6,y+3);
+    if(i){g.strokeStyle='#1b212b';g.beginPath();g.moveTo(L,y);g.lineTo(L+pw,y);g.stroke();}}
+  g.textAlign='left';g.fillText(unit,4,T-4);
+  const bw=pw/entries.length,bar=Math.min(64,bw*0.5);
+  entries.forEach(([lab,vs],i)=>{
+    const cx=L+bw*(i+0.5),m=mean(vs.map(o=>o.v)),e=sem(vs.map(o=>o.v));
+    const col=colFor(lab);
+    g.fillStyle=col+'33';g.strokeStyle=col;g.lineWidth=1.4;
+    g.fillRect(cx-bar/2,Y(m),bar,T+ph-Y(m));
+    g.strokeRect(cx-bar/2,Y(m),bar,T+ph-Y(m));
+    if(isFinite(e)&&e>0){g.beginPath();
+      g.moveTo(cx,Y(m-e));g.lineTo(cx,Y(m+e));
+      g.moveTo(cx-6,Y(m+e));g.lineTo(cx+6,Y(m+e));
+      g.moveTo(cx-6,Y(m-e));g.lineTo(cx+6,Y(m-e));g.stroke();}
+    // every video drawn as its own point: a bar of four animals should never be able
+    // to hide that three of them disagree with the fourth
+    vs.forEach((o,j)=>{
+      const jx=cx+((j%2?1:-1)*Math.ceil((j+1)/2))*Math.min(7,bar/4);
+      g.fillStyle='#e5e7eb';g.globalAlpha=.85;
+      g.beginPath();g.arc(jx,Y(o.v),2.6,0,7);g.fill();g.globalAlpha=1;});
+    g.fillStyle='#cbd5e1';g.font='10px system-ui';g.textAlign='center';
+    const short=lab.length>18?lab.slice(0,17)+'…':lab;
+    g.fillText(short,cx,T+ph+14);
+    g.fillStyle='#64748b';g.fillText(`n=${vs.length}`,cx,T+ph+26);
+    g.textAlign='left';});}
+
+function drawPie(el,slices,title){
+  const r=cv(el);if(!r)return;
+  const [g,w,h]=r;
+  const tot=slices.reduce((t,s)=>t+s.v,0);
+  if(!(tot>0)){g.fillStyle='#64748b';g.font='11px system-ui';
+    g.fillText('no data',10,20);return;}
+  const cx=Math.min(w*0.36,h*0.5),cy=h/2+6,rad=Math.min(cx,h/2)-14;
+  let a0=-Math.PI/2;
+  for(const s of slices){
+    const a1=a0+2*Math.PI*s.v/tot;
+    g.fillStyle=s.col;g.beginPath();g.moveTo(cx,cy);
+    g.arc(cx,cy,rad,a0,a1);g.closePath();g.fill();
+    g.strokeStyle='#12151b';g.lineWidth=1.5;g.stroke();
+    a0=a1;}
+  g.fillStyle='#cbd5e1';g.font='11px system-ui';
+  if(title)g.fillText(title,4,12);
+  let ly=cy-rad+2;
+  for(const s of slices){
+    g.fillStyle=s.col;g.fillRect(cx+rad+14,ly-8,9,9);
+    g.fillStyle='#cbd5e1';g.font='11px system-ui';
+    g.fillText(`${s.lab} ${(100*s.v/tot).toFixed(1)}%`,cx+rad+28,ly);
+    ly+=15;}}
+
+// ---------- the groups tab ----------
+async function renderGroups(){
+  const el=$('#grp');
+  if(!INDEX.length){el.innerHTML='<div class="card">nothing loaded</div>';return;}
+  const Xs=await Promise.all(INDEX.map((_,i)=>clipData(i)));
+  const gl=groupNames(),rl=roleNames();
+  const curSlug=D?D.r.slug:null;
+
+  const drows=Xs.map((X,i)=>{
+    const roles=[...Array(X.n)].map((_,a)=>
+      `<td><input class="tin" data-role="${X.slug}" data-a="${a}" list="rlist"
+         value="${esc(roleOf(X.slug,a))}" placeholder="${NM[a]}"
+         style="border-bottom:2px solid ${COLS[a%COLS.length]}"></td>`).join('');
+    return `<tr><td style="color:${X.slug===curSlug?'#e5e7eb':'#8a93a5'}">${
+        esc(X.name)}</td>
+      <td><input class="tin" data-grp="${X.slug}" list="glist"
+        value="${esc(groupOf(X.slug))}" placeholder="unassigned"></td>${roles}</tr>`;
+  }).join('');
+  const nmax=Math.max(...Xs.map(X=>X.n));
+  const rheads=[...Array(nmax)].map((_,a)=>`<th>${NM[a]} role</th>`).join('');
+
+  const metric=METRICS.find(m=>m.k===GV.metric)||METRICS[0];
+  const by=metric.lvl==='video'&&GV.by!=='group'?'group':GV.by;
+  const map=collect(metric,by,Xs);
+  const entries=[...map.entries()].sort((a,b)=>{
+    const ia=gl.indexOf(a[0].split(' · ')[0]),ib=gl.indexOf(b[0].split(' · ')[0]);
+    return (ia<0?99:ia)-(ib<0?99:ib)||a[0].localeCompare(b[0]);});
+  const colFor=lab=>{const head=lab.split(' · ')[0];
+    if(gl.includes(head))return groupColor(head);
+    const ri=rl.indexOf(lab);return GCOLS[(ri<0?3:ri)%GCOLS.length];};
+
+  // descriptives + the test
+  let srows=entries.map(([lab,vs])=>{
+    const v=vs.map(o=>o.v);
+    return `<tr><td style="color:${colFor(lab)}">${esc(lab)}</td><td>${vs.length}</td>
+      <td>${mean(v).toFixed(3)}</td><td>${isFinite(sd(v))?sd(v).toFixed(3):'—'}</td>
+      <td>${isFinite(sem(v))?sem(v).toFixed(3):'—'}</td>
+      <td>${Math.min(...v).toFixed(2)} – ${Math.max(...v).toFixed(2)}</td></tr>`;})
+    .join('');
+  let test='<div class="sub">assign at least two groups, with two videos each, '+
+           'for a test</div>';
+  if(entries.length===2){
+    const w2=welch(entries[0][1].map(o=>o.v),entries[1][1].map(o=>o.v));
+    test=w2?`<table class="st"><tr><th>test</th><th>t</th><th>df</th><th>p</th>
+      <th></th><th>Hedges' g</th></tr>
+      <tr><td>Welch's t</td><td>${w2.t.toFixed(3)}</td><td>${w2.df.toFixed(1)}</td>
+      <td>${pstr(w2.p)}</td><td>${stars(w2.p)}</td>
+      <td>${isFinite(w2.g)?w2.g.toFixed(2):'—'}</td></tr></table>`
+      :'<div class="sub">each group needs at least two videos for a test</div>';}
+  else if(entries.length>2){
+    const A=anova(entries.map(e=>e[1].map(o=>o.v)));
+    let pw='';
+    for(let i=0;i<entries.length;i++)for(let j=i+1;j<entries.length;j++){
+      const w2=welch(entries[i][1].map(o=>o.v),entries[j][1].map(o=>o.v));
+      if(w2)pw+=`<tr><td>${esc(entries[i][0])} vs ${esc(entries[j][0])}</td>
+        <td>${w2.t.toFixed(2)}</td><td>${w2.df.toFixed(1)}</td>
+        <td>${pstr(w2.p)}</td><td>${stars(w2.p)}</td></tr>`;}
+    test=(A?`<table class="st"><tr><th>test</th><th>F</th><th>df</th><th>p</th><th></th>
+      <th>eta squared</th></tr>
+      <tr><td>one-way ANOVA</td><td>${A.F.toFixed(3)}</td>
+      <td>${A.d1}, ${A.d2}</td><td>${pstr(A.p)}</td><td>${stars(A.p)}</td>
+      <td>${A.eta.toFixed(3)}</td></tr></table>`:'')+
+      (pw?`<div class="sub" style="margin-top:8px">pairwise Welch, UNCORRECTED —
+        read them as description, not as ${entries.length*(entries.length-1)/2}
+        independent tests</div>
+        <table class="st"><tr><th>pair</th><th>t</th><th>df</th><th>p</th><th></th></tr>
+        ${pw}</table>`:'');}
+
+  // composition: the time budget of each group, as a pie per group
+  const budget=[];
+  for(const gname of (gl.length?gl:['(no group)'])){
+    const sel=Xs.filter(X=>(groupOf(X.slug)||'(no group)')===gname);
+    if(!sel.length)continue;
+    const c=mean(sel.map(X=>{const S=statsOf(X);return 100*S.touch/Math.max(1,S.valid);}));
+    const n=mean(sel.map(X=>{const S=statsOf(X);
+      return 100*(S.near-S.touch)/Math.max(1,S.valid);}));
+    budget.push({g:gname,n:sel.length,apart:Math.max(0,100-c-n),near:n,touch:c});}
+
+  el.innerHTML=`
+   <datalist id="glist">${gl.map(g=>`<option value="${esc(g)}">`).join('')}</datalist>
+   <datalist id="rlist">${rl.map(r=>`<option value="${esc(r)}">`).join('')}</datalist>
+
+   <div class="card"><h3>study design</h3>
+     <div class="sub">one row per video. Type a group name and it is created; type the
+       same name again anywhere and the two videos are in the same group. The same goes
+       for each animal's role — "subject" and "partner", or "treated" and "cagemate",
+       or just leave them and they stay A and B.
+       <span id="dstate" style="margin-left:8px">${esc(designState)}</span></div>
+     <table class="st"><tr><th>video</th><th>group</th>${rheads}</tr>${drows}</table>
+     <div style="margin-top:8px;display:flex;gap:6px">
+       <button class="chip lite" id="gClear">clear all assignments</button>
+       <button class="chip lite" id="gDl">download study_design.json</button></div>
+   </div>
+
+   <div class="card"><h3>group comparison</h3>
+     <div class="sub" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+       <span>measure</span>
+       <select id="mSel">${METRICS.map(m=>
+         `<option value="${m.k}"${m.k===metric.k?' selected':''}>${m.lab} (${m.unit})</option>`)
+         .join('')}</select>
+       <span>compare by</span>
+       <select id="bSel">
+         <option value="group"${by==='group'?' selected':''}>group</option>
+         <option value="role"${by==='role'?' selected':''}>role</option>
+         <option value="gxr"${by==='gxr'?' selected':''}>group × role</option>
+       </select>
+       <span style="color:#64748b">${metric.lvl==='video'
+         ? 'a whole-video measure — one point per video'
+         : 'per animal; averaged within a video unless split by role'}</span></div>
+     <canvas id="cBar" style="width:100%;height:300px"></canvas>
+     <div class="sub" style="margin-top:8px">bars are group means, whiskers ±SEM,
+       dots are individual videos</div>
+     <table class="st" style="margin-top:6px"><tr><th></th><th>n</th><th>mean</th>
+       <th>SD</th><th>SEM</th><th>range</th></tr>${srows}</table>
+     <div style="margin-top:10px">${test}</div>
+   </div>
+
+   <div class="card"><h3>time budget</h3>
+     <div class="sub">how each group split its time — apart, together (under
+       ${NEAR_BL} BL), in contact (under ${TOUCH_BL} BL); the mean over the videos in
+       the group</div>
+     <div class="${budget.length>1?'grid2':''}">
+       ${budget.map((b,i)=>`<div><div class="sub"
+         style="color:${groupColor(b.g)};margin:0 0 3px">${esc(b.g)} · n=${b.n}</div>
+         <canvas id="cPie${i}" style="width:100%;height:150px"></canvas></div>`)
+         .join('')}</div></div>
+   <div style="height:24px"></div>`;
+
+  drawBars($('#cBar'),entries,metric.unit,colFor);
+  budget.forEach((b,i)=>drawPie($('#cPie'+i),[
+    {lab:'apart',   v:b.apart,col:'#334155'},
+    {lab:'together',v:b.near, col:'#2563eb'},
+    {lab:'contact', v:b.touch,col:'#ef4444'}]));
+
+  $$('#grp input[data-grp]').forEach(inp=>inp.onchange=()=>{
+    const v=inp.value.trim();
+    if(v)DESIGN.groups[inp.dataset.grp]=v;else delete DESIGN.groups[inp.dataset.grp];
+    saveDesign();renderGroups();});
+  $$('#grp input[data-role]').forEach(inp=>inp.onchange=()=>{
+    const s=inp.dataset.role,a=+inp.dataset.a,v=inp.value.trim();
+    DESIGN.roles[s]=DESIGN.roles[s]||[];DESIGN.roles[s][a]=v;
+    if(!DESIGN.roles[s].some(Boolean))delete DESIGN.roles[s];
+    saveDesign();renderGroups();});
+  $('#mSel').onchange=e=>{GV.metric=e.target.value;renderGroups();};
+  $('#bSel').onchange=e=>{GV.by=e.target.value;renderGroups();};
+  $('#gClear').onclick=()=>{DESIGN={groups:{},roles:{},order:[],roleOrder:[]};
+    saveDesign();renderGroups();};
+  $('#gDl').onclick=()=>{const a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([JSON.stringify(DESIGN,null,1)],
+      {type:'application/json'}));
+    a.download='study_design.json';a.click();};
+}
+
+// ---------- the tabs ----------
+// statsOpen means "an analysis tab is in front", which is what the wheel, the keys and
+// the timeline hover all need to know: the review shortcuts must not fire while a
+// page of statistics is being scrolled, and the wheel must reach the scrollbar.
+function showTab(which){
+  statsOpen=which!=='rev';
+  // 'block', not '': the stylesheet sets display:none on #stats, so clearing the
+  // inline style hands control back to that rule and the panel stays hidden --
+  // the tab looked dead while the handler was running perfectly.
+  $('#stats').style.display=which==='sta'?'block':'none';
+  $('#grp').style.display=which==='grp'?'block':'none';
+  $('#tabRev').classList.toggle('on',which==='rev');
+  $('#tabSta').classList.toggle('on',which==='sta');
+  $('#tabGrp').classList.toggle('on',which==='grp');
+  $('#tip').style.display='none';
+  if(which==='sta')renderStats();else cams=[];
+  if(which==='grp')renderGroups();}
+$('#tabRev').onclick=()=>showTab('rev');
+$('#tabSta').onclick=()=>showTab('sta');
+$('#tabGrp').onclick=()=>showTab('grp');
+
+// ---------- autosave ----------
+async function loadMarks(slug){
+  if(DIRH){
+    try{
+      const fh=await DIRH.getFileHandle(slug+'_problems.json');
+      const j=JSON.parse(await (await fh.getFile()).text());
+      saveState=`loaded ${slug}_problems.json`;
+      // everything else a mark carries (label, status, note, dates) is kept and
+      // written back unchanged, so a file prepared elsewhere survives a review pass
+      return (j.segments||[]).map(x=>{const{start_frame,end_frame,start_s,end_s,...rest}=x;
+        return {s:start_frame,e:end_frame,...rest};});
+    }catch(e){ /* nothing saved for this clip yet */ }
+  }
+  try{
+    const all=JSON.parse(localStorage.getItem(LSKEY)||'{}');
+    if(all[slug]){saveState='restored from this browser';return all[slug];}
+  }catch(e){}
+  saveState=DIRH?'autosaving to the folder':'autosaving in this browser';
+  return [];
+}
+
+// Written straight into the folder you chose, as JSON, on every change -- no Save
+// button and nothing to forget. The directory handle is requested read-write when the
+// folder is picked, so this is the same folder the videos came from. Where the browser
+// will not grant that (an older browser, or a file:// page it refuses), the marks still
+// persist in the browser and a one-off download button appears instead, so work is
+// never silently lost.
+let DIRH=null,saveState='not saved yet',saveT=null;
+// Versioned. Earlier builds seeded the timeline from the pipeline and persisted those
+// seeds here, so a reader who had opened an old build saw them come back as "marks"
+// even after the seeding was removed from the code. Only reviewer-made marks are
+// stored under this key, and the old bucket is discarded on load.
+const LSKEY='as_marks_v2';
+try{localStorage.removeItem('as_probseg');}catch(e){}
+function autosave(){
+  if(!D)return;
+  clearTimeout(saveT);
+  saveT=setTimeout(async()=>{
+    const payload={clip:D.r.slug,updated:new Date().toISOString(),
+      fps:D.fps,skip_s:D.skip,
+      segments:SEGS.map(x=>{const{s,e,...rest}=x;return {start_frame:s,end_frame:e,
+        start_s:+(s/D.fps).toFixed(2),end_s:+(e/D.fps).toFixed(2),
+        label:'problem',status:'problem',...rest};})};
+    const text=JSON.stringify(payload,null,1);
+    try{
+      const all=JSON.parse(localStorage.getItem(LSKEY)||'{}');
+      all[D.r.slug]=SEGS;localStorage.setItem(LSKEY,JSON.stringify(all));
+    }catch(e){}
+    if(DIRH){
+      try{
+        const fh=await DIRH.getFileHandle(D.r.slug+'_problems.json',{create:true});
+        const w=await fh.createWritable();await w.write(text);await w.close();
+        saveState=`saved to ${D.r.slug}_problems.json`;renderSegs();return;
+      }catch(e){ saveState='could not write to the folder — use Download'; }
+    } else saveState='kept in this browser — use Download for a file';
+    $('#dl').style.display='';
+    $('#dl').onclick=()=>{const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+      a.download=D.r.slug+'_problems.json';a.click();};
+    renderSegs();
+  },400);
+}
+// ---------- identity colours ----------
+// Click an animal on the video to select it (nearest outline / centroid), then a
+// number key or the dropdown assigns its marker colour. Every change is recorded
+// with the frame it was made on, so the evidence can be found again, and the whole
+// history is kept -- the current table alone would hide a reassignment.
+function trackXY(e){const G=geo(),b=$('#main').getBoundingClientRect();
+  return [Z.ox+(e.clientX-b.left-G.ox)/(G.k*Z.z),Z.oy+(e.clientY-b.top-G.oy)/(G.k*Z.z)];}
+let downXY=null;
+$('#main').addEventListener('mousedown',e=>{downXY=[e.clientX,e.clientY];},true);
+$('#main').addEventListener('click',e=>{
+  if(!D||statsOpen||e.target.closest('#bar,#tabs,#need'))return;
+  if(downXY&&Math.hypot(e.clientX-downXY[0],e.clientY-downXY[1])>4)return;  // a pan
+  const[x,y]=trackXY(e);let best=null,bd=1e18;
+  for(let a=0;a<D.n;a++){const i=cur*D.n+a;if(D.status[i]===0)continue;
+    const b0=D.box[i*4],b1=D.box[i*4+1],b2=D.box[i*4+2],b3=D.box[i*4+3];
+    const inside=x>=b0&&x<=b2&&y>=b1&&y<=b3;
+    const cx=D.cent[i*2],cy=D.cent[i*2+1];
+    const d=(isFinite(cx)?Math.hypot(x-cx,y-cy):1e9)-(inside?1e6:0);
+    if(d<bd){bd=d;best=a;}}
+  if(best==null||bd>D.BL*1.5){selA=null;renderIds();draw();return;}   // inside a box scores < 0
+  selA=best;renderIds();draw();
+  hint(`animal ${LET[best]} selected — 1 Red · 2 Green · 3 Blue · 4 Black · 5 Red+Green · 0 clears`);});
+
+function assignId(a,marker){
+  if(!D)return;
+  if(marker){const other=Object.keys(IDS).find(k=>+k!==a&&IDS[k].marker===marker);
+    if(other!=null){hint(`${marker} is already animal ${LET[other]} — clear it there first`);return;}}
+  const prev=IDS[a]?IDS[a].marker:null;
+  if(prev===marker)return;
+  const now=new Date().toISOString();
+  if(marker)IDS[a]={marker,frame:cur,at:now};else delete IDS[a];
+  IDHIST.push({animal:LET[a],track_id:a,from:prev,to:marker,frame:cur,
+    clip_s:+(cur/D.fps).toFixed(2),src_s:+(D.skip+cur/D.fps).toFixed(2),at:now});
+  saveIds();renderIds();draw();drawTL();
+  hint(marker?`animal ${LET[a]} = ${MK[marker].label||marker} (recorded at f${cur})`
+             :`animal ${LET[a]} colour cleared`);}
+
+function renderIds(){
+  if(!D){$('#idpanel').style.display='none';return;}
+  $('#idpanel').style.display='block';
+  const COL0=['#00c8ff','#ff4dd8','#ffb020','#39d353','#a78bfa'];
+  let h='';
+  for(let a=0;a<D.n;a++){
+    const m=IDS[a]?MK[IDS[a].marker]:null,col=m?m.c:COL0[a%COL0.length];
+    const used=new Set(Object.keys(IDS).filter(k=>+k!==a).map(k=>IDS[k].marker));
+    h+=`<div class="idrow${selA===a?' sel':''}" data-a="${a}">
+      <span class="sw${m&&m.k==='Black'?' blk':''}" style="background:${col}"></span>
+      <span class="let">${LET[a]}</span>
+      <select data-a="${a}"><option value="">— unassigned —</option>${
+        MARKERS.map(x=>`<option value="${x.k}"${m&&m.k===x.k?' selected':''}${
+          used.has(x.k)?' disabled':''}>${x.key} ${x.label||x.k}</option>`).join('')}</select>
+    </div>`;}
+  $('#idrows').innerHTML=h;
+  $$('#idrows .idrow').forEach(r=>r.onclick=ev=>{if(ev.target.tagName==='SELECT')return;
+    selA=+r.dataset.a;renderIds();draw();});
+  $$('#idrows select').forEach(sl=>sl.onchange=()=>{selA=+sl.dataset.a;
+    assignId(+sl.dataset.a,sl.value||null);});
+  const k=Object.keys(IDS).length;
+  const over=D.n>MARKERS.length?` · this clip has ${D.n} animals but only ${MARKERS.length} markers exist`:'';
+  $('#idinfo').textContent=`${k} of ${D.n} assigned${over}`+(idState?` · ${idState}`:'');}
+
+const IDKEY='as_ids_v1';
+async function loadIds(slug){
+  IDS={};IDHIST=[];idState='';
+  let j=null;
+  if(DIRH){try{const fh=await DIRH.getFileHandle(slug+'_identities.json');
+    j=JSON.parse(await (await fh.getFile()).text());idState=`loaded ${slug}_identities.json`;}catch(e){}}
+  if(!j){try{const all=JSON.parse(localStorage.getItem(IDKEY)||'{}');
+    if(all[slug]){j=all[slug];idState='restored from this browser';}}catch(e){}}
+  if(j){for(const r of (j.assignments||[]))
+          if(MK[r.marker])IDS[r.track_id]={marker:r.marker,frame:r.assigned_frame,at:r.assigned_at};
+        IDHIST=j.history||[];}
+  renderIds();}
+
+let idT=null;
+function saveIds(){
+  clearTimeout(idT);
+  idT=setTimeout(async()=>{
+    const payload={clip:D.r.slug,updated:new Date().toISOString(),fps:D.fps,skip_s:D.skip,
+      n_animals:D.n,
+      palette:MARKERS.map(m=>({marker:m.k,display_colour:m.c,label:m.label||m.k})),
+      assignments:Object.keys(IDS).map(Number).sort((a,b)=>a-b).map(a=>({
+        animal:LET[a],track_id:a,marker:IDS[a].marker,display_colour:MK[IDS[a].marker].c,
+        assigned_frame:IDS[a].frame,assigned_clip_s:+(IDS[a].frame/D.fps).toFixed(2),
+        assigned_src_s:+(D.skip+IDS[a].frame/D.fps).toFixed(2),assigned_at:IDS[a].at})),
+      history:IDHIST};
+    const text=JSON.stringify(payload,null,1);
+    try{const all=JSON.parse(localStorage.getItem(IDKEY)||'{}');all[D.r.slug]=payload;
+      localStorage.setItem(IDKEY,JSON.stringify(all));}catch(e){}
+    if(DIRH){try{const fh=await DIRH.getFileHandle(D.r.slug+'_identities.json',{create:true});
+        const w=await fh.createWritable();await w.write(text);await w.close();
+        idState=`saved to ${D.r.slug}_identities.json`;renderIds();return;}
+      catch(e){idState='could not write to the folder — use Download';}}
+    else idState='kept in this browser — use Download for a file';
+    $('#iddl').style.display='';
+    $('#iddl').onclick=()=>{const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+      a.download=D.r.slug+'_identities.json';a.click();};
+    renderIds();},300);}
+
+boot().then(async()=>{designState=await loadDesign();}).catch(showLoadError);
+</script>
