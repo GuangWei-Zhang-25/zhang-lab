@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to use the Parenting Annotator</title>
+<style>
+  :root { --ink: #1d1d1f; --ink2: #6e6e73; --bg: #f5f5f7; --card: #fff; --accent: #0071e3; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 20px 64px; }
+  h1 { font-size: 34px; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .sub { color: var(--ink2); margin: 0 0 28px; font-size: 17px; }
+  ol { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+  li { background: var(--card); border-radius: 14px; padding: 16px 18px 16px 64px; margin: 0 0 10px; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 18px rgba(0,0,0,.05); counter-increment: step; }
+  li::before { content: counter(step); position: absolute; left: 18px; top: 15px; width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; font-weight: 600; display: grid; place-items: center; font-size: 14px; }
+  li b { font-weight: 600; }
+  kbd { font: 600 12px ui-monospace, "SF Mono", Menlo, monospace; background: #f2f2f7; border-radius: 6px; padding: 2px 7px; border: 1px solid #e5e5ea; }
+  .note { background: var(--card); border-radius: 14px; padding: 14px 18px; margin-top: 22px; color: var(--ink2); font-size: 14px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .note b { color: var(--ink); }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="./">Launch Parenting Annotator V5</a> · <a href="index.html" download="parenting_annotator_jie_V5.html">Download annotator</a></p>
+  <h1>How to use the Parenting Annotator</h1>
+  <p class="sub">From opening your videos to results and an Excel table.</p>
+  <ol>
+    <li><b>Open the annotator.</b> Double-click <i>parenting_annotator_jie_V5.html</i> (or open its page on the website) in <b>Chrome</b> or <b>Edge</b>.</li>
+    <li><b>Open your videos.</b> Click <b>Open Video Folder</b>, choose the folder with your videos (MP4, MKV or AVI) and allow it to edit files. Next time, use <b>Reopen</b>.</li>
+    <li><b>Pick a video</b> from the list on the left.</li>
+    <li><b>Skip the beginning (optional).</b> In <b>Analysis range</b>, type the start time, e.g. <kbd>2:00</kbd>. Click <b>apply to all videos</b> to skip the same minutes in every video.</li>
+    <li><b>Label a behavior.</b> Click a behavior at the bottom (or press <kbd>1</kbd>–<kbd>9</kbd>), press <kbd>I</kbd> where it starts and <kbd>O</kbd> where it ends.</li>
+    <li><b>Fix labels.</b> Drag a bar's edge to change its start or end, drag it to another row to change the behavior, double-click it to edit or delete. <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes.</li>
+    <li><b>Mark what you checked.</b> Press <kbd>V</kbd> at the start and <kbd>V</kbd> again at the end of the part you have fully reviewed.</li>
+    <li><b>Change behaviors (optional).</b> Click <b>Edit categories</b> at the bottom (or double-click a behavior) to add, rename or remove behaviors.</li>
+    <li><b>Saving is automatic.</b> The badge at the top right shows <b>Saved</b>.</li>
+    <li><b>See the results.</b> Click <b>Results</b> at the top: totals, frequency and bout length per behavior, an ethogram for every video, and a table. Choose the measure at the top right; click a bout to jump to it.</li>
+    <li><b>Export results.</b> Click <b>Export CSV</b> (Results tab). The tables appear in the <i>exports</i> folder inside your video folder and open in Excel.</li>
+  </ol>
+  <div class="note"><b>Good to know:</b> your videos never leave your computer. Press <kbd>?</kbd> in the annotator for all shortcuts. In Safari or Firefox, drag your videos together with their <i>.json</i> files onto the page and save with <b>Download JSON</b>.</div>
+</main>
+</body>
+</html>

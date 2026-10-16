@@ -125,10 +125,11 @@
         <div class="tool-eyebrow"><i class="fas fa-hand-holding-heart"></i> Behavior · Parenting</div>
         <h1 class="tool-name">Parenting Behavior Annotator</h1>
         <p class="tool-tagline">
-          A browser-based tool for scoring parenting behaviors in mouse videos across seven dedicated timeline tracks (a pooled parenting prediction plus six ethogram codes), frame by frame.
+          Version 5: score parenting behaviors frame by frame, customize categories, track reviewed sections, and explore results with CSV export.
         </p>
         <div class="tool-actions">
-          <a href="Tools/parenting-annotator/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch Parenting Annotator</a>
+          <a href="Tools/parenting-annotator/" class="btn-launch" target="_blank"><i class="fas fa-play"></i> Launch Parenting Annotator V5</a>
+          <a href="Tools/parenting-annotator/HOW_TO_USE.html" class="btn-launch" target="_blank" rel="noopener">How to use</a>
           <span class="tool-badge-note"><i class="fas fa-lock"></i> Runs 100% locally: your videos stay on your device</span>
         </div>
       </div>
@@ -145,7 +146,7 @@
           Built for a collaborating lab's parenting-behavior study, this annotator makes it easy to score maternal and parental behaviors in mouse videos. Load a video, step through it frame by frame, and mark when each behavior begins and ends. Each category lives on its own color-coded timeline track. A pooled <strong>parenting</strong> prediction track (from the ParentingAll model) sits alongside six manually scored ethogram codes, so model output and hand annotation can be compared at a glance. Annotations auto-save as JSON next to the source video. Everything runs in your browser, with no installation, and your videos never leave your computer.
         </p>
 
-        <h3>Seven behavior tracks</h3>
+        <h3>Default behavior tracks</h3>
         <div class="track-grid">
           <div class="track-chip"><span class="track-dot" style="background:#94e2d5;"></span><strong>Parenting</strong></div>
           <div class="track-chip"><span class="track-dot" style="background:#d62728;"></span><strong>Attack</strong></div>
@@ -157,9 +158,11 @@
         </div>
         <p style="font-size:0.9rem; color:var(--text-muted);">The <strong>Parenting</strong> track is a pooled prediction from the ParentingAll model; the remaining six are the project's BORIS ethogram codes, scored by hand.</p>
 
+        <h3>New in V5</h3>
+        <p>Set an analysis range for each video or apply it to all videos. Mark reviewed sections with V, edit behavior categories, and inspect totals, frequency, bout length, and ethograms in the Results tab. Export CSV tables for Excel into the video folder's <code>exports</code> folder. Browser drafts help protect work after an interrupted session.</p>
         <h3>Highlights</h3>
         <div class="tool-features">
-          <span class="feature-chip"><i class="fas fa-layer-group"></i> Seven dedicated behavior tracks</span>
+          <span class="feature-chip"><i class="fas fa-layer-group"></i> Customizable behavior tracks</span>
           <span class="feature-chip"><i class="fas fa-robot"></i> Model prediction alongside manual codes</span>
           <span class="feature-chip"><i class="fas fa-forward-step"></i> Frame-by-frame keyboard navigation</span>
           <span class="feature-chip"><i class="fas fa-timeline"></i> Zoomable per-track timeline</span>
@@ -169,7 +172,7 @@
 
         <div class="quick-start">
           <h4><i class="fas fa-bolt"></i> Quick start</h4>
-          <p>Click <strong>Launch Parenting Annotator</strong>, open your video folder (Chrome or Edge), then step through frames and mark in/out points for each behavior on its track. Annotation JSONs save automatically into the same folder as your videos. Questions or feature requests? Reach out at <a href="mailto:guangwei.zhang@vcuhealth.org?subject=Parenting%20Behavior%20Annotator" style="color: var(--primary); font-weight: 500;">guangwei.zhang@vcuhealth.org</a>.</p>
+          <p>Click <strong>Launch Parenting Annotator</strong>, open your video folder (Chrome or Edge), then step through frames and mark in/out points for each behavior on its track. With folder write access, annotation JSONs save automatically beside your videos. Without folder access, use Download JSON. Read the <a href="Tools/parenting-annotator/HOW_TO_USE.html">step-by-step V5 instructions</a> for analysis ranges, review marks, results, and CSV export. Questions or feature requests? Reach out at <a href="mailto:guangwei.zhang@vcuhealth.org?subject=Parenting%20Behavior%20Annotator" style="color: var(--primary); font-weight: 500;">guangwei.zhang@vcuhealth.org</a>.</p>
         </div>
       </div>
     </div>
