@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Resources | Zhang Lab</title>
-  <meta name="description" content="Public research databases, grants by career stage, laboratory equipment instructions, and VCU internal links from the Zhang Lab.">
+  <meta name="description" content="Quick links to VCU animal training, IACUC, and RealSource ordering, plus Zhang Lab research resources.">
   <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -59,6 +59,18 @@
     a.r::before{content:'';position:absolute;left:1px;top:.85em;width:4px;height:4px;border-radius:50%;background:var(--border-medium)}
     a.r:hover{color:var(--primary)}
     a.r:hover::before{background:var(--accent)}
+
+    /* Frequently used links */
+    .quick-links{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:12px}
+    .quick-links a.r{display:flex;align-items:center;gap:12px;min-height:108px;padding:22px;border:2px solid var(--primary);border-radius:12px;background:var(--primary);color:var(--white);font-size:1.05rem;font-weight:600;line-height:1.4;transition:var(--transition)}
+    .quick-links a.r::before{display:none}
+    .quick-links a.r:nth-child(2){background:#edf4fc;color:var(--primary);border-color:#a8c3e6}
+    .quick-links a.r:nth-child(3){background:#fff5d6;color:var(--primary-dark);border-color:var(--accent)}
+    .quick-links a.r:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(26,54,93,.15)}
+    .quick-links a.r:focus-visible{outline:3px solid var(--primary-light);outline-offset:4px}
+    .quick-links .link-icon{font-size:1.4rem;flex-shrink:0}
+    .quick-links .external-icon{font-size:.8rem;margin-left:auto;flex-shrink:0}
+    @media(max-width:700px){.quick-links{grid-template-columns:1fr;gap:10px}.quick-links a.r{min-height:76px;padding:18px}}
 
     .resource-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0 24px}
     .resource-nav a{padding:14px 16px;border:1px solid var(--border-light);border-top:3px solid var(--accent);border-radius:7px;text-decoration:none;color:var(--primary);background:var(--bg-light)}
@@ -141,16 +153,25 @@
 <div class="container">
   <div class="page-head">
     <h1>Resources</h1>
-    <p>Research databases, funding opportunities, lab guides, and VCU internal links.</p>
+    <p>Frequently used links &amp; lab resources.</p>
     <input id="q" type="search" placeholder="Filter by name or keyword&hellip;" autocomplete="off" aria-label="Filter resources">
-    <span class="count" id="count" aria-live="polite">63 resources</span>
+    <span class="count" id="count" aria-live="polite">66 resources</span>
   </div>
 
+<section class="cat" id="frequently-used">
+<h2><i class="fas fa-star" aria-hidden="true"></i>Frequently used<span class="cnt"></span></h2>
+<div class="quick-links">
+<a class="r" href="https://acup.vcu.edu/news-and-updates/2026/jan-9-2026---adding-new-study-staff-to-your-iacuc-protocol/" target="_blank" rel="noopener" data-k="VCU animal care training onboarding study staff personnel protocol requirements"><i class="fas fa-graduation-cap link-icon" aria-hidden="true"></i><span>VCU Animal Training Page</span><i class="fas fa-arrow-up-right-from-square external-icon" aria-hidden="true"></i></a>
+<a class="r" href="https://acup.research.vcu.edu/" target="_blank" rel="noopener" data-k="VCU IACUC animal care protocol"><i class="fas fa-clipboard-check link-icon" aria-hidden="true"></i><span>IACUC</span><i class="fas fa-arrow-up-right-from-square external-icon" aria-hidden="true"></i></a>
+<a class="r" href="https://solutions.sciquest.com/apps/Router/SAMLAuth/VCU" target="_blank" rel="noopener" data-k="VCU RealSource purchasing ordering lab supplies equipment staff login"><i class="fas fa-cart-shopping link-icon" aria-hidden="true"></i><span>RealSource — Ordering</span><i class="fas fa-arrow-up-right-from-square external-icon" aria-hidden="true"></i></a>
+</div>
+</section>
+
 <nav class="resource-nav" aria-label="Resource categories">
-<a href="#grants"><strong>Grants by career stage</strong><span>Student funding first: internal &amp; external</span></a>
-<a href="#public-databases"><strong>Public databases</strong><span>Datasets, tissue banks &amp; research resources</span></a>
-<a href="#equipment-usage"><strong>Equipment usage &amp; instructions</strong><span>Lab protocols, settings &amp; reference photos</span></a>
-<a href="#vcu-internal-systems"><strong>VCU internal links</strong><span>Purchasing, administration &amp; lab safety</span></a>
+<a href="#grants"><strong>Grants by career stage</strong></a>
+<a href="#public-databases"><strong>Public databases</strong></a>
+<a href="#equipment-usage"><strong>Equipment usage &amp; instructions</strong></a>
+<a href="#vcu-internal-systems"><strong>VCU internal links</strong></a>
 </nav>
 <section class="cat" id="grants">
 <h2><i class="fas fa-graduation-cap" aria-hidden="true"></i>Grants by career stage<span class="cnt"></span></h2>
@@ -331,10 +352,8 @@
 </div>
 </div>
 <div class="resource-group">
-<h3>IACUC onboarding &amp; health registration</h3>
-<p class="group-note">Before adding anyone to an IACUC protocol, complete the standard training and onboarding requirements described in the VCU guidance. Use the separate link below for the health registration form.</p>
+<h3>Health registration</h3>
 <div class="rlist">
-<a class="r" href="https://acup.vcu.edu/news-and-updates/2026/jan-9-2026---adding-new-study-staff-to-your-iacuc-protocol/" target="_blank" rel="noopener" title="Standard training and onboarding guidance before adding new study staff to an IACUC protocol. VCU sign-in required." data-k="IACUC animal care training onboarding new study staff personnel protocol requirements">IACUC — required training before adding study staff</a>
 <a class="r" href="https://redcap.vcu.edu/surveys/?s=FYRLLWWPPP8TYPJE" target="_blank" rel="noopener" title="Health registration form for animal research personnel" data-k="IACUC animal research health registration form occupational health REDCap">Health registration form</a>
 </div>
 </div>
@@ -343,7 +362,6 @@
 <p class="group-note">VCU eID required; some systems require the VCU network or VPN.</p>
 <div class="rlist">
 <a class="r" href="https://research.vcu.edu/rams-systems/" target="_blank" rel="noopener" title="Research administration — VCU&#x27;s central research administration portal" data-k="Research administration VCU&#x27;s central research administration portal">RAMS (Research Administration Management System)</a>
-<a class="r" href="https://procurement.vcu.edu/i-want-to/realsource/" target="_blank" rel="noopener" title="Purchasing and payment — VCU&#x27;s eProcurement system for ordering lab supplies, equipment, and services from contracted suppliers, and for…" data-k="Purchasing and payment VCU&#x27;s eProcurement system for ordering lab supplies, equipment, and services from contracted suppliers, and for…">RealSource</a>
 <a class="r" href="https://payment2.works.com/works/" target="_blank" rel="noopener" title="Purchasing and payment — Where small-dollar purchasing card transactions are reviewed, coded to the right index, and signed off each cycle" data-k="Purchasing and payment Where small-dollar purchasing card transactions are reviewed, coded to the right index, and signed off each cycle">Bank of America Works (purchasing card)</a>
 <a class="r" href="https://vcu.bioraft.com/" target="_blank" rel="noopener" title="Safety and training — VCU&#x27;s lab safety platform" data-k="Safety and training VCU&#x27;s lab safety platform">BioRAFT</a>
 </div>
