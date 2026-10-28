@@ -1,4 +1,4 @@
-<!DOCT<span class="publication-featured-badge">Featured</span>YPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -1508,6 +1508,17 @@
         justify-content: center;
       }
     }
+
+    .atlas-video { display: block; width: 100%; height: auto; background: #fff; object-fit: contain; }
+    .atlas-links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-top: 0.75rem; }
+    .atlas-highlight { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 1.5rem; align-items: center; }
+    .atlas-highlight-thumbnail { display: block; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; background: #fff; }
+    .atlas-highlight-thumbnail .atlas-video { aspect-ratio: 1476 / 1184; }
+    #molecular-profiling { scroll-margin-top: 90px; }
+    @media (max-width: 600px) {
+      .atlas-highlight { grid-template-columns: minmax(0, 1fr); }
+      .atlas-highlight-thumbnail { max-width: 280px; }
+    }
   </style>
 </head>
 <body>
@@ -1547,6 +1558,7 @@
   <div class="ticker-viewport">
     <div class="ticker-track">
       <div class="ticker-group">
+        <a class="ticker-item" href="news.html#spinal-cord-atlas-2026"><i class="fas fa-dna"></i> <strong>New preprint</strong> maps the molecular architecture of the whole mouse spinal cord</a>
         <a class="ticker-item" href="tool-neuroflow.html"><i class="fas fa-brain"></i> <strong>NeuroFlow</strong> now includes <strong>Learn mode</strong> for signal detection</a>
         <a class="ticker-item" href="news.html"><i class="fas fa-trophy"></i> <strong>VCU Convergence</strong> Team Planning Grant to decode the neural architecture of social volition</a>
         <a class="ticker-item" href="news.html"><i class="fas fa-award"></i> <strong>Henry Oo</strong> receives a VCU School of Medicine travel award</a>
@@ -1559,6 +1571,7 @@
         <a class="ticker-item" href="news.html"><i class="fas fa-trophy"></i> <strong>Dr. Guang-Wei Zhang</strong> named a 2026 NIA Butler-Williams Scholar at the NIH</a>
       </div>
       <div class="ticker-group" aria-hidden="true">
+        <a class="ticker-item" href="news.html#spinal-cord-atlas-2026" tabindex="-1"><i class="fas fa-dna"></i> <strong>New preprint</strong> maps the molecular architecture of the whole mouse spinal cord</a>
         <a class="ticker-item" href="tool-neuroflow.html" tabindex="-1"><i class="fas fa-brain"></i> <strong>NeuroFlow</strong> now includes <strong>Learn mode</strong> for signal detection</a>
         <a class="ticker-item" href="news.html" tabindex="-1"><i class="fas fa-trophy"></i> <strong>VCU Convergence</strong> Team Planning Grant to decode the neural architecture of social volition</a>
         <a class="ticker-item" href="news.html" tabindex="-1"><i class="fas fa-award"></i> <strong>Henry Oo</strong> receives a VCU School of Medicine travel award</a>
@@ -1991,7 +2004,7 @@
 <!-- Tech Showcase: Molecular Profiling -->
 <section class="tech-showcase tech-showcase-molecular" id="molecular-profiling">
   <div class="container">
-    <div class="tech-content-grid tech-content-reverse tech-content-single">
+    <div class="tech-content-grid tech-content-reverse">
       <div class="tech-info">
         <div class="tech-badge tech-badge-teal">
           <i class="fas fa-dna"></i>
@@ -2000,7 +2013,7 @@
         <h2 class="tech-title">Molecular <span>Perspective</span> on Neural Populations</h2>
           <p class="tech-why">Neurons that look alike under a microscope can differ molecularly, and that molecular identity is what makes a circuit targetable and links it to disease.</p>
         <p class="tech-description">
-          Single-cell sequencing and spatial transcriptomics provide a complementary molecular perspective on behavior-relevant neuronal populations.
+          Single-cell sequencing and spatial transcriptomics provide a complementary molecular perspective on behavior-relevant neuronal populations. Our new whole-spinal-cord atlas maps 322,827 cells across 81 sections, linking molecular identity to anatomical organization.
         </p>
         <div class="tech-features">
           <div class="tech-feature">
@@ -2019,6 +2032,10 @@
 
         <div class="tech-related-pubs">
           <span class="label">Related Publications</span>
+          <a class="tech-pub-link" href="https://doi.org/10.64898/2026.10.24.761397" target="_blank" rel="noopener">
+            <strong>Multi-scale spatial transcriptomic atlas of the whole mouse spinal cord</strong>. <span class="pub-venue">bioRxiv</span>, 2026 · New preprint
+          </a>
+          <a class="tech-pub-link" href="publications/Zhang-et-al-2026-Spinal-Cord-Atlas.pdf" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i> Download the atlas paper (PDF)</a>
           <a class="tech-pub-link" href="https://doi.org/10.1101/2023.08.28.555156" target="_blank">
             <strong>Integrative mapping of spatial transcriptomic and amyloid pathology in Alzheimer's disease at single-cell resolution</strong>. <span class="pub-venue">bioRxiv</span>, 2023
           </a>
@@ -2026,6 +2043,15 @@
             <strong>The neural basis of neuropsychiatric symptoms in Alzheimer's disease</strong>. <span class="pub-venue">Frontiers in Aging Neuroscience</span>, 2024
           </a>
         </div>
+      </div>
+      <div class="tech-visual">
+        <figure class="animal-figure">
+          <video class="atlas-video" autoplay muted loop playsinline controls preload="metadata" poster="publications/thumbnails/spinal-cord-atlas-2026.png" aria-label="Animated visualization of molecularly defined spinal cord cell populations">
+              <source src="videos/spinal-cord-atlas-2026.mp4" type="video/mp4">
+              <img src="publications/thumbnails/spinal-cord-atlas-2026.png" alt="Spatial transcriptomic atlas of the whole mouse spinal cord">
+            </video>
+          <figcaption>Molecularly defined cell populations from our whole-mouse spinal cord atlas. <a href="https://doi.org/10.64898/2026.10.24.761397" target="_blank" rel="noopener">Read the preprint</a>.</figcaption>
+        </figure>
       </div>
     </div>
   </div>
@@ -2043,6 +2069,24 @@
       </p>
     </div>
     <div class="publications-list">
+      <div class="publication-item featured atlas-highlight" id="spinal-cord-atlas-2026">
+        <a class="atlas-highlight-thumbnail" href="https://doi.org/10.64898/2026.10.24.761397" target="_blank" rel="noopener" aria-label="Read the spinal cord atlas preprint">
+          <video class="atlas-video" autoplay muted loop playsinline preload="metadata" poster="publications/thumbnails/spinal-cord-atlas-2026.png" aria-label="Animated visualization of molecularly defined spinal cord cell populations">
+              <source src="videos/spinal-cord-atlas-2026-thumbnail.mp4" type="video/mp4">
+              <img src="publications/thumbnails/spinal-cord-atlas-2026.png" alt="Spatial transcriptomic atlas of the whole mouse spinal cord">
+            </video>
+        </a>
+        <div>
+          <span class="publication-year">Spatial Transcriptomics</span><span class="publication-featured-badge">New</span>
+          <h3 class="publication-title">Multi-scale spatial transcriptomic atlas of the whole mouse spinal cord</h3>
+          <p class="publication-authors"><strong>Zhang GW</strong>, Li J, Huang JJ, Tao HW, Zhang KK, Zhang LI</p>
+          <p class="publication-journal">bioRxiv (2026) · Preprint</p>
+          <div class="atlas-links">
+            <a href="https://doi.org/10.64898/2026.10.24.761397" target="_blank" rel="noopener" class="publication-link">Read paper <i class="fas fa-arrow-right"></i></a>
+            <a href="publications/Zhang-et-al-2026-Spinal-Cord-Atlas.pdf" target="_blank" rel="noopener" class="publication-link"><i class="fas fa-file-pdf"></i> PDF</a>
+          </div>
+        </div>
+      </div>
       <div class="publication-item featured">
         <span class="publication-year">Methods &amp; Software</span><span class="publication-featured-badge">New</span>
         <h3 class="publication-title">EthoTrace: from behaviour to neural dynamics in a unified analysis system</h3>
@@ -3088,7 +3132,7 @@ window.addEventListener('scroll', () => {
 </script>
 
 <script>
-  /* Four autoplay loops on one page is a lot of decode work. Play only what is
+  /* Multiple autoplay loops can be expensive. Play only what is
      on screen; the rest stay paused on their poster frame. */
   (function () {
     const vids = [...document.querySelectorAll('video[autoplay]')];
