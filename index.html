@@ -1513,7 +1513,7 @@
     .atlas-links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; margin-top: 0.75rem; }
     .atlas-highlight { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 1.5rem; align-items: center; }
     .atlas-highlight-thumbnail { display: block; border: 1px solid var(--border-light); border-radius: 8px; overflow: hidden; background: #fff; }
-    .atlas-highlight-thumbnail .atlas-video { aspect-ratio: 1476 / 1184; }
+    .atlas-highlight-thumbnail img { display: block; width: 100%; height: auto; }
     #molecular-profiling { scroll-margin-top: 90px; }
     @media (max-width: 600px) {
       .atlas-highlight { grid-template-columns: minmax(0, 1fr); }
@@ -2073,10 +2073,7 @@
     <div class="publications-list">
       <div class="publication-item featured atlas-highlight" id="spinal-cord-atlas-2026">
         <a class="atlas-highlight-thumbnail" href="https://doi.org/10.64898/2026.10.24.761397" target="_blank" rel="noopener" aria-label="Read the spinal cord atlas preprint">
-          <video class="atlas-video" autoplay muted loop playsinline preload="metadata" poster="publications/thumbnails/spinal-cord-atlas-2026.png" aria-label="Animated visualization of molecularly defined spinal cord cell populations">
-              <source src="videos/spinal-cord-atlas-2026-thumbnail.mp4" type="video/mp4">
-              <img src="publications/thumbnails/spinal-cord-atlas-2026.png" alt="Spatial transcriptomic atlas of the whole mouse spinal cord">
-            </video>
+          <img src="publications/thumbnails/spinal-cord-atlas-2026.png" alt="Whole-mouse spinal cord atlas, Stereo-seq workflow, and spatially mapped cell populations" width="1212" height="878" loading="lazy">
         </a>
         <div>
           <span class="publication-year">Spatial Transcriptomics</span><span class="publication-featured-badge">New</span>
