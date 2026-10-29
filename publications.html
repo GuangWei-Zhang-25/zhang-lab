@@ -498,7 +498,7 @@
           <p class="pub-journal"><strong>bioRxiv</strong>, 2026 · Preprint <span class="pub-featured">New</span></p>
           <div class="pub-links">
             <a href="https://doi.org/10.64898/2026.10.24.761397" target="_blank" rel="noopener" class="pub-link"><i class="fas fa-external-link-alt"></i> Full Text</a>
-            <a href="publications/Zhang-et-al-2026-Spinal-Cord-Atlas.pdf" target="_blank" rel="noopener" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
+            <a href="publications/Zhang-et-al-2026-Spinal-Cord-Atlas.pdf?v=20261029" target="_blank" rel="noopener" class="pub-link"><i class="fas fa-file-pdf"></i> PDF</a>
           </div>
         </div>
       </div>
@@ -1011,7 +1011,7 @@ backToTop.addEventListener('click', (e) => {
 // Make each publication card clickable: open its PDF if available, else the web link.
 document.querySelectorAll('.pub-item').forEach(item => {
   const links = [...item.querySelectorAll('.pub-link')];
-  const pdf = links.find(a => a.getAttribute('href').toLowerCase().endsWith('.pdf'));
+  const pdf = links.find(a => /\.pdf(?:[?#]|$)/i.test(a.getAttribute('href')));
   const web = links.find(a => /^https?:/i.test(a.getAttribute('href')));
   const target = pdf || web || links[0];
   if (!target) return;
