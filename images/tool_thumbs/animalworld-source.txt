@@ -1,0 +1,6 @@
+AnimalWorld demo image
+Credit: Guangwei Zhang laboratory
+Source: https://github.com/GuangWei-Zhang-25/AnimalWorld/blob/main/demo_release/expected/mouse_x2_arena_a/overlay_still.jpg
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+License URL: https://creativecommons.org/licenses/by/4.0/
+The original image is used unchanged. Its filename was changed to animalworld.jpg.
